@@ -21,4 +21,5 @@ let insertQuestion = (req, res) => {
   });
 };
 
+
 module.exports = { selectAll, insertQuestion };
