@@ -10,7 +10,9 @@ var register = async (req, res) => {
     //get info of user
     const { first_name, last_name, email, password, phone, address, username } =
       req.body;
+    console.log(last_name);
     const status = "notBanned";
+    const created_at = new Date();
     const role = "user";
     // check fields
     if (!first_name || !email || !password) {
@@ -18,57 +20,63 @@ var register = async (req, res) => {
     }
 
     // check email
-    if (!validateEmail(email)) {
+    else if (!validateEmail(email)) {
+      console.log("email not valid");
       return res
         .status(400)
         .json({ msg: "Please enter a valid email address." });
-    }
+    } else {
+      //check user
 
-    //check user
+      const sql = `SELECT * FROM users WHERE email=? `;
+      db.query(sql, [email], async (err, result) => {
+        if (result.length) {
+          return res
+            .status(400)
+            .json({ msg: "This email is already registered in our system." });
+        } else {
+          const salt = await bcrypt.genSalt();
+          const password = await bcrypt.hash(req.body.password, salt);
+          db.query(
+            "INSERT INTO users ( first_name, last_name, email, password, phone,address,username,status, role,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            [
+              first_name,
+              last_name,
+              email,
+              password,
+              phone,
+              address,
+              username,
+              status,
+              role,
+              created_at,
+            ],
+            (err, result) => {
+              if (err) {
+                console.log(err);
+                res.status(409).send(err);
+              } else {
+                console.log(["yes", result]);
+                //create token
+                const newUser = { username, email, password };
+                const activation_token = createToken.activation(newUser);
+                console.log(
+                  jwt.verify(activation_token, process.env.ACTIVATION_TOKEN)
+                );
+                // send email
+                const url = `${activation_token}`;
+                sendMail.sendEmailRegister(email, url, "Verify your email");
 
-    const sql = `SELECT * FROM users WHERE email=? `;
-    db.query(sql, [email], async (err, result) => {
-      if (result.length > 0) {
-        return res
-          .status(400)
-          .json({ msg: "This email is already registered in our system." });
-      } else {
-        const salt = await bcrypt.genSalt();
-        const password = await bcrypt.hash(req.body.password, salt);
-        const role = "user";
-        db.query(
-          "INSERT INTO users ( first_name, last_name, email, password, phone,address,username,status, role) VALUES (?,?,?,?,?,?,?,?,?)",
-          [
-            first_name,
-            last_name,
-            email,
-            password,
-            phone,
-            address,
-            username,
-            status,
-            role,
-          ],
-          (err, result) => {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log(["yes", result]);
+                // registration success
+                res
+                  .status(200)
+                  .json({ msg: "Welcome! Please check your email." });
+              }
             }
-          }
-        );
-      }
-    });
-    //create token
-    const newUser = { username, email, password };
-    const activation_token = createToken.activation(newUser);
-    console.log(jwt.verify(activation_token, process.env.ACTIVATION_TOKEN));
-    // send email
-    const url = `${activation_token}`;
-    sendMail.sendEmailRegister(email, url, "Verify your email");
-
-    // registration success
-    res.status(200).json({ msg: "Welcome! Please check your email." });
+          );
+        }
+      });
+    }
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
