@@ -14,6 +14,8 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema etafakna
 -- -----------------------------------------------------
+DROP DATABASE IF EXISTS `etafakna`;
+
 CREATE SCHEMA IF NOT EXISTS `etafakna` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
 USE `etafakna` ;
 
@@ -104,15 +106,16 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(50) NOT NULL,
-  `last_name` VARCHAR(50) NOT NULL,
-  `username` VARCHAR(50) NOT NULL,
-  `email` VARCHAR(50) NOT NULL,
-  `password` VARCHAR(50) NOT NULL,
-  `address` VARCHAR(50) NOT NULL,
-  `phone` VARCHAR(50) NOT NULL,
-  `role` VARCHAR(50) NOT NULL,
-  `status` VARCHAR(50) NOT NULL,
+  `first_name` VARCHAR(100) NOT NULL,
+  `last_name` VARCHAR(100) NOT NULL,
+  `username` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
+  `address` VARCHAR(100) NOT NULL,
+  `phone` VARCHAR(100) NOT NULL,
+  `role` VARCHAR(100) NOT NULL,
+  `status` VARCHAR(100) NOT NULL,
+  `image` VARCHAR(100) NOT NULL,
   `created_at` DATE NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
