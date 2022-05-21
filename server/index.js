@@ -1,27 +1,24 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-
-
-
+const morgan = require("morgan");
 const questionRoutes = require("./routes/question.routes");
-const login = require("./routes/login.js")
+const usersRoutes = require("./routes/user.routes");
+
 var items = require("./database-mysql");
+const contractTypeRoutes = require("./routes/contractType.routes");
+const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
+const login = require("./routes/login");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
-app.use(cors({ origin: "*" }));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/questions", questionRoutes);
-app.use('/api/users',login)
-
-
+app.use("/api/users", usersRoutes);
+app.use("/api/contractType", contractTypeRoutes);
+app.use("/api/contractTypeQuestions", contractTypeQuestionsRoutes);
+app.use("/api/users",login);
 app.listen(PORT, function () {
   console.log("listening on port 3000!");
 });

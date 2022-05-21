@@ -20,22 +20,9 @@ CREATE SCHEMA IF NOT EXISTS `etafakna` DEFAULT CHARACTER SET utf8mb4 COLLATE utf
 USE `etafakna` ;
 
 -- -----------------------------------------------------
--- Table `questions`
+-- Table `etafakna`.`contract_types`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `questions` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `content_FR` VARCHAR(50) NOT NULL,
-  `content_AR` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `contract_types`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `contract_types` (
+CREATE TABLE IF NOT EXISTS `etafakna`.`contract_types` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `signed_time` INT NOT NULL,
   `time_answering` INT NOT NULL,
@@ -54,9 +41,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `contracts`
+-- Table `etafakna`.`contracts`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `contracts` (
+CREATE TABLE IF NOT EXISTS `etafakna`.`contracts` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `contract_url` VARCHAR(50) NOT NULL,
   `status` VARCHAR(50) NOT NULL,
@@ -66,18 +53,30 @@ CREATE TABLE IF NOT EXISTS `contracts` (
   INDEX `fk_contracts_contract_types1_idx` (`contract_types_id` ASC) VISIBLE,
   CONSTRAINT `fk_contracts_contract_types1`
     FOREIGN KEY (`contract_types_id`)
-    REFERENCES `contract_types` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+    REFERENCES `etafakna`.`contract_types` (`id`)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `answers`
+-- Table `etafakna`.`questions`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `answers` (
+CREATE TABLE IF NOT EXISTS `etafakna`.`questions` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `content_FR` VARCHAR(50) NOT NULL,
+  `content_AR` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `etafakna`.`answers`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `etafakna`.`answers` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `content` VARCHAR(50) NOT NULL,
   `questions_id` INT NOT NULL,
@@ -86,36 +85,57 @@ CREATE TABLE IF NOT EXISTS `answers` (
   PRIMARY KEY (`id`, `questions_id`, `contracts_id`, `contracts_contract_types_id`),
   INDEX `fk_answers_questions1_idx` (`questions_id` ASC) VISIBLE,
   INDEX `fk_answers_contracts1_idx` (`contracts_id` ASC, `contracts_contract_types_id` ASC) VISIBLE,
-  CONSTRAINT `fk_answers_questions1`
-    FOREIGN KEY (`questions_id`)
-    REFERENCES `questions` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_answers_contracts1`
     FOREIGN KEY (`contracts_id` , `contracts_contract_types_id`)
-    REFERENCES `contracts` (`id` , `contract_types_id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+    REFERENCES `etafakna`.`contracts` (`id` , `contract_types_id`)
+    ON DELETE CASCADE,
+  CONSTRAINT `fk_answers_questions1`
+    FOREIGN KEY (`questions_id`)
+    REFERENCES `etafakna`.`questions` (`id`)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `users`
+-- Table `etafakna`.`questions_has_contract_types`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `etafakna`.`questions_has_contract_types` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(100) NOT NULL,
-  `last_name` VARCHAR(100) NOT NULL,
-  `username` VARCHAR(100) NOT NULL,
-  `email` VARCHAR(100) NOT NULL,
-  `password` VARCHAR(100) NOT NULL,
-  `address` VARCHAR(100) NOT NULL,
-  `phone` VARCHAR(100) NOT NULL,
-  `role` VARCHAR(100) NOT NULL,
-  `status` VARCHAR(100) NOT NULL,
-  `image` VARCHAR(100) NOT NULL,
+  `questions_id` INT NOT NULL,
+  `contract_types_id` INT NOT NULL,
+  `order_question` INT NULL DEFAULT NULL,
+  INDEX `fk_questions_has_contract_types_questions` (`questions_id` ASC) VISIBLE,
+  INDEX `fk_questions_has_contract_types_contract_types1` (`contract_types_id` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_questions_has_contract_types_contract_types1`
+    FOREIGN KEY (`contract_types_id`)
+    REFERENCES `etafakna`.`contract_types` (`id`)
+    ON DELETE CASCADE,
+  CONSTRAINT `fk_questions_has_contract_types_questions`
+    FOREIGN KEY (`questions_id`)
+    REFERENCES `etafakna`.`questions` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `etafakna`.`users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `etafakna`.`users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `first_name` VARCHAR(200) NOT NULL,
+  `last_name` VARCHAR(200) NOT NULL,
+  `username` VARCHAR(200) NOT NULL,
+  `email` VARCHAR(200) NOT NULL,
+  `password` VARCHAR(200) NOT NULL,
+  `address` VARCHAR(200) NOT NULL,
+  `phone` VARCHAR(200) NOT NULL,
+  `role` VARCHAR(200) NOT NULL,
+  `status` VARCHAR(200) NOT NULL,
   `created_at` DATE NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -124,51 +144,24 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `questions_has_contract_types`
+-- Table `etafakna`.`users_has_contracts`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `questions_has_contract_types` (
-  `questions_id` INT NOT NULL,
-  `contract_types_id` INT NOT NULL,
-  `order_question` INT NULL,
-  PRIMARY KEY (`questions_id`, `contract_types_id`),
-  INDEX `fk_questions_has_contract_types_contract_types1_idx` (`contract_types_id` ASC) VISIBLE,
-  INDEX `fk_questions_has_contract_types_questions_idx` (`questions_id` ASC) VISIBLE,
-  CONSTRAINT `fk_questions_has_contract_types_questions`
-    FOREIGN KEY (`questions_id`)
-    REFERENCES `questions` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_questions_has_contract_types_contract_types1`
-    FOREIGN KEY (`contract_types_id`)
-    REFERENCES `contract_types` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `users_has_contracts`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `users_has_contracts` (
+CREATE TABLE IF NOT EXISTS `etafakna`.`users_has_contracts` (
   `owner` INT NOT NULL,
   `contracts_id` INT NOT NULL,
-  `receiver` INT NULL,
-  `receiver_email` VARCHAR(45) NULL,
+  `receiver` INT NULL DEFAULT NULL,
+  `receiver_email` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`owner`, `contracts_id`),
   INDEX `fk_users_has_contracts_contracts1_idx` (`contracts_id` ASC) VISIBLE,
   INDEX `fk_users_has_contracts_users1_idx` (`owner` ASC) VISIBLE,
-  CONSTRAINT `fk_users_has_contracts_users1`
-    FOREIGN KEY (`owner`)
-    REFERENCES `users` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_users_has_contracts_contracts1`
     FOREIGN KEY (`contracts_id`)
-    REFERENCES `contracts` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+    REFERENCES `etafakna`.`contracts` (`id`)
+    ON DELETE CASCADE,
+  CONSTRAINT `fk_users_has_contracts_users1`
+    FOREIGN KEY (`owner`)
+    REFERENCES `etafakna`.`users` (`id`)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
