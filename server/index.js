@@ -1,16 +1,21 @@
 const express = require("express");
+const morgan = require("morgan");
 const questionRoutes = require("./routes/question.routes");
+const usersRoutes = require("./routes/user.routes");
+
+var items = require("./database-mysql");
 const contractTypeRoutes = require('./routes/contractType.routes')
 const contractTypeQuestionsRoutes = require('./routes/contraType.questions.routes')
 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/questions", questionRoutes);
+app.use("/api/users", usersRoutes);
 app.use("/api/contractType", contractTypeRoutes);
 app.use("/api/contractTypeQuestions", contractTypeQuestionsRoutes);
 
