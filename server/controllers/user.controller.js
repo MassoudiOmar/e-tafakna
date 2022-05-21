@@ -22,18 +22,14 @@ var register = async (req, res) => {
     // check email
     else if (!validateEmail(email)) {
       console.log("email not valid");
-      return res
-        .status(400)
-        .json({ msg: "Please enter a valid email address." });
+      res.send({ msg: "Please enter a valid email address." });
     } else {
       //check user
 
       const sql = `SELECT * FROM users WHERE email=? `;
       db.query(sql, [email], async (err, result) => {
         if (result.length) {
-          return res
-            .status(400)
-            .json({ msg: "This email is already registered in our system." });
+           res.send({ msg: "This email is already registered in our system." });
         } else {
           const salt = await bcrypt.genSalt();
           const password = await bcrypt.hash(req.body.password, salt);
