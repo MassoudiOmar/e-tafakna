@@ -10,7 +10,6 @@ var register = async (req, res) => {
     //get info of user
     const { first_name, last_name, email, password, phone, address, username } =
       req.body;
-    console.log(last_name);
     const status = "notBanned";
     const created_at = new Date();
     const role = "user";
