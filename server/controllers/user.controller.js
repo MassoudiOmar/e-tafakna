@@ -8,9 +8,9 @@ const jwt = require("jsonwebtoken");
 var register = async (req, res) => {
   try {
     //get info of user
-    const { first_name, last_name, email, password, phone, address, username } =
+    const { first_name, last_name, email, password, phone, address, username, image } =
       req.body;
-    console.log(last_name);
+    console.log(image);
     const status = "notBanned";
     const created_at = new Date();
     const role = "user";
@@ -34,7 +34,7 @@ var register = async (req, res) => {
           const salt = await bcrypt.genSalt();
           const password = await bcrypt.hash(req.body.password, salt);
           db.query(
-            "INSERT INTO users ( first_name, last_name, email, password, phone,address,username,status, role,created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO users ( first_name, last_name, email, password, phone,address,username,image,status, role,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             [
               first_name,
               last_name,
@@ -43,6 +43,7 @@ var register = async (req, res) => {
               phone,
               address,
               username,
+              image,
               status,
               role,
               created_at,

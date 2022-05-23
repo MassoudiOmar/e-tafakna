@@ -136,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users` (
   `phone` VARCHAR(200) NOT NULL,
   `role` VARCHAR(200) NOT NULL,
   `status` VARCHAR(200) NOT NULL,
+  `image`  VARCHAR(200) Not NULL,
   `created_at` DATE NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
