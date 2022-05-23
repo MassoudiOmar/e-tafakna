@@ -14,6 +14,8 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema etafakna
 -- -----------------------------------------------------
+DROP DATABASE IF EXISTS `etafakna`;
+
 CREATE SCHEMA IF NOT EXISTS `etafakna` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
 USE `etafakna` ;
 
@@ -24,13 +26,13 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`contract_types` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `signed_time` INT NOT NULL,
   `time_answering` INT NOT NULL,
-  `title_FR` VARCHAR(50) NOT NULL,
-  `title_AR` VARCHAR(50) NOT NULL,
+  `title_FR` VARCHAR(200) NOT NULL,
+  `title_AR` VARCHAR(200) NOT NULL,
   `description_FR` VARCHAR(255) NOT NULL,
   `description_AR` VARCHAR(255) NOT NULL,
-  `image_url` VARCHAR(50) NOT NULL,
-  `template_FR` VARCHAR(50) NOT NULL,
-  `template_AR` VARCHAR(50) NOT NULL,
+  `image_url` VARCHAR(200) NOT NULL,
+  `template_FR` VARCHAR(200) NOT NULL,
+  `template_AR` VARCHAR(200) NOT NULL,
   `country` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -125,15 +127,15 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(50) NOT NULL,
-  `last_name` VARCHAR(50) NOT NULL,
-  `username` VARCHAR(50) NOT NULL,
-  `email` VARCHAR(50) NOT NULL,
-  `password` VARCHAR(50) NOT NULL,
-  `address` VARCHAR(50) NOT NULL,
-  `phone` VARCHAR(50) NOT NULL,
-  `role` VARCHAR(50) NOT NULL,
-  `status` VARCHAR(50) NOT NULL,
+  `first_name` VARCHAR(200) NOT NULL,
+  `last_name` VARCHAR(200) NOT NULL,
+  `username` VARCHAR(200) NOT NULL,
+  `email` VARCHAR(200) NOT NULL,
+  `password` VARCHAR(200) NOT NULL,
+  `address` VARCHAR(200) NOT NULL,
+  `phone` VARCHAR(200) NOT NULL,
+  `role` VARCHAR(200) NOT NULL,
+  `status` VARCHAR(200) NOT NULL,
   `created_at` DATE NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -168,3 +170,16 @@ COLLATE = utf8mb4_0900_ai_ci;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+
+-- Insert All Contracts
+INSERT INTO etafakna.contract_types(signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country)
+VALUES(115,2,"Rent","Rent","Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...","desc_AR","https://thumbs.dreamstime.com/b/word-rent-cubes-model-home-real-estate-word-rent-cubes-model-home-real-estate-concept-133078583.jpg","temp_FR","temp_AR","Tunisia"),
+      (41,5,"Promise","Promise","This is Promise Description","desc_AR","https://i.pinimg.com/originals/0e/f1/54/0ef15459639689548bb4bd1008f9b8cb.png","temp_FR","temp_AR","Tunisia"),
+      (74,2,"Credencial","Credencial","This is Credencial Description","desc_AR","https://image.shutterstock.com/image-vector/confidential-grunge-rubber-stamp-on-260nw-178606619.jpg","temp_FR","temp_AR","Tunisia"),
+      (153,9,"Handyman","Handyman","This is Handyman Description","desc_AR","https://handymanservices.ae/images/Handyman%20services-01.png","temp_FR","temp_AR","Tunisia"),
+      (78,4,"SARL-SUARL","SARL-SUARL","This is SARL-SUARL Description","desc_AR","https://swiver.io/wp-content/uploads/2021/12/sarl.png","temp_FR","temp_AR","Tunisia"),
+      (52,4,"Freelancer","Freelancer","This is Freelancer Description","desc_AR","https://craftypixels.com/placeholder-image/600x315/042550/ffffff.png&text=Freelancer","temp_FR","temp_AR","Tunisia"),
+      (78,10,"Loan","Loan","This is loan Description","desc_AR","https://www.cashadvanceqmvt.com/wp-content/uploads/2022/03/Loan2.jpg","temp_FR","temp_AR","Tunisia"),
+      (78,10,"Employment Contract","Employment Contract","This is Employment Contract Description","desc_AR","https://trak.in/wp-content/uploads/2015/06/Employment-in-India-cities.jpg","temp_FR","temp_AR","Tunisia");
