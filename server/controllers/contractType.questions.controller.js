@@ -7,8 +7,7 @@ let { questions_id, contract_types_id, order_question } = req.body
      db.query(sql,[questions_id, contract_types_id, order_question],(err,result)=>{
          if (err) console.log(err)
          else res.send(result)
-     })
-   
+     })   
 }
 
 findQuestionsOfSpecificContract = (req,res)=>{
