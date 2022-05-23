@@ -41,6 +41,7 @@ let loginUser = function (req, res) {
                 }
                 if (result[0].status === "notBanned") {
                   getOneUser(email, (err, result) => {
+                    if(err) {res.send(err)}
                     const user = {
                       id: result[0].id,
                       username: result[0].username,

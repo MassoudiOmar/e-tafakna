@@ -8,7 +8,7 @@ const contractTypeRoutes = require("./routes/contractType.routes");
 const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
 const login = require("./routes/login");
 
-const app = express();
+const app = express(); 
 const PORT = process.env.PORT || 3000;
 app.use(morgan("dev"));
 app.use(express.json());

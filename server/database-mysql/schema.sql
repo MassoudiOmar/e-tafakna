@@ -135,6 +135,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users` (
   `address` VARCHAR(200) NOT NULL,
   `phone` VARCHAR(200) NOT NULL,
   `role` VARCHAR(200) NOT NULL,
+  `image` VARCHAR(200) NOT NULL,
   `status` VARCHAR(200) NOT NULL,
   `created_at` DATE NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
