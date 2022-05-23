@@ -1,4 +1,4 @@
-const db = require("../database-mysql");
+// const db = require("../database-mysql");
 const Docxtemplater = require("docxtemplater");
 const PizZip = require("pizzip");
 
@@ -21,10 +21,16 @@ const doc = new Docxtemplater(zip, {
 
 // Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
 doc.render({
-   name: 'amine',
-   doc:'omar',
-   cin:11368574,
-   ar:'أحبك'
+   q1: 'amine',
+   q2:'omar',
+   q3:11368574,
+   q4:'23/10/2015',
+   q5:'imed',
+   q6:'فارس',
+   q7:'17/01/1997',
+   q8:11259863,
+   q9:'15/07/2013',
+   q10:'يوسف'
 });
 
 const buf = doc.getZip().generate({
@@ -38,15 +44,15 @@ const buf = doc.getZip().generate({
 // file or res.send it with express for example.
 fs.writeFileSync("output.docx", buf);
 
-const insertContractType = (req,res)=>{
-    let {signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country} = req.body;
-    const sql = `INSERT INTO contract_types (signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country) values(?,?,?,?,?,?,?,?,?,?)`
-    db.query(sql,[signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country], (err,contractType)=>{
-        if (err) res.status(500).send(err)
-        if (contractType) res.status(200).send(contractType)
-    })
-}
+// const insertContractType = (req,res)=>{
+//     let {signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country} = req.body;
+//     const sql = `INSERT INTO contract_types (signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country) values(?,?,?,?,?,?,?,?,?,?)`
+//     db.query(sql,[signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country], (err,contractType)=>{
+//         if (err) res.status(500).send(err)
+//         if (contractType) res.status(200).send(contractType)
+//     })
+// }
 
 
 
-module.exports = { insertContractType };
+module.exports = {  };
