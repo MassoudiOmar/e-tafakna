@@ -26,13 +26,13 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`contract_types` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `signed_time` INT NOT NULL,
   `time_answering` INT NOT NULL,
-  `title_FR` VARCHAR(50) NOT NULL,
-  `title_AR` VARCHAR(50) NOT NULL,
+  `title_FR` VARCHAR(200) NOT NULL,
+  `title_AR` VARCHAR(200) NOT NULL,
   `description_FR` VARCHAR(255) NOT NULL,
   `description_AR` VARCHAR(255) NOT NULL,
-  `image_url` VARCHAR(50) NOT NULL,
-  `template_FR` VARCHAR(50) NOT NULL,
-  `template_AR` VARCHAR(50) NOT NULL,
+  `image_url` VARCHAR(200) NOT NULL,
+  `template_FR` VARCHAR(200) NOT NULL,
+  `template_AR` VARCHAR(200) NOT NULL,
   `country` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
