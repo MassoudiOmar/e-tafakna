@@ -46,7 +46,25 @@ const insertContractType = (req,res)=>{
         if (contractType) res.status(200).send(contractType)
     })
 }
+// getAllContractType
+
+const getAllContractType = (req,res)=>{
+    let query = `SELECT * FROM contract_types`
+    db.query(query, (err,contracts)=>{
+        if(err){res.status(500).send(err)}
+        else{res.json(contracts)}
+    })
+};
+const getByIdContractType = (req,res)=>{
+    let id = req.params.id;
+    let query = `SELECT * FROM contract_types WHERE id = ?`
+    db.query(query, [id], (err,contracts)=>{
+        if(err){res.status(500).send(err)}
+        else{res.json(contracts)}
+    })
+};
 
 
 
-module.exports = { insertContractType };
+
+module.exports = { insertContractType, getAllContractType, getByIdContractType };
