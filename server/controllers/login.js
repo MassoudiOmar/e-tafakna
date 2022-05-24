@@ -39,8 +39,11 @@ let loginUser = function (req, res) {
                 if (err) {
                   res.send(err);
                 }
-                if (result[0].status === "notBanned") {
+                if (result[0].status === "notBanned" || "Activated") {
                   getOneUser(email, (err, result) => {
+                    if (err) {
+                      res.send(err);
+                    }
                     const user = {
                       id: result[0].id,
                       username: result[0].username,
@@ -57,14 +60,14 @@ let loginUser = function (req, res) {
                           return res.send(err);
                         }
                         res.send({
-                          token: token,
+                          UsertokenInfo: token,
                           message: "login succssefull",
                         });
                       }
                     );
                   });
                 } else {
-                  res.send("sorry, you are banned!");
+                  res.send("sorry, you have no access !");
                 }
               });
             } else {
@@ -78,4 +81,29 @@ let loginUser = function (req, res) {
     });
   }
 };
+
+// let decodeToken = function (req, res) {
+//   let token = req.headers.token; //token
+//   jwt.verify(token, 'secretkey', (err, decoded) => {
+//     if (err) return res.status(401).json({
+//       title: 'unauthorized'
+//     })
+//     //token is valid
+//     User.findOne({ _id: decoded.userId }, (err, user) => {
+//       if (err) return console.log(err)
+//       return res.status(200).json({
+//         title: 'user grabbed',
+//         user: {
+//           email: user.email,
+//           username: user.username,
+//           address: user.address,
+//           phone: user.phone,
+//           image:user.image,
+//           id:user.id
+//         }
+//       })
+//     })
+
+//   })
+// }
 module.exports = { loginUser };
