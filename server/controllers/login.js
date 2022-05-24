@@ -58,7 +58,7 @@ let loginUser = function (req, res) {
                           return res.send(err);
                         }
                         res.send({
-                          token: token,
+                          UsertokenInfo: token,
                           message: "login succssefull",
                         });
                       }
