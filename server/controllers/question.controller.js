@@ -11,6 +11,16 @@ let getOneQuestion = function (req, res) {
     }
   });
 };
+let getAllQuestions = function (req, res) {
+  let query = "SELECT * FROM questions ";
+  db.query(query, (err, questions) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(questions);
+    }
+  });
+};
 
 let insertQuestion = (req, res) => {
   let { content_FR, content_AR } = req.body;
@@ -22,4 +32,4 @@ let insertQuestion = (req, res) => {
 };
 
 
-module.exports = { getOneQuestion, insertQuestion };
+module.exports = { getOneQuestion, insertQuestion,getAllQuestions };
