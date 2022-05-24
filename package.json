@@ -15,11 +15,8 @@
     "docxtemplater": "^3.29.4",
     "dotenv": "^16.0.1",
     "express": "^4.17.1",
-<<<<<<< HEAD
     "form-data": "^4.0.0",
-=======
     "googleapis": "^100.0.0",
->>>>>>> 62f438e46fbed81a152d5931552132de4c04a816
     "jquery": "^3.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.10",
