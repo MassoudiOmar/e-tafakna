@@ -10,13 +10,6 @@ let getOneUser = (email, callback) => {
   });
 };
 
-let getStatus = (email, callback) => {
-  const sql = "SELECT status FROM `users` WHERE email = ?";
-  db.query(sql, [email], (err, user) => {
-    callback(err, user);
-  });
-};
-
 let loginUser = function (req, res) {
   const { email, password } = req.body;
   if (!email || !password) {
