@@ -21,10 +21,16 @@ const doc = new Docxtemplater(zip, {
 
 // Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
 doc.render({
-   name: 'amine',
-   doc:'omar',
-   cin:11368574,
-   ar:'أحبك'
+   q1: 'amine',
+   q2:'omar',
+   q3:11368574,
+   q4:'23/10/2015',
+   q5:'imed',
+   q6:'فارس',
+   q7:'17/01/1997',
+   q8:11259863,
+   q9:'15/07/2013',
+   q10:'يوسف'
 });
 
 const buf = doc.getZip().generate({
@@ -46,7 +52,25 @@ const insertContractType = (req,res)=>{
         if (contractType) res.status(200).send(contractType)
     })
 }
+// getAllContractType
+
+const getAllContractType = (req,res)=>{
+    let query = `SELECT * FROM contract_types`
+    db.query(query, (err,contracts)=>{
+        if(err){res.status(500).send(err)}
+        else{res.json(contracts)}
+    })
+};
+const getByIdContractType = (req,res)=>{
+    let id = req.params.id;
+    let query = `SELECT * FROM contract_types WHERE id = ?`
+    db.query(query, [id], (err,contracts)=>{
+        if(err){res.status(500).send(err)}
+        else{res.json(contracts)}
+    })
+};
 
 
 
-module.exports = { insertContractType };
+
+module.exports = { insertContractType, getAllContractType, getByIdContractType };

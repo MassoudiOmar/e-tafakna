@@ -1,16 +1,16 @@
 var db = require("../database-mysql");
-var selectAll = () => {};
 
-// UNCOMMENT IF USING MYSQL WITH CALLBACKS
-// var selectAll = function (req, res) {
-//   db.query("SELECT * FROM items", (err, items, fields) => {
-//     if (err) {
-//       res.status(500).send(err);
-//     } else {
-//       res.status(200).send(items);
-//     }
-//   });
-// };
+let getOneQuestion = function (req, res) {
+  let id = req.params.id;
+  let query = "SELECT * FROM questions WHERE id=?";
+  db.query(query, [id], (err, questions) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(questions);
+    }
+  });
+};
 
 let insertQuestion = (req, res) => {
   let { content_FR, content_AR } = req.body;
@@ -21,4 +21,5 @@ let insertQuestion = (req, res) => {
   });
 };
 
-module.exports = { selectAll, insertQuestion };
+
+module.exports = { getOneQuestion, insertQuestion };
