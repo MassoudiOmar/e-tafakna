@@ -1,4 +1,4 @@
-// const db = require("../database-mysql");
+const db = require("../database-mysql");
 const Docxtemplater = require("docxtemplater");
 const PizZip = require("pizzip");
 

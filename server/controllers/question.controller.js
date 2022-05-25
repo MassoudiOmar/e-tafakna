@@ -1,9 +1,9 @@
 var db = require("../database-mysql");
 
 let getOneQuestion = function (req, res) {
-  let contract_id = req.params.contract_id;
-  let query = "SELECT * FROM questions WHERE id contract_id = ?";
-  db.query(query, [contract_id], (err, questions) => {
+  let id = req.params.id;
+  let query = "SELECT * FROM questions WHERE id=?";
+  db.query(query, [id], (err, questions) => {
     if (err) {
       res.status(500).send(err);
     } else {
