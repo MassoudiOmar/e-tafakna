@@ -19,9 +19,10 @@ var register = async (req, res) => {
       username,
       image,
     } = req.body;
-    const status = "notBanned";
+    const status = "notActivated";
     const created_at = new Date();
     const role = "user";
+    const activate = "false";
     // check fields
     if (
       !first_name ||
@@ -111,8 +112,12 @@ var activate = async (req, res) => {
     db.query(sql, [email], async (err, result) => {
       if (err) res.send(err);
       if (result.length > 0) {
-        return res.json({
-          msg: "Your account has been activated, you can now sign in.",
+        const sql = `UPDATE users SET status= 'Activated' WHERE email=?`;
+        db.query(sql, [email], async (err, result) => {
+          if (err) res.send(err);
+          return res.json({
+            msg: "Your account has been activated, you can now sign in.",
+          });
         });
       } else {
         return res.send("wrong token");
