@@ -12,11 +12,26 @@ let getOneQuestion = function (req, res) {
   });
 };
 let getAllQuestions = function (req, res) {
-  let query = "SELECT * FROM questions ";
+  console.log("first")
+  let query = "SELECT content_FR FROM questions ";
   db.query(query, (err, questions) => {
     if (err) {
       res.status(500).send(err);
     } else {
+      console.log(questions)
+      res.status(200).send(questions);
+    }
+  });
+};
+let getArQuestions = function (req, res) {
+  
+  let query = "SELECT content_AR FROM questions ";
+ 
+  db.query(query, (err, questions) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      console.log(questions,"fwea")
       res.status(200).send(questions);
     }
   });
@@ -32,4 +47,4 @@ let insertQuestion = (req, res) => {
 };
 
 
-module.exports = { getOneQuestion, insertQuestion,getAllQuestions };
+module.exports = { getOneQuestion, insertQuestion, getAllQuestions, getArQuestions };
