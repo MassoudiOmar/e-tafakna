@@ -4,6 +4,6 @@ const contractTypeQuestions = require('../controllers/contractType.questions.con
 
 router.post('/', contractTypeQuestions.affectQuestionToContractType)
 router.get('/', contractTypeQuestions.findAll)
-router.get('/:contract_id', contractTypeQuestions.findQuestionsOfSpecificContract)
+router.get('/:contract_id/:lang', contractTypeQuestions.findQuestionsOfSpecificContract)
 
 module.exports = router
