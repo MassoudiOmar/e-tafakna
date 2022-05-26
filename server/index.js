@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const questionRoutes = require("./routes/question.routes");
 const usersRoutes = require("./routes/user.routes");
+const adminRoutes = require("./routes/admin.routes");
 const reset = require("./routes/resetPassord");
 var items = require("./database-mysql");
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/questions", questionRoutes);
 app.use("/api", reset);
 app.use("/api/users", usersRoutes);
+app.use("/api/admin",adminRoutes);
 app.use("/api/contractType", contractTypeRoutes);
 app.use("/api/contractTypeQuestions", contractTypeQuestionsRoutes);
 app.use("/api/users",login);

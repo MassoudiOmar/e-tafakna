@@ -132,7 +132,6 @@ var activate = async (req, res) => {
 const decodeToken = function (req, res) {
   console.log(req.headers.token, "i5demm")
   let token = req.headers.token
-  // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6Ik9tYXJpbyIsImVtYWlsIjoibWFzc291ZGlvbWFyNTQzMjFAZ21haWwuY29tIiwiaW1hZ2UiOiJodHRwOi8vcmVzLmNsb3VkaW5hcnkuY29tL2RtNnl3NGRuMC9pbWFnZS91cGxvYWQvdjE2NTM0Njg1Mjgvc29sZnNxY3F3cGloaWpoY3doY3MucG5nIiwiYWRkcmVzcyI6IlR1bmVIiwicGhvbmUiOiI1NTc0MDk1NyJ9LCJpYXQiOjE2NTM0NzE2OTZ9.yUwFFvukDEs0cGTIrDh3L7qrcCUMz8-zZlLLoQ5-nL0"; //token
   var decoded = jwtDecode(token)
   console.log(decoded);
   jwt.verify(token,process.env.JWT_SECRET_KEY, (err, result) => {
