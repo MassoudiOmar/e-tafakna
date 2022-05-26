@@ -112,7 +112,6 @@ let deleteUser = (req, res) => {
 let updateStatus = (req, res) => {
   const id = req.params.id;
   const { status } = req.body;
-
   const sql = `UPDATE users SET status=? WHERE id=?`;
   db.query(sql, [status, id], (err, result) => {
     if (err) res.send(err);
@@ -120,10 +119,94 @@ let updateStatus = (req, res) => {
   });
 };
 
+//delete contract_types
+let deleteContractTypes = (req, res) => {
+    const id = req.params.id;
+    const sql = `DELETE FROM contract_types WHERE id =?`;
+    db.query(sql, [id], (err, result) => {
+      if (err) res.send(err);
+      else res.send(result);
+    });
+  }
+
+//update descriptionFR of contract-type
+let updateContractDiscriptionFR = (req, res) => {
+  const id = req.params.id;
+  const { description_FR } = req.body;
+  const sql = `UPDATE contract_types SET description_FR=? WHERE id=?`;
+  db.query(sql, [description_FR, id], (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
+};
+
+let updateContractDiscriptionAR = (req, res) => {
+  const id = req.params.id;
+  const { description_AR } = req.body;
+  const sql = `UPDATE contract_types SET description_AR=? WHERE id=?`;
+  db.query(sql, [description_AR, id], (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
+};
+
+
+
+//update url of contract-type
+ let updateUrlContractFR =(req, res)=>{
+  const id = req.params.id;
+  const { template_FR } = req.body;
+  const sql = `UPDATE contract_types SET template_FR=? WHERE id=?`;
+  db.query(sql, [template_FR, id], (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
+ };
+
+ let updateUrlContractAR =(req, res)=>{
+  const id = req.params.id;
+  const { template_AR } = req.body;
+  const sql = `UPDATE contract_types SET template_AR=? WHERE id=?`;
+  db.query(sql, [template_AR, id], (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
+ };
+
+ //update title of contract type
+ let updateTitleFR =(req, res)=>{
+  const id = req.params.id;
+  const { title_FR } = req.body;
+  const sql = `UPDATE contract_types SET title_FR=? WHERE id=?`;
+  db.query(sql, [title_FR, id], (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
+ };
+
+ let updateTitleAR =(req, res)=>{
+  const id = req.params.id;
+  const { title_AR } = req.body;
+  const sql = `UPDATE contract_types SET title_AR=? WHERE id=?`;
+  db.query(sql, [title_AR, id], (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
+ };
+
+
+
 module.exports = {
   loginAdmin,
   getAllUsers,
   getOneUser,
   deleteUser,
   updateStatus,
+  deleteContractTypes,
+  updateContractDiscriptionFR,
+  updateContractDiscriptionAR,
+  updateUrlContractFR,
+  updateUrlContractAR,
+  updateTitleFR,
+  updateTitleAR
 };
