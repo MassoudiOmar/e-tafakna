@@ -5,5 +5,5 @@ router.get("/:id", questionController.getOneQuestion);
 router.post("/", questionController.insertQuestion);
 router.delete("/:id", questionController.deleteQuestion);
 router.put("/:id", questionController.updateQuestion);
-
+router.get("/", questionController.getAllQuestions);
 module.exports = router;
