@@ -20,6 +20,23 @@ let insertQuestion = (req, res) => {
     else res.status(200).send(question);
   });
 };
+let deleteQuestion = (req, res) => {
+  let id = req.params.id;
+  const sql = `DELETE FROM questions WHERE id = ?`;
+  db.query(sql, [id], (err, result) => {
+    if (err) res.status(500).send(err);
+    else res.status(200).send(result);
+  });
+};
+let updateQuestion = (req, res) => {
+  let id = req.params.id;
+  let { content_FR, content_AR } = req.body;
+  const sql = `UPDATE questions SET content_FR = ?, content_AR = ? WHERE id = ?`;
+  db.query(sql, [content_FR, content_AR, id], (err, result) => {
+    if (err) res.status(500).send(err);
+    else res.status(200).send(result);
+  });
+};
 
 
-module.exports = { getOneQuestion, insertQuestion };
+module.exports = { getOneQuestion, insertQuestion, deleteQuestion, updateQuestion };
