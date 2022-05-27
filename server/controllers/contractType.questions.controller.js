@@ -20,7 +20,7 @@ const findQuestionsOfSpecificContract = (req, res) => {
   let {contract_id,lang} = req.params;
   let column = "";
   
-  lang === "Arabic"
+  lang === "Arabe"
     ? (column = "content_AR")
     : (column = "content_FR");
   const query = `SELECT ${column} from etafakna.questions
