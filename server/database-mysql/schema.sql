@@ -81,13 +81,12 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`answers` (
   `content` VARCHAR(50) NOT NULL,
   `questions_id` INT NOT NULL,
   `contracts_id` INT NOT NULL,
-  `contracts_contract_types_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `questions_id`, `contracts_id`, `contracts_contract_types_id`),
+  PRIMARY KEY (`id`),
   INDEX `fk_answers_questions1_idx` (`questions_id` ASC) VISIBLE,
-  INDEX `fk_answers_contracts1_idx` (`contracts_id` ASC, `contracts_contract_types_id` ASC) VISIBLE,
+  INDEX `fk_answers_contracts1_idx` (`contracts_id` ASC) VISIBLE,
   CONSTRAINT `fk_answers_contracts1`
-    FOREIGN KEY (`contracts_id` , `contracts_contract_types_id`)
-    REFERENCES `etafakna`.`contracts` (`id` , `contract_types_id`)
+    FOREIGN KEY (`contracts_id`)
+    REFERENCES `etafakna`.`contracts` (`id`)
     ON DELETE CASCADE,
   CONSTRAINT `fk_answers_questions1`
     FOREIGN KEY (`questions_id`)

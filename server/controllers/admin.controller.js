@@ -76,6 +76,44 @@ let loginAdmin = (req, res) => {
   }
 };
 
+
+
+let ChangePassword =  async (req, res) => {
+  const {password} = req.body
+  const {id} = req.params
+  const sql=`SELECT * FROM users Where id=?`
+  db.query(sql,[id],(err, result) => {
+    if (err) {
+      res.send(err)
+    }
+    else {
+      try{
+        bcrypt.compare(req.body.password, result[0].password, async (err, result)=> {
+          if (err) {
+            res.send(err);
+          }
+          else{
+            const {id} = req.params
+            const salt = await bcrypt.genSalt();
+            const password = await bcrypt.hash(req.body.newPassword, salt);
+            const sql='UPDATE users SET password=? WHERE id=?'
+            db.query(sql,[password,id],(err,result)=>{
+              if(err) {res.send(err)}
+              else{
+                res.send('Your password changed ')
+              }
+            })
+          }
+      })
+      // res.send(result)
+    } catch (err) {
+      res.send(err)
+    }
+      
+  }})
+
+}
+
 // get all users
 let getAllUsers = (req, res) => {
   db.query("SELECT * FROM users Where role='user'", (err, result) => {
@@ -196,6 +234,8 @@ let updateContractDiscriptionAR = (req, res) => {
 
 
 
+
+
 module.exports = {
   loginAdmin,
   getAllUsers,
@@ -208,5 +248,6 @@ module.exports = {
   updateUrlContractFR,
   updateUrlContractAR,
   updateTitleFR,
-  updateTitleAR
+  updateTitleAR, 
+  ChangePassword,
 };
