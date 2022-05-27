@@ -32,7 +32,7 @@ let loginUser = function (req, res) {
                 if (err) {
                   res.send(err);
                 }
-                if (result[0].status === "notBanned" || "Activated") {
+                if (result[0].status === "Activated") {
                   getOneUser(email, (err, result) => {
                     if (err) {
                       res.send(err);

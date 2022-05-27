@@ -69,8 +69,4 @@ const getByIdContractType = (req,res)=>{
         else{res.json(contracts)}
     })
 };
-
-
-
-
 module.exports = { insertContractType, getAllContractType, getByIdContractType };
