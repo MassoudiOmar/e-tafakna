@@ -125,6 +125,7 @@ var activate = async (req, res) => {
               image: results[0].image,
               address: results[0].address,
               phone: results[0].phone,
+              password:results[0].password
             };
             jwt.sign({ user }, process.env.JWT_SECRET_KEY, (err, token) => {
               if (err) {
@@ -169,7 +170,8 @@ const decodeToken = function (req, res) {
           address:decoded.user.address,
           phone: decoded.user.phone,
           image:decoded.user.image,
-          id:decoded.user.id
+          id:decoded.user.id,
+          password: decoded.user.password
         }
       })
     })
