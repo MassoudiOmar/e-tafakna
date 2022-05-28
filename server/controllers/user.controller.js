@@ -4,7 +4,12 @@ const validateEmail = require("../helpers/validateEmail");
 const createToken = require("../helpers/createToken");
 const sendMail = require("../helpers/sendMail");
 const jwt = require("jsonwebtoken");
+<<<<<<< HEAD
+const jwtDecode = require('jwt-decode');
+
+=======
 const jwtDecode = require("jwt-decode");
+>>>>>>> ea87a631fa5a482c1472f1d58951cf193785d4d8
 require("dotenv").config();
 
 var register = async (req, res) => {
@@ -73,7 +78,6 @@ var register = async (req, res) => {
                   console.log(err);
                   res.send(err);
                 } else {
-                  console.log(["yes", result]);
                   //create token
                   const newUser = { username, email, password };
                   const activation_token = createToken.activation(newUser);
@@ -110,15 +114,33 @@ var activate = async (req, res) => {
 
     //check user
     const sql = `SELECT * FROM users WHERE email=? `;
-    db.query(sql, [email], async (err, result) => {
+    db.query(sql, [email], async (err, results) => {
       if (err) res.send(err);
-      if (result.length > 0) {
+      if (results.length > 0) {
         const sql = `UPDATE users SET status= 'Activated' WHERE email=?`;
         db.query(sql, [email], async (err, result) => {
+          console.log(result);
           if (err) res.send(err);
-          return res.json({
-            msg: "Your account has been activated, you can now sign in.",
-          });
+          else {
+            const user = {
+              id: results[0].id,
+              username: results[0].username,
+              email: results[0].email,
+              image: results[0].image,
+              address: results[0].address,
+              phone: results[0].phone,
+              password:results[0].password
+            };
+            jwt.sign({ user }, process.env.JWT_SECRET_KEY, (err, token) => {
+              if (err) {
+                return res.send(err);
+              }
+              res.send({
+                UsertokenInfo: token,
+                msg: "Your account has been activated",
+              });
+            });
+          }
         });
       } else {
         return res.send("wrong token");
@@ -129,35 +151,34 @@ var activate = async (req, res) => {
   }
 };
 
+
 const decodeToken = function (req, res) {
-  console.log(req.headers.token, "i5demm");
-  let token = req.headers.token;
-  var decoded = jwtDecode(token);
+  console.log(req.headers.token, "i5demm")
+  let token = req.headers.token
+  var decoded = jwtDecode(token)
   console.log(decoded);
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, result) => {
-    if (err)
-      return res.json({
-        title: ("unauthorized", err),
-      });
-
+  jwt.verify(token,process.env.JWT_SECRET_KEY, (err, result) => {
+    if (err) return res.json({
+      title: ('unauthorized', err)
+    })
     //token is valid
-
-    const sql = "SELECT * FROM users WHERE id=?";
-    db.query(sql, [decoded.user.id], async (err, user) => {
-      console.log(decoded.user.image);
-      if (err) return console.log(err);
+    const sql ='SELECT * FROM users WHERE id=?'
+    db.query(sql,[decoded.user.id], async (err,user)=>{
+      console.log(decoded.user.image)
+      if (err) return console.log(err)
       return res.status(200).json({
-        title: "user grabbed",
+        title: 'user grabbed',
         user: {
           email: decoded.user.email,
           username: decoded.user.username,
-          address: decoded.user.address,
+          address:decoded.user.address,
           phone: decoded.user.phone,
-          image: decoded.user.image,
-          id: decoded.user.id,
-        },
-      });
-    });
-  });
-};
-module.exports = { register, activate, decodeToken };
+          image:decoded.user.image,
+          id:decoded.user.id,
+          password: decoded.user.password
+        }
+      })
+    })
+  })
+}
+module.exports = { register, activate ,decodeToken};
