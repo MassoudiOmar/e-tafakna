@@ -10,13 +10,6 @@ let getOneUser = (email, callback) => {
   });
 };
 
-let getStatus = (email, callback) => {
-  const sql = "SELECT status FROM `users` WHERE email = ?";
-  db.query(sql, [email], (err, user) => {
-    callback(err, user);
-  });
-};
-
 let loginUser = function (req, res) {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -82,28 +75,5 @@ let loginUser = function (req, res) {
   }
 };
 
-// let decodeToken = function (req, res) {
-//   let token = req.headers.token; //token
-//   jwt.verify(token, 'secretkey', (err, decoded) => {
-//     if (err) return res.status(401).json({
-//       title: 'unauthorized'
-//     })
-//     //token is valid
-//     User.findOne({ _id: decoded.userId }, (err, user) => {
-//       if (err) return console.log(err)
-//       return res.status(200).json({
-//         title: 'user grabbed',
-//         user: {
-//           email: user.email,
-//           username: user.username,
-//           address: user.address,
-//           phone: user.phone,
-//           image:user.image,
-//           id:user.id
-//         }
-//       })
-//     })
 
-//   })
-// }
 module.exports = { loginUser };
