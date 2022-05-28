@@ -4,8 +4,12 @@ const validateEmail = require("../helpers/validateEmail");
 const createToken = require("../helpers/createToken");
 const sendMail = require("../helpers/sendMail");
 const jwt = require("jsonwebtoken");
+<<<<<<< HEAD
 const jwtDecode = require('jwt-decode');
 
+=======
+const jwtDecode = require("jwt-decode");
+>>>>>>> ea87a631fa5a482c1472f1d58951cf193785d4d8
 require("dotenv").config();
 
 var register = async (req, res) => {
@@ -125,6 +129,7 @@ var activate = async (req, res) => {
               image: results[0].image,
               address: results[0].address,
               phone: results[0].phone,
+              password:results[0].password
             };
             jwt.sign({ user }, process.env.JWT_SECRET_KEY, (err, token) => {
               if (err) {
@@ -169,7 +174,8 @@ const decodeToken = function (req, res) {
           address:decoded.user.address,
           phone: decoded.user.phone,
           image:decoded.user.image,
-          id:decoded.user.id
+          id:decoded.user.id,
+          password: decoded.user.password
         }
       })
     })
