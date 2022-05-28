@@ -4,12 +4,7 @@ const validateEmail = require("../helpers/validateEmail");
 const createToken = require("../helpers/createToken");
 const sendMail = require("../helpers/sendMail");
 const jwt = require("jsonwebtoken");
-<<<<<<< HEAD
 const jwtDecode = require('jwt-decode');
-
-=======
-const jwtDecode = require("jwt-decode");
->>>>>>> ea87a631fa5a482c1472f1d58951cf193785d4d8
 require("dotenv").config();
 
 var register = async (req, res) => {
