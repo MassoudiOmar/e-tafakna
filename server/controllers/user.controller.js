@@ -148,8 +148,10 @@ var activate = async (req, res) => {
 
 
 const decodeToken = function (req, res) {
+  console.log(req.headers.token, "i5demm")
   let token = req.headers.token
   var decoded = jwtDecode(token)
+  console.log(decoded);
   jwt.verify(token,process.env.JWT_SECRET_KEY, (err, result) => {
     if (err) return res.json({
       title: ('unauthorized', err)
@@ -157,6 +159,7 @@ const decodeToken = function (req, res) {
     //token is valid
     const sql ='SELECT * FROM users WHERE id=?'
     db.query(sql,[decoded.user.id], async (err,user)=>{
+      console.log(user,'hennnnnnnnnneee')
       if (err) return console.log(err)
       return res.status(200).json(user)
     })
