@@ -1,8 +1,8 @@
 var db = require("../database-mysql");
 
 let getAnswers = (req, res) => {
-  const { contracts_id } = req.body;
-  const sql = `SELECT content, questions_id FROM answers  where contracts_id=?`;
+  const { contracts_id } = req.params;
+  const sql = `SELECT questions_id,content  FROM answers  where contracts_id=?`;
   db.query(sql, [contracts_id], (err, result) => {
     if (err) res.send(err);
     else res.send(result);
