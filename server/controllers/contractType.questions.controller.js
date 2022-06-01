@@ -14,7 +14,19 @@ const affectQuestionToContractType = (req, res) => {
     }
   );
 };
-
+/////////////////////////
+const deleteRelation=(req,res)=>{
+  let questions_id= req.params.questions_id
+  contract_types_id =req.params.contract_types_id
+ let sql=`DELETE from etafakna.questions_has_contract_types   where questions_id = ? && contract_types_id = ?	`
+  db.query(sql, [questions_id,contract_types_id], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+    res.send(result)
+    }
+  });
+}
 // get questions of specific contract_type by its id
 const findQuestionsOfSpecificContract = (req, res) => {
   let {contract_id,lang} = req.params;
@@ -57,4 +69,5 @@ module.exports = {
   affectQuestionToContractType,
   findAll,
   findQuestionsOfSpecificContract,
+  deleteRelation
 };
