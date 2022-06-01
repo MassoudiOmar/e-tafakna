@@ -3,13 +3,15 @@ const superagent = require("superagent");
 const Docxtemplater = require("docxtemplater");
 const PizZip = require("pizzip");
 const fs = require("fs");
-
+const cloudinary = require("../utils/cloudinary");
 
 const fillContract = async (req, res) => {
   let renderObject = {};
   let answersArray = [];
   const { id } = req.params;
-  const sql = `SELECT questions_id,content  FROM answers where contracts_id=1`;
+  const sql = `select template_FR, questions_id,content from contract_types
+  inner join answers on (contract_types.id = answers.contracts_contract_types_id)
+  where answers.contracts_id = ?`;
   db.query(sql, [id], async (err, result) => {
     console.log(result);
     if (err) res.send(err);
@@ -27,10 +29,10 @@ const fillContract = async (req, res) => {
 
         return acc;
       }, {});
-      res.send(renderObject);
+      // res.send(result);
       console.log(renderObject, "check obj before rendeer");
-      const url =
-        "https://res.cloudinary.com/royal-armysrbk/raw/upload/v1654051740/Contrat_de_location_simple_okzo4s.docx";
+
+      const url = result[0].template_FR;
 
       const response = await superagent
         .get(url)
@@ -53,41 +55,34 @@ const fillContract = async (req, res) => {
         compression: "DEFLATE",
       });
       console.log(buf, "check buf");
+      fs.writeFileSync("output.docx", buf);
+      await cloudinary.uploader.upload(
+        "output.docx",
+        { resource_type: "auto" },
+        (err, result) => {
+          if (err) {
+            console.log(err);
+          } else {
+            const url = result.secure_url;
+            console.log(url, "url");
+            res.send(url);
+          }
+        }
+      );
+      fs.unlink("output.docx",(err) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+      
+        //file removed
+      })
       // buf is a nodejs Buffer, you can either write it to a
       // file or res.send it with express for example.
-      fs.writeFileSync("output.docx", buf);
     }
   });
 
-  // console.log(response,"response from fill contract methode")
-  // res.send('aaa')
-  // console.log('aaaaaaaa')
 };
-
-// Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
-// doc.render({
-//   q1: "amine",
-//   q2: "omar",
-//   q3: 11368574,
-//   q4: "23/10/2015",
-//   q5: "imed",
-//   q6: "فارس",
-//   q7: "17/01/1997",
-//   q8: 11259863,
-//   q9: "15/07/2013",
-//   q10: "يوسف",
-// });
-
-// const buf = doc.getZip().generate({
-//   type: "nodebuffer",
-//   // compression: DEFLATE adds a compression step.
-//   // For a 50MB output document, expect 500ms additional CPU time
-//   compression: "DEFLATE",
-// });
-
-// // buf is a nodejs Buffer, you can either write it to a
-// // file or res.send it with express for example.
-// fs.writeFileSync("output.docx", buf);
 
 const insertContractType = (req, res) => {
   let {

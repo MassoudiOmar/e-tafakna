@@ -3,9 +3,9 @@ const router = require('express').Router()
 
 
 router.post('/',contractType.insertContractType)
-// router.get('/',contractType.getAllContractType)
+router.get('/',contractType.getAllContractType)
 router.get('/:id/:lang',contractType.getByIdContractType)
-// router.get('/:id',contractType.getDataById)
-router.get('/fill',contractType.fillContract)
+router.get('/:id',contractType.getDataById)
+router.post('/fill/:id',contractType.fillContract)
 
 module.exports = router;
