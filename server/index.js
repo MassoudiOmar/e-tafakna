@@ -5,6 +5,7 @@ const usersRoutes = require("./routes/user.routes");
 const adminRoutes = require("./routes/admin.routes");
 const reset = require("./routes/resetPassord");
 const answersRoutes = require("./routes/answers.routes");
+const contractRoutes = require("./routes/contract.routes");
 var items = require("./database-mysql");
 
 const contractTypeRoutes = require("./routes/contractType.routes");
@@ -25,6 +26,7 @@ app.use("/api/contractType", contractTypeRoutes);
 app.use("/api/contractTypeQuestions", contractTypeQuestionsRoutes);
 app.use("/api/users",login);
 app.use("/api/answers",answersRoutes)
+app.use("/api/contract",contractRoutes)
 app.listen(PORT, function () {
   console.log("listening on port 3000!");
 });
