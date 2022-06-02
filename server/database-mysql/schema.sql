@@ -147,11 +147,12 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `etafakna`.`users_has_contracts`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`users_has_contracts` (
+  `id` INT NOT NULL AUTO_INCREMENT,
   `owner` INT NOT NULL,
   `contracts_id` INT NOT NULL,
-  `receiver` INT NULL DEFAULT NULL,
-  `receiver_email` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`owner`, `contracts_id`),
+  `receiver` INT,
+  `receiver_email` VARCHAR(45) ,
+  PRIMARY KEY (`id`),
   INDEX `fk_users_has_contracts_contracts1_idx` (`contracts_id` ASC) VISIBLE,
   INDEX `fk_users_has_contracts_users1_idx` (`owner` ASC) VISIBLE,
   CONSTRAINT `fk_users_has_contracts_contracts1`
