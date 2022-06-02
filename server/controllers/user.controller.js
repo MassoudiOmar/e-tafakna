@@ -94,9 +94,11 @@ var register = async (req, res) => {
     res.json({ msg: err.message });
   }
 };
+
 var activate = async (req, res) => {
   // get token
   try {
+    console.log(req.body,"body")
     const { activation_token } = req.body;
     // verify token
     const user = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN);
@@ -136,7 +138,7 @@ var activate = async (req, res) => {
       }
     });
   } catch (err) {
-    res.json({ msg: err.message });
+    res.json({ msg: err.message});
   }
 };
 const decodeToken = function (req, res) {

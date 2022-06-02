@@ -56,6 +56,7 @@ const insertContractType = (req, res) => {
     template_AR,
     country,
   } = req.body;
+  console.log(req.body)
   const sql = `INSERT INTO contract_types (signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country) values(?,?,?,?,?,?,?,?,?,?)`;
   db.query(
     sql,
@@ -72,8 +73,9 @@ const insertContractType = (req, res) => {
       country,
     ],
     (err, contractType) => {
-      if (err) res.status(500).send(err);
-      if (contractType) res.status(200).send(contractType);
+      if (err) res.send(err
+        );
+      if (contractType) res.send(contractType);
     }
   );
 };
