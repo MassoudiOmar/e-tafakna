@@ -4,12 +4,13 @@ const validateEmail = require("../helpers/validateEmail");
 const createToken = require("../helpers/createToken");
 const sendMail = require("../helpers/sendMail");
 const jwt = require("jsonwebtoken");
-<<<<<<< HEAD
-const jwtDecode = require('jwt-decode');
-
-=======
 const jwtDecode = require("jwt-decode");
->>>>>>> ea87a631fa5a482c1472f1d58951cf193785d4d8
+const cloudinary = require("../utils/cloudinary");
+var cloudinar = require("cloudinary");
+var cloudinar = require("cloudinary").v2;
+
+require("dotenv").config();
+
 require("dotenv").config();
 
 var register = async (req, res) => {
@@ -87,7 +88,6 @@ var register = async (req, res) => {
                   // send email
                   const url = `${activation_token}`;
                   sendMail.sendEmailRegister(email, url, "Verify your email");
-
                   // registration success
                   res.json({ msg: "Welcome! Please check your email." });
                 }
@@ -129,7 +129,7 @@ var activate = async (req, res) => {
               image: results[0].image,
               address: results[0].address,
               phone: results[0].phone,
-              password:results[0].password
+              password: results[0].password,
             };
             jwt.sign({ user }, process.env.JWT_SECRET_KEY, (err, token) => {
               if (err) {
@@ -151,34 +151,60 @@ var activate = async (req, res) => {
   }
 };
 
-
 const decodeToken = function (req, res) {
-  console.log(req.headers.token, "i5demm")
-  let token = req.headers.token
-  var decoded = jwtDecode(token)
+  console.log(req.headers.token, "i5demm");
+  let token = req.headers.token;
+  var decoded = jwtDecode(token);
   console.log(decoded);
-  jwt.verify(token,process.env.JWT_SECRET_KEY, (err, result) => {
-    if (err) return res.json({
-      title: ('unauthorized', err)
-    })
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, result) => {
+    if (err)
+      return res.json({
+        title: ("unauthorized", err),
+      });
     //token is valid
-    const sql ='SELECT * FROM users WHERE id=?'
-    db.query(sql,[decoded.user.id], async (err,user)=>{
-      console.log(decoded.user.image)
-      if (err) return console.log(err)
+    const sql = "SELECT * FROM users WHERE id=?";
+    db.query(sql, [decoded.user.id], async (err, user) => {
+      console.log(decoded.user.image);
+      if (err) return console.log(err);
       return res.status(200).json({
-        title: 'user grabbed',
+        title: "user grabbed",
         user: {
           email: decoded.user.email,
           username: decoded.user.username,
-          address:decoded.user.address,
+          address: decoded.user.address,
           phone: decoded.user.phone,
-          image:decoded.user.image,
-          id:decoded.user.id,
-          password: decoded.user.password
+          image: decoded.user.image,
+          id: decoded.user.id,
+          password: decoded.user.password,
+        },
+      });
+    });
+  });
+};
+
+const addContract = (req, res) => {
+  const { doc } = req.body;
+  console.log(req.body);
+  try {
+    cloudinary.uploader.upload(
+      doc,
+      {
+        public_id: "sample_document.docx",
+        resource_type: "raw",
+        raw_convert: "aspose",
+      },
+      async function (error, result) {
+        if (error) {
+          res.send(error);
+        } else {
+          const docment = result.secure_url;
+          res.send(docment);
         }
-      })
-    })
-  })
-}
-module.exports = { register, activate ,decodeToken};
+      }
+    );
+  } catch {
+    console.log("object");
+  }
+};
+
+module.exports = { register, activate, decodeToken, addContract };

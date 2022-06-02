@@ -22,55 +22,67 @@ let loginAdmin = (req, res) => {
       } else if (!result.length) {
         return res.send("Admin not found");
       } else {
-        try {
-          bcrypt.compare(password, result[0].password, function (err, result) {
-            if (err) {
-              res.send(err);
-            } else if (result === false) {
-              res.send("login failed");
-            } else if (result === true) {
-              getAdmin(email, (err, result) => {
-                if (err) {
-                  res.send(err);
-                }
-                if (result[0].role === "admin") {
-                  getAdmin(email, (err, result) => {
-                    if (err) {
-                      res.send(err);
-                    }
-                    const user = {
-                      id: result[0].id,
-                      username: result[0].username,
-                      email: result[0].email,
-                      image: result[0].image,
-                      address: result[0].address,
-                      phone: result[0].phone,
-                    };
-                    jwt.sign(
-                      { user },
-                      process.env.JWT_SECRET_KEY,
-                      (err, token) => {
-                        if (err) {
-                          return res.send(err);
-                        }
-                        res.send({
-                          UsertokenInfo: token,
-                          message: "login succssefull",
-                        });
+     getAdmin(email, (err, result) => {
+       if(err){res.send(err)}
+       else{
+         if(result[0].role === "admin"){
+          try {
+            bcrypt.compare(password, result[0].password, function (err, result) {
+              if (err) {
+                res.send(err);
+              } else if (result === false) {
+                res.send("login failed");
+              } else if (result === true) {
+                getAdmin(email, (err, result) => {
+                  if (err) {
+                    res.send(err);
+                  }
+                  if (result[0].role === "admin") {
+                    getAdmin(email, (err, result) => {
+                      if (err) {
+                        res.send(err);
                       }
-                    );
-                  });
-                } else {
-                  res.send("sorry, you have no access !");
-                }
-              });
-            } else {
-              res.send("not found");
-            }
-          });
-        } catch (err) {
-          res.send(err);
-        }
+                      const user = {
+                        id: result[0].id,
+                        username: result[0].username,
+                        email: result[0].email,
+                        image: result[0].image,
+                        address: result[0].address,
+                        phone: result[0].phone,
+                      };
+                      jwt.sign(
+                        { user },
+                        process.env.JWT_SECRET_KEY,
+                        (err, token) => {
+                          if (err) {
+                            return res.send(err);
+                          }
+                          res.send({
+                            UsertokenInfo: token,
+                            message: "login succssefull",
+                          });
+                        }
+                      );
+                    });
+                  } else {
+                    res.send("sorry, you have no access !");
+                  }
+                });
+              } else {
+                res.send("not found");
+              }
+            });
+          } catch (err) {
+            res.send(err);
+          }
+         }else{
+           res.send('access denied!')
+         }
+       }
+     })
+
+
+     
       }
     });
   }

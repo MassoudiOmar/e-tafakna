@@ -29,6 +29,7 @@ const deleteRelation=(req,res)=>{
 }
 // get questions of specific contract_type by its id
 const findQuestionsOfSpecificContract = (req, res) => {
+  
   let {contract_id,lang} = req.params;
   let column = "";
   
