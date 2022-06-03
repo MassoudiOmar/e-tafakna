@@ -20,6 +20,8 @@ if(!email || !password){
                  res.send("incorrect password");
                } else if (result === true) {
          res.send('welcome !')
+     }else{
+         res.send('er')
      }
          })
      

@@ -24,16 +24,16 @@ USE `etafakna` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`contract_types` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `signed_time` INT NOT NULL,
+  `signed_time` INT ,
   `time_answering` INT NOT NULL,
   `title_FR` VARCHAR(200) NOT NULL,
-  `title_AR` VARCHAR(200) NOT NULL,
+  `title_AR` VARCHAR(200) ,
   `description_FR` VARCHAR(255) NOT NULL,
-  `description_AR` VARCHAR(255) NOT NULL,
+  `description_AR` VARCHAR(255) ,
   `image_url` VARCHAR(200) NOT NULL,
-  `template_FR` VARCHAR(200) NOT NULL,
-  `template_AR` VARCHAR(200) NOT NULL,
-  `country` VARCHAR(10) NOT NULL,
+  `template_FR` VARCHAR(200) ,
+  `template_AR` VARCHAR(200) ,
+  `country` VARCHAR(10),
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4

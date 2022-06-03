@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors")
 const questionRoutes = require("./routes/question.routes");
 const usersRoutes = require("./routes/user.routes");
 const adminRoutes = require("./routes/admin.routes");
@@ -7,6 +8,7 @@ const reset = require("./routes/resetPassord");
 const answersRoutes = require("./routes/answers.routes");
 const sendContractRoutes = require("./routes/user_has_contracts.routes")
 var items = require("./database-mysql");
+// const bodyParser = require("body-parser")
 const cors = require("cors")
 
 const contractTypeRoutes = require("./routes/contractType.routes");
@@ -15,6 +17,8 @@ const login = require("./routes/login");
 
 const app = express(); 
 const PORT = process.env.PORT || 3000;
+// app.use(express.bodyParser({limit: '500mb'}))
+app.use(cors({origin:"*"}))
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
