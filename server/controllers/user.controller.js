@@ -161,19 +161,34 @@ const decodeToken = function (req, res) {
     db.query(sql,[decoded.user.id], async (err,user)=>{
       console.log(decoded.user.image)
       if (err) return console.log(err)
-      return res.status(200).json({
-        title: 'user grabbed',
-        user: {
-          email: decoded.user.email,
-          username: decoded.user.username,
-          address:decoded.user.address,
-          phone: decoded.user.phone,
-          image:decoded.user.image,
-          id:decoded.user.id,
-          password: decoded.user.password
-        }
-      })
+      return res.status(200).json(user
+      //   {
+      //   title: 'user grabbed',
+      //   user: {
+      //     email: decoded.user.email,
+      //     username: decoded.user.username,
+      //     address:decoded.user.address,
+      //     phone: decoded.user.phone,
+      //     image:decoded.user.image,
+      //     id:decoded.user.id,
+      //     password: decoded.user.password
+      //   }
+      // }
+      )
     })
   })
 }
-module.exports = { register, activate ,decodeToken};
+
+const getAllUsers = async (req, res) => {
+  const sql ='SELECT * FROM users'
+    db.query(sql, (err, questions) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        console.log(questions,'result')
+        res.send(questions);
+      }
+    });
+  
+}
+module.exports = { register, activate ,decodeToken,getAllUsers};
