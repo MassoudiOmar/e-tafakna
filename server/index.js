@@ -6,7 +6,7 @@ const usersRoutes = require("./routes/user.routes");
 const adminRoutes = require("./routes/admin.routes");
 const reset = require("./routes/resetPassord");
 const answersRoutes = require("./routes/answers.routes");
-const sendContractRoutes = require("./routes/users_has_contracts.routess")
+const usersContractstRoutes = require("./routes/users_has_contracts.routes")
 var items = require("./database-mysql");
 // const bodyParser = require("body-parser")
 
@@ -22,7 +22,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/send",sendContractRoutes)
+app.use("/api/send",usersContractstRoutes)
 app.use("/api/questions", questionRoutes);
 app.use("/api", reset);
 app.use("/api/users", usersRoutes);
