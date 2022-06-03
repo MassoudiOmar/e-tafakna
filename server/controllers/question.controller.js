@@ -72,4 +72,4 @@ db.query(sql,[id], (err, result) => {
 })
 }
 
-module.exports = { getOneQuestion, insertQuestion, getAllQuestions, getArQuestions, deleteQuestion, updateQuestion };
+module.exports = { getOneQuestion, insertQuestion, getAllQuestions, getArQuestions, deleteQuestions, updateQuestion };
