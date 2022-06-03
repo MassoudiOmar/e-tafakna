@@ -159,22 +159,9 @@ const decodeToken = function (req, res) {
     //token is valid
     const sql ='SELECT * FROM users WHERE id=?'
     db.query(sql,[decoded.user.id], async (err,user)=>{
-      console.log(decoded.user.image)
+      console.log(user,'hennnnnnnnnneee')
       if (err) return console.log(err)
-      return res.status(200).json(user
-      //   {
-      //   title: 'user grabbed',
-      //   user: {
-      //     email: decoded.user.email,
-      //     username: decoded.user.username,
-      //     address:decoded.user.address,
-      //     phone: decoded.user.phone,
-      //     image:decoded.user.image,
-      //     id:decoded.user.id,
-      //     password: decoded.user.password
-      //   }
-      // }
-      )
+      return res.status(200).json(user)
     })
   })
 }
