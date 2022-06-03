@@ -79,8 +79,7 @@ let loginAdmin = (req, res) => {
 
 
 let ChangePassword =  async (req, res) => {
-  const {password} = req.body
-  const {id} = req.params
+  const {id} = req.body
   const sql=`SELECT * FROM users Where id=?`
   db.query(sql,[id],(err, result) => {
     if (err) {
@@ -93,7 +92,7 @@ let ChangePassword =  async (req, res) => {
             res.send(err);
           }
           else{
-            const {id} = req.params
+            const {id} = req.body
             const salt = await bcrypt.genSalt();
             const password = await bcrypt.hash(req.body.newPassword, salt);
             const sql='UPDATE users SET password=? WHERE id=?'
@@ -113,6 +112,8 @@ let ChangePassword =  async (req, res) => {
   }})
 
 }
+
+
 
 // get all users
 let getAllUsers = (req, res) => {
@@ -138,8 +139,9 @@ let getOneUser = (req, res) => {
 // delete one user
 let deleteUser = (req, res) => {
   const id = req.params.id;
-  const sql = `DELETE FROM users WHERE id =?`;
-  db.query(sql, [id], (err, result) => {
+  const { status } = req.body
+  const sql = `UPDATE users SET status=? WHERE id=?`;
+  db.query(sql, [status, id], (err, result) => {
     if (err) res.send(err);
     else res.send(result);
   });

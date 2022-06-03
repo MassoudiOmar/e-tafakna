@@ -6,7 +6,9 @@ const adminRoutes = require("./routes/admin.routes");
 const reset = require("./routes/resetPassord");
 const answersRoutes = require("./routes/answers.routes");
 const contractRoutes = require("./routes/contract.routes");
+const usersContractsRoutes = require("./routes/users_has_contracts.routes")
 var items = require("./database-mysql");
+const cors = require("cors")
 
 const contractTypeRoutes = require("./routes/contractType.routes");
 const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
@@ -17,7 +19,8 @@ const PORT = process.env.PORT || 3000;
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors({origin:"*"}))
+app.use("/api/usersContracts",usersContractsRoutes)
 app.use("/api/questions", questionRoutes);
 app.use("/api", reset);
 app.use("/api/users", usersRoutes);
