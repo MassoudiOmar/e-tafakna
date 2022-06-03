@@ -45,6 +45,7 @@ let loginUser = function (req, res) {
                       image: result[0].image,
                       address: result[0].address,
                       phone: result[0].phone,
+                      password: result[0].password
                     };
                     jwt.sign(
                       { user },

@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors")
 const questionRoutes = require("./routes/question.routes");
 const usersRoutes = require("./routes/user.routes");
 const adminRoutes = require("./routes/admin.routes");
@@ -8,7 +9,7 @@ const answersRoutes = require("./routes/answers.routes");
 const contractRoutes = require("./routes/contract.routes");
 const usersContractsRoutes = require("./routes/users_has_contracts.routes")
 var items = require("./database-mysql");
-const cors = require("cors")
+// const bodyParser = require("body-parser")
 
 const contractTypeRoutes = require("./routes/contractType.routes");
 const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
@@ -16,11 +17,13 @@ const login = require("./routes/login");
 
 const app = express(); 
 const PORT = process.env.PORT || 3000;
+// app.use(express.bodyParser({limit: '500mb'}))
+app.use(cors({origin:"*"}))
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({origin:"*"}))
-app.use("/api/usersContracts",usersContractsRoutes)
+
+app.use("/api/send",usersContractsRoutes)
 app.use("/api/questions", questionRoutes);
 app.use("/api", reset);
 app.use("/api/users", usersRoutes);
