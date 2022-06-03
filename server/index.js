@@ -6,8 +6,10 @@ const usersRoutes = require("./routes/user.routes");
 const adminRoutes = require("./routes/admin.routes");
 const reset = require("./routes/resetPassord");
 const answersRoutes = require("./routes/answers.routes");
+const sendContractRoutes = require("./routes/user_has_contracts.routes")
 var items = require("./database-mysql");
 // const bodyParser = require("body-parser")
+const cors = require("cors")
 
 const contractTypeRoutes = require("./routes/contractType.routes");
 const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
@@ -20,7 +22,8 @@ app.use(cors({origin:"*"}))
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors({origin:"*"}))
+app.use("/api/send",sendContractRoutes)
 app.use("/api/questions", questionRoutes);
 app.use("/api", reset);
 app.use("/api/users", usersRoutes);

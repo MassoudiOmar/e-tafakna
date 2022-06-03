@@ -1,47 +1,88 @@
 const db = require("../database-mysql");
+const superagent = require("superagent");
 const Docxtemplater = require("docxtemplater");
 const PizZip = require("pizzip");
-
 const fs = require("fs");
-const path = require("path");
+const cloudinary = require("../utils/cloudinary");
 
-// Load the docx file as binary content
-const content = fs.readFileSync(
-  path.resolve(__dirname, "Contrat de location simple.docx"),
-  "binary"
-);
+const fillContract = async (req, res) => {
+  let renderObject = {};
+  let answersArray = [];
+  const { id } = req.params;
+  const sql = `select template_FR, questions_id,content from contract_types
+  inner join answers on (contract_types.id = answers.contracts_contract_types_id)
+  where answers.contracts_id = ?`;
+  db.query(sql, [id], async (err, result) => {
+    console.log(result);
+    if (err) res.send(err);
+    else {
+      answersArray = result.map((element, index) => {
+        let key = element.questions_id;
+        let object = {};
+        object[key] = element.content;
+        return object;
+      });
+      renderObject = answersArray.reduce((acc, e, i) => {
+        let key = Object.keys(e)[0];
+        let value = Object.values(e)[0];
+        acc[key] = value;
 
-const zip = new PizZip(content);
+        return acc;
+      }, {});
+      // res.send(result);
+      console.log(renderObject, "check obj before rendeer");
 
-const doc = new Docxtemplater(zip, {
-  paragraphLoop: true,
-  linebreaks: true,
-});
+      const url = result[0].template_FR;
 
-// Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
-doc.render({
-  q1: "amine",
-  q2: "omar",
-  q3: 11368574,
-  q4: "23/10/2015",
-  q5: "imed",
-  q6: "فارس",
-  q7: "17/01/1997",
-  q8: 11259863,
-  q9: "15/07/2013",
-  q10: "يوسف",
-});
+      const response = await superagent
+        .get(url)
+        .parse(superagent.parse.image)
+        .buffer();
 
-const buf = doc.getZip().generate({
-  type: "nodebuffer",
-  // compression: DEFLATE adds a compression step.
-  // For a 50MB output document, expect 500ms additional CPU time
-  compression: "DEFLATE",
-});
+      const buffer = response.body;
 
-// buf is a nodejs Buffer, you can either write it to a
-// file or res.send it with express for example.
-fs.writeFileSync("output.docx", buf);
+      const zip = new PizZip(buffer);
+
+      const doc = new Docxtemplater(zip, {
+        paragraphLoop: true,
+        linebreaks: true,
+      });
+      doc.render(renderObject);
+      const buf = doc.getZip().generate({
+        type: "nodebuffer",
+        // compression: DEFLATE adds a compression step.
+        // For a 50MB output document, expect 500ms additional CPU time
+        compression: "DEFLATE",
+      });
+      console.log(buf, "check buf");
+      fs.writeFileSync("output.docx", buf);
+      await cloudinary.uploader.upload(
+        "output.docx",
+        { resource_type: "auto" },
+        (err, result) => {
+          if (err) {
+            console.log(err);
+          } else {
+            const url = result.secure_url;
+            console.log(url, "url");
+            res.send(url);
+          }
+        }
+      );
+      fs.unlink("output.docx",(err) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+      
+        //file removed
+      })
+      // buf is a nodejs Buffer, you can either write it to a
+      // file or res.send it with express for example.
+    }
+  });
+
+};
 
 const insertContractType = (req, res) => {
   let {
@@ -135,4 +176,5 @@ module.exports = {
   getByIdContractType,
   getDataById,
   deleteContractById,
+  fillContract,
 };

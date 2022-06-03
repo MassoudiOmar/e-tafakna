@@ -12,13 +12,14 @@ let getOneQuestion = function (req, res) {
   });
 };
 let getAllQuestions = function (req, res) {
+  // console.log("first")
   let query = "SELECT * FROM questions ";
   db.query(query, (err, questions) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      console.log(questions)
-      res.status(200).send(questions);
+      console.log(questions,'result')
+      res.send(questions);
     }
   });
 };
@@ -41,7 +42,7 @@ let insertQuestion = (req, res) => {
   const sql = `INSERT INTO questions (content_FR,content_AR) values (?,?)`;
   db.query(sql, [content_FR, content_AR], (err, question) => {
     if (err) res.status(500).send(err);
-    else res.status(200).send(question);
+    else res.send(question).json();
   });
 };
 const deleteQuestion = (req, res) => {
@@ -62,5 +63,13 @@ let updateQuestion = (req, res) => {
   });
 };
 
+const deleteQuestions=(req, res)=>{
+  const {id}=req.params
+const sql =`DELETE FROM questions WHERE id=?`
+db.query(sql,[id], (err, result) => {
+  if (err) res.send(err);
+  else res.send(result);
+})
+}
 
 module.exports = { getOneQuestion, insertQuestion, getAllQuestions, getArQuestions, deleteQuestion, updateQuestion };

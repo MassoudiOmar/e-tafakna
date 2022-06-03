@@ -103,7 +103,7 @@ const sendEmailRegister = (to, url, text) => {
           <h1><span> Bien venue à E-Tafakna! Votre compte est maintenant créé
           </span> Cet e-mail est la confirmation que vous êtes maintenant inscrit à E-Tafakna!</h1>
           <p>Avant de commencer à utiliser E-Tafakna, veuillez confirmer votre compte en copiant ce lien ci-dessous vers l'application🙂 👇🏻 :</p>
-          <div>${url}</div>
+          
           <br>
           <br>
           <p> Merci pour votre confiance  !</p>
