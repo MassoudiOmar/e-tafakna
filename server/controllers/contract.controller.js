@@ -15,9 +15,8 @@ formData.append('instructions', JSON.stringify({
     dpi: 500
   }
 }))
-formData.append('document', fs.createReadStream('output.docx'))
-
-;(async () => {
+formData.append('document', fs.createReadStream('output.docx'));
+(async () => {
   try {
     const response = await axios.post('https://api.pspdfkit.com/build', formData, {
       headers: formData.getHeaders({

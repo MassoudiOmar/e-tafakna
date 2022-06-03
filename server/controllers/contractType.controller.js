@@ -74,7 +74,7 @@ const insertContractType = (req, res) => {
     ],
     (err, contractType) => {
       if (err) res.send(err
-        );
+      );
       if (contractType) res.send(contractType);
     }
   );
@@ -117,10 +117,22 @@ const getByIdContractType = (req, res) => {
     }
   });
 };
+const deleteContractById = (req, res) => {
+  let id = req.params.id;
+  let query = `DELETE FROM contract_types WHERE id = ?`;
+  db.query(query, [id], (err, contracts) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(contracts);
+    }
+  });
+};
 
 module.exports = {
   insertContractType,
   getAllContractType,
   getByIdContractType,
   getDataById,
+  deleteContractById,
 };

@@ -98,7 +98,7 @@ var register = async (req, res) => {
 var activate = async (req, res) => {
   // get token
   try {
-    console.log(req.body,"body")
+    console.log(req.body, "body")
     const { activation_token } = req.body;
     // verify token
     const user = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN);
@@ -120,7 +120,7 @@ var activate = async (req, res) => {
               image: results[0].image,
               address: results[0].address,
               phone: results[0].phone,
-              password:results[0].password
+              password: results[0].password
             };
             jwt.sign({ user }, process.env.JWT_SECRET_KEY, (err, token) => {
               if (err) {
@@ -138,25 +138,25 @@ var activate = async (req, res) => {
       }
     });
   } catch (err) {
-    res.json({ msg: err.message});
+    res.json({ msg: err.message });
   }
 };
 const decodeToken = function (req, res) {
   let token = req.headers.token
   var decoded = jwtDecode(token)
-  jwt.verify(token,process.env.JWT_SECRET_KEY, (err, result) => {
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, result) => {
     if (err) return res.json({
       title: ('unauthorized', err)
     })
     //token is valid
-    const sql ='SELECT * FROM users WHERE id=?'
-    db.query(sql,[decoded.user.id], async (err,user)=>{
+    const sql = 'SELECT * FROM users WHERE id=?'
+    db.query(sql, [decoded.user.id], async (err, user) => {
       if (err) return console.log(err)
       return res.status(200).json(user)
     })
   })
 }
-module.exports = { register, activate ,decodeToken};
+module.exports = { register, activate, decodeToken };
 
 
 
