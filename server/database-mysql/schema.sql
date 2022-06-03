@@ -173,7 +173,6 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
-
 -- Insert All Contracts
 INSERT INTO etafakna.contract_types(signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country)
 VALUES(115,2,"Rent","Rent","Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...","desc_AR","https://thumbs.dreamstime.com/b/word-rent-cubes-model-home-real-estate-word-rent-cubes-model-home-real-estate-concept-133078583.jpg","temp_FR","temp_AR","Tunisia"),

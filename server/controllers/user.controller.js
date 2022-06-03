@@ -4,7 +4,7 @@ const validateEmail = require("../helpers/validateEmail");
 const createToken = require("../helpers/createToken");
 const sendMail = require("../helpers/sendMail");
 const jwt = require("jsonwebtoken");
-const jwtDecode = require('jwt-decode');
+const jwtDecode = require("jwt-decode");
 require("dotenv").config();
 
 var register = async (req, res) => {
@@ -124,7 +124,7 @@ var activate = async (req, res) => {
               image: results[0].image,
               address: results[0].address,
               phone: results[0].phone,
-              password:results[0].password
+              password: results[0].password,
             };
             jwt.sign({ user }, process.env.JWT_SECRET_KEY, (err, token) => {
               if (err) {
@@ -146,23 +146,23 @@ var activate = async (req, res) => {
   }
 };
 
-
 const decodeToken = function (req, res) {
-  console.log(req.headers.token, "i5demm")
-  let token = req.headers.token
-  var decoded = jwtDecode(token)
+  console.log(req.headers.token, "i5demm");
+  let token = req.headers.token;
+  var decoded = jwtDecode(token);
   console.log(decoded);
-  jwt.verify(token,process.env.JWT_SECRET_KEY, (err, result) => {
-    if (err) return res.json({
-      title: ('unauthorized', err)
-    })
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, result) => {
+    if (err)
+      return res.json({
+        title: ("unauthorized", err),
+      });
     //token is valid
-    const sql ='SELECT * FROM users WHERE id=?'
-    db.query(sql,[decoded.user.id], async (err,user)=>{
-      console.log(user,'hennnnnnnnnneee')
-      if (err) return console.log(err)
-      return res.status(200).json(user)
-    })
-  })
-}
-module.exports = { register, activate ,decodeToken};
+    const sql = "SELECT * FROM users WHERE id=?";
+    db.query(sql, [decoded.user.id], async (err, user) => {
+      console.log(user, "hennnnnnnnnneee");
+      if (err) return console.log(err);
+      return res.status(200).json(user);
+    });
+  });
+};
+module.exports = { register, activate, decodeToken };
