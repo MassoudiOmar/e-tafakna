@@ -37,7 +37,7 @@ const findQuestionsOfSpecificContract = (req, res) => {
   lang === "Arabe"
     ? (column = "content_AR")
     : (column = "content_FR");
-  const query = `SELECT ${column} from etafakna.questions
+  const query = `SELECT questions.id,${column} from etafakna.questions
      inner join etafakna.questions_has_contract_types on (questions.id = questions_has_contract_types.questions_id)
      inner join etafakna.contract_types on (contract_types.id = questions_has_contract_types.contract_types_id)
      where contract_types.id = ?
