@@ -45,7 +45,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`contracts` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `contract_url` VARCHAR(50) NOT NULL,
+  `contract_url` VARCHAR(255) NOT NULL,
   `status` VARCHAR(50) NOT NULL,
   `created_at` VARCHAR(50) NULL DEFAULT NULL,
   `contract_types_id` INT NOT NULL,
