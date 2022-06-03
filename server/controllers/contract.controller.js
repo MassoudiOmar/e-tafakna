@@ -20,7 +20,7 @@ formData.append('document', fs.createReadStream('output.docx'));
   try {
     const response = await axios.post('https://api.pspdfkit.com/build', formData, {
       headers: formData.getHeaders({
-          'Authorization': 'Bearer pdf_live_rMidCXXZtyxm6alf3YwkDAtkrG1PZbuiBfjIGOZefLJ'
+        'Authorization': 'Bearer pdf_live_rMidCXXZtyxm6alf3YwkDAtkrG1PZbuiBfjIGOZefLJ'
       }),
       responseType: "stream"
     })
@@ -43,9 +43,9 @@ function streamToString(stream) {
 
 
 let userContract = (req, res) => {
-  const {id,receiver,receiver_email,contracts_id}= req.body
-  const sql=`INSERT INTO users_has_contracts (id,receiver ,receiver_email,contracts_id) VALUES (?,?,?,?)`
-  db.sql(sql,[id,receiver,receiver_email,contracts_id], (err, result)=>{
+  const { id, receiver, receiver_email, contracts_id } = req.body
+  const sql = `INSERT INTO users_has_contracts (id,receiver ,receiver_email,contracts_id) VALUES (?,?,?,?)`
+  db.sql(sql, [id, receiver, receiver_email, contracts_id], (err, result) => {
     if (err) res.send(err);
     else res.send(result);
   })
@@ -53,11 +53,11 @@ let userContract = (req, res) => {
 
 let getOwner = (req, res) => {
   const owner = req.body.id
-  const sql=`SELECT * FROM users_has_contracts WHERE owner=?`
+  const sql = `SELECT * FROM users_has_contracts WHERE owner=?`
   db.query(sql, [owner], (err, result) => {
     if (err) res.send(err);
     else res.send(result);
   });
 }
 
-module.exports = {userContract,getOwner}
+module.exports = { userContract, getOwner }
