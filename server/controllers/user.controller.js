@@ -6,7 +6,6 @@ const sendMail = require("../helpers/sendMail");
 const jwt = require("jsonwebtoken");
 const jwtDecode = require("jwt-decode");
 require("dotenv").config();
-
 var register = async (req, res) => {
   try {
     //get info of user
@@ -36,14 +35,12 @@ var register = async (req, res) => {
     ) {
       return res.json({ msg: "please fill in all fields" });
     }
-
     // check email
     else if (!validateEmail(email)) {
       console.log("email not valid");
       res.send({ msg: "Please enter a valid email address." });
     } else {
       //check user
-
       const sql = `SELECT * FROM users WHERE email=? `;
       db.query(sql, [email], async (err, result) => {
         if (err) return res.send(err);
@@ -82,7 +79,6 @@ var register = async (req, res) => {
                   // send email
                   const url = `${activation_token}`;
                   sendMail.sendEmailRegister(email, url, "Verify your email");
-
                   // registration success
                   res.json({ msg: "Welcome! Please check your email." });
                 }
@@ -102,11 +98,11 @@ var register = async (req, res) => {
 var activate = async (req, res) => {
   // get token
   try {
+    console.log(req.body, "body")
     const { activation_token } = req.body;
     // verify token
     const user = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN);
     const { name, email, password } = user;
-
     //check user
     const sql = `SELECT * FROM users WHERE email=? `;
     db.query(sql, [email], async (err, results) => {
@@ -124,7 +120,7 @@ var activate = async (req, res) => {
               image: results[0].image,
               address: results[0].address,
               phone: results[0].phone,
-              password: results[0].password,
+              password: results[0].password
             };
             jwt.sign({ user }, process.env.JWT_SECRET_KEY, (err, token) => {
               if (err) {
@@ -145,24 +141,33 @@ var activate = async (req, res) => {
     res.json({ msg: err.message });
   }
 };
-
 const decodeToken = function (req, res) {
-  console.log(req.headers.token, "i5demm");
-  let token = req.headers.token;
-  var decoded = jwtDecode(token);
-  console.log(decoded);
+  let token = req.headers.token
+  var decoded = jwtDecode(token)
   jwt.verify(token, process.env.JWT_SECRET_KEY, (err, result) => {
-    if (err)
-      return res.json({
-        title: ("unauthorized", err),
-      });
+    if (err) return res.json({
+      title: ('unauthorized', err)
+    })
     //token is valid
-    const sql = "SELECT * FROM users WHERE id=?";
-    db.query(sql, [decoded.user.id], async (err, user) => {
-      console.log(user, "hennnnnnnnnneee");
-      if (err) return console.log(err);
-      return res.status(200).json(user);
+    const sql ='SELECT * FROM users WHERE id=?'
+    db.query(sql,[decoded.user.id], async (err,user)=>{
+      console.log(user,'hennnnnnnnnneee')
+      if (err) return console.log(err)
+      return res.status(200).json(user)
+    })
+  })
+}
+
+const getAllUsers = async (req, res) => {
+  const sql ='SELECT * FROM users'
+    db.query(sql, (err, questions) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        console.log(questions,'result')
+        res.send(questions);
+      }
     });
-  });
-};
-module.exports = { register, activate, decodeToken };
+  
+}
+module.exports = { register, activate ,decodeToken,getAllUsers};
