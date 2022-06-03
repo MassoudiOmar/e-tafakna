@@ -162,49 +162,12 @@ const decodeToken = function (req, res) {
         title: ("unauthorized", err),
       });
     //token is valid
-    const sql = "SELECT * FROM users WHERE id=?";
-    db.query(sql, [decoded.user.id], async (err, user) => {
-      console.log(decoded.user.image);
-      if (err) return console.log(err);
-      return res.status(200).json({
-        title: "user grabbed",
-        user: {
-          email: decoded.user.email,
-          username: decoded.user.username,
-          address: decoded.user.address,
-          phone: decoded.user.phone,
-          image: decoded.user.image,
-          id: decoded.user.id,
-          password: decoded.user.password,
-        },
-      });
-    });
-  });
-};
-
-const addContract = (req, res) => {
-  const { doc } = req.body;
-  console.log(req.body);
-  try {
-    cloudinary.uploader.upload(
-      doc,
-      {
-        public_id: "sample_document.docx",
-        resource_type: "raw",
-        raw_convert: "aspose",
-      },
-      async function (error, result) {
-        if (error) {
-          res.send(error);
-        } else {
-          const docment = result.secure_url;
-          res.send(docment);
-        }
-      }
-    );
-  } catch {
-    console.log("object");
-  }
-};
-
-module.exports = { register, activate, decodeToken, addContract };
+    const sql ='SELECT * FROM users WHERE id=?'
+    db.query(sql,[decoded.user.id], async (err,user)=>{
+      console.log(user,'hennnnnnnnnneee')
+      if (err) return console.log(err)
+      return res.status(200).json(user)
+    })
+  })
+}
+module.exports = { register, activate ,decodeToken};

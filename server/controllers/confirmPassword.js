@@ -7,7 +7,8 @@ require("dotenv").config();
 
 const confirmPassword =(req,res)=>{
 const {email,password,hashedPassword}= req.body 
-console.log(req.body,'lol');
+console.log(req.body , "body")
+console.log(req.body,'s');
 if(!email || !password){
     return res.send('enter your password') 
  }else{

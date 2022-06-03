@@ -6,5 +6,4 @@ router.post("/register", userController.register);
 router.post("/activation",userController.activate);
 router.get("/userInfo",userController.decodeToken);
 router.post('/confirmPassword',pass.confirmPassword)
-router.post('/add',userController.addContract)
 module.exports = router;

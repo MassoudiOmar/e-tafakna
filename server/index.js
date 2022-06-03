@@ -13,6 +13,7 @@ const cors =require("cors")
 const contractTypeRoutes = require("./routes/contractType.routes");
 const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
 const login = require("./routes/login");
+const con = require("./routes/contract.routes")
 
 const app = express(); 
 const PORT = process.env.PORT || 3000;
@@ -31,6 +32,7 @@ app.use("/api/contractType", contractTypeRoutes);
 app.use("/api/contractTypeQuestions", contractTypeQuestionsRoutes);
 app.use("/api/users",login);
 app.use("/api/answers",answersRoutes)
+app.use('/contarct',con)
 app.listen(PORT, function () {
   console.log("listening on port 3000!");
 });
