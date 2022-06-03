@@ -12,8 +12,7 @@ let getOneQuestion = function (req, res) {
   });
 };
 let getAllQuestions = function (req, res) {
-  console.log("first")
-  let query = "SELECT content_FR FROM questions ";
+  let query = "SELECT * FROM questions ";
   db.query(query, (err, questions) => {
     if (err) {
       res.status(500).send(err);
@@ -24,14 +23,14 @@ let getAllQuestions = function (req, res) {
   });
 };
 let getArQuestions = function (req, res) {
-  
+
   let query = "SELECT content_AR FROM questions ";
- 
+
   db.query(query, (err, questions) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      console.log(questions,"fwea")
+      console.log(questions, "fwea")
       res.status(200).send(questions);
     }
   });
@@ -45,14 +44,14 @@ let insertQuestion = (req, res) => {
     else res.status(200).send(question);
   });
 };
-let deleteQuestion = (req, res) => {
-  let id = req.params.id;
-  const sql = `DELETE FROM questions WHERE id = ?`;
+const deleteQuestion = (req, res) => {
+  const { id } = req.params
+  const sql = `DELETE FROM questions WHERE id=?`
   db.query(sql, [id], (err, result) => {
-    if (err) res.status(500).send(err);
-    else res.status(200).send(result);
-  });
-};
+    if (err) res.send(err);
+    else res.send(result);
+  })
+}
 let updateQuestion = (req, res) => {
   let id = req.params.id;
   let { content_FR, content_AR } = req.body;
@@ -64,4 +63,4 @@ let updateQuestion = (req, res) => {
 };
 
 
-module.exports = { getOneQuestion, insertQuestion, getAllQuestions, getArQuestions, deleteQuestion, updateQuestion  };
+module.exports = { getOneQuestion, insertQuestion, getAllQuestions, getArQuestions, deleteQuestion, updateQuestion };

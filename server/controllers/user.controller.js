@@ -4,8 +4,8 @@ const validateEmail = require("../helpers/validateEmail");
 const createToken = require("../helpers/createToken");
 const sendMail = require("../helpers/sendMail");
 const jwt = require("jsonwebtoken");
+const jwtDecode = require('jwt-decode');
 require("dotenv").config();
-
 var register = async (req, res) => {
   try {
     //get info of user
@@ -35,14 +35,12 @@ var register = async (req, res) => {
     ) {
       return res.json({ msg: "please fill in all fields" });
     }
-
     // check email
     else if (!validateEmail(email)) {
       console.log("email not valid");
       res.send({ msg: "Please enter a valid email address." });
     } else {
       //check user
-
       const sql = `SELECT * FROM users WHERE email=? `;
       db.query(sql, [email], async (err, result) => {
         if (err) return res.send(err);
@@ -72,7 +70,6 @@ var register = async (req, res) => {
                   console.log(err);
                   res.send(err);
                 } else {
-                  console.log(["yes", result]);
                   //create token
                   const newUser = { username, email, password };
                   const activation_token = createToken.activation(newUser);
@@ -82,7 +79,6 @@ var register = async (req, res) => {
                   // send email
                   const url = `${activation_token}`;
                   sendMail.sendEmailRegister(email, url, "Verify your email");
-
                   // registration success
                   res.json({ msg: "Welcome! Please check your email." });
                 }
@@ -102,22 +98,40 @@ var register = async (req, res) => {
 var activate = async (req, res) => {
   // get token
   try {
+    console.log(req.body, "body")
     const { activation_token } = req.body;
     // verify token
     const user = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN);
     const { name, email, password } = user;
-
     //check user
     const sql = `SELECT * FROM users WHERE email=? `;
-    db.query(sql, [email], async (err, result) => {
+    db.query(sql, [email], async (err, results) => {
       if (err) res.send(err);
-      if (result.length > 0) {
+      if (results.length > 0) {
         const sql = `UPDATE users SET status= 'Activated' WHERE email=?`;
         db.query(sql, [email], async (err, result) => {
+          console.log(result);
           if (err) res.send(err);
-          return res.json({
-            msg: "Your account has been activated, you can now sign in.",
-          });
+          else {
+            const user = {
+              id: results[0].id,
+              username: results[0].username,
+              email: results[0].email,
+              image: results[0].image,
+              address: results[0].address,
+              phone: results[0].phone,
+              password: results[0].password
+            };
+            jwt.sign({ user }, process.env.JWT_SECRET_KEY, (err, token) => {
+              if (err) {
+                return res.send(err);
+              }
+              res.send({
+                UsertokenInfo: token,
+                msg: "Your account has been activated",
+              });
+            });
+          }
         });
       } else {
         return res.send("wrong token");
@@ -127,4 +141,37 @@ var activate = async (req, res) => {
     res.json({ msg: err.message });
   }
 };
-module.exports = { register, activate };
+const decodeToken = function (req, res) {
+  let token = req.headers.token
+  var decoded = jwtDecode(token)
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, result) => {
+    if (err) return res.json({
+      title: ('unauthorized', err)
+    })
+    //token is valid
+    const sql = 'SELECT * FROM users WHERE id=?'
+    db.query(sql, [decoded.user.id], async (err, user) => {
+      if (err) return console.log(err)
+      return res.status(200).json(user)
+    })
+  })
+}
+module.exports = { register, activate, decodeToken };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

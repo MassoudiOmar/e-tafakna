@@ -56,6 +56,7 @@ const insertContractType = (req, res) => {
     template_AR,
     country,
   } = req.body;
+  console.log(req.body)
   const sql = `INSERT INTO contract_types (signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country) values(?,?,?,?,?,?,?,?,?,?)`;
   db.query(
     sql,
@@ -72,8 +73,9 @@ const insertContractType = (req, res) => {
       country,
     ],
     (err, contractType) => {
-      if (err) res.status(500).send(err);
-      if (contractType) res.status(200).send(contractType);
+      if (err) res.send(err
+      );
+      if (contractType) res.send(contractType);
     }
   );
 };
@@ -92,7 +94,7 @@ const getAllContractType = (req, res) => {
 const getDataById = (req, res) => {
   let { id } = req.params;
   let query = `SELECT 
-    signed_time, time_answering, title_FR
+    signed_time, time_answering, title_FR, image_url
    FROM contract_types WHERE id = ?`;
   db.query(query, [id], (err, contracts) => {
     if (err) {
@@ -115,10 +117,22 @@ const getByIdContractType = (req, res) => {
     }
   });
 };
+const deleteContractById = (req, res) => {
+  let id = req.params.id;
+  let query = `DELETE FROM contract_types WHERE id = ?`;
+  db.query(query, [id], (err, contracts) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(contracts);
+    }
+  });
+};
 
 module.exports = {
   insertContractType,
   getAllContractType,
   getByIdContractType,
   getDataById,
+  deleteContractById,
 };

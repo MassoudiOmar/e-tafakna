@@ -15,9 +15,8 @@ formData.append('instructions', JSON.stringify({
     dpi: 500
   }
 }))
-formData.append('document', fs.createReadStream('output.docx'))
-
-;(async () => {
+formData.append('document', fs.createReadStream('output.docx'));
+(async () => {
   try {
     const response = await axios.post('https://api.pspdfkit.com/build', formData, {
       headers: formData.getHeaders({
@@ -41,3 +40,24 @@ function streamToString(stream) {
     stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")))
   })
 }
+
+
+let userContract = (req, res) => {
+  const {id,receiver,receiver_email,contracts_id}= req.body
+  const sql=`INSERT INTO users_has_contracts (id,receiver ,receiver_email,contracts_id) VALUES (?,?,?,?)`
+  db.sql(sql,[id,receiver,receiver_email,contracts_id], (err, result)=>{
+    if (err) res.send(err);
+    else res.send(result);
+  })
+}
+
+let getOwner = (req, res) => {
+  const owner = req.body.id
+  const sql=`SELECT * FROM users_has_contracts WHERE owner=?`
+  db.query(sql, [owner], (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
+}
+
+module.exports = {userContract,getOwner}

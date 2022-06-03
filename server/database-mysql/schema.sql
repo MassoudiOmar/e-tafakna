@@ -24,16 +24,16 @@ USE `etafakna` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`contract_types` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `signed_time` INT NOT NULL,
+  `signed_time` INT ,
   `time_answering` INT NOT NULL,
   `title_FR` VARCHAR(200) NOT NULL,
-  `title_AR` VARCHAR(200) NOT NULL,
+  `title_AR` VARCHAR(200) ,
   `description_FR` VARCHAR(255) NOT NULL,
-  `description_AR` VARCHAR(255) NOT NULL,
+  `description_AR` VARCHAR(255) ,
   `image_url` VARCHAR(200) NOT NULL,
-  `template_FR` VARCHAR(200) NOT NULL,
-  `template_AR` VARCHAR(200) NOT NULL,
-  `country` VARCHAR(10) NOT NULL,
+  `template_FR` VARCHAR(200) ,
+  `template_AR` VARCHAR(200) ,
+  `country` VARCHAR(10),
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -81,13 +81,12 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`answers` (
   `content` VARCHAR(50) NOT NULL,
   `questions_id` INT NOT NULL,
   `contracts_id` INT NOT NULL,
-  `contracts_contract_types_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `questions_id`, `contracts_id`, `contracts_contract_types_id`),
+  PRIMARY KEY (`id`),
   INDEX `fk_answers_questions1_idx` (`questions_id` ASC) VISIBLE,
-  INDEX `fk_answers_contracts1_idx` (`contracts_id` ASC, `contracts_contract_types_id` ASC) VISIBLE,
+  INDEX `fk_answers_contracts1_idx` (`contracts_id` ASC) VISIBLE,
   CONSTRAINT `fk_answers_contracts1`
-    FOREIGN KEY (`contracts_id` , `contracts_contract_types_id`)
-    REFERENCES `etafakna`.`contracts` (`id` , `contract_types_id`)
+    FOREIGN KEY (`contracts_id`)
+    REFERENCES `etafakna`.`contracts` (`id`)
     ON DELETE CASCADE,
   CONSTRAINT `fk_answers_questions1`
     FOREIGN KEY (`questions_id`)
