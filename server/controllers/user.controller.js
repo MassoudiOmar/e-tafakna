@@ -165,4 +165,17 @@ const decodeToken = function (req, res) {
     })
   })
 }
-module.exports = { register, activate ,decodeToken};
+
+const getAllUsers = async (req, res) => {
+  const sql ='SELECT * FROM users'
+    db.query(sql, (err, questions) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        console.log(questions,'result')
+        res.send(questions);
+      }
+    });
+  
+}
+module.exports = { register, activate ,decodeToken,getAllUsers};
