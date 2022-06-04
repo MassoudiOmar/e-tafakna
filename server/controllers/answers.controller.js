@@ -10,10 +10,10 @@ let getAnswers = (req, res) => {
 };
 
 let AddAnswers = (req, res) => {
-  const { content, questions_id, contracts_id } = req.body;
-  const sql = `INSERT INTO answers (content ,questions_id,contracts_id) VALUES (?,?,?)`;
+  const { content, questions_id, contracts_id, contracts_contract_types_id } = req.body;
+  const sql = `INSERT INTO answers (content ,questions_id,contracts_id,contracts_contract_types_id) VALUES (?,?,?,?)`;
 
-  db.query(sql, [content, questions_id, contracts_id], (err, result) => {
+  db.query(sql, [content, questions_id, contracts_id, contracts_contract_types_id], (err, result) => {
     if (err) res.send(err);
     else res.send(result);
   });

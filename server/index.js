@@ -6,7 +6,8 @@ const usersRoutes = require("./routes/user.routes");
 const adminRoutes = require("./routes/admin.routes");
 const reset = require("./routes/resetPassord");
 const answersRoutes = require("./routes/answers.routes");
-const usersContractstRoutes = require("./routes/users_has_contracts.routes")
+const contractRoutes = require("./routes/contract.routes");
+const usersContractsRoutes = require("./routes/users_has_contracts.routes")
 var items = require("./database-mysql");
 // const bodyParser = require("body-parser")
 
@@ -22,7 +23,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/send",usersContractstRoutes)
+app.use("/api/send",usersContractsRoutes)
 app.use("/api/questions", questionRoutes);
 app.use("/api", reset);
 app.use("/api/users", usersRoutes);
@@ -31,6 +32,7 @@ app.use("/api/contractType", contractTypeRoutes);
 app.use("/api/contractTypeQuestions", contractTypeQuestionsRoutes);
 app.use("/api/users",login);
 app.use("/api/answers",answersRoutes)
+app.use("/api/contracts",contractRoutes)
 app.listen(PORT, function () {
   console.log("listening on port 3000!");
 });

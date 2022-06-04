@@ -16,28 +16,28 @@ const affectQuestionToContractType = (req, res) => {
 };
 /////////////////////////
 const deleteRelation=(req,res)=>{
-  console.log(req.params,"deleteeeeeeeee")
   let questions_id= req.params.questions_id
   let contract_types_id =req.params.contract_types_id
-  
+  console.log(req.params)
  let sql=`DELETE from etafakna.questions_has_contract_types  WHERE questions_id = ? && contract_types_id = ? `
   db.query(sql, [questions_id,contract_types_id], (err, result) => {
     if (err) {
       console.log(err);
     } else {
-    res.send(result)
+      console.log(result)
+      res.send(result)
     }
   });
 };
 // get questions of specific contract_type by its id
 const findQuestionsOfSpecificContract = (req, res) => {
-  let {contract_id,lang} = req.params;
+  let { contract_id, lang } = req.params;
   let column = "";
-  
+
   lang === "Arabe"
     ? (column = "content_AR")
     : (column = "content_FR");
-  const query = `SELECT ${column} from etafakna.questions
+  const query = `SELECT questions.id,${column} from etafakna.questions
      inner join etafakna.questions_has_contract_types on (questions.id = questions_has_contract_types.questions_id)
      inner join etafakna.contract_types on (contract_types.id = questions_has_contract_types.contract_types_id)
      where contract_types.id = ?
