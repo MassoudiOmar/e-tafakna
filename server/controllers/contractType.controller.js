@@ -46,7 +46,7 @@ const fillContract = async (req, res) => {
       const buffer = response.body;
 
       const zip = new PizZip(buffer);
-
+      
       const doc = new Docxtemplater(zip, {
         paragraphLoop: true,
         linebreaks: true,
@@ -84,7 +84,7 @@ const fillContract = async (req, res) => {
         .post("https://api.pspdfkit.com/build", formData, {
           headers: formData.getHeaders({
             Authorization:
-              "Bearer pdf_live_rMidCXXZtyxm6alf3YwkDAtkrG1PZbuiBfjIGOZefLJ",
+              "Bearer pdf_live_UIPJ7eyybpwmRv0NpzCMfX4HoGHERNai4U3fHzksiP8",
           }),
           responseType: "stream",
         })
@@ -109,7 +109,7 @@ const fillContract = async (req, res) => {
       await cloudinary.uploader.upload(
         "output.docx",
         { resource_type: "auto" },
-        (err, result) => {
+       async (err, result) => {
           if (err) {
             console.log(err);
           } else {
@@ -117,21 +117,21 @@ const fillContract = async (req, res) => {
             console.log(docUrl, "url docx");
             res.send(docUrl);
 
+            await cloudinary.uploader.upload("image.jpg",
+            { resource_type: "auto" }, (err, result) => {
+              if (err) {
+                console.log(err, "err");
+              } else {
+                urlImage = result.secure_url;
+                console.log(urlImage, "url"); 
+                // res.send(urlImage);
+              
+              }
+            });
           }
         }
       );
 
-      // await cloudinary.uploader.upload("image.jpg",
-      // { resource_type: "auto" }, (err, result) => {
-      //   if (err) {
-      //     console.log(err, "err");
-      //   } else {
-      //     urlImage = result.secure_url;
-      //     console.log(url, "url");
-      //     res.send(url);
-        
-      //   }
-      // });
       fs.unlinkSync("output.docx", (err) => {
         if (err) {
           console.error(err);
