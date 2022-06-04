@@ -27,8 +27,8 @@ formData.append('document', fs.createReadStream('output.docx'));
 
     response.data.pipe(fs.createWriteStream("image.jpg"))
   } catch (e) {
-    const errorString = await streamToString(e.response.data)
-    console.log(errorString)
+    // const errorString = await streamToString(e.response.data)
+    console.log(e)
   }
 })()
 
