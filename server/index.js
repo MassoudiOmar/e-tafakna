@@ -11,6 +11,13 @@ const usersContractsRoutes = require("./routes/users_has_contracts.routes")
 var items = require("./database-mysql");
 // const bodyParser = require("body-parser")
 
+
+
+//Payment 
+const Stripe = require("stripe") ;
+const PUBLISHABLE_KEY="pk_test_51L6X72Hejc9XlfCikQdaY9J17A4v46tUebq9sgFLimch2Axe4uQivcx5oTwGk3r7m8XMSCdm1OwAaghn4HqAl9Ps0042FYDgM6"
+const SECRET_KEY="sk_test_51L6X72Hejc9XlfCijVRAxpDU4QAwtw3PQe4bw92wREDGZQ5l8F79nGTSUx6jk0rWGn51KeBQr73cIqiME05YABwg009CErrqim"
+
 const contractTypeRoutes = require("./routes/contractType.routes");
 const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
 const login = require("./routes/login");
@@ -35,4 +42,27 @@ app.use("/api/answers",answersRoutes)
 app.use("/api/contracts",contractRoutes)
 app.listen(PORT, function () {
   console.log("listening on port 3000!");
+});
+
+
+//Confirm the API version from your stripe dashboard
+const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
+
+app.post("/create-payment-intent", async (req, res) => {
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: 1099, //lowest denomination of particular currency
+      currency: "usd",
+      payment_method_types: ["card"], //by default
+    });
+
+    const clientSecret = paymentIntent.client_secret;
+
+    res.json({
+      clientSecret: clientSecret,
+    });
+  } catch (e) {
+    console.log(e.message);
+    res.json({ error: e.message });
+  }
 });

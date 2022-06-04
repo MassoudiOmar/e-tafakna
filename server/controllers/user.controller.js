@@ -4,7 +4,7 @@ const validateEmail = require("../helpers/validateEmail");
 const createToken = require("../helpers/createToken");
 const sendMail = require("../helpers/sendMail");
 const jwt = require("jsonwebtoken");
-const jwtDecode = require('jwt-decode');
+const jwtDecode = require("jwt-decode");
 require("dotenv").config();
 var register = async (req, res) => {
   try {
@@ -149,9 +149,9 @@ const decodeToken = function (req, res) {
       title: ('unauthorized', err)
     })
     //token is valid
-    const sql ='SELECT * FROM users WHERE id=?'
-    db.query(sql,[decoded.user.id], async (err,user)=>{
-      console.log(user,'hennnnnnnnnneee')
+    const sql = 'SELECT * FROM users WHERE id=?'
+    db.query(sql, [decoded.user.id], async (err, user) => {
+      console.log(user, 'hennnnnnnnnneee')
       if (err) return console.log(err)
       return res.status(200).json(user)
     })
@@ -159,15 +159,15 @@ const decodeToken = function (req, res) {
 }
 
 const getAllUsers = async (req, res) => {
-  const sql ='SELECT * FROM users'
-    db.query(sql, (err, questions) => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        console.log(questions,'result')
-        res.send(questions);
-      }
-    });
-  
+  const sql = 'SELECT * FROM users'
+  db.query(sql, (err, questions) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      console.log(questions, 'result')
+      res.send(questions);
+    }
+  });
+
 }
-module.exports = { register, activate ,decodeToken,getAllUsers};
+module.exports = { register, activate, decodeToken, getAllUsers };
