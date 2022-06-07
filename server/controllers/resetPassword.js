@@ -4,15 +4,17 @@ const bcrypt = require("bcrypt");
 
 const resetPasswor = async (req, res) => {
   const { email } = req.body;
+  console.log(req.body)
   if (!email) {
-    res.send("please put your email");
+    res.send('please put your email')
   } else {
-    const sql = "SELECT * FROM users WHERE email=?";
+    const sql = 'SELECT * FROM users WHERE email=?'
     db.query(sql, [email], async (err, result) => {
       if (err) {
-        res.send(err);
-      } else if (!result.length) {
-        res.send("you dont have an account");
+        res.send(err)
+      }
+      else if (!result.length) {
+        res.send('you dont have an account')
       } else {
         var transporter = nodemailer.createTransport({
           service: "gmail",
@@ -35,11 +37,8 @@ const resetPasswor = async (req, res) => {
         transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
           } else {
-            res.send({
-              message: "email has been send",
-              resetToken: hashedCode,
-            });
-            console.log(hashedCode);
+            res.send({ message: 'email has been send', resetToken: hashedCode })
+            console.log(hashedCode)
           }
         });
       }
@@ -48,54 +47,52 @@ const resetPasswor = async (req, res) => {
 };
 
 const updatepassword = async (req, res) => {
-  const { email, newpassword, confirmPassword } = req.body;
-  console.log(email, newpassword, confirmPassword);
+  const { email, newpassword, confirmPassword } = req.body
+  console.log(email, newpassword, confirmPassword)
   if (!newpassword || !confirmPassword) {
-    res.send("pleas fill all the fields");
+    res.send('pleas fill all the fields')
   } else {
     if (newpassword !== confirmPassword) {
-      res.send("please confirm your password");
+      res.send('please confirm your password')
     } else {
       try {
         const salt = await bcrypt.genSalt();
         const newphashedassword = await bcrypt.hash(newpassword, salt);
-        const query = "UPDATE users SET password = ? WHERE email = ?";
+        const query = 'UPDATE users SET password = ? WHERE email = ?';
         db.query(query, [newphashedassword, email], (err, result) => {
-          if (err) {
-            res.send(err);
-          }
-          res.send("password updated successfully");
-        });
+          if (err) { res.send(err) }
+          res.send('password updated successfully')
+        })
       } catch {
-        console.log("err");
+        console.log('err')
       }
     }
   }
+
 };
 
 const verifying = (req, res) => {
   const { resetCode, hashedCode } = req.body;
-  console.log(req.body);
+  console.log(req.body)
   if (!resetCode || !hashedCode) {
-    return res.send("enter your code");
+    return res.send('enter your code')
   } else {
     try {
-      bcrypt.compare(
-        resetCode.toString(),
-        hashedCode.toString(),
-        (err, result) => {
-          if (err) {
-            res.send(err);
-          } else if (result === false) {
-            res.send("not verified");
-          } else if (result === true) {
-            res.send("you can change your password");
-          }
+      bcrypt.compare(resetCode.toString(), hashedCode.toString(), (err, result) => {
+        if (err) {
+          res.send(err);
+        } else if (result === false) {
+          res.send("not verified");
+        } else if (result === true) {
+          res.send('you can change your password')
         }
-      );
+      })
+
     } catch {
-      console.log("first");
+      console.log("first")
     }
   }
-};
+
+
+}
 module.exports = { resetPasswor, verifying, updatepassword };

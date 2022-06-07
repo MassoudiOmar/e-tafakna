@@ -24,16 +24,16 @@ USE `etafakna` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`contract_types` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `signed_time` INT NOT NULL,
+  `signed_time` INT ,
   `time_answering` INT NOT NULL,
   `title_FR` VARCHAR(200) NOT NULL,
-  `title_AR` VARCHAR(200) NOT NULL,
+  `title_AR` VARCHAR(200) ,
   `description_FR` VARCHAR(255) NOT NULL,
-  `description_AR` VARCHAR(255) NOT NULL,
+  `description_AR` VARCHAR(255) ,
   `image_url` VARCHAR(200) NOT NULL,
-  `template_FR` VARCHAR(200) NOT NULL,
-  `template_AR` VARCHAR(200) NOT NULL,
-  `country` VARCHAR(10) NOT NULL,
+  `template_FR` VARCHAR(200) ,
+  `template_AR` VARCHAR(200) ,
+  `country` VARCHAR(10),
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -45,7 +45,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`contracts` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `contract_url` VARCHAR(50) NOT NULL,
+  `contract_url` VARCHAR(255) NOT NULL,
   `status` VARCHAR(50) NOT NULL,
   `created_at` VARCHAR(50) NULL DEFAULT NULL,
   `contract_types_id` INT NOT NULL,
@@ -95,7 +95,6 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`answers` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
-
 
 -- -----------------------------------------------------
 -- Table `etafakna`.`questions_has_contract_types`
@@ -147,11 +146,12 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `etafakna`.`users_has_contracts`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`users_has_contracts` (
+  `id` INT NOT NULL AUTO_INCREMENT,
   `owner` INT NOT NULL,
   `contracts_id` INT NOT NULL,
-  `receiver` INT NULL DEFAULT NULL,
-  `receiver_email` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`owner`, `contracts_id`),
+  `receiver` INT,
+  `receiver_email` VARCHAR(45) ,
+  PRIMARY KEY (`id`),
   INDEX `fk_users_has_contracts_contracts1_idx` (`contracts_id` ASC) VISIBLE,
   INDEX `fk_users_has_contracts_users1_idx` (`owner` ASC) VISIBLE,
   CONSTRAINT `fk_users_has_contracts_contracts1`
@@ -170,7 +170,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
 
 
 -- Insert All Contracts

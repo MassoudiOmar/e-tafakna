@@ -4,8 +4,12 @@ const Docxtemplater = require("docxtemplater");
 const PizZip = require("pizzip");
 const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
+const FormData = require("form-data");
+const axios = require("axios");
 
 const fillContract = async (req, res) => {
+  let urlImage =''
+  let docUrl = ''
   let renderObject = {};
   let answersArray = [];
   const { id } = req.params;
@@ -56,6 +60,52 @@ const fillContract = async (req, res) => {
       });
       console.log(buf, "check buf");
       fs.writeFileSync("output.docx", buf);
+      
+
+      
+      const formData = new FormData();
+      formData.append(
+        "instructions",
+        JSON.stringify({
+          parts: [
+            {
+              file: "document", 
+            },
+          ],
+          output: {
+            type: "image",
+            format: "jpg",
+            dpi: 500,
+          },
+        })
+      );
+      formData.append("document", fs.createReadStream("output.docx"));
+      axios
+        .post("https://api.pspdfkit.com/build", formData, {
+          headers: formData.getHeaders({
+            Authorization:
+              "Bearer pdf_live_rMidCXXZtyxm6alf3YwkDAtkrG1PZbuiBfjIGOZefLJ",
+          }),
+          responseType: "stream",
+        })
+        .then((response) => {
+          response.data.pipe(fs.createWriteStream("image.jpg"));
+        })
+        .catch(async function (e) {
+          console.log(e);
+          const errorString = await streamToString(e.response.data);
+          console.log(errorString, "from catch");
+        });
+      function streamToString(stream) {
+        const chunks = [];
+        return new Promise((resolve, reject) => {
+          stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+          stream.on("error", (err) => reject(err));
+          stream.on("end", () =>
+            resolve(Buffer.concat(chunks).toString("utf8"))
+          );
+        });
+      }
       await cloudinary.uploader.upload(
         "output.docx",
         { resource_type: "auto" },
@@ -63,25 +113,42 @@ const fillContract = async (req, res) => {
           if (err) {
             console.log(err);
           } else {
-            const url = result.secure_url;
-            console.log(url, "url");
-            res.send(url);
+            docUrl = result.secure_url;
+            console.log(docUrl, "url docx");
+            res.send(docUrl);
+
           }
         }
       );
-      fs.unlink("output.docx",(err) => {
+
+      // await cloudinary.uploader.upload("image.jpg",
+      // { resource_type: "auto" }, (err, result) => {
+      //   if (err) {
+      //     console.log(err, "err");
+      //   } else {
+      //     urlImage = result.secure_url;
+      //     console.log(url, "url");
+      //     res.send(url);
+        
+      //   }
+      // });
+      fs.unlinkSync("output.docx", (err) => {
         if (err) {
-          console.error(err)
-          return
+          console.error(err);
+          return;
         }
-      
-        //file removed
+
+        // file removed
+      });
+      const updateContract = `UPDATE contracts set contract_url = ? where id =? `
+      db.query(updateContract,[docUrl,id],(err,result)=>{
+        err ? console.log(err) : console.log(result)
       })
+
       // buf is a nodejs Buffer, you can either write it to a
       // file or res.send it with express for example.
     }
   });
-
 };
 
 const insertContractType = (req, res) => {
@@ -97,6 +164,7 @@ const insertContractType = (req, res) => {
     template_AR,
     country,
   } = req.body;
+  console.log(req.body)
   const sql = `INSERT INTO contract_types (signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country) values(?,?,?,?,?,?,?,?,?,?)`;
   db.query(
     sql,
@@ -113,8 +181,9 @@ const insertContractType = (req, res) => {
       country,
     ],
     (err, contractType) => {
-      if (err) res.status(500).send(err);
-      if (contractType) res.status(200).send(contractType);
+      if (err) res.send(err
+      );
+      if (contractType) res.send(contractType);
     }
   );
 };
@@ -133,7 +202,7 @@ const getAllContractType = (req, res) => {
 const getDataById = (req, res) => {
   let { id } = req.params;
   let query = `SELECT 
-    signed_time, time_answering, title_FR
+    signed_time, time_answering, title_FR, image_url
    FROM contract_types WHERE id = ?`;
   db.query(query, [id], (err, contracts) => {
     if (err) {
@@ -156,11 +225,23 @@ const getByIdContractType = (req, res) => {
     }
   });
 };
+const deleteContractById = (req, res) => {
+  let id = req.params.id;
+  let query = `DELETE FROM contract_types WHERE id = ?`;
+  db.query(query, [id], (err, contracts) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(contracts);
+    }
+  });
+};
 
 module.exports = {
   insertContractType,
   getAllContractType,
   getByIdContractType,
   getDataById,
+  deleteContractById,
   fillContract,
 };
