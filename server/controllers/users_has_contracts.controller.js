@@ -1,3 +1,4 @@
+var db = require("../database-mysql");
 const axios = require('axios')
 const FormData = require('form-data')
 const fs = require('fs')
@@ -44,6 +45,7 @@ function streamToString(stream) {
 
 let userContract = (req, res) => {
   const {id,receiver,receiver_email,contracts_id}= req.body
+  console.log(req.body,'bodyyy')
   const sql=`INSERT INTO users_has_contracts (id,receiver ,receiver_email,contracts_id) VALUES (?,?,?,?)`
   db.sql(sql,[id,receiver,receiver_email,contracts_id], (err, result)=>{
     if (err) res.send(err);

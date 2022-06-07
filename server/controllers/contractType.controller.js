@@ -37,7 +37,7 @@ const fillContract = async (req, res) => {
       console.log(renderObject, "check obj before rendeer");
 
       const url = result[0].template_FR;
-
+      console.log(url)
       const response = await superagent
         .get(url)
         .parse(superagent.parse.image)
@@ -84,7 +84,7 @@ const fillContract = async (req, res) => {
         .post("https://api.pspdfkit.com/build", formData, {
           headers: formData.getHeaders({
             Authorization:
-              "Bearer pdf_live_UIPJ7eyybpwmRv0NpzCMfX4HoGHERNai4U3fHzksiP8",
+              "Bearer pdf_live_vdeFKKEIpJQPRS7Mll8nRmA4K4YbAZ57Cnxj2yCc9np",
           }),
           responseType: "stream",
         })
@@ -106,44 +106,51 @@ const fillContract = async (req, res) => {
           );
         });
       }
-      await cloudinary.uploader.upload(
-        "output.docx",
-        { resource_type: "auto" },
-       async (err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            docUrl = result.secure_url;
-            console.log(docUrl, "url docx");
-            res.send(docUrl);
+      try {
 
-            await cloudinary.uploader.upload("image.jpg",
-            { resource_type: "auto" }, (err, result) => {
-              if (err) {
-                console.log(err, "err");
-              } else {
-                urlImage = result.secure_url;
-                console.log(urlImage, "url"); 
-                // res.send(urlImage);
-              
-              }
-            });
+        await cloudinary.uploader.upload(
+          "output.docx",
+          { resource_type: "auto" },
+         async (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              docUrl = result.secure_url;
+              console.log(docUrl, "url docx");
+              res.send(docUrl);
+  
+              await cloudinary.uploader.upload("image.jpg",
+              { resource_type: "auto" }, (err, result) => {
+                if (err) {
+                  console.log(err, "err");
+                } else {
+                  urlImage = result.secure_url;
+                  console.log(urlImage, "url"); 
+                  // res.send(urlImage);
+                  const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =? `
+                  db.query(updateContract,[docUrl,urlImage,id],(err,result)=>{
+                    err ? console.log(err) : console.log(result)
+                  })
+                  fs.unlinkSync("output.docx", (err) => {
+                    if (err) {
+                      console.error(err);
+                      return;
+                    }
+            
+                    // file removed
+                  });
+                }
+              });
+            }
           }
-        }
-      );
+        );
+      }
+      catch(err){
+        console.log(err , 'catch for cloudinary')
+      }
 
-      fs.unlinkSync("output.docx", (err) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-
-        // file removed
-      });
-      const updateContract = `UPDATE contracts set contract_url = ? where id =? `
-      db.query(updateContract,[docUrl,id],(err,result)=>{
-        err ? console.log(err) : console.log(result)
-      })
+    
+      
 
       // buf is a nodejs Buffer, you can either write it to a
       // file or res.send it with express for example.
