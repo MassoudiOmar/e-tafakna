@@ -9,7 +9,7 @@ const confirmPassword =(req,res)=>{
 const {email,password,hashedPassword}= req.body 
 console.log(req.body , "body")
 console.log(req.body,'s');
-if(!email || !password){
+if( !password){
     return res.send('enter your password') 
  }else{
      try{

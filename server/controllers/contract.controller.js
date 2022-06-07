@@ -12,12 +12,13 @@ db.query(sql,['draft',"",created_at,contract_types_id],(err,result)=>{
 let getAllContracts = (req, res) => {
   const {id}=req.params
  
-   const sql = `select uo.username as owner,ur.username as receiver,c.created_at,c.contract_url,ct.signed_time,ct.title_FR,c.status,ct.image_url  from users_has_contracts  uhc
-   inner join users uo on (uo.id = uhc.owner)
-   inner join users ur on (ur.id = uhc.receiver)
-   inner join contracts c on (c.id = uhc.contracts_id)
-   inner join contract_types ct on (ct.id = c.contract_types_id) 
-   WHERE uo.id=? OR ur.id =?;
+   const sql = `
+   select uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.created_at,c.contract_url,ct.signed_time,ct.title_FR,c.status  from users_has_contracts  uhc
+      inner join users uo on (uo.id = uhc.owner)
+      inner join users ur on (ur.id = uhc.receiver)
+      inner join contracts c on (c.id = uhc.contracts_id)
+      inner join contract_types ct on (ct.id = c.contract_types_id) 
+      WHERE uo.id=? OR ur.id =?;
    `;
    db.query(sql, [id,id],(err, result) => {
      if (err) res.send(err);
