@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const validateEmail = require("../helpers/validateEmail");
 const createToken = require("../helpers/createToken");
 const sendMail = require("../helpers/sendMail");
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken"); 
 const jwtDecode = require("jwt-decode");
 require("dotenv").config();
 var register = async (req, res) => {
