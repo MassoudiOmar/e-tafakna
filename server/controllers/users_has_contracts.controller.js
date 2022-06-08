@@ -1,3 +1,4 @@
+var db = require("../database-mysql");
 const axios = require('axios')
 const FormData = require('form-data')
 const fs = require('fs')
@@ -20,15 +21,15 @@ formData.append('document', fs.createReadStream('output.docx'));
   try {
     const response = await axios.post('https://api.pspdfkit.com/build', formData, {
       headers: formData.getHeaders({
-          'Authorization': 'Bearer pdf_live_rMidCXXZtyxm6alf3YwkDAtkrG1PZbuiBfjIGOZefLJ'
+          'Authorization': 'Bearer pdf_live_UIPJ7eyybpwmRv0NpzCMfX4HoGHERNai4U3fHzksiP8'
       }),
       responseType: "stream"
     })
 
     response.data.pipe(fs.createWriteStream("image.jpg"))
   } catch (e) {
-    const errorString = await streamToString(e.response.data)
-    console.log(errorString)
+    // const errorString = await streamToString(e.response.data)
+    // console.log(errorString)
   }
 })()
 
@@ -44,6 +45,7 @@ function streamToString(stream) {
 
 let userContract = (req, res) => {
   const {id,receiver,receiver_email,contracts_id}= req.body
+  console.log(req.body,'bodyyy')
   const sql=`INSERT INTO users_has_contracts (id,receiver ,receiver_email,contracts_id) VALUES (?,?,?,?)`
   db.sql(sql,[id,receiver,receiver_email,contracts_id], (err, result)=>{
     if (err) res.send(err);
