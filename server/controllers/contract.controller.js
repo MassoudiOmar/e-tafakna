@@ -21,15 +21,14 @@ const getAllContractByStatus = (req, res) => {
     } else res.send(result);
   });
 };
-
 let getAllContracts = (req, res) => {
   const { id } = req.params;
-
-  const sql = `select uo.username as owner,uo.image ,ur.username as receiver,c.created_at,c.contract_url,ct.signed_time,ct.title_FR,c.status,ct.image_url  from users_has_contracts  uhc
+  const sql = `
+   select uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.created_at,c.contract_url,ct.signed_time,ct.title_FR,c.status  from users_has_contracts  uhc
       inner join users uo on (uo.id = uhc.owner)
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
-      inner join contract_types ct on (ct.id = c.contract_types_id) 
+      inner join contract_types ct on (ct.id = c.contract_types_id)
       WHERE uo.id=? OR ur.id =?;
    `;
   db.query(sql, [id, id], (err, result) => {
@@ -38,6 +37,19 @@ let getAllContracts = (req, res) => {
       console.log(result, "result");
       res.send(result);
     }
+  });
+};
+let updateStatus = (req, res) => {
+  const { id } = req.params;
+  const sql = `UPDATE users_has_contracts uhc
+  inner join users uo on (uo.id = uhc.owner)
+  inner join users ur on (ur.id = uhc.receiver)
+  inner join contracts c on (c.id = uhc.contracts_id)
+  inner join contract_types ct on (ct.id = c.contract_types_id)
+  SET c.status="Rejected"
+  WHERE uo.id=? `;
+  db.query(sql, [id], (err, result) => {
+    err ? console.log(err) : console.log(result);
   });
 };
 let getQuestionsAnswers = (req, res) => {
@@ -59,4 +71,5 @@ module.exports = {
   getAllContracts,
   getAllContractByStatus,
   getQuestionsAnswers,
+  updateStatus
 };
