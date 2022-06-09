@@ -66,13 +66,10 @@ let getContractImage = (req, res) => {
   });
 };
 
-
-
-
 module.exports = {
   insertContract,
   getAllContracts,
   getAllContractByStatus,
   getQuestionsAnswers,
-  getContractImage
+  getContractImage,
 };
