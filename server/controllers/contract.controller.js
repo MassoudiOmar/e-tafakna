@@ -14,7 +14,7 @@ const getAllContractByStatus = (req, res) => {
   const owner = req.params.ownerId;
   const sql = `SELECT * FROM users_has_contracts
   inner join contracts on (contracts.id = users_has_contracts.contracts_id )
-  where contracts.status = ? &&  users_has_contracts.owner = ?; `;
+  where contracts.status = ? &&  users_has_contracts.owner = ? `;
   db.query(sql, [status, owner], (err, result) => {
     if (err) {
       console.log(err);
@@ -40,24 +40,24 @@ let getAllContracts = (req, res) => {
     }
   });
 };
-let getQuestionsAnswers = (req, res) => {
-  let id = req.params.id;
-  const sql = `select template_FR, questions_id,content from contract_types
-   inner join answers on (contract_types.id = answers.contracts_contract_types_id)
-   where answers.contracts_id = ?
-   `;
-  db.query(sql, [id], (err, result) => {
-    console.log(id)
-    if (err) res.send(err);
-    else {
-      console.log(result, "result");
-      res.send(result);
-    }
-  });
-};
+// let getQuestionsAnswers = (req, res) => {
+//   let id = req.params.id;
+//   let idq = req.params.idq;
+//   console.log(req.params,'req.params')
+//   const sql = `select questions_id,content from contract_types
+//    inner join answers on (contract_types.id = answers.contracts_contract_types_id)
+//    where answers.contracts_id = `;
+//   db.query(sql, [id,idq], (err, result) => {
+//     console.log(id)
+//     if (err) res.send(err);
+//     else {
+//       console.log(result, "result");
+//       res.send(result);
+//     }
+//   });
+// };
 module.exports = {
   insertContract,
   getAllContracts,
-  getAllContractByStatus,
-  getQuestionsAnswers,
+  getAllContractByStatus
 };
