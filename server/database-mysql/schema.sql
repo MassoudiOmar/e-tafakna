@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`contracts` (
   `contract_url` VARCHAR(255) NOT NULL,
   `status` VARCHAR(50) NOT NULL,
   `created_at` VARCHAR(50) NULL DEFAULT NULL,
+  `contract_image` VARCHAR(255) NULL DEFAULT NULL,
   `contract_types_id` INT NOT NULL,
   PRIMARY KEY (`id`, `contract_types_id`),
   INDEX `fk_contracts_contract_types1_idx` (`contract_types_id` ASC) VISIBLE,

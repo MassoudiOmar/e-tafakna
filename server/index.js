@@ -44,9 +44,9 @@ app.use("/api/users", usersRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/contractType", contractTypeRoutes);
 app.use("/api/contractTypeQuestions", contractTypeQuestionsRoutes);
-app.use("/api/users", login);
-app.use("/api/answers", answersRoutes);
-app.use("/api/contract", contractRoutes);
+app.use("/api/users",login);
+app.use("/api/answers",answersRoutes)
+app.use("/api/contracts",contractRoutes)
 app.listen(PORT, function () {
   console.log("listening on port 3000!");
 });
