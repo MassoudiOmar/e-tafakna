@@ -117,21 +117,29 @@ const fillContract = async (req, res) => {
             } else {
               docUrl = result.secure_url;
               console.log(docUrl, "url docx");
-              res.send(docUrl);
+              
   
               await cloudinary.uploader.upload("image.jpg",
               { resource_type: "auto" }, (err, result) => {
                 if (err) {
-                  console.log(err, "err");
+                  console.log(err, "err"); 
                 } else {
                   urlImage = result.secure_url;
                   console.log(urlImage, "url"); 
-                  // res.send(urlImage);
+                  res.send(urlImage);
                   const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =? `
                   db.query(updateContract,[docUrl,urlImage,id],(err,result)=>{
                     err ? console.log(err) : console.log(result)
                   })
                   fs.unlinkSync("output.docx", (err) => {
+                    if (err) {
+                      console.error(err);
+                      return;
+                    }
+            
+                    // file removed
+                  });
+                  fs.unlinkSync("image.jpg", (err) => {
                     if (err) {
                       console.error(err);
                       return;

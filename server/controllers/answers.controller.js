@@ -28,5 +28,18 @@ let updateAnswers = (req, res) => {
     else res.send(result);
   });
 };
+let getContractImage = (req, res) => {
+  let { id } = req.params;
+  console.log(id,"from get contract image")
+  const sql = `SELECT contract_image FROM contracts WHERE id = ?`;
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      res.send(err);}
+    else {
+      console.log(result, "result");
+      res.send(result);
+    }
+  });
+};
 
-module.exports = { AddAnswers, updateAnswers, getAnswers };
+module.exports = { AddAnswers, updateAnswers, getAnswers, getContractImage };

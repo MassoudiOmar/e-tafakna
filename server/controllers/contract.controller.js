@@ -42,18 +42,33 @@ let getAllContracts = (req, res) => {
   });
 };
 let updateStatus = (req, res) => {
-  const { id } = req.params;
+  const { id,status } = req.params;
+  let column="pending";
+  status==="pending"?(column="rejected"):(column="draft")
   const sql = `UPDATE users_has_contracts uhc
   inner join users uo on (uo.id = uhc.owner)
   inner join users ur on (ur.id = uhc.receiver)
   inner join contracts c on (c.id = uhc.contracts_id)
   inner join contract_types ct on (ct.id = c.contract_types_id) 
-  SET c.status="Rekjgijgb"
+  SET ${column}="Rejected" OR c.status="draft"
   WHERE uo.id=? `;
   db.query(sql, [id], (err, result) => {
     err ? console.log(err) : console.log(result);
   });
 };
+// const getByIdContractType = (req, res) => {
+//   let { id, lang } = req.params;
+//   let column = "";
+//   lang === "Arabe" ? (column = "description_AR") : (column = "description_FR");
+//   let query = `SELECT ${column} FROM contract_types WHERE id = ?`;
+//   db.query(query, [id], (err, contracts) => {
+//     if (err) {
+//       res.status(500).send(err);
+//     } else {
+//       res.json(contracts);
+//     }
+//   });
+// };
 let getQuestionsAnswers = (req, res) => {
   let id = req.params.contractI;
   const sql = `select template_FR, questions_id,content from contract_types
