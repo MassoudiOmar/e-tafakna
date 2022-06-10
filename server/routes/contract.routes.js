@@ -6,7 +6,7 @@ router.route('/')
     .post(contractController.insertContract)
 router.get('/:status/:ownerId', contractController.getAllContractByStatus)
 router.get("/:id",contractController.getAllContracts)
-router.get("getQuestionsAnswers/:id",contractController.getQuestionsAnswers)
-router.put("/:id",contractController.updateStatus)
+
+// router.get("/a",contractController.getQuestionsAnswers)
 
 module.exports = router;
