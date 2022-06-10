@@ -14,7 +14,7 @@ const getAllContractByStatus = (req, res) => {
   const owner = req.params.ownerId;
   const sql = `SELECT * FROM users_has_contracts
   inner join contracts on (contracts.id = users_has_contracts.contracts_id )
-  where contracts.status = ? &&  users_has_contracts.owner = ?; `;
+  where contracts.status = ? &&  users_has_contracts.owner = ? `;
   db.query(sql, [status, owner], (err, result) => {
     if (err) {
       console.log(err);
