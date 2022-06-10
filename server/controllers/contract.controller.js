@@ -40,22 +40,7 @@ let getAllContracts = (req, res) => {
     }
   });
 };
-// let getQuestionsAnswers = (req, res) => {
-//   let id = req.params.id;
-//   let idq = req.params.idq;
-//   console.log(req.params,'req.params')
-//   const sql = `select questions_id,content from contract_types
-//    inner join answers on (contract_types.id = answers.contracts_contract_types_id)
-//    where answers.contracts_id = `;
-//   db.query(sql, [id,idq], (err, result) => {
-//     console.log(id)
-//     if (err) res.send(err);
-//     else {
-//       console.log(result, "result");
-//       res.send(result);
-//     }
-//   });
-// };
+
 module.exports = {
   insertContract,
   getAllContracts,
