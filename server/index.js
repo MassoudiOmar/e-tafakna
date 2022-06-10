@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 
 const questionRoutes = require("./routes/question.routes");
 const usersRoutes = require("./routes/user.routes");
