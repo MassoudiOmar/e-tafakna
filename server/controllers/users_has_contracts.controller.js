@@ -44,10 +44,10 @@ function streamToString(stream) {
 
 
 let userContract = (req, res) => {
-  const {id,receiver,receiver_email,contracts_id}= req.body
+  const {owner,receiver,receiver_email,contracts_id}= req.body
   console.log(req.body,'bodyyy')
-  const sql=`INSERT INTO users_has_contracts (id,receiver ,receiver_email,contracts_id) VALUES (?,?,?,?)`
-  db.sql(sql,[id,receiver,receiver_email,contracts_id], (err, result)=>{
+  const sql=`INSERT INTO users_has_contracts (owner,receiver ,receiver_email,contracts_id) VALUES (?,?,?,?)`
+  db.query(sql,[owner,receiver,receiver_email,contracts_id], (err, result)=>{
     if (err) res.send(err);
     else res.send(result);
   })
@@ -62,9 +62,9 @@ let getOwner = (req, res) => {
   });
 }
 const sendcontracts =(req, res)=>{
-let {owner,contracts_id,receiver,receiver_email} = req.body
-const sql=`insert into etafakna.users_has_contracts (owner,contracts_id ,receiver ,receiver_email) values(?,?,?,?)`
-db.query(sql,[owner,contracts_id,receiver,receiver_email],(err, result)=>{
+let {receiver,contracts_id} = req.body
+const sql=`Update users_has_contracts set receiver = ? where contracts_id = ?`
+db.query(sql,[receiver,contracts_id],(err, result)=>{
     {
         if (err) console.log(err);
         else res.send(result);
