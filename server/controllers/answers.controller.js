@@ -45,12 +45,11 @@ let getContractImage = (req, res) => {
 
 let getQuestionsAnswers = (req, res) => {
   let id = req.params.id;
-  let idq = req.params.idq;
   console.log(req.params, 'req.params')
   const sql = `select a.id,questions_id,content from contract_types
   inner join answers as a on (contract_types.id = a.contracts_contract_types_id)
   where a.contracts_id = ?`;
-  db.query(sql, [id, idq], (err, result) => {
+  db.query(sql, [id], (err, result) => {
     console.log(id)
     if (err) res.send(err);
     else {
