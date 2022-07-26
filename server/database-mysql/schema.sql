@@ -26,9 +26,10 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`contract_types` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `signed_time` INT ,
   `time_answering` INT NOT NULL,
-  `title_FR` VARCHAR(200) NOT NULL,
+  `title_EN` VARCHAR(200) ,
+  `title_FR` VARCHAR(200) ,
   `title_AR` VARCHAR(200) ,
-  `description_FR` VARCHAR(255) NOT NULL,
+  `description_FR` VARCHAR(255) ,
   `description_AR` VARCHAR(255) ,
   `image_url` VARCHAR(200) NOT NULL,
   `template_FR` VARCHAR(200) ,
@@ -174,12 +175,12 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
 -- Insert All Contracts
-INSERT INTO etafakna.contract_types(signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country)
-VALUES(115,2,"Rent","Rent","Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...","desc_AR","https://thumbs.dreamstime.com/b/word-rent-cubes-model-home-real-estate-word-rent-cubes-model-home-real-estate-concept-133078583.jpg","temp_FR","temp_AR","Tunisia"),
-      (41,5,"Promise","Promise","This is Promise Description","desc_AR","https://i.pinimg.com/originals/0e/f1/54/0ef15459639689548bb4bd1008f9b8cb.png","temp_FR","temp_AR","Tunisia"),
-      (74,2,"Credencial","Credencial","This is Credencial Description","desc_AR","https://image.shutterstock.com/image-vector/confidential-grunge-rubber-stamp-on-260nw-178606619.jpg","temp_FR","temp_AR","Tunisia"),
-      (153,9,"Handyman","Handyman","This is Handyman Description","desc_AR","https://handymanservices.ae/images/Handyman%20services-01.png","temp_FR","temp_AR","Tunisia"),
-      (78,4,"SARL-SUARL","SARL-SUARL","This is SARL-SUARL Description","desc_AR","https://swiver.io/wp-content/uploads/2021/12/sarl.png","temp_FR","temp_AR","Tunisia"),
-      (52,4,"Freelancer","Freelancer","This is Freelancer Description","desc_AR","https://craftypixels.com/placeholder-image/600x315/042550/ffffff.png&text=Freelancer","temp_FR","temp_AR","Tunisia"),
-      (78,10,"Loan","Loan","This is loan Description","desc_AR","https://www.cashadvanceqmvt.com/wp-content/uploads/2022/03/Loan2.jpg","temp_FR","temp_AR","Tunisia"),
-      (78,10,"Employment Contract","Employment Contract","This is Employment Contract Description","desc_AR","https://trak.in/wp-content/uploads/2015/06/Employment-in-India-cities.jpg","temp_FR","temp_AR","Tunisia");
+INSERT INTO etafakna.contract_types(signed_time,time_answering,title_EN,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country)
+VALUES(115,2,"Rent","Location","كراء","Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...","desc_AR","https://res.cloudinary.com/diyuy6jxe/image/upload/v1658432948/Rent_1_u9dzgf.png","temp_FR","temp_AR","Tunisia"),
+      (41,5,"Promise","Promettre","وعد","This is Promise Description","desc_AR","https://res.cloudinary.com/diyuy6jxe/image/upload/v1658432908/Rent_7_ycqpab.png","temp_FR","temp_AR","Tunisia"),
+      (74,2,"Credencial","Credencial","اعتماد","This is Credencial Description","desc_AR","https://res.cloudinary.com/diyuy6jxe/image/upload/v1658432925/Rent_6_c4dqlr.png","temp_FR","temp_AR","Tunisia"),
+      (153,9,"Handyman","Bricoleur","عامل يومي","This is Handyman Description","desc_AR","https://res.cloudinary.com/diyuy6jxe/image/upload/v1658432947/Rent_4_eunrrd.png","temp_FR","temp_AR","Tunisia"),
+      (78,4,"SARL-SUARL","SARL-SUARL","شركة محدودة المسؤولية - ملكية فردية ذات مسؤولية محدودة","This is SARL-SUARL Description","desc_AR","https://res.cloudinary.com/diyuy6jxe/image/upload/v1658432933/Rent_5_gev3ia.png","temp_FR","temp_AR","Tunisia"),
+      (52,4,"Freelancer","Freelancer","مستقل","This is Freelancer Description","desc_AR","https://res.cloudinary.com/diyuy6jxe/image/upload/v1658432948/Rent_3_tusil2.png","temp_FR","temp_AR","Tunisia"),
+      (78,10,"Loan","pret","قرض","This is loan Description","desc_AR","https://res.cloudinary.com/diyuy6jxe/image/upload/v1658432948/Rent_2_ucnr7b.png","temp_FR","temp_AR","Tunisia"),
+      (78,10,"Employment Contract","Contrat de travail","عقد توظيف","This is Employment Contract Description","desc_AR","https://res.cloudinary.com/diyuy6jxe/image/upload/v1658432948/Rent_h78cet.png","temp_FR","temp_AR","Tunisia");

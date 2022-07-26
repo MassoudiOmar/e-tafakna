@@ -233,7 +233,7 @@ const getAllContractType = (req, res) => {
 const getDataById = (req, res) => {
   let { id } = req.params;
   let query = `SELECT 
-    signed_time, time_answering, title_FR, image_url
+    signed_time, time_answering, title_FR,title_AR,title_EN, image_url
    FROM contract_types WHERE id = ?`;
   db.query(query, [id], (err, contracts) => {
     if (err) {
