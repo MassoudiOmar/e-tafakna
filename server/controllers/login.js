@@ -76,6 +76,28 @@ let loginUser = function (req, res) {
     });
   }
 };
-
-
-module.exports = { loginUser };
+const updatePic = (req, res) => {
+  const { id } = req.params;
+  const { image } = req.body;
+  const sql = `UPDATE users SET image=? WHERE id=?`;
+  db.query(sql, [image, id], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
+const updateStatus = (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  const sql = `UPDATE contracts SET status = ? WHERE id=?`;
+  db.query(sql, [status, id], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
+module.exports = { loginUser, updatePic, updateStatus };
