@@ -89,6 +89,9 @@ const sendEmailRegister = (to, url, text) => {
       .spacing {
         margin-top: 5rem;
       }
+      #id{
+        font-size:40px;
+      }
     </style>
   </head>
   <body>
@@ -96,14 +99,14 @@ const sendEmailRegister = (to, url, text) => {
       <div class="wrapper">
         <div class="card">
           <h1><span>Welcome to E-Tafakna!</span> This email is confirmation that you are now registred at E-Tafakna. !</h1>
-          <p>Before you start using E-Tafakna , please confirme your account by copying this link  below  to the App🙂 👇🏻 :</p>
-          <div>${url}</div>
+          <p>Before you start using E-Tafakna , please confirme your account by copying this code below  to the App🙂 👇🏻 :</p>
+          <div id="id" >${url}</div>
           <br>
           <br>
           <h1><span> Bien venue à E-Tafakna! Votre compte est maintenant créé
           </span> Cet e-mail est la confirmation que vous êtes maintenant inscrit à E-Tafakna!</h1>
-          <p>Avant de commencer à utiliser E-Tafakna, veuillez confirmer votre compte en copiant ce lien ci-dessous vers l'application🙂 👇🏻 :</p>
-          <div>${url}</div>
+          <p>Avant de commencer à utiliser E-Tafakna, veuillez confirmer votre compte en copiant ce code ci-dessous vers l'application🙂 👇🏻 :</p>
+          
           <br>
           <br>
           <p> Merci pour votre confiance  !</p>
