@@ -83,6 +83,9 @@ const findContractbyQuesId =(req, res) =>{
 }  })
 }
 
+
+
+
 module.exports = {
   affectQuestionToContractType,
   findAll,

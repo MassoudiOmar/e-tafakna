@@ -45,7 +45,6 @@ let loginUser = function (req, res) {
                       image: result[0].image,
                       address: result[0].address,
                       phone: result[0].phone,
-                      password: result[0].password
                     };
                     jwt.sign(
                       { user },
@@ -76,6 +75,36 @@ let loginUser = function (req, res) {
     });
   }
 };
+const updatePic = (req, res) => {
+  const { id } = req.params;
+  const { image } = req.body;
+  const sql = `UPDATE users SET image=? WHERE id=?`;
+  db.query(sql, [image, id], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2bd62e2b8fa1e8537b5ad0566f1494cfa00d7ba7
+const updateStatus = (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  const sql = `UPDATE contracts SET status = ? WHERE id=?`;
+  db.query(sql, [status, id], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
+<<<<<<< HEAD
 
-module.exports = { loginUser };
+=======
+>>>>>>> 2bd62e2b8fa1e8537b5ad0566f1494cfa00d7ba7
+module.exports = { loginUser, updatePic ,updateStatus};
