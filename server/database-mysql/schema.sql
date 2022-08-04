@@ -15,7 +15,6 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema etafakna
 -- -----------------------------------------------------
 DROP DATABASE IF EXISTS `etafakna`;
-
 CREATE SCHEMA IF NOT EXISTS `etafakna` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
 USE `etafakna` ;
 
@@ -24,21 +23,22 @@ USE `etafakna` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`contract_types` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `signed_time` INT ,
+  `signed_time` INT NULL DEFAULT NULL,
   `time_answering` INT NOT NULL,
-  `title_EN` VARCHAR(200) ,
-  `title_FR` VARCHAR(200) ,
-  `title_AR` VARCHAR(200) ,
-  `description_EN` VARCHAR(255) ,
-  `description_FR` VARCHAR(255) ,
-  `description_AR` VARCHAR(255) ,
+  `title_EN` VARCHAR(200) NULL DEFAULT NULL,
+  `title_FR` VARCHAR(200) NULL DEFAULT NULL,
+  `title_AR` VARCHAR(200) NULL DEFAULT NULL,
+  `description_EN` VARCHAR(255) NULL DEFAULT NULL,
+  `description_FR` VARCHAR(255) NULL DEFAULT NULL,
+  `description_AR` VARCHAR(255) NULL DEFAULT NULL,
   `image_url` VARCHAR(200) NOT NULL,
-  `template_EN` VARCHAR(200) ,
-  `template_FR` VARCHAR(200) ,
-  `template_AR` VARCHAR(200) ,
-  `country` VARCHAR(10),
+  `template_EN` VARCHAR(200) NULL DEFAULT NULL,
+  `template_FR` VARCHAR(200) NULL DEFAULT NULL,
+  `template_AR` VARCHAR(200) NULL DEFAULT NULL,
+  `country` VARCHAR(10) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 18
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -83,22 +83,24 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `etafakna`.`answers` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `content` VARCHAR(50) NOT NULL,
+  `contracts_id` INT NOT NULL,
+  `contracts_contract_types_id` INT NOT NULL,
   `questions_id` INT NOT NULL,
-  `contracts_id` INT NOT NULL, `contracts_contract_types_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `questions_id`, `contracts_id`, `contracts_contract_types_id`),
-  INDEX `fk_answers_questions1_idx` (`questions_id` ASC) VISIBLE,
-  INDEX `fk_answers_contracts1_idx` (`contracts_id` ASC, `contracts_contract_types_id` ASC) VISIBLE,
-  CONSTRAINT `fk_answers_contracts1`
-    FOREIGN KEY (`contracts_id`)
-    REFERENCES `etafakna`.`contracts` (`id`)
-    ON DELETE CASCADE,
+  PRIMARY KEY (`id`, `contracts_id`, `contracts_contract_types_id`, `questions_id`),
+  INDEX `fk_answers_questions2_idx` (`questions_id` ASC) VISIBLE,
   CONSTRAINT `fk_answers_questions1`
-	FOREIGN KEY (`contracts_id` , `contracts_contract_types_id`)
+    FOREIGN KEY (`contracts_id` , `contracts_contract_types_id`)
     REFERENCES `etafakna`.`contracts` (`id` , `contract_types_id`)
-    ON DELETE CASCADE)
+    ON DELETE CASCADE,
+  CONSTRAINT `fk_answers_questions2`
+    FOREIGN KEY (`questions_id`)
+    REFERENCES `etafakna`.`questions` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
 
 -- -----------------------------------------------------
 -- Table `etafakna`.`questions_has_contract_types`
@@ -108,9 +110,9 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`questions_has_contract_types` (
   `questions_id` INT NOT NULL,
   `contract_types_id` INT NOT NULL,
   `order_question` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
   INDEX `fk_questions_has_contract_types_questions` (`questions_id` ASC) VISIBLE,
   INDEX `fk_questions_has_contract_types_contract_types1` (`contract_types_id` ASC) VISIBLE,
-  PRIMARY KEY (`id`),
   CONSTRAINT `fk_questions_has_contract_types_contract_types1`
     FOREIGN KEY (`contract_types_id`)
     REFERENCES `etafakna`.`contract_types` (`id`)
@@ -140,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users` (
   `image` VARCHAR(200) NOT NULL,
   `status` VARCHAR(200) NOT NULL,
   `created_at` DATE NULL DEFAULT NULL,
-  `notification` VARCHAR(200),
+  `notification` VARCHAR(200) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -154,8 +156,8 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users_has_contracts` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `owner` INT NOT NULL,
   `contracts_id` INT NOT NULL,
-  `receiver` INT,
-  `receiver_email` VARCHAR(45) ,
+  `receiver` INT NULL DEFAULT NULL,
+  `receiver_email` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_users_has_contracts_contracts1_idx` (`contracts_id` ASC) VISIBLE,
   INDEX `fk_users_has_contracts_users1_idx` (`owner` ASC) VISIBLE,
@@ -173,14 +175,14 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `etafakna`.`users_has_contracts`
+-- Table `etafakna`.`users_has_notifications`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`users_has_notifications` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `owner` INT NOT NULL,
   `contracts_id` INT NOT NULL,
-  `receiver` INT,
-  `date` VARCHAR(45) ,
+  `receiver` INT NULL DEFAULT NULL,
+  `date` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_users_has_notification_contracts1_idx` (`contracts_id` ASC) VISIBLE,
   INDEX `fk_users_has_notification_users1_idx` (`owner` ASC) VISIBLE,
@@ -196,10 +198,10 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
 
 -- Insert All Contracts
 INSERT INTO etafakna.contract_types(signed_time,time_answering,title_EN,title_FR,title_AR,description_FR,description_AR,description_EN,image_url,template_FR,template_AR,template_EN,country)
