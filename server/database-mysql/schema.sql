@@ -140,6 +140,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users` (
   `image` VARCHAR(200) NOT NULL,
   `status` VARCHAR(200) NOT NULL,
   `created_at` DATE NULL DEFAULT NULL,
+  `notification` VARCHAR(200),
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -170,6 +171,30 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+
+-- -----------------------------------------------------
+-- Table `etafakna`.`users_has_contracts`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `etafakna`.`users_has_notifications` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `owner` INT NOT NULL,
+  `contracts_id` INT NOT NULL,
+  `receiver` INT,
+  `date` VARCHAR(45) ,
+  PRIMARY KEY (`id`),
+  INDEX `fk_users_has_notification_contracts1_idx` (`contracts_id` ASC) VISIBLE,
+  INDEX `fk_users_has_notification_users1_idx` (`owner` ASC) VISIBLE,
+  CONSTRAINT `fk_users_has_notification_notification`
+    FOREIGN KEY (`contracts_id`)
+    REFERENCES `etafakna`.`contracts` (`id`)
+    ON DELETE CASCADE,
+  CONSTRAINT `fk_users_has_notification_users1`
+    FOREIGN KEY (`owner`)
+    REFERENCES `etafakna`.`users` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

@@ -45,7 +45,6 @@ let loginUser = function (req, res) {
                       image: result[0].image,
                       address: result[0].address,
                       phone: result[0].phone,
-                      password: result[0].password
                     };
                     jwt.sign(
                       { user },
@@ -88,6 +87,10 @@ const updatePic = (req, res) => {
     }
   });
 };
+<<<<<<< HEAD
+
+=======
+>>>>>>> 2bd62e2b8fa1e8537b5ad0566f1494cfa00d7ba7
 const updateStatus = (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
@@ -100,4 +103,8 @@ const updateStatus = (req, res) => {
     }
   });
 };
+<<<<<<< HEAD
+
+=======
+>>>>>>> 2bd62e2b8fa1e8537b5ad0566f1494cfa00d7ba7
 module.exports = { loginUser, updatePic ,updateStatus};
