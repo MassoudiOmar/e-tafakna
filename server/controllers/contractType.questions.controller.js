@@ -82,6 +82,10 @@ const findContractbyQuesId =(req, res) =>{
 { res.send(result);
 }  })
 }
+
+
+
+
 module.exports = {
   affectQuestionToContractType,
   findAll,

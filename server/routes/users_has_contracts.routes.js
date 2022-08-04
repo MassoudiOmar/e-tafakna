@@ -3,5 +3,7 @@ const contractController = require("../controllers/users_has_contracts.controlle
 
 router.post('/saveContract',contractController.userContract)
 router.put("/sendContract",contractController.sendcontracts)
+router.post("/sendNotification",contractController.sendNotification)
+router.delete("/deleteNotification/:id",contractController.deleteNotification)
 
 module.exports = router;
