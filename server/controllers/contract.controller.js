@@ -12,9 +12,11 @@ const insertContract = (req, res) => {
 const getAllContractByStatus = (req, res) => {
   const status = req.params.status;
   const owner = req.params.ownerId;
-  const sql = `SELECT * FROM users_has_contracts
-  inner join contracts on (contracts.id = users_has_contracts.contracts_id )
-  where contracts.status = ? &&  users_has_contracts.owner = ? `;
+  const sql = `SELECT * FROM users_has_contracts c
+  inner join contracts t on (t.id = c.contracts_id )
+  inner join contract_types f on (f.id=t.contract_types_id)
+  inner join users u on(u.id= c.owner)
+  where t.status = ? && c.owner = ? `;
   db.query(sql, [status, owner], (err, result) => {
     if (err) {
       console.log(err);
