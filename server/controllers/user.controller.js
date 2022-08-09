@@ -84,7 +84,7 @@ var register = async (req, res) => {
                   // send email
                   sendMail.sendEmailRegister(email, code, "Verify your email");
                   // registration success
-                  res.send({
+                  res.json({
                     msg: "Welcome! Please check your email.",
                     code: code.toString(),
                     email: email,
