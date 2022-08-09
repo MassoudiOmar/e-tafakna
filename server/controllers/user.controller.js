@@ -45,7 +45,7 @@ var register = async (req, res) => {
     else if (!validateEmail(email)) {
       console.log("email not valid");
       res.send({ msg: "Please enter a valid email address." });
-    } else if (typeof password !== "number" || password.length !== 5) {
+    } else if (typeof password !== "number" && password.length !== 5) {
       res.send({ msg: "Please enter a valid password" });
     } else {
       //check user
