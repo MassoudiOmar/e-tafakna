@@ -82,7 +82,7 @@ var register = async (req, res) => {
                   //create token
                   const code = Math.floor(100000 + Math.random() * 900000);
                   // send email
-                  sendMail.sendEmailRegister(email, code, "Verify your email");
+                  sendMail.sendEmailRegister(email, code, "Verify your email",username);
                   // registration success
                   res.json({
                     msg: "Welcome! Please check your email.",
