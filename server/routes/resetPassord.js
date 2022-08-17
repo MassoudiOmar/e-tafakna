@@ -3,6 +3,6 @@ const reset = require("../controllers/resetPassword");
 
 router.post('/reset',reset.resetPasswor)
 router.post('/activation',reset.verifying)
-router.post('/update',reset.updatepassword)
+router.put('/update',reset.updatepassword)
 
 module.exports = router;

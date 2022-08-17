@@ -8,8 +8,8 @@ const FormData = require("form-data");
 const axios = require("axios");
 
 const fillContract = async (req, res) => {
-  let urlImage =''
-  let docUrl = ''
+  let urlImage = "";
+  let docUrl = "";
   let renderObject = {};
   let answersArray = [];
   const { id } = req.params;
@@ -37,7 +37,7 @@ const fillContract = async (req, res) => {
       console.log(renderObject, "check obj before rendeer");
 
       const url = result[0].template_FR;
-
+      console.log(url);
       const response = await superagent
         .get(url)
         .parse(superagent.parse.image)
@@ -60,16 +60,16 @@ const fillContract = async (req, res) => {
       });
       console.log(buf, "check buf");
       fs.writeFileSync("output.docx", buf);
-      
 
       
+      try {
       const formData = new FormData();
       formData.append(
         "instructions",
         JSON.stringify({
           parts: [
             {
-              file: "document", 
+              file: "document",
             },
           ],
           output: {
@@ -80,17 +80,24 @@ const fillContract = async (req, res) => {
         })
       );
       formData.append("document", fs.createReadStream("output.docx"));
-      axios
+     await axios
         .post("https://api.pspdfkit.com/build", formData, {
           headers: formData.getHeaders({
             Authorization:
-              "Bearer pdf_live_rMidCXXZtyxm6alf3YwkDAtkrG1PZbuiBfjIGOZefLJ",
+              "Bearer pdf_live_sT9INjbf04Pxx2u7IZmWUH25s30P6cY7H4OuCLDuIvi",
           }),
           responseType: "stream",
         })
         .then((response) => {
-          response.data.pipe(fs.createWriteStream("image.jpg"));
+          // console.log(response,'response')
+          response.data.pipe(fs.createWriteStream("image.jpg"))
+          //  cloudinary.uploader.upload("image.jpg")
+          
+          // urlImage = uploadimage.secure_url;
+          // console.log(urlImage, "image url");
+          // // fs.unlinkSync("image.jpg");
         })
+
         .catch(async function (e) {
           console.log(e);
           const errorString = await streamToString(e.response.data);
@@ -106,50 +113,75 @@ const fillContract = async (req, res) => {
           );
         });
       }
-      await cloudinary.uploader.upload(
-        "output.docx",
-        { resource_type: "auto" },
-        (err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            docUrl = result.secure_url;
-            console.log(docUrl, "url docx");
-            res.send(docUrl);
 
-          }
-        }
-      );
+      
+        res.send('added docx and image')
+        
+      } catch (error) {
+        console.log(err, "from cloudinary image");
+      }
+      
 
-      // await cloudinary.uploader.upload("image.jpg",
-      // { resource_type: "auto" }, (err, result) => {
+          //  fs.unlink("output.docx")  
+           
+      // { resource_type: "auto" }, async (err, result) => {
       //   if (err) {
       //     console.log(err, "err");
       //   } else {
       //     urlImage = result.secure_url;
-      //     console.log(url, "url");
-      //     res.send(url);
-        
+      //     console.log(urlImage, "url");
+      //     res.send(urlImage);
+      //     const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =? `
+      //     db.query(updateContract,[docUrl,urlImage,id],(err,result)=>{
+      //       err ? console.log(err) : console.log(result)
+      //     })
+      //     // fs.unlinkSync("output.docx", (err) => {
+      //     //   if (err) {
+      //     //     console.error(err);
+      //     //     return;
+      //     //   }
+
+      //     //   // file removed
+      //     // });
+      //     // fs.unlinkSync("image.jpg", (err) => {
+      //     //   if (err) {
+      //     //     console.error(err);
+      //     //     return;
+      //     //   }
+
+      //     //   // file removed
+      //     // });
       //   }
       // });
-      fs.unlinkSync("output.docx", (err) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-
-        // file removed
-      });
-      const updateContract = `UPDATE contracts set contract_url = ? where id =? `
-      db.query(updateContract,[docUrl,id],(err,result)=>{
-        err ? console.log(err) : console.log(result)
-      })
 
       // buf is a nodejs Buffer, you can either write it to a
       // file or res.send it with express for example.
     }
   });
 };
+
+const updateContractImage = async (req,res)=>{
+  const { id } = req.params;
+  try {
+    let uploadDoc = await cloudinary.uploader.upload("output.docx", {
+      resource_type: "auto",
+    });
+    docUrl = uploadDoc.secure_url;
+    console.log(docUrl, "doc url");
+    let uploadImage = await cloudinary.uploader.upload("image.jpg", {
+      resource_type: "auto",
+    });
+    urlImage = uploadImage.secure_url;
+    res.send(urlImage)
+    console.log(urlImage, "image url");
+    const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =? `;
+      db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
+        err ? console.log(err) : console.log(result);
+      });
+  } catch (err) {
+    console.log(err, "catch for cloudinary");
+  }
+}
 
 const insertContractType = (req, res) => {
   let {
@@ -164,7 +196,7 @@ const insertContractType = (req, res) => {
     template_AR,
     country,
   } = req.body;
-  console.log(req.body)
+  console.log(req.body);
   const sql = `INSERT INTO contract_types (signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country) values(?,?,?,?,?,?,?,?,?,?)`;
   db.query(
     sql,
@@ -181,8 +213,7 @@ const insertContractType = (req, res) => {
       country,
     ],
     (err, contractType) => {
-      if (err) res.send(err
-      );
+      if (err) res.send(err);
       if (contractType) res.send(contractType);
     }
   );
@@ -202,7 +233,7 @@ const getAllContractType = (req, res) => {
 const getDataById = (req, res) => {
   let { id } = req.params;
   let query = `SELECT 
-    signed_time, time_answering, title_FR, image_url
+    signed_time, time_answering, title_FR,title_AR,title_EN, image_url
    FROM contract_types WHERE id = ?`;
   db.query(query, [id], (err, contracts) => {
     if (err) {
@@ -244,4 +275,5 @@ module.exports = {
   getDataById,
   deleteContractById,
   fillContract,
+  updateContractImage
 };

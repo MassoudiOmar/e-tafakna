@@ -3,13 +3,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-
-
 const confirmPassword =(req,res)=>{
 const {email,password,hashedPassword}= req.body 
 console.log(req.body , "body")
 console.log(req.body,'s');
-if(!email || !password){
+if(!password){
     return res.send('enter your password') 
  }else{
      try{
