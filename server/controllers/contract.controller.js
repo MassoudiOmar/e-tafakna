@@ -41,6 +41,21 @@ let getAllContracts = (req, res) => {
     }
   });
 };
+
+const changeContractStatus = (req, res) => {
+  const contract_url = req.params.contractUrl;
+  const status = req.params.status;
+  const sql = `UPDATE contracts SET status = ? WHERE contract_url = ?`;
+  db.query(sql, [status,contract_url], (err, result) => {
+    if (err) {
+      res.send(err)
+    }
+    else {
+      res.send(result)
+    }
+
+  })
+};
 let getNotification = (req, res) => {
   const { id } = req.params;
   const sql = `
@@ -109,4 +124,5 @@ module.exports = {
   getContractImage,
   updateStatus,
   getNotification,
+  changeContractStatus,
 };
