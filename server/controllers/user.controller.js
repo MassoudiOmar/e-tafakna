@@ -186,14 +186,27 @@ const getnotstatus = async (req, res) => {
 const updateNotifications = (req, res) => {
   const id = req.params.id;
   const notification = req.body.notification;
+  console.log(req.body)
+  console.log(id, notification)
   const sql = "update users SET notification = ? WHERE id=?";
   db.query(sql, [notification, id], (err, result) => {
     if (err) {
-      res.send("err");
+      res.send(err);
     }
-    res.send("result");
+    res.send(result);
   });
 };
+
+const deleteUser = (req, res) => {
+  const userId = req.params.userId;
+  const query = `DELETE FROM users WHERE id = ?`;
+  db.query(query, [userId], (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+    res.send(result);
+  })
+}
 
 module.exports = {
   register,
@@ -202,4 +215,6 @@ module.exports = {
   getAllUsers,
   updateNotifications,
   getnotstatus,
+  deleteUser
 };
+
