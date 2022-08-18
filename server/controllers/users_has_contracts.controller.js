@@ -74,8 +74,8 @@ let getOwner = (req, res) => {
 };
 const sendcontracts = (req, res) => {
   let { owner, contracts_id, receiver } = req.body;
-  const sql = `INSERT INTO users_has_contracts (owner,contract_id,receiver) VALUES (?,?,?,?)`;
-  db.query(sql, [owner, receiver, contracts_id], (err, result) => {
+  const sql = `INSERT INTO users_has_contracts (owner,contracts_id,receiver) VALUES (?,?,?)`;
+  db.query(sql, [owner,contracts_id ,receiver], (err, result) => {
     {
       if (err) console.log(err);
       else res.send(result);
