@@ -45,6 +45,7 @@ var register = async (req, res) => {
     else if (!validateEmail(email)) {
       console.log("email not valid");
       res.send({ msg: "Please enter a valid email address." });
+    // Validation Password
     } else if (typeof password !== "number" && password.length !== 5) {
       res.send({ msg: "Please enter a valid password" });
     } else {
@@ -81,7 +82,7 @@ var register = async (req, res) => {
                   //create token
                   const code = Math.floor(100000 + Math.random() * 900000);
                   // send email
-                  sendMail.sendEmailRegister(email, code, "Verify your email");
+                  sendMail.sendEmailRegister(email, code, "Verify your email",username);
                   // registration success
                   res.json({
                     msg: "Welcome! Please check your email.",
@@ -185,14 +186,27 @@ const getnotstatus = async (req, res) => {
 const updateNotifications = (req, res) => {
   const id = req.params.id;
   const notification = req.body.notification;
+  console.log(req.body)
+  console.log(id, notification)
   const sql = "update users SET notification = ? WHERE id=?";
   db.query(sql, [notification, id], (err, result) => {
     if (err) {
-      res.send("err");
+      res.send(err);
     }
-    res.send("result");
+    res.send(result);
   });
 };
+
+const deleteUser = (req, res) => {
+  const userId = req.params.userId;
+  const query = `DELETE FROM users WHERE id = ?`;
+  db.query(query, [userId], (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+    res.send(result);
+  })
+}
 
 module.exports = {
   register,
@@ -201,4 +215,6 @@ module.exports = {
   getAllUsers,
   updateNotifications,
   getnotstatus,
+  deleteUser
 };
+
