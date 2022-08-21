@@ -29,6 +29,8 @@ var register = async (req, res) => {
     const created_at = new Date();
     const role = "user";
     const activate = "false";
+    const notification = false;
+
     // check fields
     if (
       !first_name ||
@@ -45,8 +47,9 @@ var register = async (req, res) => {
     else if (!validateEmail(email)) {
       console.log("email not valid");
       res.send({ msg: "Please enter a valid email address." });
-    } else if (typeof password !== "number" || password.length !== 5) {
+    } else if (typeof password !== "number" && password.length !== 5) {
       res.send({ msg: "Please enter a valid password" });
+      console.log("object");
     } else {
       //check user
       const sql = `SELECT * FROM users WHERE email=? `;
@@ -59,7 +62,7 @@ var register = async (req, res) => {
             const salt = await bcrypt.genSalt();
             const password = await bcrypt.hash(req.body.password, salt);
             db.query(
-              "INSERT INTO users ( first_name, last_name, email, password, phone,address,username,status,image, role,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+              "INSERT INTO users ( first_name, last_name, email, password, phone,address,username,status,image, role,created_at,notification) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
               [
                 first_name,
                 last_name,
@@ -72,6 +75,7 @@ var register = async (req, res) => {
                 image,
                 role,
                 created_at,
+                notification,
               ],
               (err, result) => {
                 if (err) {
@@ -97,6 +101,89 @@ var register = async (req, res) => {
         }
       });
     }
+  } catch (err) {
+    res.json({ msg: err.message });
+  }
+};
+
+var registerwithfcb = async (req, res) => {
+  try {
+    //get info of user
+    const { first_name, last_name, username, image } = req.body;
+    const email = "null";
+    const address = "null";
+    const notification = false;
+    const phone = "null";
+    const status = "Activated";
+    const created_at = new Date();
+    const role = "user";
+    //check user
+    const sql = "SELECT * FROM users WHERE username = ?";
+    db.query(sql, [username], async (err, result) => {
+      if (err) res.send(err);
+      else if (result.length) {
+        res.send("exist");
+      } else {
+        try {
+          const genPassword = Math.floor(10000 + Math.random() * 90000);
+          const salt = await bcrypt.genSalt();
+          const password = await bcrypt.hash(genPassword.toString(), salt);
+          db.query(
+            "INSERT INTO users (first_name, last_name, email, password, phone,address,username,status,image, role,created_at,notification) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+            [
+              first_name,
+              last_name,
+              email,
+              password,
+              phone,
+              address,
+              username,
+              status,
+              image,
+              role,
+              created_at,
+              notification,
+            ],
+            async (err, result) => {
+              if (err) {
+                console.log(err);
+                res.send(err);
+              } else {
+                const sql = `SELECT * FROM users WHERE image=image `;
+                db.query(sql, [image], async (err, results) => {
+                  if (err) res.send(err);
+                  else {
+                    const user = {
+                      id: results[0].id,
+                      username: results[0].username,
+                      image: results[0].image,
+                      password: results[0].password,
+                    };
+                    jwt.sign(
+                      { user },
+                      process.env.JWT_SECRET_KEY,
+                      (err, token) => {
+                        if (err) {
+                          return res.send(err);
+                        } else {
+                          res.send({
+                            UsertokenInfo: token,
+                            msg: "Login succssefull",
+                            password: genPassword,
+                          });
+                        }
+                      }
+                    );
+                  }
+                });
+              }
+            }
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    });
   } catch (err) {
     res.json({ msg: err.message });
   }
@@ -146,10 +233,11 @@ const decodeToken = function (req, res) {
   let token = req.headers.token;
   var decoded = jwtDecode(token);
   jwt.verify(token, process.env.JWT_SECRET_KEY, (err, result) => {
-    if (err)
+    if (err){
       return res.json({
         title: ("unauthorized", err),
       });
+    }
     //token is valid
     const sql = "SELECT * FROM users WHERE id=?";
     db.query(sql, [decoded.user.id], async (err, user) => {
@@ -201,4 +289,5 @@ module.exports = {
   getAllUsers,
   updateNotifications,
   getnotstatus,
+  registerwithfcb,
 };

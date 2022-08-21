@@ -39,6 +39,7 @@ let getAllContracts = (req, res) => {
     }
   });
 };
+
 let getNotification = (req, res) => {
   const { id } = req.params;
   const sql = `

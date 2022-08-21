@@ -17,11 +17,11 @@ const resetPasswor = async (req, res) => {
         var transporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
-            user: "massoudiomar54321@gmail.com",
-            pass: "zmeqnqeyagwrgtcu",
+            user: "Etafakna.startup@gmail.com",
+            pass: "wjdcnxmaiglkufmv",
           },
         });
-        const resetCode = Math.floor(100000 + Math.random() * 900000);
+        const resetCode = Math.floor(10000 + Math.random() * 90000);
         const salt = await bcrypt.genSalt();
         const hashedCode = await bcrypt.hash(resetCode.toString(), salt);
         //  const check = await bcrypt.compare(resetCode.toString(), hashedCode.toString())
@@ -50,7 +50,7 @@ const resetPasswor = async (req, res) => {
 
 const updatepassword = async (req, res) => {
   const { email, newpassword, confirmPassword } = req.body;
-  console.log(email,'udatzeeeeeeeeeeeeeeeeee');
+  console.log(email, "udatzeeeeeeeeeeeeeeeeee");
   if (!newpassword || !confirmPassword) {
     res.send("pleas fill all the fields");
   } else {
@@ -67,7 +67,7 @@ const updatepassword = async (req, res) => {
           }
           res.send("password updated successfully");
         });
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     }
