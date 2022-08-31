@@ -84,7 +84,7 @@ const fillContract = async (req, res) => {
         .post("https://api.pspdfkit.com/build", formData, {
           headers: formData.getHeaders({
             Authorization:
-              "Bearer pdf_live_SHZKjQwvuELJqHwFGxymQOxN0IOKCltJKUyFcFixnGa",
+              "Bearer pdf_live_sT9INjbf04Pxx2u7IZmWUH25s30P6cY7H4OuCLDuIvi",
           }),
           responseType: "stream",
         })

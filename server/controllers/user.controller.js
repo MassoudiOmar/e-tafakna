@@ -45,6 +45,7 @@ var register = async (req, res) => {
     else if (!validateEmail(email)) {
       console.log("email not valid");
       res.send({ msg: "Please enter a valid email address." });
+    // Validation Password
     } else if (typeof password !== "number" && password.length !== 5) {
       res.send({ msg: "Please enter a valid password" });
     } else {
@@ -79,11 +80,11 @@ var register = async (req, res) => {
                   res.send(err);
                 } else {
                   //create token
-                  const code = Math.floor(100000 + Math.random() * 900000);
+                  const code = Math.floor(10000 + Math.random() * 90000);
                   // send email
-                  sendMail.sendEmailRegister(email, code, "Verify your email");
+                  sendMail.sendEmailRegister(email, code, "Verify your email",username);
                   // registration success
-                  res.send({
+                  res.json({
                     msg: "Welcome! Please check your email.",
                     code: code.toString(),
                     email: email,
@@ -216,3 +217,4 @@ module.exports = {
   getnotstatus,
   deleteUser
 };
+
