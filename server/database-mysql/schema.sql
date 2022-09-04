@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`questions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `content_FR` VARCHAR(50) NOT NULL,
   `content_AR` VARCHAR(50) NOT NULL,
+  `date` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
