@@ -205,7 +205,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- Insert All Contracts
 INSERT INTO etafakna.contract_types(signed_time,time_answering,title_EN,title_FR,title_AR,description_FR,description_AR,description_EN,image_url,template_FR,template_AR,template_EN,country)
-      (41,5,"CDI, CDD, Civp","CDI, CDD, Civp","CDI, CDD, Civp","This is Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659574972/licensing_cguq6w.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (41,5,"CDI, CDD, Civp","CDI, CDD, Civp","CDI, CDD, Civp","This is Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659574972/licensing_cguq6w.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia"),
       (74,2,"Training Certificate","Attestation de stage","شهادة تدريب","This is Credencial Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659575382/certificate_pq9iv1.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (52,4,"Freelancer","Freelancer","مستقل","This is Freelancer Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659575545/freelancer_ceengy.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (78,10,"Microcredit","Microcredit ","قرض","This is loan Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659575642/microcredit_kys5yy.png","temp_FR","temp_AR","temp_EN","Tunisia"),
