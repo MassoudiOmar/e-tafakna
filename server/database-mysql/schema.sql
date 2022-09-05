@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`questions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `content_FR` VARCHAR(50) NOT NULL,
   `content_AR` VARCHAR(50) NOT NULL,
+  `date` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -213,9 +214,10 @@ INSERT INTO etafakna.contract_types(signed_time,time_answering,title_EN,title_FR
       (78,10,"Car sale","Vente de voiture","بيع سيارة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659574972/leasing_a1cb8o.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (78,10,"SEO","Referral agreement","Referencement","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659575738/handshake_kfryge.png","temp_FR","temp_AR","temp_EN","Tunisia"),
 (78,10,"Idea registration","Enregistrement idee","
-","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043326/297609484_848005992833365_5003408249063035108_n_pphfpx.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-            (78,10,"partnership","Partenariat","partnership","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043325/260048281_424224099204156_2815248212267245984_n_e2d4jg.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-            (78,10,"Purchase Order","Bon de commande","أمر شراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043327/297959134_1140535949866728_5301129545476794429_n_q18nir.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043326/297609484_848005992833365_5003408249063035108_n_pphfpx.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia"),
+            (78,10,"partnership","Partenariat","partnership","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043325/260048281_424224099204156_2815248212267245984_n_e2d4jg.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia"),
+            (78,10,"Purchase Order","Bon de commande","أمر شراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043327/297959134_1140535949866728_5301129545476794429_n_q18nir.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia"),
             (78,10,"Quotation","Devis","التسعير
-","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043325/258643233_3090364871253043_8778337274605421257_n_hrgjxu.png","temp_FR","temp_AR","temp_EN","Tunisia");
+","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043325/258643233_3090364871253043_8778337274605421257_n_hrgjxu.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia");
 
+ALTER TABLE etafakna.questions ADD COLUMN date VARCHAR(10);

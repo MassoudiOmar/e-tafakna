@@ -28,7 +28,7 @@ formData.append("document", fs.createReadStream("output.docx"));
       {
         headers: formData.getHeaders({
           Authorization:
-            "Bearer pdf_live_UIPJ7eyybpwmRv0NpzCMfX4HoGHERNai4U3fHzksiP8",
+            "Bearer pdf_live_45VHZqO3e7bh89x8rAYwjnjMvUC1eBG9xcyJsNSwLcy",
         }),
         responseType: "stream",
       }
