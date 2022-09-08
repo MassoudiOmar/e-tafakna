@@ -73,9 +73,16 @@ let getOwner = (req, res) => {
   });
 };
 const sendcontracts = (req, res) => {
+  const date = function today(i) {
+    var today = new Date();
+    var mm = today.toLocaleString("default", { month: "long" });
+    var yyyy = today.getMonth();
+    today = yyyy + " " + mm;
+    return today;
+  };
   let { owner, contracts_id, receiver } = req.body;
-  const sql = `INSERT INTO users_has_contracts (owner,contract_id,receiver) VALUES (?,?,?,?)`;
-  db.query(sql, [owner, receiver, contracts_id], (err, result) => {
+  const sql = `INSERT INTO users_has_contracts (owner,contracts_id,receiver,date) VALUES (?,?,?,?)`;
+  db.query(sql, [owner, contracts_id, receiver, date()], (err, result) => {
     {
       if (err) console.log(err);
       else res.send(result);
@@ -84,25 +91,76 @@ const sendcontracts = (req, res) => {
 };
 
 const sendNotification = (req, res) => {
-  const date = new Date()
+  const date = function today(i) {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth();
+    var yyyy = today.getFullYear();
+    today = dd + "/" + mm + "/" + yyyy;
+    return today;
+  };
+  const seen = false;
   const { owner, receiver, contracts_id } = req.body;
   console.log(req.body, "bodyyy");
-  const sql = `INSERT INTO users_has_notifications (owner,receiver ,date,contracts_id) VALUES (?,?,?,?)`;
+  const sql = `INSERT INTO users_has_notifications (owner,receiver ,date,contracts_id,seen) VALUES (?,?,?,?,?)`;
   db.query(
     sql,
-    [owner, receiver, date, contracts_id],
+    [owner, receiver, date(), contracts_id, seen],
     (err, result) => {
       if (err) res.send(err);
       else res.send(result);
     }
   );
 };
+
 const deleteNotification = (req, res) => {
   const { id } = req.params;
   const sql = `DELETE FROM users_has_notifications WHERE id = ?`;
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
     else res.send(result);
+  });
+};
+const hasSeen = (req, res) => {
+  const { id } = req.params;
+  const sql = `update users_has_notifications set seen = "true" where id = ?;`;
+  db.query(sql, [id], (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
+};
+const getnumbers = (req, res) => {
+  let {id} = req.params
+  const sql = `select * from users_has_notifications where seen != "true" && receiver = ?;`
+  db.query(sql, [id], (err, result) => {
+    if (err) res.send(err);
+    else {
+      res.send(result);
+    }
+  });
+} 
+
+const getArchieve = (req, res) => {
+  const owner = req.params.ownerId;
+  const sql = `SELECT * FROM users_has_contracts c
+  inner join contracts t on (t.id = c.contracts_id )
+  inner join contract_types f on (f.id=t.contract_types_id)
+  inner join users u on(u.id= c.owner)
+  where c.owner = ? && archieve = "true"`;
+  db.query(sql, [owner], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else res.send(result);
+  });
+};
+
+const sentoArchieve = (req, res) => {
+  const id = req.params.id;
+  const sql = `update users_has_contracts set archieve = "true" where id = ? `;
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else res.send(result);
   });
 };
 
@@ -112,4 +170,8 @@ module.exports = {
   sendcontracts,
   sendNotification,
   deleteNotification,
+  hasSeen,
+  getnumbers,
+  getArchieve,
+  sentoArchieve
 };

@@ -14,7 +14,7 @@ const oauth2client = new OAuth2(
   OAUTH_PLAYGROUND
 );
 
-const sendEmailRegister = (to, url, text) => {
+const sendEmailRegister = (to, url, text,user) => {
   oauth2client.setCredentials({
     refresh_token: G_REFRESH_TOKEN,
   });
@@ -98,15 +98,18 @@ const sendEmailRegister = (to, url, text) => {
     <div class="container">
       <div class="wrapper">
         <div class="card">
-          <h1><span>Welcome to E-Tafakna!</span> This email is confirm that you are now registred at E-Tafakna. !</h1>
-          <p>Before you start using E-Tafakna , please confirme your account by copying this code below  to the App🙂 👇🏻 :</p>
+        <h1>From:E-Tafakna</h1>
+        <h1><span> ${user} Welcome to E-Tafakna!</span> This email is confirmation that you are now registred on E-Tafakna with this Email : ${to}</h1>‏
+          <p>Before you start using E-Tafakna , please confirm your account by copying this code below  to the App🙂 👇🏻 :</p>
           <div id="id" >${url}</div>
+          <p> Thank you for Registring  !</p>
+          <p>E-Tafakna.com</p>‏
           <br>
           <br>
-          <h1><span> Bien venue à E-Tafakna! Votre compte est maintenant créé
-          </span> Cet e-mail est la confirm que vous êtes maintenant inscrit à E-Tafakna!</h1>
+          <h1><span>  ${user} Bien venue à E-Tafakna! Votre compte est maintenant créé
+          </span> Cet e-mail est la confirmation que vous êtes maintenant inscrit à E-Tafakna avec cet Email : ${to}</h1>
           <p>Avant de commencer à utiliser E-Tafakna, veuillez confirmer votre compte en copiant ce code ci-dessous vers l'application🙂 👇🏻 :</p>
-          
+          <div>${url}</div>
           <br>
           <br>
           <p> Merci pour votre confiance  !</p>
@@ -116,7 +119,7 @@ const sendEmailRegister = (to, url, text) => {
         </div>
       </div>
     </div>
-  </body>
+  </body> 
 </html>
   `,
   };

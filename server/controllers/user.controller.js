@@ -47,6 +47,7 @@ var register = async (req, res) => {
     else if (!validateEmail(email)) {
       console.log("email not valid");
       res.send({ msg: "Please enter a valid email address." });
+    // Validation Password
     } else if (typeof password !== "number" && password.length !== 5) {
       res.send({ msg: "Please enter a valid password" });
       console.log("object");
@@ -62,7 +63,7 @@ var register = async (req, res) => {
             const salt = await bcrypt.genSalt();
             const password = await bcrypt.hash(req.body.password, salt);
             db.query(
-              "INSERT INTO users ( first_name, last_name, email, password, phone,address,username,status,image, role,created_at,notification) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+              "INSERT INTO users ( first_name, last_name, email, password, phone,address,username,status,image, role,created_at,notification) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
               [
                 first_name,
                 last_name,
@@ -83,11 +84,11 @@ var register = async (req, res) => {
                   res.send(err);
                 } else {
                   //create token
-                  const code = Math.floor(100000 + Math.random() * 900000);
+                  const code = Math.floor(10000 + Math.random() * 90000);
                   // send email
-                  sendMail.sendEmailRegister(email, code, "Verify your email");
+                  sendMail.sendEmailRegister(email, code, "Verify your email",username);
                   // registration success
-                  res.send({
+                  res.json({
                     msg: "Welcome! Please check your email.",
                     code: code.toString(),
                     email: email,
@@ -273,14 +274,27 @@ const getnotstatus = async (req, res) => {
 const updateNotifications = (req, res) => {
   const id = req.params.id;
   const notification = req.body.notification;
+  console.log(req.body)
+  console.log(id, notification)
   const sql = "update users SET notification = ? WHERE id=?";
   db.query(sql, [notification, id], (err, result) => {
     if (err) {
-      res.send("err");
+      res.send(err);
     }
-    res.send("result");
+    res.send(result);
   });
 };
+
+const deleteUser = (req, res) => {
+  const userId = req.params.userId;
+  const query = `DELETE FROM users WHERE id = ?`;
+  db.query(query, [userId], (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+    res.send(result);
+  })
+}
 
 module.exports = {
   register,
@@ -290,4 +304,6 @@ module.exports = {
   updateNotifications,
   getnotstatus,
   registerwithfcb,
+  deleteUser
 };
+

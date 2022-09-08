@@ -75,7 +75,6 @@ let loginUser = function (req, res) {
     });
   }
 };
-
 const updatePic = (req, res) => {
   const { id } = req.params;
   const { image } = req.body;
@@ -101,5 +100,4 @@ const updateStatus = (req, res) => {
     }
   });
 };
-
 module.exports = { loginUser, updatePic ,updateStatus};
