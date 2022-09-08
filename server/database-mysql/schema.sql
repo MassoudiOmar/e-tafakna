@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`contracts` (
   `created_at` VARCHAR(50) NULL DEFAULT NULL,
   `contract_image` VARCHAR(255) NULL DEFAULT NULL,
   `contract_types_id` INT NOT NULL,
+  `archieve` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `contract_types_id`),
   INDEX `fk_contracts_contract_types1_idx` (`contract_types_id` ASC) VISIBLE,
   CONSTRAINT `fk_contracts_contract_types1`
@@ -159,6 +160,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users_has_contracts` (
   `contracts_id` INT NOT NULL,
   `receiver` INT NULL DEFAULT NULL,
   `receiver_email` VARCHAR(45) NULL DEFAULT NULL,
+  `date` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_users_has_contracts_contracts1_idx` (`contracts_id` ASC) VISIBLE,
   INDEX `fk_users_has_contracts_users1_idx` (`owner` ASC) VISIBLE,
@@ -184,6 +186,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users_has_notifications` (
   `contracts_id` INT NOT NULL,
   `receiver` INT NULL DEFAULT NULL,
   `date` VARCHAR(45) NULL DEFAULT NULL,
+  `seen` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_users_has_notification_contracts1_idx` (`contracts_id` ASC) VISIBLE,
   INDEX `fk_users_has_notification_users1_idx` (`owner` ASC) VISIBLE,
@@ -204,6 +207,8 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
+
+
 -- Insert All Contracts
 INSERT INTO etafakna.contract_types(signed_time,time_answering,title_EN,title_FR,title_AR,description_FR,description_AR,description_EN,image_url,template_FR,template_AR,template_EN,country)
       (41,5,"CDI, CDD, Civp","CDI, CDD, Civp","CDI, CDD, Civp","This is Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659574972/licensing_cguq6w.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia"),
@@ -219,5 +224,4 @@ INSERT INTO etafakna.contract_types(signed_time,time_answering,title_EN,title_FR
             (78,10,"Purchase Order","Bon de commande","أمر شراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043327/297959134_1140535949866728_5301129545476794429_n_q18nir.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia"),
             (78,10,"Quotation","Devis","التسعير
 ","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043325/258643233_3090364871253043_8778337274605421257_n_hrgjxu.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia");
-
-ALTER TABLE etafakna.questions ADD COLUMN date VARCHAR(10);
+ALTER TABLE etafakna.questions add column date VARCHAR(10)
