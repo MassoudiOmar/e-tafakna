@@ -9,6 +9,7 @@ const adminRoutes = require("./routes/admin.routes");
 const reset = require("./routes/resetPassord");
 const answersRoutes = require("./routes/answers.routes");
 const contractRoutes = require("./routes/contract.routes");
+const contractRoutess = require("./routes/contract2.routes");
 const usersContractsRoutes = require("./routes/users_has_contracts.routes");
 var items = require("./database-mysql");
 const cors = require("cors");
@@ -47,6 +48,7 @@ app.use("/api/contractTypeQuestions", contractTypeQuestionsRoutes);
 app.use("/api/users",login);
 app.use("/api/answers",answersRoutes)
 app.use("/api/contracts",contractRoutes)
+app.use("/api",contractRoutess)
 app.listen(PORT, function () {
   console.log("listening on port 3000!");
 });
