@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`contracts` (
   `created_at` VARCHAR(50) NULL DEFAULT NULL,
   `contract_image` VARCHAR(255) NULL DEFAULT NULL,
   `contract_types_id` INT NOT NULL,
+  `archieve` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `contract_types_id`),
   INDEX `fk_contracts_contract_types1_idx` (`contract_types_id` ASC) VISIBLE,
   CONSTRAINT `fk_contracts_contract_types1`
@@ -69,8 +70,9 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`questions` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `content_FR` VARCHAR(50) NOT NULL,
-  `content_AR` VARCHAR(50) NOT NULL,
+  `content_FR` VARCHAR(200) NOT NULL,
+  `content_AR` VARCHAR(200) NOT NULL,
+  `date` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4

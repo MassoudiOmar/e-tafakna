@@ -75,9 +75,10 @@ let getOwner = (req, res) => {
 const sendcontracts = (req, res) => {
   const date = function today(i) {
     var today = new Date();
-    var mm = today.toLocaleString("default", { month: "long" });
-    var yyyy = today.getMonth();
-    today = yyyy + " " + mm;
+    var dd = today.getDate();
+    var mm = today.getMonth();
+    var yyyy = today.getFullYear();
+    today = dd + "-" + mm + "-" + yyyy;
     return today;
   };
   let { owner, contracts_id, receiver } = req.body;
@@ -92,11 +93,19 @@ const sendcontracts = (req, res) => {
 
 const sendNotification = (req, res) => {
   const date = function today(i) {
+    var weekday = new Array(7);
+    weekday[0] = "Monday";
+    weekday[1] = "Tuesday";
+    weekday[2] = "Wednesday";
+    weekday[3] = "Thursday";
+    weekday[4] = "Friday";
+    weekday[5] = "Saturday";
+    weekday[6] = "Sunday";
     var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth();
-    var yyyy = today.getFullYear();
-    today = dd + "/" + mm + "/" + yyyy;
+    var yyyy = today.getDay();
+    var min = today.getMinutes();
+    var hours = today.getHours();
+    today = weekday[yyyy] + " at " + hours + ":" + min;
     return today;
   };
   const seen = false;
@@ -129,16 +138,17 @@ const hasSeen = (req, res) => {
     else res.send(result);
   });
 };
+
 const getnumbers = (req, res) => {
-  let {id} = req.params
-  const sql = `select * from users_has_notifications where seen != "true" && receiver = ?;`
+  let { id } = req.params;
+  const sql = `select * from users_has_notifications where seen != "true" && receiver = ?`;
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
     else {
       res.send(result);
     }
   });
-} 
+};
 
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
@@ -173,5 +183,5 @@ module.exports = {
   hasSeen,
   getnumbers,
   getArchieve,
-  sentoArchieve
+  sentoArchieve,
 };
