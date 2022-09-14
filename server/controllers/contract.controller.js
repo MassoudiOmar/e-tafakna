@@ -25,10 +25,23 @@ const getAllContractByStatus = (req, res) => {
     } else res.send(result);
   });
 };
+const getAllContractById = (req, res) => {
+  const owner = req.params.ownerId;
+  const sql = `SELECT * FROM users_has_contracts c
+  inner join contracts t on (t.id = c.contracts_id )
+  inner join contract_types f on (f.id=t.contract_types_id)
+  inner join users u on(u.id= c.owner)
+  where c.owner = ? `;
+  db.query(sql, [owner], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else res.send(result);
+  });
+};
 let getAllContracts = (req, res) => {
   const { id } = req.params;
   const sql = `
-   select c.id, uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,c.status  from users_has_contracts  uhc
+   select c.id, date, uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,c.status  from users_has_contracts  uhc
       inner join users uo on (uo.id = uhc.owner)
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
@@ -60,19 +73,18 @@ const changeContractStatus = (req, res) => {
 };
 let getNotification = (req, res) => {
   const { id } = req.params;
-  const sql = `
-   select uhc.id, uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,c.status ,date from users_has_notifications  uhc
+  const sql = 
+   `select uhc.id,seen, uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,c.status ,date from users_has_notifications  uhc
       inner join users uo on (uo.id = uhc.owner)
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
       inner join contract_types ct on (ct.id = c.contract_types_id)
-      where ur.id =?;
-   `;
+      where ur.id =?`;
+   ;
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
     else {
-      console.log(result, "result");
-      res.send(result);
+      res.send(result.reverse());
     }
   });
 };
@@ -127,4 +139,5 @@ module.exports = {
   updateStatus,
   getNotification,
   changeContractStatus,
+  getAllContractById
 };
