@@ -15,12 +15,12 @@ const affectQuestionToContractType = (req, res) => {
   );
 };
 /////////////////////////
-const deleteRelation=(req,res)=>{
-  let questions_id= req.params.questions_id
-  let contract_types_id =req.params.contract_types_id
+const deleteRelation = (req, res) => {
+  let questions_id = req.params.questions_id
+  let contract_types_id = req.params.contract_types_id
   console.log(req.params)
- let sql=`DELETE from etafakna.questions_has_contract_types  WHERE questions_id = ? && contract_types_id = ? `
-  db.query(sql, [questions_id,contract_types_id], (err, result) => {
+  let sql = `DELETE from etafakna.questions_has_contract_types  WHERE questions_id = ? && contract_types_id = ? `
+  db.query(sql, [questions_id, contract_types_id], (err, result) => {
     if (err) {
       console.log(err);
     } else {
@@ -34,10 +34,11 @@ const findQuestionsOfSpecificContract = (req, res) => {
   let { contract_id, lang } = req.params;
   let column = "";
 
-  lang === "Arabe"
-    ? (column = "content_AR")
-    : (column = "content_FR");
-  const query = `SELECT questions.id,${column},questions.date from etafakna.questions
+  lang === "Arabe" ? (column = "content_AR")
+    : lang === "Englais" ? (column = "content_EN")
+      : (column = "content_FR");
+  console.log(column, "hgherthrrtgrtgrrs")
+  const query = `SELECT questions.id,${column},questions.inputType,questions.part2,questions.options from etafakna.questions
      inner join etafakna.questions_has_contract_types on (questions.id = questions_has_contract_types.questions_id)
      inner join etafakna.contract_types on (contract_types.id = questions_has_contract_types.contract_types_id)
      where contract_types.id = ?
@@ -47,8 +48,8 @@ const findQuestionsOfSpecificContract = (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(questions);
-      res.send(questions); 
+      console.log(questions, "questions");
+      res.send(questions);
     }
   });
 };
@@ -67,20 +68,22 @@ const findAll = (req, res) => {
   }
 };
 
-const findContractbyQuesId =(req, res) =>{
+const findContractbyQuesId = (req, res) => {
   // let {questions_id} = req.body
-  let sql =`select  title_FR,contract_types.id as id_contract_type, questions.id, content_FR, content_AR, order_question from questions_has_contract_types 
+  let sql = `select  title_FR,contract_types.id as id_contract_type, questions.id, content_FR, content_AR,content_EN, order_question from questions_has_contract_types 
   inner join contract_types on (questions_has_contract_types.contract_types_id = contract_types.id)
   inner join questions on (questions_has_contract_types.questions_id = questions.id)
   order by etafakna.questions_has_contract_types.order_question ASC;`
   db.query(sql
     // [questions_id]
-    ,(err, result)=>{
-    if (err) console.log(err);
-      else  
-      console.log(result)     
-{ res.send(result);
-}  })
+    , (err, result) => {
+      if (err) console.log(err);
+      else
+        console.log(result)
+      {
+        res.send(result);
+      }
+    })
 }
 
 
