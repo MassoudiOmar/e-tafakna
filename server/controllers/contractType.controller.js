@@ -240,13 +240,14 @@ const getDataById = (req, res) => {
       res.status(500).send(err);
     } else {
       res.json(contracts);
+      console.log(contracts, 'herererererer')
     }
   });
 };
 const getByIdContractType = (req, res) => {
   let { id, lang } = req.params;
   let column = "";
-  lang === "Arabe" ? (column = "description_AR") : (column = "description_FR");
+  lang === "Arabe" ? (column = "description_AR") : lang === "Englais" ? (column = "description_EN") : (column = "description_FR");
   let query = `SELECT ${column} FROM contract_types WHERE id = ?`;
   db.query(query, [id], (err, contracts) => {
     if (err) {
