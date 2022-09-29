@@ -70,8 +70,12 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`questions` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `content_FR` VARCHAR(50) NOT NULL,
-  `content_AR` VARCHAR(50) NOT NULL,
+  `content_FR` VARCHAR(100) NOT NULL,
+  `content_AR` VARCHAR(100) NOT NULL,
+  `content_EN` VARCHAR(100) NOT NULL,
+  `part2` VARCHAR(50) NOT NULL, 
+  `inputType` VARCHAR(20) NOT NULL, 
+  `options` VARCHAR(250), 
   `date` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -208,20 +212,25 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
+-- Insert All Contracts
+INSERT INTO etafakna.users(first_name,last_name,username,email,password,address,phone,role,image,status,created_at)
+VALUES("fares","fares","fares","faroussassg007@gmail.com","$2b$10$sIzEhADNfPcEOUCO7ILtAunEbf8Y9YVQt2/gTaZ0TvHvNA3bN6U1O","boumhale","122883","user","http://res.cloudinary.com/dm6yw4dn0/image/upload/v1664461073/nkggfhddtafov08wf7x4.jpg","Activated","2022-09-29");
 
 -- Insert All Contracts
 INSERT INTO etafakna.contract_types(signed_time,time_answering,title_EN,title_FR,title_AR,description_FR,description_AR,description_EN,image_url,template_FR,template_AR,template_EN,country)
-      (41,5,"CDI, CDD, Civp","CDI, CDD, Civp","CDI, CDD, Civp","This is Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659574972/licensing_cguq6w.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia"),
-      (74,2,"Training Certificate","Attestation de stage","شهادة تدريب","This is Credencial Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659575382/certificate_pq9iv1.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-      (52,4,"Freelancer","Freelancer","مستقل","This is Freelancer Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659575545/freelancer_ceengy.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-      (78,10,"Microcredit","Microcredit ","قرض","This is loan Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659575642/microcredit_kys5yy.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-      (78,10,"Car rental","Location de voiture","كراء سيارة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659574972/leasing_1_dzzmi0.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-      (78,10,"Car sale","Vente de voiture","بيع سيارة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659574972/leasing_a1cb8o.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-      (78,10,"SEO","Referral agreement","Referencement","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1659575738/handshake_kfryge.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-(78,10,"Idea registration","Enregistrement idee","
-","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043326/297609484_848005992833365_5003408249063035108_n_pphfpx.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia"),
-            (78,10,"partnership","Partenariat","partnership","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043325/260048281_424224099204156_2815248212267245984_n_e2d4jg.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia"),
-            (78,10,"Purchase Order","Bon de commande","أمر شراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043327/297959134_1140535949866728_5301129545476794429_n_q18nir.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia"),
-            (78,10,"Quotation","Devis","التسعير
-","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/diyuy6jxe/image/upload/v1660043325/258643233_3090364871253043_8778337274605421257_n_hrgjxu.png","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","https://res.cloudinary.com/royal-armysrbk/raw/upload/v1660052483/Contrat_de_location_simple_mzut2s.docx","Tunisia");
-ALTER TABLE etafakna.questions add column date VARCHAR(10)
+VALUES(0,5,"NDA","Accord de non-divulgation(NDA)","اتفاقية عدم إفصاح","Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_1_1_lzrkcv.png","https://res.cloudinary.com/obesity-healer/raw/upload/v1662650983/Contrat_de_location_simple_hx7nv7.docx","https://res.cloudinary.com/obesity-healer/raw/upload/v1662650983/Contrat_de_location_simple_hx7nv7.docx","https://res.cloudinary.com/obesity-healer/raw/upload/v1662650983/Contrat_de_location_simple_hx7nv7.docx","Tunisia"),
+      (0,5,"CDI, CDD, CIVP","CDI, CDD, Civp","CDI, CDD, CIVP","This is Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_2_1_ztst4g.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Training Certificate","Attestation de stage","شهادة تدريب","This is Credencial Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_3_1_bumvz0.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Freelancer","Freelance","مستقل","This is Freelancer Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_4_1_fzraz8.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Microcredit","Contrat de Prêt numéraire (microcrédit) ","قرض","This is loan Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_5_1_exbhco.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Car rental","Location de voiture","كراء سيارة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_6_1_owmpwk.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Car sale","Achat de voiture","بيع سيارة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_7_1_evodld.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Rental of real estate","Location de biens","Referencement","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_16_1_drpr0x.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Sale","Vente","عقد كراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_10_1_wbb9lm.png","https://res.cloudinary.com/obesity-healer/raw/upload/v1662650983/Contrat_de_location_simple_hx7nv7.docx","https://res.cloudinary.com/obesity-healer/raw/upload/v1662650983/Contrat_de_location_simple_hx7nv7.docx","https://res.cloudinary.com/obesity-healer/raw/upload/v1662650983/Contrat_de_location_simple_hx7nv7.docx","Tunisia"),
+      (0,5,"Purchase","Achat","Contrat d’engagement ","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_9_1_pmtbst.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Partnership","Partenariat","شراكة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_18_1_fssujl.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Quotation/Bill","Devis/Facture ","Devis/Facture ","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_13_1_klfbym.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Travel insurance","Assurance Voyage","Assurance Voyage","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_12_1_mol4hi.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Idea registration","Enregistrement d'une idée","Enregistrement d'une idée","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_11_1_rkyp58.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"CV","CV","أمر شراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_15_1_ubzxye.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Safe of real estate","Contrat de Domiciliation","Contrat de Domiciliation","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_17_1_mejvek.png","temp_FR","temp_AR","temp_EN","Tunisia");
