@@ -4,9 +4,9 @@ var cloudinar = require("cloudinary").v2;
 
 const uploadCin = (req, res) => {
   const { id } = req.params;
-  const {cinImg} = req.body;
-  const sql = `update users SET carteCin = ? WHERE id=?`;
-  db.query(sql, [cinImg, id], (err, result) => {
+  const { carteCinFront, carteCinBack ,faceVideo} = req.body;
+  const sql = `update users SET carteCinFront = ? , carteCinBack = ? , faceVideo =? WHERE id=?`;
+  db.query(sql, [carteCinFront, carteCinBack, faceVideo, id], (err, result) => {
     if (err) {
       res.send(err);
     }
@@ -14,11 +14,22 @@ const uploadCin = (req, res) => {
   });
 };
 
-const uploadSignature = (req, res) => {
+const uploadCodeStatus = (req, res) => {
   const { id } = req.params;
-  const {signatureImg} = req.body;
-  const sql = `update users SET scanSignature = ? WHERE id=?`;
+  const sql = `update users SET signatureCode = "en cours" WHERE id=?`;
   db.query(sql, [signatureImg, id], (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+    res.send(result);
+  });
+};
+
+const uploadVideo = (req, res) => {
+  const { id } = req.params;
+  const { scanSignature } = req.body;
+  const sql = `update users SET scanSignature = ? WHERE id=?`;
+  db.query(sql, [scanSignature, id], (err, result) => {
     if (err) {
       res.send(err);
     }
@@ -28,5 +39,6 @@ const uploadSignature = (req, res) => {
 
 module.exports = {
   uploadCin,
-  uploadSignature,
+  uploadCodeStatus,
+  uploadVideo,
 };
