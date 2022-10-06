@@ -3,18 +3,28 @@ var cloudinar = require("cloudinary");
 var cloudinar = require("cloudinary").v2;
 
 const uploadCin = (req, res) => {
-    const { id } = req.params;
-    const { cinImg } = req.body;
-    const { faceVideo } = req.body;
-
-    const sql = `update users SET carteCin = ? , faceVideo =? WHERE id =?`;
-    db.query(sql, [cinImg, faceVideo, id], (err, result) => {
-        if (err) {
-            res.send(err);
-        }
-        res.send(result);
-    });
+  const { id } = req.params;
+  const { carteCinFront, carteCinBack ,faceVideo} = req.body;
+  const sql = `update users SET carteCinFront = ? , carteCinBack = ? , faceVideo =? WHERE id=?`;
+  db.query(sql, [carteCinFront, carteCinBack, faceVideo, id], (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+    res.send(result);
+  });
 };
+
+const uploadCodeStatus = (req, res) => {
+  const { id } = req.params;
+  const sql = `update users SET signatureCode = "en cours" WHERE id=?`;
+  db.query(sql, [signatureImg, id], (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+    res.send(result);
+  });
+};
+
 
 const uploadSignature = (req, res) => {
     const { id } = req.params;
