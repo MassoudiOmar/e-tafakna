@@ -25,20 +25,33 @@ const uploadCodeStatus = (req, res) => {
   });
 };
 
+
+const uploadSignature = (req, res) => {
+    const { id } = req.params;
+    const { signatureImg } = req.body;
+    const sql = `update users SET scanSignature = ? WHERE id =?`;
+    db.query(sql, [signatureImg, id], (err, result) => {
+        if (err) {
+            res.send(err);
+        }
+        res.send(result);
+    });
+};
+
 const uploadVideo = (req, res) => {
-  const { id } = req.params;
-  const { scanSignature } = req.body;
-  const sql = `update users SET scanSignature = ? WHERE id=?`;
-  db.query(sql, [scanSignature, id], (err, result) => {
-    if (err) {
-      res.send(err);
-    }
-    res.send(result);
-  });
+    const { id } = req.params;
+    const { faceVideo } = req.body;
+    const sql = `update users SET faceVideo = ? WHERE id =?`;
+    db.query(sql, [faceVideo, id], (err, result) => {
+        if (err) {
+            res.send(err);
+        }
+        res.send(result);
+    });
 };
 
 module.exports = {
-  uploadCin,
-  uploadCodeStatus,
-  uploadVideo,
+    uploadCin,
+    uploadSignature,
+    uploadVideo,
 };
