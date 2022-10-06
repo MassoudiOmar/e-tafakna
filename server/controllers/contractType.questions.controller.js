@@ -34,11 +34,13 @@ const findQuestionsOfSpecificContract = (req, res) => {
   let { contract_id, lang } = req.params;
   let column = "";
 
-  lang === "Arabe" ? (column = "content_AR")
-    : lang === "Englais" ? (column = "content_EN")
-      : (column = "content_FR");
-  console.log(column, "hgherthrrtgrtgrrs")
-  const query = `SELECT questions.id,${column},questions.inputType,questions.part2_FR,questions.options from etafakna.questions
+  lang === "Arabe"
+    ? (column = "content_AR")
+    : lang == "Francais"
+    ? (column = "content_FR")
+    : (column = "content_EN");
+console.log(column,'coll');
+  const query = `SELECT questions.id,${column},questions.date , questions.part2_AR,questions.part2_EN,questions.part2_FR ,questions.options from etafakna.questions
      inner join etafakna.questions_has_contract_types on (questions.id = questions_has_contract_types.questions_id)
      inner join etafakna.contract_types on (contract_types.id = questions_has_contract_types.contract_types_id)
      where contract_types.id = ?
