@@ -283,8 +283,17 @@ VALUES("civilité ","null","null","Employeur","null","null","null","null","null"
       ("Fin de contract", "n", "n", "n", "n", "n", "n", "n", "true"),
       ("Salaire mensuel", "n", "n", "n", "n", "n", "n", "n", "n"),
       ("Fait a", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Date de contract", "n", "n", "n", "n", "n", "n", "n", "true");
-
+      ("Date de contract", "n", "n", "n", "n", "n", "n", "n", "true"),
+-- contract de location
+      ("Nom et prenom de proprietaire le bailleur", "n", "n", "n", "n", "n", "n", "n", "false"),
+      ("Nom et prenom de locataire", "n", "n", "n", "n", "n", "n", "n", "false"),
+      ("Type de propriete", "n", "n", "n", "n", "n", "n", "n", "false"),
+      ("Adress de propriete", "n", "n", "n", "n", "n", "n", "n", "false"),
+      ("Duree de la location", "n", "n", "n", "n", "n", "n", "n", "false"),
+      ("Location a partir de ", "n", "n", "n", "n", "n", "n", "n", "true"),
+      ("Jusqu'a", "n", "n", "n", "n", "n", "n", "n", "true"),
+      ("Montant du loyer", "n", "n", "n", "n", "n", "n", "n", "false"),
+      ("Date du contrat", "n", "n", "n", "n", "n", "n", "n", "true");
 
 
 -- insert question-has-contracttype 
@@ -352,8 +361,17 @@ VALUES
 ( 54,18, 18),
 ( 55,18, 19),
 ( 56,18, 20),
-( 57,18, 21);
+( 57,18, 21),
 
+( 58,26, 1),
+( 59,26, 2),
+( 60,26, 3),
+( 61,26, 4),
+( 62,26, 5),
+( 63,26, 6),
+( 64,26, 7),
+( 65,26, 8),
+( 66,26, 9);
 
 
 
@@ -366,7 +384,7 @@ VALUES("fares","fares","fares","faroussassg007@gmail.com","$2b$10$sIzEhADNfPcEOU
 
 -- Insert All Contracts
 INSERT INTO etafakna.contract_types(signed_time,time_answering,title_EN,title_FR,title_AR,description_FR,description_AR,description_EN,image_url,template_FR,template_AR,template_EN,country)
-VALUES(0,5,"NDA","Accord de non-divulgation(NDA)","اتفاقية عدم إفصاح","Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_1_1_lzrkcv.png","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664713235/Contrat_de_travail_a%CC%80_dure%CC%81e_determine%CC%81e_n6_qxx7rq.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664713235/Contrat_de_travail_a%CC%80_dure%CC%81e_determine%CC%81e_n6_qxx7rq.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664713235/Contrat_de_travail_a%CC%80_dure%CC%81e_determine%CC%81e_n6_qxx7rq.docx","Tunisia"),
+VALUES(0,5,"NDA","Accord de non-divulgation(NDA)","اتفاقية عدم إفصاح","Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_1_1_lzrkcv.png","https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract1_isna08.docx,https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract2_fiwvof.docx","https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract1_isna08.docx,https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract2_fiwvof.docx","https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract1_isna08.docx,https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract2_fiwvof.docx","Tunisia"),
       (0,5,"CDI, CDD, CIVP","CDI, CDD, Civp","CDI, CDD, CIVP","This is Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_2_1_ztst4g.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Training Certificate","Attestation de stage","شهادة تدريب","This is Credencial Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_3_1_bumvz0.png","https://res.cloudinary.com/e-tafakna/raw/upload/v1664543960/Attestation-de-stage_n2_rjvm0l.docx","https://res.cloudinary.com/e-tafakna/raw/upload/v1664543960/Attestation-de-stage_n2_rjvm0l.docx","https://res.cloudinary.com/e-tafakna/raw/upload/v1664543960/Attestation-de-stage_n2_rjvm0l.docx","Tunisia"),
       (0,5,"Freelancer","Freelance","مستقل","This is Freelancer Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_4_1_fzraz8.png","temp_FR","temp_AR","temp_EN","Tunisia"),
@@ -374,7 +392,7 @@ VALUES(0,5,"NDA","Accord de non-divulgation(NDA)","اتفاقية عدم إفص�
       (0,5,"Car rental","Location de voiture","كراء سيارة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_6_1_owmpwk.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Car sale","Achat de voiture","بيع سيارة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_7_1_evodld.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Rental of real estate","Location de biens","Referencement","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_16_1_drpr0x.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-      (0,5,"Sale","Vente","عقد كراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_10_1_wbb9lm.png","https://res.cloudinary.com/obesity-healer/raw/upload/v1662650983/Contrat_de_location_simple_hx7nv7.docx","https://res.cloudinary.com/obesity-healer/raw/upload/v1662650983/Contrat_de_location_simple_hx7nv7.docx","https://res.cloudinary.com/obesity-healer/raw/upload/v1662650983/Contrat_de_location_simple_hx7nv7.docx","Tunisia"),
+      (0,5,"Sale","Vente","عقد كراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_10_1_wbb9lm.png","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664737567/Template_Contrat_de_location_bureau_n3_xvsszr.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664737567/Template_Contrat_de_location_bureau_n3_xvsszr.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664737567/Template_Contrat_de_location_bureau_n3_xvsszr.docx","Tunisia"),
       (0,5,"Purchase","Achat","Contrat d’engagement ","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_9_1_pmtbst.png","https://res.cloudinary.com/e-tafakna/raw/upload/v1664562844/Engagement_contract_n2_x14mz3.docx","https://res.cloudinary.com/e-tafakna/raw/upload/v1664562844/Engagement_contract_n2_x14mz3.docx","https://res.cloudinary.com/e-tafakna/raw/upload/v1664562844/Engagement_contract_n2_x14mz3.docx","Tunisia"),
       (0,5,"Partnership","Partenariat","شراكة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_18_1_fssujl.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Quotation/Bill","Devis/Facture ","Devis/Facture ","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_13_1_klfbym.png","temp_FR","temp_AR","temp_EN","Tunisia"),
@@ -383,3 +401,4 @@ VALUES(0,5,"NDA","Accord de non-divulgation(NDA)","اتفاقية عدم إفص�
       (0,5,"CV","CV","أمر شراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_15_1_ubzxye.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Safe of real estate","Contrat de Domiciliation","Contrat de Domiciliation","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_17_1_mejvek.png","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664625501/Attestation_de_Domiciliation_n2_anigf5.docx","temp_AR","temp_EN","Tunisia"),
       (0,5,"Official request","Demande officielle", "طلب رسمي" ,"This is demande  Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_17_1_mejvek.png","https://res.cloudinary.com/e-tafakna/raw/upload/v1664546377/Demande_officielle_n4_m4cbe4.docx","temp_AR","temp_EN","Tunisia");
+     
