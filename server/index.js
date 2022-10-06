@@ -11,6 +11,7 @@ const answersRoutes = require("./routes/answers.routes");
 const contractRoutes = require("./routes/contract.routes");
 const contractRoutess = require("./routes/contract2.routes");
 const usersContractsRoutes = require("./routes/users_has_contracts.routes");
+const signature = require("./routes/signature.routes");
 var items = require("./database-mysql");
 const cors = require("cors");
 // const bodyParser = require("body-parser")
@@ -26,7 +27,6 @@ const contractTypeRoutes = require("./routes/contractType.routes");
 const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
 const login = require("./routes/login");
 const con = require("./routes/contract.routes");
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ limit: "50mb" }));
@@ -48,6 +48,7 @@ app.use("/api/contractTypeQuestions", contractTypeQuestionsRoutes);
 app.use("/api/users",login);
 app.use("/api/answers",answersRoutes)
 app.use("/api/contracts",contractRoutes)
+app.use("/api/signature",signature)
 app.use("/api",contractRoutess)
 app.listen(PORT, function () {
   console.log("listening on port 3000!");
