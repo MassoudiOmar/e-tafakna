@@ -224,38 +224,38 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- insert questions 
 INSERT INTO etafakna.questions(content_FR,content_AR,content_EN,part2_FR,part2_AR,part2_EN,inputType,options,date)
 -- attestation de stage
-VALUES("civilité ","null","null","Employeur","null","null","null","null","null"),
-      (" Nom et prénom ","null","null"," Employeur ","null","null","null","null","null"),
-      ("Indiquer la fonction dans l'entreprise","null","null","null","null","null","null","null","null"),
-      (" civilité ","null","null","Stagiare","null","null","null","null","null"),
-      ("Nom et prenom","null","null","Stagiare","null","null","null","null","null"),
-      ("Adress","null","null","Stagiare","null","null","null","null","null"),
-      ("Nom de l'entreprise","null","null","null","null","null","null","null","null"),
-      ("Date","null","null"," Début ","null","null","null","null","true"),
-      ("Date","null","null","fin","null","null","null","null","true"),
-      ("Indiquer la fonction dans lentreprise","null","null","null","null","null","null","null","null"),
-      ("Fait le","null","null","null","null","null","null","null","true"),
+VALUES("Civilité ","arabe","Civility","Employeur","null","Employer","civilite","civilite","null"),
+      (" Nom et prénom ","null","Full name"," Employeur ","arab","Employer","null","null","null"),
+      ("Indiquer la fonction dans l'entreprise","null","Indicate the function in the company","null","null","null","null","null","null"),
+      (" Civilité ","null","Civility","Stagiare","null","The intern","null","civilite","null"),
+      ("Nom et prenom","null","Full name","Stagiare","null","The intern","null","null","null"),
+      ("Adress","null","Address","Stagiare","null","The intern","null","null","null"),
+      ("Nom de l'entreprise","null","Company Name","null","null","null","null","null","null"),
+      ("Date","null","Date"," Debut ","null","Beginning","true","null","true"),
+      ("Date","null","Date","fin","null","End","true","null","true"),
+      ("Indiquer la fonction dans lentreprise","null","Indicate your position in the company","null","null","null","null","null","null"),
+      ("Fait le","null","The date today","null","null","null","null","null","true"),
 -- demande officielle
-      ("A l'attention de ", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Quel est l'object de votre demande", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Veuillez presier votre demande", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Fait à ", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Date ", "n", "n", "n", "n", "n", "n", "n", "true"),
-      ("Votre nom et prenom", "n", "n", "n", "n", "n", "n", "n", "false"),
+      ("A l'attention de ", "null", "To the attention of", "null", "null", "null", "null", "null", "false"),
+      ("Quel est l'object de votre demande", "null", "What is the purpose of your request", "null", "null", "null", "null", "null", "false"),
+      ("Veuillez presier votre demande", "null", "Please submit your request", "null", "null", "null", "null", "null", "false"),
+      ("Fait à ", "null", "Made in", "null", "null", "null", "null", "null", "false"),
+      ("Date ", "null", "Date", "null", "null", "null", "null", "null", "true"),
+      ("Votre nom et prenom", "null", "Full name", "null", "null", "null", "null", "null", "false"),
 -- contract dengagement
-      ("Nom et prenom de l'engagé", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Numero de CIN", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("CIN delivree le", "n", "n", "n", "n", "n", "n", "n", "true"),
-      ("Indiquer la fonction", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Nom de ma societe", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Identifiant unique", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Je m'engage", "n", "n", "n", "n", "n", "n", "n", "n"),
+      ("Nom et prenom de l'engagé", "null", "Full name of the participant", "null", "null", "null", "null", "null", "false"),
+      ("Numero de CIN", "null", "Number of CIN", "null", "null", "null", "null", "null", "null"),
+      ("CIN delivree le", "null", "CIN issued on", "null", "null", "null", "null", "null", "true"),
+      ("Indiquer la fonction", "null", "null", "null", "null", "null", "null", "null", "null"),
+      ("Nom de ma societe", "null", "null", "null", "null", "null", "null", "null", "null"),
+      ("Identifiant unique", "null", "null", "null", "null", "null", "null", "null", "null"),
+      ("Je m'engage", "null", "null", "null", "null", "null", "null", "null", "null"),
       ("Fait le", "n", "n", "n", "n", "n", "n", "n", "true"),
       ("à", "n", "n", "n", "n", "n", "n", "n", "true"),
 -- contract domicielle
-  ("Nom et prenom", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Numero de carte CIN", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("CIN delivree le", "n", "n", "n", "n", "n", "n", "n", "true"),
+  ("Nom et prenom", "null", "Full name", "null", "null", "null", "null", "null", "false"),
+      ("Numero de carte CIN", "null", "Number of CIN", "null", "null", "null", "null", "null", "null"),
+      ("CIN delivree le", "null", "CIN issued on", "null", "null", "null", "null", "null", "true"),
       ("Raison social", "n", "n", "n", "n", "n", "n", "n", "n"),
       ("Forme juridique", "n", "n", "n", "n", "n", "n", "n", "n"),
       ("Capital de la societe", "n", "n", "n", "n", "n", "n", "n", "n"),
@@ -264,13 +264,13 @@ VALUES("civilité ","null","null","Employeur","null","null","null","null","null"
       ("Fait à", "n", "n", "n", "n", "n", "n", "n", "n"),
       ("Fait le", "n", "n", "n", "n", "n", "n", "n", "true"),
 -- contract de travail
-      ("Nom de la societe", "قرض", "n", "n", "n", "n", "n", "n", "n"),
-      ("Activite de la societe", "قرض", "n", "n", "n", "n", "n", "n", "n"),
-      ("Adress de la societe", "قرض", "n", "n", "n", "n", "n", "n", "n"),
-      ("N° du registre de commerce", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("civilité de gerant", "قرض", "n", "n", "n", "n", "n", "n", "n"),
+      ("Nom de la societe", "قرض", "Company Name", "part2fr", "part2ar", "part2en", "null", "null", "null"),
+      ("Activite de la societe", "قرض", "Company activity", "part2fr", "null", "null", "null", "null", "null"),
+      ("Adress de la societe", "قرض", "null", "Company address", "null", "null", "null", "null", "null"),
+      ("N° du registre de commerce", "n", "part2fr", "n", "n", "n", "n", "n", "n"),
+      ("civilité de gerant", "قرض", "n", "n", "n", "n", "n", "civilite", "n"),
       ("Nom et prenom du gerant", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("civilité de l'employe", "n", "n", "n", "n", "n", "n", "n", "n"),
+      ("civilité de l'employe", "n", "n", "n", "n", "n", "n", "civilite", "n"),
       ("Nom et prenom du L'emploe", "n", "n", "n", "n", "n", "n", "n", "n"),
       ("Statut de L'emploe", "n", "n", "n", "n", "n", "n", "n", "n"),
       ("Lieu de naissance", "n", "n", "n", "n", "n", "n", "n", "n"),
@@ -285,7 +285,7 @@ VALUES("civilité ","null","null","Employeur","null","null","null","null","null"
       ("Fait a", "n", "n", "n", "n", "n", "n", "n", "n"),
       ("Date de contract", "n", "n", "n", "n", "n", "n", "n", "true"),
 -- contract de location
-      ("Nom et prenom de proprietaire le bailleur", "n", "n", "n", "n", "n", "n", "n", "false"),
+      ("Nom et prenom de proprietaire le bailleur", "null", "null", "null", "null", "null", "null", "null", "false"),
       ("Nom et prenom de locataire", "n", "n", "n", "n", "n", "n", "n", "false"),
       ("Type de propriete", "n", "n", "n", "n", "n", "n", "n", "false"),
       ("Adress de propriete", "n", "n", "n", "n", "n", "n", "n", "false"),
@@ -378,20 +378,23 @@ VALUES
 
 
 
+
 -- Insert All Contracts
 INSERT INTO etafakna.users(first_name,last_name,username,email,password,address,phone,role,image,status,created_at)
-VALUES("fares","fares","fares","faroussassg007@gmail.com","$2b$10$sIzEhADNfPcEOUCO7ILtAunEbf8Y9YVQt2/gTaZ0TvHvNA3bN6U1O","boumhale","122883","user","https://res.cloudinary.com/dew6e8h2m/image/upload/v1664624355/cld-sample.jpg","Activated","2022-09-29");
+VALUES("fares","fares","fares","faroussassg007@gmail.com","$2b$10$sIzEhADNfPcEOUCO7ILtAunEbf8Y9YVQt2/gTaZ0TvHvNA3bN6U1O","boumhale","122883","user","https://res.cloudinary.com/dew6e8h2m/image/upload/v1664624355/cld-sample.jpg","Activated","2022-09-29"),
+("omar","omar","omar","massoudiomar@gmail.com","$2b$10$sIzEhADNfPcEOUCO7ILtAunEbf8Y9YVQt2/gTaZ0TvHvNA3bN6U1O","boumhale","122883","user","https://res.cloudinary.com/dew6e8h2m/image/upload/v1664624356/cld-sample-3.jpg","Activated","2022-09-29");
 
 -- Insert All Contracts
 INSERT INTO etafakna.contract_types(signed_time,time_answering,title_EN,title_FR,title_AR,description_FR,description_AR,description_EN,image_url,template_FR,template_AR,template_EN,country)
 VALUES(0,5,"NDA","Accord de non-divulgation(NDA)","اتفاقية عدم إفصاح","Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_1_1_lzrkcv.png","https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract1_isna08.docx,https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract2_fiwvof.docx","https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract1_isna08.docx,https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract2_fiwvof.docx","https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract1_isna08.docx,https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract2_fiwvof.docx","Tunisia"),
       (0,5,"CDI, CDD, CIVP","CDI, CDD, Civp","CDI, CDD, CIVP","This is Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_2_1_ztst4g.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-      (0,5,"Training Certificate","Attestation de stage","شهادة تدريب","This is Credencial Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_3_1_bumvz0.png","https://res.cloudinary.com/e-tafakna/raw/upload/v1664543960/Attestation-de-stage_n2_rjvm0l.docx","https://res.cloudinary.com/e-tafakna/raw/upload/v1664543960/Attestation-de-stage_n2_rjvm0l.docx","https://res.cloudinary.com/e-tafakna/raw/upload/v1664543960/Attestation-de-stage_n2_rjvm0l.docx","Tunisia"),
+      (0,5,"Training Certificate","Attestation de stage","شهادة تدريب","Au sens le plus large, une attestation de formation est un document attestant que le titulaire a suivi une formation spécifique","desc_AR","In the broadest sense, a training certificate is a document certifying that the holder has taken a specific course of training.
+","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_3_1_bumvz0.png","https://res.cloudinary.com/e-tafakna/raw/upload/v1664543960/Attestation-de-stage_n2_rjvm0l.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665051324/Attestation-de-stage_en1_sxoacs.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665051324/Attestation-de-stage_en1_sxoacs.docx","Tunisia"),
       (0,5,"Freelancer","Freelance","مستقل","This is Freelancer Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_4_1_fzraz8.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Microcredit","Contrat de Prêt numéraire (microcrédit) ","قرض","This is loan Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_5_1_exbhco.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Car rental","Location de voiture","كراء سيارة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_6_1_owmpwk.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Car sale","Achat de voiture","بيع سيارة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_7_1_evodld.png","temp_FR","temp_AR","temp_EN","Tunisia"),
-      (0,5,"Rental of real estate","Location de biens","Referencement","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_16_1_drpr0x.png","temp_FR","temp_AR","temp_EN","Tunisia"),
+      (0,5,"Rental of real estate","Location de biens","Referencement","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_16_1_drpr0x.png","temple_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Sale","Vente","عقد كراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_10_1_wbb9lm.png","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664737567/Template_Contrat_de_location_bureau_n3_xvsszr.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664737567/Template_Contrat_de_location_bureau_n3_xvsszr.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664737567/Template_Contrat_de_location_bureau_n3_xvsszr.docx","Tunisia"),
       (0,5,"Purchase","Achat","Contrat d’engagement ","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457758/unnamed_9_1_pmtbst.png","https://res.cloudinary.com/e-tafakna/raw/upload/v1664562844/Engagement_contract_n2_x14mz3.docx","https://res.cloudinary.com/e-tafakna/raw/upload/v1664562844/Engagement_contract_n2_x14mz3.docx","https://res.cloudinary.com/e-tafakna/raw/upload/v1664562844/Engagement_contract_n2_x14mz3.docx","Tunisia"),
       (0,5,"Partnership","Partenariat","شراكة","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_18_1_fssujl.png","temp_FR","temp_AR","temp_EN","Tunisia"),
@@ -401,4 +404,3 @@ VALUES(0,5,"NDA","Accord de non-divulgation(NDA)","اتفاقية عدم إفص�
       (0,5,"CV","CV","أمر شراء","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_15_1_ubzxye.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Safe of real estate","Contrat de Domiciliation","Contrat de Domiciliation","This is Employment Contract Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_17_1_mejvek.png","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1664625501/Attestation_de_Domiciliation_n2_anigf5.docx","temp_AR","temp_EN","Tunisia"),
       (0,5,"Official request","Demande officielle", "طلب رسمي" ,"This is demande  Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_17_1_mejvek.png","https://res.cloudinary.com/e-tafakna/raw/upload/v1664546377/Demande_officielle_n4_m4cbe4.docx","temp_AR","temp_EN","Tunisia");
-     

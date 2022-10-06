@@ -116,10 +116,7 @@ const fillContract = async (req, res) => {
         return acc;
       }, {} );
       // res.send(result);
-      console.log(renderObject, "check obj before rendeer");
-       for (let i = 27 ; i<=32 ; i ++)
-       renderObject[i]="Omar"
-      
+      console.log(renderObject, "check obj before rendeer");      
       var url = result[0].template_FR;
    var Has_Two_Pages = true 
       if(url.search(",")==-1){
