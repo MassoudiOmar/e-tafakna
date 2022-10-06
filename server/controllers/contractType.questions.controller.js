@@ -16,16 +16,16 @@ const affectQuestionToContractType = (req, res) => {
 };
 /////////////////////////
 const deleteRelation = (req, res) => {
-  let questions_id = req.params.questions_id
-  let contract_types_id = req.params.contract_types_id
-  console.log(req.params)
-  let sql = `DELETE from etafakna.questions_has_contract_types  WHERE questions_id = ? && contract_types_id = ? `
+  let questions_id = req.params.questions_id;
+  let contract_types_id = req.params.contract_types_id;
+  console.log(req.params);
+  let sql = `DELETE from etafakna.questions_has_contract_types  WHERE questions_id = ? && contract_types_id = ? `;
   db.query(sql, [questions_id, contract_types_id], (err, result) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(result)
-      res.send(result)
+      console.log(result);
+      res.send(result);
     }
   });
 };
@@ -56,7 +56,6 @@ console.log(column,'coll');
   });
 };
 
-
 // get list of id quetions with contract_type id
 const findAll = (req, res) => {
   try {
@@ -75,26 +74,24 @@ const findContractbyQuesId = (req, res) => {
   let sql = `select  title_FR,contract_types.id as id_contract_type, questions.id, content_FR, content_AR,content_EN, order_question from questions_has_contract_types 
   inner join contract_types on (questions_has_contract_types.contract_types_id = contract_types.id)
   inner join questions on (questions_has_contract_types.questions_id = questions.id)
-  order by etafakna.questions_has_contract_types.order_question ASC;`
-  db.query(sql
+  order by etafakna.questions_has_contract_types.order_question ASC;`;
+  db.query(
+    sql,
     // [questions_id]
-    , (err, result) => {
+    (err, result) => {
       if (err) console.log(err);
-      else
-        console.log(result)
+      else console.log(result);
       {
         res.send(result);
       }
-    })
-}
-
-
-
+    }
+  );
+};
 
 module.exports = {
   affectQuestionToContractType,
   findAll,
   findQuestionsOfSpecificContract,
   deleteRelation,
-  findContractbyQuesId
+  findContractbyQuesId,
 };

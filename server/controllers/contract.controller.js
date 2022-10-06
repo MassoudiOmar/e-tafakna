@@ -63,18 +63,16 @@ const changeContractStatus = (req, res) => {
   const sql = `UPDATE contracts SET status = ? WHERE contract_url = ?`;
   db.query(sql, [status, contract_url], (err, result) => {
     if (err) {
-      res.send(err)
+      res.send(err);
+    } else {
+      res.send(result);
     }
-    else {
-      res.send(result)
-    }
-
-  })
+  });
 };
 let getNotification = (req, res) => {
   const { id } = req.params;
-  const sql =
-    `select uhc.id,seen, uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_EN,ct.title_AR,c.status ,date from users_has_notifications  uhc
+  const sql = `
+   select uhc.id,seen, uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,c.status ,date from users_has_notifications  uhc
       inner join users uo on (uo.id = uhc.owner)
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)

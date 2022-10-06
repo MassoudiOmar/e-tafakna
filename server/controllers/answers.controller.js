@@ -10,12 +10,17 @@ let getAnswers = (req, res) => {
 };
 
 let AddAnswers = (req, res) => {
-  const { content, questions_id, contracts_id, contracts_contract_types_id } = req.body;
+  const { content, questions_id, contracts_id, contracts_contract_types_id } =
+    req.body;
   const sql = `INSERT INTO answers (content ,questions_id,contracts_id,contracts_contract_types_id) VALUES (?,?,?,?)`;
-  db.query(sql, [content, questions_id, contracts_id, contracts_contract_types_id], (err, result) => {
-    if (err) res.send(err);
-    else res.send(result);
-  });
+  db.query(
+    sql,
+    [content, questions_id, contracts_id, contracts_contract_types_id],
+    (err, result) => {
+      if (err) res.send(err);
+      else res.send(result);
+    }
+  );
 };
 
 let updateAnswers = (req, res) => {
@@ -30,13 +35,12 @@ let updateAnswers = (req, res) => {
 
 let getContractImage = (req, res) => {
   let { id } = req.params;
-  console.log(id, "from get contract image")
+  console.log(id, "from get contract image");
   const sql = `SELECT contract_image FROM contracts WHERE id = ?`;
   db.query(sql, [id], (err, result) => {
     if (err) {
       res.send(err);
-    }
-    else {
+    } else {
       console.log(result, "result");
       res.send(result);
     }
@@ -45,12 +49,12 @@ let getContractImage = (req, res) => {
 
 let getQuestionsAnswers = (req, res) => {
   let id = req.params.id;
-  console.log(req.params, 'req.params')
+  console.log(req.params, "req.params");
   const sql = `select a.id,questions_id,content from contract_types
   inner join answers as a on (contract_types.id = a.contracts_contract_types_id)
   where a.contracts_id = ?`;
   db.query(sql, [id], (err, result) => {
-    console.log(id)
+    console.log(id);
     if (err) res.send(err);
     else {
       console.log(result, "result");
@@ -59,4 +63,10 @@ let getQuestionsAnswers = (req, res) => {
   });
 };
 
-module.exports = { AddAnswers, updateAnswers, getAnswers, getQuestionsAnswers, getContractImage };
+module.exports = {
+  AddAnswers,
+  updateAnswers,
+  getAnswers,
+  getQuestionsAnswers,
+  getContractImage,
+};
