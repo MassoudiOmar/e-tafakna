@@ -21,9 +21,9 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema etafakna
 -- -----------------------------------------------------
 DROP DATABASE IF EXISTS `etafakna`;
-CREATE SCHEMA IF NOT EXISTS `etafakna` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
-USE `etafakna` ;
-
+CREATE SCHEMA IF NOT EXISTS etafakna DEFAULT CHARACTER SET cp1256;
+USE `etafakna`;
+select * from information_schema.character_sets where description like '%arabic%';
 -- -----------------------------------------------------
 -- Table `etafakna`.`contract_types`
 -- -----------------------------------------------------
@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`questions` (
   `inputType` VARCHAR(20) NOT NULL, 
   `options` VARCHAR(250), 
   `date` VARCHAR(10) NOT NULL,
+  `explanation` VARCHAR(1000),
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 CHARACTER SET = utf8
@@ -222,78 +223,78 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
 -- insert questions 
-INSERT INTO etafakna.questions(content_FR,content_AR,content_EN,part2_FR,part2_AR,part2_EN,inputType,options,date)
+INSERT INTO etafakna.questions(content_FR,content_AR,content_EN,part2_FR,part2_AR,part2_EN,inputType,options,date,explanation)
 -- attestation de stage
-VALUES("Civilité ","arabe","Civility","Employeur","null","Employer","civilite","civilite","null"),
-      (" Nom et prénom ","null","Full name"," Employeur ","arab","Employer","null","null","null"),
-      ("Indiquer la fonction dans l'entreprise","null","Indicate the function in the company","null","null","null","null","null","null"),
-      (" Civilité ","null","Civility","Stagiare","null","The intern","null","civilite","null"),
-      ("Nom et prenom","null","Full name","Stagiare","null","The intern","null","null","null"),
-      ("Adress","null","Address","Stagiare","null","The intern","null","null","null"),
-      ("Nom de l'entreprise","null","Company Name","null","null","null","null","null","null"),
-      ("Date","null","Date"," Debut ","null","Beginning","true","null","true"),
-      ("Date","null","Date","fin","null","End","true","null","true"),
-      ("Indiquer la fonction dans lentreprise","null","Indicate your position in the company","null","null","null","null","null","null"),
-      ("Fait le","null","The date today","null","null","null","null","null","true"),
+VALUES("Civilité ","arabe","Civility","Employeur","null","Employer","civilite","civilite","null","null"),
+      (" Nom et prénom ","null","Full name"," Employeur ","arab","Employer","null","null","null","null"),
+      ("Indiquer la fonction dans l'entreprise","null","Indicate the function in the company","null","null","null","null","null","null","null"),
+      (" Civilité ","null","Civility","Stagiare","null","The intern","null","civilite","null","null"),
+      ("Nom et prenom","null","Full name","Stagiare","null","The intern","null","null","null","null"),
+      ("Adress","null","Address","Stagiare","null","The intern","null","null","null","null"),
+      ("Nom de l'entreprise","null","Company Name","null","null","null","null","null","null","null"),
+      ("Date","null","Date"," Debut ","null","Beginning","true","null","true","null"),
+      ("Date","null","Date","fin","null","End","true","null","true","null"),
+      ("Indiquer la fonction dans lentreprise","null","Indicate your position in the company","null","null","null","null","null","null","null"),
+      ("Fait le","null","The date today","null","null","null","null","null","true","null"),
 -- demande officielle
-      ("A l'attention de ", "null", "To the attention of", "null", "null", "null", "null", "null", "false"),
-      ("Quel est l'object de votre demande", "null", "What is the purpose of your request", "null", "null", "null", "null", "null", "false"),
-      ("Veuillez presier votre demande", "null", "Please submit your request", "null", "null", "null", "null", "null", "false"),
-      ("Fait à ", "null", "Made in", "null", "null", "null", "null", "null", "false"),
-      ("Date ", "null", "Date", "null", "null", "null", "null", "null", "true"),
-      ("Votre nom et prenom", "null", "Full name", "null", "null", "null", "null", "null", "false"),
+      ("A l'attention de ", "null", "To the attention of", "null", "null", "null", "null", "null", "false","la personne à qui vous voulez demander"),
+      ("Quel est l'object de votre demande", "null", "What is the purpose of your request", "null", "null", "null", "null", "null", "false","null"),
+      ("Veuillez presier votre demande", "null", "Please submit your request", "null", "null", "null", "null", "null", "false","null"),
+      ("Fait à ", "null", "Made in", "null", "null", "null", "null", "null", "false","null"),
+      ("Date ", "null", "Date", "null", "null", "null", "null", "null", "true","null"),
+      ("Votre nom et prenom", "null", "Full name", "null", "null", "null", "null", "null", "false","null"),
 -- contract dengagement
-      ("Nom et prenom de l'engagé", "null", "Full name of the participant", "null", "null", "null", "null", "null", "false"),
-      ("Numero de CIN", "null", "Number of CIN", "null", "null", "null", "null", "null", "null"),
-      ("CIN delivree le", "null", "CIN issued on", "null", "null", "null", "null", "null", "true"),
-      ("Indiquer la fonction", "null", "null", "null", "null", "null", "null", "null", "null"),
-      ("Nom de ma societe", "null", "null", "null", "null", "null", "null", "null", "null"),
-      ("Identifiant unique", "null", "null", "null", "null", "null", "null", "null", "null"),
-      ("Je m'engage", "null", "null", "null", "null", "null", "null", "null", "null"),
-      ("Fait le", "n", "n", "n", "n", "n", "n", "n", "true"),
-      ("à", "n", "n", "n", "n", "n", "n", "n", "true"),
+      ("Nom et prenom de l'engagé", "null", "Full name of the participant", "null", "null", "null", "null", "null", "false","null"),
+      ("Numero de CIN", "null", "Number of CIN", "null", "null", "null", "null", "null", "null","Le contrat exige cette information"),
+      ("CIN delivree le", "null", "CIN issued on", "null", "null", "null", "null", "null", "true","null"),
+      ("Indiquer la fonction", "null", "null", "null", "null", "null", "null", "null", "null","null"),
+      ("Nom de ma societe", "null", "null", "null", "null", "null", "null", "null", "null","null"),
+      ("Identifiant unique", "null", "null", "null", "null", "null", "null", "null", "null","Un identifiant unique (UID ou Unique Identifier en anglais) est une chaîne numérique ou alphanumérique associée à une seule entité au sein d’un système donné. Les UID permettent de s’adresser à cette entité, afin de pouvoir y accéder et interagir avec elle."),
+      ("Je m'engage", "null", "null", "null", "null", "null", "null", "null", "null","null"),
+      ("Fait le", "n", "n", "n", "n", "n", "n", "n", "true","null"),
+      ("à", "n", "n", "n", "n", "n", "n", "n", "true","null"),
 -- contract domicielle
-  ("Nom et prenom", "null", "Full name", "null", "null", "null", "null", "null", "false"),
-      ("Numero de carte CIN", "null", "Number of CIN", "null", "null", "null", "null", "null", "null"),
-      ("CIN delivree le", "null", "CIN issued on", "null", "null", "null", "null", "null", "true"),
-      ("Raison social", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Forme juridique", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Capital de la societe", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Adress de local", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("A titre", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Fait à", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Fait le", "n", "n", "n", "n", "n", "n", "n", "true"),
+  ("Nom et prenom", "null", "Full name", "null", "null", "null", "null", "null", "false","null"),
+      ("Numero de carte CIN", "null", "Number of CIN", "null", "null", "null", "null", "null", "null","Le contrat exige cette information"),
+      ("CIN delivree le", "null", "CIN issued on", "null", "null", "null", "null", "null", "true","null"),
+      ("Raison social", "n", "n", "n", "n", "n", "n", "n", "n","La raison sociale est le nom de votre société, c'est celui par lequel, en principe, elle sera connue de ses clients, de vos partenaires, et du grand public"),
+      ("Forme juridique", "n", "n", "n", "n", "n", "n", "n", "n","Il existe cinq formes juridiques principales : l'entreprise individuelle, l'entreprise individuelle à responsabilité limitée, la société de capitaux, l'entreprise unipersonnelle à responsabilité limitée, et la société en nom collectif"),
+      ("Capital de la societe", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("Adress de local", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("A titre", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("Fait à", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("Fait le", "n", "n", "n", "n", "n", "n", "n", "true","null"),
 -- contract de travail
-      ("Nom de la societe", "قرض", "Company Name", "part2fr", "part2ar", "part2en", "null", "null", "null"),
-      ("Activite de la societe", "قرض", "Company activity", "part2fr", "null", "null", "null", "null", "null"),
-      ("Adress de la societe", "قرض", "null", "Company address", "null", "null", "null", "null", "null"),
-      ("N° du registre de commerce", "n", "part2fr", "n", "n", "n", "n", "n", "n"),
-      ("civilité de gerant", "قرض", "n", "n", "n", "n", "n", "civilite", "n"),
-      ("Nom et prenom du gerant", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("civilité de l'employe", "n", "n", "n", "n", "n", "n", "civilite", "n"),
-      ("Nom et prenom du L'emploe", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Statut de L'emploe", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Lieu de naissance", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Date de naissance", "n", "n", "n", "n", "n", "n", "n", "true"),
-      ("N° de la carte CIN", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("CIN delivree", "n", "n", "n", "n", "n", "n", "n", "true"),
-      ("Adress de L'emploe", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Fonction de L'emploe", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Debut de contract", "n", "n", "n", "n", "n", "n", "n", "true"),
-      ("Fin de contract", "n", "n", "n", "n", "n", "n", "n", "true"),
-      ("Salaire mensuel", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Fait a", "n", "n", "n", "n", "n", "n", "n", "n"),
-      ("Date de contract", "n", "n", "n", "n", "n", "n", "n", "true"),
+      ("Nom de la societe", "قرض", "Company Name", "part2fr", "part2ar", "part2en", "null", "null", "null","null"),
+      ("Activite de la societe", "قرض", "Company activity", "part2fr", "null", "null", "null", "null", "null","null"),
+      ("Adress de la societe", "قرض", "null", "Company address", "null", "null", "null", "null", "null","null"),
+      ("N° du registre de commerce", "n", "part2fr", "n", "n", "n", "n", "n", "n","Qu'est-ce qu'un numéro RCS ? Le numéro RCS est le numéro d'identification du registre du commerce, il est attribué par l'Institut national de la statistique et des études économiques (Insee) à tous commerçants et sociétés qui s'inscrivent à ce registre"),
+      ("civilité de gerant", "قرض", "n", "n", "n", "n", "n", "civilite", "n","null"),
+      ("Nom et prenom du gerant", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("civilité de l'employe", "n", "n", "n", "n", "n", "n", "civilite", "n","null"),
+      ("Nom et prenom du L'emploe", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("Statut de L'emploe", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("Lieu de naissance", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("Date de naissance", "n", "n", "n", "n", "n", "n", "n", "true","null"),
+      ("N° de la carte CIN", "n", "n", "n", "n", "n", "n", "n", "n","Le contrat exige cette information"),
+      ("CIN delivree", "n", "n", "n", "n", "n", "n", "n", "true","null"),
+      ("Adress de L'emploe", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("Fonction de L'emploe", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("Debut de contract", "n", "n", "n", "n", "n", "n", "n", "true","null"),
+      ("Fin de contract", "n", "n", "n", "n", "n", "n", "n", "true","null"),
+      ("Salaire mensuel", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("Fait a", "n", "n", "n", "n", "n", "n", "n", "n","null"),
+      ("Date de contract", "n", "n", "n", "n", "n", "n", "n", "true","null"),
 -- contract de location
-      ("Nom et prenom de proprietaire le bailleur", "null", "null", "null", "null", "null", "null", "null", "false"),
-      ("Nom et prenom de locataire", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Type de propriete", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Adress de propriete", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Duree de la location", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Location a partir de ", "n", "n", "n", "n", "n", "n", "n", "true"),
-      ("Jusqu'a", "n", "n", "n", "n", "n", "n", "n", "true"),
-      ("Montant du loyer", "n", "n", "n", "n", "n", "n", "n", "false"),
-      ("Date du contrat", "n", "n", "n", "n", "n", "n", "n", "true");
+      ("Nom et prenom de proprietaire le bailleur", "null", "null", "null", "null", "null", "null", "null", "false","null"),
+      ("Nom et prenom de locataire", "n", "n", "n", "n", "n", "n", "n", "false","null"),
+      ("Type de propriete", "n", "n", "n", "n", "n", "n", "n", "false","null"),
+      ("Adress de propriete", "n", "n", "n", "n", "n", "n", "n", "false","null"),
+      ("Duree de la location", "n", "n", "n", "n", "n", "n", "n", "false","null"),
+      ("Location a partir de ", "n", "n", "n", "n", "n", "n", "n", "true","null"),
+      ("Jusqu'a", "n", "n", "n", "n", "n", "n", "n", "true","null"),
+      ("Montant du loyer", "n", "n", "n", "n", "n", "n", "n", "false","null"),
+      ("Date du contrat", "n", "n", "n", "n", "n", "n", "n", "true","null");
 
 
 -- insert question-has-contracttype 
@@ -361,17 +362,17 @@ VALUES
 ( 54,18, 18),
 ( 55,18, 19),
 ( 56,18, 20),
-( 57,18, 21),
 
-( 58,26, 1),
-( 59,26, 2),
-( 60,26, 3),
-( 61,26, 4),
-( 62,26, 5),
-( 63,26, 6),
-( 64,26, 7),
-( 65,26, 8),
-( 66,26, 9);
+( 57,26, 1),
+( 58,26, 2),
+( 59,26, 3),
+( 60,26, 4),
+( 61,26, 5),
+( 62,26, 6),
+( 63,26, 7),
+( 64,26, 8),
+( 65,26, 9),
+( 66,26, 10);
 
 
 
@@ -382,11 +383,11 @@ VALUES
 -- Insert All Contracts
 INSERT INTO etafakna.users(first_name,last_name,username,email,password,address,phone,role,image,status,created_at)
 VALUES("fares","fares","fares","faroussassg007@gmail.com","$2b$10$sIzEhADNfPcEOUCO7ILtAunEbf8Y9YVQt2/gTaZ0TvHvNA3bN6U1O","boumhale","122883","user","https://res.cloudinary.com/dew6e8h2m/image/upload/v1664624355/cld-sample.jpg","Activated","2022-09-29"),
-("omar","omar","omar","massoudiomar@gmail.com","$2b$10$sIzEhADNfPcEOUCO7ILtAunEbf8Y9YVQt2/gTaZ0TvHvNA3bN6U1O","boumhale","122883","user","https://res.cloudinary.com/dew6e8h2m/image/upload/v1664624356/cld-sample-3.jpg","Activated","2022-09-29");
+      ("omar","omar","omar","massoudiomar@gmail.com","$2b$10$sIzEhADNfPcEOUCO7ILtAunEbf8Y9YVQt2/gTaZ0TvHvNA3bN6U1O","boumhale","122883","user","https://res.cloudinary.com/dew6e8h2m/image/upload/v1664624356/cld-sample-3.jpg","Activated","2022-09-29");
 
 -- Insert All Contracts
 INSERT INTO etafakna.contract_types(signed_time,time_answering,title_EN,title_FR,title_AR,description_FR,description_AR,description_EN,image_url,template_FR,template_AR,template_EN,country)
-VALUES(0,5,"NDA","Accord de non-divulgation(NDA)","اتفاقية عدم إفصاح","Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_1_1_lzrkcv.png","https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract1_isna08.docx,https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract2_fiwvof.docx","https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract1_isna08.docx,https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract2_fiwvof.docx","https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract1_isna08.docx,https://res.cloudinary.com/dn6kxvylo/raw/upload/v1664720488/contract2_fiwvof.docx","Tunisia"),
+VALUES(0,5,"NDA","Accord de non-divulgation(NDA)","اتفاقية عدم إفصاح","Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_1_1_lzrkcv.png","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084720/contract1_isna08_1_part1_esqffs.docx,https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084831/contract2_fiwvof_part2_i550oc.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084720/contract1_isna08_1_part1_esqffs.docx,https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084831/contract2_fiwvof_part2_i550oc.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084720/contract1_isna08_1_part1_esqffs.docx,https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084831/contract2_fiwvof_part2_i550oc.docx","Tunisia"),
       (0,5,"CDI, CDD, CIVP","CDI, CDD, Civp","CDI, CDD, CIVP","This is Description","desc_AR","desc_EN","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_2_1_ztst4g.png","temp_FR","temp_AR","temp_EN","Tunisia"),
       (0,5,"Training Certificate","Attestation de stage","شهادة تدريب","Au sens le plus large, une attestation de formation est un document attestant que le titulaire a suivi une formation spécifique","desc_AR","In the broadest sense, a training certificate is a document certifying that the holder has taken a specific course of training.
 ","https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_3_1_bumvz0.png","https://res.cloudinary.com/e-tafakna/raw/upload/v1664543960/Attestation-de-stage_n2_rjvm0l.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665051324/Attestation-de-stage_en1_sxoacs.docx","https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665051324/Attestation-de-stage_en1_sxoacs.docx","Tunisia"),
