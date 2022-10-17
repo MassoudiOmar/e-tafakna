@@ -7,88 +7,53 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 
-
-
-var createDocAndImage= async (str , index, renderObject)=>{
-
-
+var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
-  .get(str)
-  .parse(superagent.parse.image)
-  .buffer();
+    .get(str)
+    .parse(superagent.parse.image)
+    .buffer();
 
-const buffer = response.body;
-const zip = new PizZip(buffer);
+  const buffer = response.body;
+  const zip = new PizZip(buffer);
 
-const doc = new Docxtemplater(zip, {
-  paragraphLoop: true,
-  linebreaks: true,
-});
-doc.render(renderObject);
-const buf = doc.getZip().generate({
-  type: "nodebuffer",
-  // compression: DEFLATE adds a compression step.
-  // For a 50MB output document, expect 500ms additional CPU time
-  compression: "DEFLATE",
-});
-console.log(buf, "check buf");
-fs.writeFileSync(`output${index}.docx`, buf);
-try {
-const formData = new FormData();
-formData.append(
-  "instructions",
-  JSON.stringify({
-    parts: [
-      {
-        file: "document",
-      },
-    ],
-    output: {
-      type: "image",
-      format: "jpg",
-      dpi: 500,
-    },
-  })
-);
-formData.append("document", fs.createReadStream(`output${index}.docx`));
-await axios
-  .post("https://api.pspdfkit.com/build", formData, {
-    headers: formData.getHeaders({
-      Authorization:
-        "Bearer pdf_live_fb8AX9Q5L2Fl7CyxFwdBnRYH1AD1YJcV8onNMpBNkfO",
-    }),
-    responseType: "stream",
-  })
-  .then((response) => {
-    // console.log(response,'response')
-    response.data.pipe(fs.createWriteStream(`image${index}.jpg`))
-    //  cloudinary.uploader.upload("image.jpg")
-    // urlImage = uploadimage.secure_url;
-    // console.log(urlImage, "image url");
-    // // fs.unlinkSync("image.jpg");
-  })
-  .catch(async function (e) {
-    console.log(e);
-    console.log("Test Eroor")
-    const errorString = await streamToString(e.response.data);
-    console.log(errorString, "from catch");
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
   });
-function streamToString(stream) {
-  const chunks = [];
-  return new Promise((resolve, reject) => {
-    stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-    stream.on("error", (err) => reject(err));
-    stream.on("end", () =>
-      resolve(Buffer.concat(chunks).toString("utf8"))
+  doc.render(renderObject);
+  const buf = doc.getZip().generate({
+    type: "nodebuffer",
+    // compression: DEFLATE adds a compression step.
+    // For a 50MB output document, expect 500ms additional CPU time
+    compression: "DEFLATE",
+  });
+  console.log(buf, "check buf");
+  fs.writeFileSync(`output${index}.docx`, buf);
+  try {
+    const formData = new FormData();
+    formData.append(
+      "instructions",
+      JSON.stringify({
+        parts: [
+          {
+            file: "document",
+          },
+        ],
+        output: {
+          type: "image",
+          format: "jpg",
+          dpi: 500,
+        },
+      })
     );
-  });
-}
-  return ('added docx and image')  
-} catch (error) {
-  return ("from cloudinary image");
-}
-}
-
+    console.log(
+      formData.append("document", fs.createReadStream(`output${index}.docx`))
+    );
+    return "added docx and image";
+  } catch (error) {
+    return "from cloudinary image";
+  }
+};
 
 const fillContract = async (req, res) => {
   let urlImage = "";
@@ -114,29 +79,25 @@ const fillContract = async (req, res) => {
         let value = Object.values(e)[0];
         acc[key] = value;
         return acc;
-      }, {} );
+      }, {});
       // res.send(result);
-      console.log(renderObject, "check obj before rendeer");      
+      console.log(renderObject, "check obj before rendeer");
       var url = result[0].template_FR;
-   var Has_Two_Pages = true 
-      if(url.search(",")==-1){
-   var Result  = await createDocAndImage(url ,0,renderObject)  
-  Has_Two_Pages = false ; 
-   res.send(Has_Two_Pages)
-  }
-  else 
-  { 
-    url = url.split(",")
-for (let i = 0 ; i< url.length  ; i ++){
-var Result = await createDocAndImage(url[i] , i,renderObject) 
+      var Has_Two_Pages = true;
+      if (url.search(",") == -1) {
+        var Result = await createDocAndImage(url, 0, renderObject);
+        Has_Two_Pages = false;
+        res.send(Has_Two_Pages);
+      } else {
+        url = url.split(",");
+        for (let i = 0; i < url.length; i++) {
+          var Result = await createDocAndImage(url[i], i, renderObject);
 
-
-if(Result == "from cloudinary image")
-res.send(err)
-}
-res.send(Has_Two_Pages)
-  }    
-          //  fs.unlink("output.docx")      
+          if (Result == "from cloudinary image") res.send(err);
+        }
+        res.send(Has_Two_Pages);
+      }
+      //  fs.unlink("output.docx")
       // { resource_type: "auto" }, async (err, result) => {
       //   if (err) {
       //     console.log(err, "err");
@@ -173,37 +134,33 @@ res.send(Has_Two_Pages)
   });
 };
 
-const updateContractImage = async (req,res)=>{
-  const { id , twoPages } = req.params;
-  console.log(req.body) 
- var urlImage = ""
- var Cmpt = 1
- if(twoPages==false)
- Cmpt=0 ; 
-  console.log(Cmpt,"Compteur")
- for (let i = 0 ; i <=Cmpt ; i ++){ 
+const updateContractImage = async (req, res) => {
+  const { id, twoPages } = req.params;
+  console.log(req.body);
+  var urlImage = "";
+  var Cmpt = 1;
+  if (twoPages == false) Cmpt = 0;
+  console.log(Cmpt, "Compteur");
+  for (let i = 0; i <= Cmpt; i++) {
     let uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
       resource_type: "auto",
     });
-  var  docUrl = uploadDoc.secure_url;
+    var docUrl = uploadDoc.secure_url;
     console.log(docUrl, "doc url");
     let uploadImage = await cloudinary.uploader.upload(`image${i}.jpg`, {
       resource_type: "auto",
     });
-    console.log(i ,"  link " , uploadImage.secure_url)
-    urlImage+=uploadImage.secure_url;
-    if(i<Cmpt)
-    urlImage+=','
+    console.log(i, "  link ", uploadImage.secure_url);
+    urlImage += uploadImage.secure_url;
+    if (i < Cmpt) urlImage += ",";
   }
-console.log(urlImage)
-  res.send(urlImage)
+  console.log(urlImage);
+  res.send(urlImage);
   const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =? `;
-    db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
-      err ? console.log(err) : console.log(result);
-    });
-
-
-}
+  db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
+    err ? console.log(err) : console.log(result);
+  });
+};
 
 const insertContractType = (req, res) => {
   let {
@@ -297,5 +254,5 @@ module.exports = {
   getDataById,
   deleteContractById,
   fillContract,
-  updateContractImage
+  updateContractImage,
 };
