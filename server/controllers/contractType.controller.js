@@ -96,6 +96,7 @@ const file = fs.createWriteStream("file.xlsx");
         console.log("Download Completed");
          const workbook = new Excel.Workbook();
          await workbook.xlsx.readFile(`file.xlsx`).then(async ()=>{
+          
         workbook.worksheets[0].getCell("A1").value = ans["68"] 
         workbook.worksheets[0].getCell("B9").value = ans["69"]+' le '+ ans["70"] 
         workbook.worksheets[0].getCell("D12").value = ans["71"] 
