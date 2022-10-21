@@ -142,6 +142,10 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users` (
   `carteCinBack` VARCHAR(200) NULL DEFAULT NULL,
   `faceVideo` VARCHAR(200) NULL DEFAULT NULL,
   `scanSignature` VARCHAR(200) NULL DEFAULT NULL,
+  `scanSignatureCheck` VARCHAR(200) NULL DEFAULT false,
+  `formulaireCheck` VARCHAR(200) NULL DEFAULT false,
+  `CINCheck` VARCHAR(200) NULL DEFAULT false,
+  `videiSelfieCheck` VARCHAR(200) NULL DEFAULT false,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 

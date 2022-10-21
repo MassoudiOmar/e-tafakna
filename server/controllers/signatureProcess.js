@@ -21,17 +21,6 @@ const uploadCin = (req, res) => {
   });
 };
 
-const uploadCodeStatus = (req, res) => {
-  const { id } = req.params;
-  const sql = `update users SET signatureCode = "en cours" WHERE id=?`;
-  db.query(sql, [signatureImg, id], (err, result) => {
-    if (err) {
-      res.send(err);
-    }
-    res.send(result);
-  });
-};
-
 const uploadSignature = (req, res) => {
   const { id } = req.params;
   const { signatureImg } = req.body;
@@ -176,10 +165,25 @@ const updateContractImage = async (req, res) => {
   });
 };
 
+
+const updateStatus = (req, res) => {
+  const { id } = req.params;
+  const { string } = req.body;
+  const sql = `UPDATE users SET ${string} = 'true' where id = ${id}`
+  db.query(sql, [string, id], (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+    res.send(result);
+  });
+}
+
+
 module.exports = {
   uploadCin,
   uploadSignature,
   uploadVideo,
   fillContract,
   updateContractImage,
+  updateStatus
 };
