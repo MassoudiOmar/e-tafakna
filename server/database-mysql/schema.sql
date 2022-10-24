@@ -187,7 +187,7 @@ VALUES
     "A l'attention",
     N'الانتباه الى',
     "To the attention of",
-    "Civilité du destinataire",
+    N'Civilité du destinataire',
     N'المرسل إليه',
     N'Recipient',
     "null",
@@ -1314,7 +1314,7 @@ VALUES
      "Adresse du Stagiare",
      N'عنوان المتدرب',
      "Trainee's address",
-     "Rur, gouvernorat et code postal",
+     "Rue, gouvernorat et code postal",
      "null",
      "The intern",
      "null",
@@ -1392,21 +1392,21 @@ INSERT INTO etafakna.questions(id,content_FR,content_AR,content_EN,part2_FR,part
 VALUES
 
 
-   (93, 'Quel est le nom de votre Société ?', 'Quel est le nom de votre Société ?', 'Quel est le nom de votre Société ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(94, 'Quel est votre gouvernorat ?', ' Quel est votre gouvernorat ?', ' Quel est votre gouvernorat ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(95, 'Quel est la date de votre facture ?', ' Quel est la date de votre facture ?', ' Quel est la date de votre facture ?', 'n', 'n', 'n', 'n', NULL, 'true', 'n', 'null'),
-(97, 'Quel est le nom de la société de votre client ?', ' Quel est le nom de la société de votre client ?', ' Quel est le nom de la société de votre client ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(98, 'Quel est la Matricule Fiscale de votre client ?', 'Quel est la Matricule Fiscale de votre client ?', 'Quel est la Matricule Fiscale de votre client ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(99, 'Quel est le numéro de votre facture ?', 'Quel est le numéro de votre facture ?', 'Quel est le numéro de votre facture ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(100, 'Quel est l’année de la facture ?', 'Quel est l’année de la facture ?', 'Quel est l’année de la facture ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(101, 'Insérez le nom de votre produit ?', 'Insérez le nom de votre produit ?', 'Insérez le nom de votre produit ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(102, 'Insérez la quantité de ce produit?', 'Insérez la quantité de ce produit?', 'la quantité de ce produit ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(103, 'Insérez le prix du produit', 'Insérez le prix du produit', 'Insérez le prix du produit', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(104, 'Quel est l’adresse de votre société?', 'Quel est l’adresse de votre société?', 'Quel est l’adresse de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(105, 'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(106, 'Quel est votre code postale ', 'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(107, 'Quel est la somme de la facture', 'Quel est la somme de la facture', 'Quel est la somme de la facture', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'null'),
-(109, 'Quelle est les nombre des Produit', 'Quelle est les nombre des Produit', 'Quelle est les nombre des Produit', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n');
+(93, N'Quel est le nom de votre Société ?', N'Quel est le nom de votre Société ?', N'Quel est le nom de votre Société ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(94, N'Quel est votre gouvernorat ?', N'Quel est votre gouvernorat ?', N' Quel est votre gouvernorat ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(95, N'Quel est la date de votre facture ?', N' Quel est la date de votre facture ?', N' Quel est la date de votre facture ?', 'n', 'n', 'n', 'n', NULL, 'true', 'n', 'null'),
+(97, N'Quel est le nom de la société de votre client ?', N' Quel est le nom de la société de votre client ?', N' Quel est le nom de la société de votre client ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(98, N'Quel est la Matricule Fiscale de votre client ?', N'Quel est la Matricule Fiscale de votre client ?', N'Quel est la Matricule Fiscale de votre client ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(99, N'Quel est le numéro de votre facture ?', N'Quel est le numéro de votre facture ?', N'Quel est le numéro de votre facture ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(100, N'Quel est l’année de la facture ?', N'Quel est l’année de la facture ?', 'Quel est l’année de la facture ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(101, N'Insérez le nom de votre produit ?', N'Insérez le nom de votre produit ?', N'Insérez le nom de votre produit ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(102, N'Insérez la quantité de ce produit?', N'Insérez la quantité de ce produit?', N'la quantité de ce produit ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(103, N'Insérez le prix du produit', N'Insérez le prix du produit', N'Insérez le prix du produit', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(104, N'Quel est l’adresse de votre société?', N'Quel est l’adresse de votre société?', N'Quel est l’adresse de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(105, N'Quel est la Matricule Fiscale de votre société ?', N'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(106, N'Quel est votre code postale ', N'Quel est la Matricule Fiscale de votre société ?', N'Quel est la Matricule Fiscale de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(107, N'Quel est la somme de la facture', N'Quel est la somme de la facture', N'Quel est la somme de la facture', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'null'),
+(109, N'Quelle est les nombre des Produit', N'Quelle est les nombre des Produit', N'Quelle est les nombre des Produit', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n');
 
   
   
