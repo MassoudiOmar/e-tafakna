@@ -26,14 +26,13 @@ const SECRET_KEY =
 const contractTypeRoutes = require("./routes/contractType.routes");
 const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
 const login = require("./routes/login");
-const hostname="0.0.0.0";
 const con = require("./routes/contract.routes");
 const app = express();
 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
-  console.log(`Server running on http://${hostname}:${PORT}`);
+  console.log(`Server running on ${PORT}`);
 });
 
 
