@@ -87,6 +87,7 @@ const updatePic = (req, res) => {
     }
   });
 };
+
 const updateStatus = (req, res) => {
   const { id } = req.params;
   const { status } = req.body;

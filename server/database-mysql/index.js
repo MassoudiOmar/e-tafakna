@@ -6,10 +6,20 @@ var connection = mysql.createConnection({
   host     : process.env.MYSQL_HOST,
   user     : process.env.MYSQL_USER,
   password : process.env.MYSQL_PASSWORD,
-  database : process.env.MYSQL_DATABASE
+  database : process.env.MYSQL_DATABASE , 
+  charset: 'cp1256'
+
 });
 
 connection.connect((err, success) => {
-  err ? console.log("connection failed", err) : console.log("Database connected successfully")
+ if(err){
+console.log("Connection failed ")
+
+ }
+ else {
+console.log("Connected")
+
+}
+
 })
 module.exports = connection;
