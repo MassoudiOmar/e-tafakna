@@ -52,7 +52,7 @@ await axios
   .post("https://api.pspdfkit.com/build", formData, {
     headers: formData.getHeaders({
       Authorization:
-        "Bearer pdf_live_pDxxHkmCM2kuYf5BoqeNs2ruh1QLSPZauMruAphqrbx",
+        "Bearer pdf_live_wtlDGJdKZJXW8WAIt3nWAii2nhwneGzWfiDCUxoVPYB",
     }),
     responseType: "stream",
   })
@@ -85,45 +85,99 @@ function streamToString(stream) {
   return ("from cloudinary image");
 }
 }
-const makeFactureOrDevis = ( url, ans)=>{
+const makeFactureOrDevis = async ( url, ans)=>{
+  console.log(ans , "RRR")
   console.log("RR")
 console.log(url)
 const file = fs.createWriteStream("file.xlsx");
-  const request =  http.get(url, function(response) {
+    http.get(url, function(response) {
     response.pipe(file);
      file.on("finish", async () => {
         file.close();
         console.log("Download Completed");
          const workbook = new Excel.Workbook();
          await workbook.xlsx.readFile(`file.xlsx`).then(async ()=>{
-          
-        workbook.worksheets[0].getCell("A1").value = ans["68"] 
-        workbook.worksheets[0].getCell("B9").value = ans["69"]+' le '+ ans["70"] 
-        workbook.worksheets[0].getCell("D12").value = ans["71"] 
-        workbook.worksheets[0].getCell("D13").value = ans["72"] 
-        workbook.worksheets[0].getCell("C17").value += ans["73"] 
-        workbook.worksheets[0].getCell("B22").value = ans["75"]
-        workbook.worksheets[0].getCell("C22").value = ans["76"]
-        workbook.worksheets[0].getCell("D22").value = ans["77"]
-/*
-9 77 
-10 78 
-11 79 
-12 80 
-13 81
+
+        workbook.worksheets[0].getCell("A1").value = ans[0] 
+        workbook.worksheets[0].getCell("B9").value = ans[1]+' le '+ ans[2] 
+        workbook.worksheets[0].getCell("D12").value = ans[3] 
+        workbook.worksheets[0].getCell("D13").value = ans[4] 
+        workbook.worksheets[0].getCell("C17").value += ans[5] 
+ let sum = 0 ; 
+let j = 8 ; 
+let k =  8 + Math.ceil((ans.length-12)/3) 
+let r = 8  + Math.ceil(((ans.length-12) * 2 )/3 )
+
+let length  =   Math.ceil((ans.length-12) / 3)
+console.log("The length is " , length)
+        for (let i = 22 ; i<(22+length) ; i ++){
+console.log( " The loop for j  is " , ans[j])
+console.log( " The loop for k  is " , ans[k])
+console.log( " The loop for r  is " , ans[r])
+sum+=parseFloat(ans[k]) * parseFloat(ans[r]) ;                            
+
+workbook.worksheets[0].getCell(`B${i}`).value = ans[j++]
+        workbook.worksheets[0].getCell(`C${i}`).value = ans[k++]
+        workbook.worksheets[0].getCell(`D${i}`).value = ans[r++]
+        workbook.worksheets[0].getCell(`E${i}`).value = parseFloat(ans[k-1]) * parseFloat(ans[r-1] )
+console.log("This is the sum so far " , sum )
+ }
+        /*
+  '93': 'Etafkna',
+  '94': 'Gafsa',
+  '95': '17/9/2022',
+  '97': 'Wajih',
+  '98': '1230',
+  '99': '23',
+  '100': '2022',
+  '101': 'Dell',
+  '102': '5',
+  '103': '5000',
+  '104': 'Tunisa/gabes',
+  '105': 'Mat client',
+  '106': '2120',
+  '107': 'Six dinar'
+**************************************
+Etafakn', 'Tunis', '20/9/2022',
+  'Wajih',   '2000',  '12',
+  '2022',    '',      'Dell',
+  'Hp',      'Asus',  '5',
+  '6',       '7',     '1440',
+  '1320',    '1500',  'Gafsa',
+  '1000',    '2120'
+  **********************************
+
+
+
+ '93': 'A',
+  '94': 'B',
+  '95': '17/9/2022',
+  '97': 'C',
+  '98': 'D',
+  '99': 'E',
+  '100': 'Dell',
+  '101': '5',
+  '102': '5',
+  '103': '600',
+  '104': 'Tunis/gafsa',
+  '105': '2130',
+  '106': '2120',
+  '107': 'Six dinars' 
+
 */
- workbook.worksheets[0].getCell("E22").value = (parseFloat(ans["76"])  * parseFloat(ans["77"])) 
- workbook.worksheets[0].getCell("E34").value = workbook.worksheets[0].getCell("E22").value  
- workbook.worksheets[0].getCell("E36").value = workbook.worksheets[0].getCell("E22").value * 19 / 100
+ workbook.worksheets[0].getCell("E34").value = parseFloat(sum)
+ workbook.worksheets[0].getCell("E36").value = sum * 19 / 100
  workbook.worksheets[0].getCell("E41").value = workbook.worksheets[0].getCell("E36").value + workbook.worksheets[0].getCell("E34").value+600     
  var arr = workbook.worksheets[0].getCell("D46").value.split(' ') 
- arr[arr.length-1] = ans["80"] 
+ arr[arr.length-1] = ans[ans.length-1] 
  arr = arr.join(' ')
+ //Fix it 
  workbook.worksheets[0].getCell("D46").value = arr 
- workbook.worksheets[0].getCell("B52").value = ans["78"] + " et "+ans["81"] + ",Tunisie"
- workbook.worksheets[0].getCell("B53").value="MF:"+ans["79"] 
+ workbook.worksheets[0].getCell("B52").value = ans[ans.length-4] + " et "+ans[ans.length-2] + ",Tunisie"
+ workbook.worksheets[0].getCell("B53").value="MF:"+ans[ans.length-3]  
 console.log("We are Here ")
  await workbook.xlsx.writeFile('output0.xlsx');
+ try {
         const formData = new FormData()
         formData.append('instructions', JSON.stringify({
           parts: [
@@ -139,21 +193,23 @@ console.log("We are Here ")
         }))
         formData.append('document', fs.createReadStream('output0.xlsx'))
         
-        ;(async () => {
-          try {
-            const response = await axios.post('https://api.pspdfkit.com/build', formData, {
+             await axios.post('https://api.pspdfkit.com/build', formData, {
               headers: formData.getHeaders({
-                  'Authorization': 'Bearer pdf_live_pDxxHkmCM2kuYf5BoqeNs2ruh1QLSPZauMruAphqrbx'
+                  'Authorization': 'Bearer pdf_live_wtlDGJdKZJXW8WAIt3nWAii2nhwneGzWfiDCUxoVPYB'
               }),
               responseType: "stream"
             })
+            .then( async response =>{
+
+              await response.data.pipe(fs.createWriteStream("image0.jpg"))
+              
+            })
+              
         
-            response.data.pipe(fs.createWriteStream("image0.jpg"))
           } catch (e) {
             const errorString = await streamToString(e.response.data)
             console.log(errorString)
           }
-        })()
         //A1 => 1 Question 
         //B9 => B9 = Question 2 + le , Question 3 
         //D12 => Question 4 
@@ -179,12 +235,15 @@ console.log("We are Here ")
 
     });
  });
-
+return ("Hi")
 }
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
  let {type} = req.body
+
+ let {questions} =req.body
+ console.log(questions ,"this is the true one")
 console.log(type)
   let renderObject = {};
   let answersArray = [];
@@ -213,10 +272,17 @@ console.log(type)
 
   if(type =="facture" || type == "devis"){
   console.log("Welcome")
-    const a = await makeFactureOrDevis(url,renderObject)
+    Promise.all([makeFactureOrDevis(url,questions)]).then((response)=>{
+     
+  setTimeout(()=>{
+    console.log("Hello") 
 res.send("facture")
-  } else {
-console.log("Hiiii")
+
+
+  },5000)
+
+    })
+} else {
       console.log(url  , "that is the url ")
    var Has_Two_Pages = true 
       if(url.search(",")==-1){
@@ -274,7 +340,6 @@ else {
     if(i<Cmpt)
     urlImage+=','
   }
-  console.log(urlImage)
 console.log(urlImage)
   const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =? `;
     db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
