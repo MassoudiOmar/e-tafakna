@@ -22,7 +22,6 @@ DROP DATABASE IF EXISTS `etafakna`;
 CREATE SCHEMA IF NOT EXISTS `etafakna` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 USE `etafakna`;
-
 -- -----------------------------------------------------
 -- Table `etafakna`.`contract_types`
 -- -----------------------------------------------------
@@ -188,7 +187,7 @@ VALUES
     "A l'attention",
     N'الانتباه الى',
     "To the attention of",
-    "du destinataire",
+    N'Civilité du destinataire',
     N'المرسل إليه',
     N'Recipient',
     "null",
@@ -198,10 +197,10 @@ VALUES
     "null"
   ),
    (
-    N'Votre nom et prénom',
+    N'Nom et prénom',
     N'اسمك الأول والأخير',
     "Full name",
-    "Nom du destinataire",
+    "Du destinataire",
     N'اسم المرسل إليه',
     N'Recipient`s name',
     "null",
@@ -211,7 +210,7 @@ VALUES
     "null"
   ),
   (
-    N'Quel est l‘objet de votre demande',
+    N'Quel est l’objet de votre demande',
     N'ما هو الغرض من طلبك',
     "What is the purpose of your request",
     "null",
@@ -250,7 +249,7 @@ VALUES
     "null"
   ),
   (
-    "Date",
+    "Date de la demande",
     N'تاريخ',
     "Date",
     "null",
@@ -266,7 +265,7 @@ VALUES
     N'Votre nom et prénom',
     N'اسمك الأول والأخير',
     "Full name",
-    "du demandeur",
+    "Du demandeur",
     "null",
     "null",
     "null",
@@ -345,7 +344,7 @@ VALUES
     N'Nom et prénom',
     N'الإسم واللقب',
     "Full name",
-    N'du gérant(e)',
+    N'Du gérant(e)',
     N'من المدير',
     "Of the manager",
     "n",
@@ -358,7 +357,7 @@ VALUES
     N'Civilité',
     "n",
     "n",
-    N'du l`employé',
+    N'De l’employé',
     "n",
     "n",
     "n",
@@ -371,7 +370,7 @@ VALUES
     N'Nom et prénom',
     N'الإسم واللقب',
     "Full name",
-    N'de l`employé',
+    N'De l’employé',
     "n",
     "n",
     "n",
@@ -384,7 +383,7 @@ VALUES
     "Statut",
     "n",
     "n",
-    N'de l`employé',
+    N'De l’employé',
     "n",
     "n",
     "n",
@@ -449,7 +448,7 @@ VALUES
     "Adresse",
     "n",
     "n",
-    N'de l`employé',
+    N'De l’employé',
     "n",
     "n",
     "n",
@@ -462,7 +461,7 @@ VALUES
     "Fonction",
     "n",
     "n",
-    N'de l`employé',
+    N'De l’employé',
     "n",
     "n",
     "n",
@@ -501,7 +500,7 @@ VALUES
     "Salaire mensuel",
     "n",
     "n",
-    "null",
+    "En dinars",
     "n",
     "n",
     "n",
@@ -607,7 +606,7 @@ VALUES
      N'Adresse de la propriété',
      "n",
      "n",
-     "null",
+     "Rue, gouvernorat et code postal",
      "n",
      "n",
      "n",
@@ -643,7 +642,7 @@ VALUES
      "null"
    ),
    (
-     N'Jusqu`à',
+     N'Jusqu’à',
      "n",
      "n",
      "null",
@@ -659,7 +658,7 @@ VALUES
      "Montant du loyer",
      "n",
      "n",
-     "en dinars",
+     "En dinars",
      "n",
      "n",
      "n",
@@ -725,7 +724,7 @@ VALUES
       N'Demeurant à',
       N'demeurant',
       "Full name",
-      N'Le propriétaire',
+      N'Le propriétaire: Rue,gouvernorat et code postal',
       N'prop',
       N'Le propriétaire',
       "null",
@@ -842,7 +841,7 @@ VALUES
       N'Demeurant à',
       N'demeurant',
       "Full name",
-      N'Le locataire',
+      N'Le locataire: Rue,gouvernorat et code postal',
       N'prop',
       N'Le locataire',
       "null",
@@ -868,7 +867,7 @@ VALUES
       N'Adresse de la propriété',
       N'demeurant',
       "Full name",
-      N'Rue, code postal et gouvernorat',
+      "Rue,gouvernorat et code postal",
       N'prop',
       N'Le locataire',
       "null",
@@ -881,7 +880,7 @@ VALUES
       N'Durée de la location',
       N'demeurant',
       "Full name",
-      N'Rue, code postal et gouvernorat',
+      "null",
       N'prop',
       N'Le locataire',
       "null",
@@ -917,10 +916,10 @@ VALUES
       "null"
     ),
         (
-      N'Montant de la location en TND',
+      N'Montant de la location ',
       N'demeurant',
       "Full name",
-      N'null',
+      N'En dinars',
       N'prop',
       N'Le locataire',
       "null",
@@ -933,11 +932,11 @@ VALUES
       N'Location est :',
       N'demeurant',
       "Full name",
-      N'null',
+      "null",
       N'prop',
       N'Le locataire',
       "null",
-      "null",
+      "jour",
       "null",
       "null",
       "null"
@@ -946,7 +945,7 @@ VALUES
       N'Montant du cautionnement en TND',
       N'demeurant',
       "Full name",
-      N'null',
+      N'En dinars',
       N'prop',
       N'null',
       "null",
@@ -987,7 +986,7 @@ VALUES
      N'Civilité',
      "n",
      "n",
-     N'de l`engagé',
+     N'De l’engagé(e)',
      "n",
      "n",
      "n",
@@ -1000,7 +999,7 @@ VALUES
      N'Nom et prénom',
      N'الإسم واللقب',
      "Full name",
-     N'de l`engagé',
+     N'De l’engagé(e)',
      N'من المشارك',
      "Of the participant",
      "null",
@@ -1039,7 +1038,7 @@ VALUES
      "Indiquer la fonction",
      "null",
      "null",
-     "null",
+     N'De l’engagé(e)',
      "null",
      "null",
      "null",
@@ -1157,7 +1156,7 @@ VALUES
      "Raison social",
      "n",
      "n",
-     "nom de la societe",
+     "Nom de la société",
      "n",
      "n",
      "n",
@@ -1183,7 +1182,7 @@ VALUES
      N'Capital de la société',
      "n",
      "n",
-     "null",
+     "En dinars",
      "n",
      "n",
      "n",
@@ -1193,10 +1192,10 @@ VALUES
       "null"
    ),
    (
-     "Adress du local",
+     "Adress du siège",
      "n",
      "n",
-     N'(du local/du siège)',
+     "null",
      "n",
      "n",
      "n",
@@ -1263,7 +1262,7 @@ VALUES
      N'Nom et prénom',
      N'الإسم واللقب',
      "Full name",
-     "(Employeur)",
+     "Employeur",
      N'صاحب العمل',
      "(Employer)",
      "null",
@@ -1273,10 +1272,10 @@ VALUES
      "null"
    ),
    (
-     N'Sélectionnez le poste dans l`entreprise',
+     N'Indiquer le fonction dans l’entreprise',
      N'حدد الوظيفة في الشركة',
      "Select the position in the company",
-     "null",
+     "Employeur",
      "null",
      "null",
      "null",
@@ -1302,7 +1301,7 @@ VALUES
      N'Nom et prénom',
      N'الإسم واللقب',
      "Full name",
-     "(Stagiare)",
+     "Stagiare",
      "(Stagiare)",
      "(The intern)",
      "null",
@@ -1315,7 +1314,7 @@ VALUES
      "Adresse du Stagiare",
      N'عنوان المتدرب',
      "Trainee's address",
-     "null",
+     "Rue, gouvernorat et code postal",
      "null",
      "The intern",
      "null",
@@ -1325,7 +1324,7 @@ VALUES
      "null"
    ),
    (
-     N'Nom de l`entreprise',
+     N'Nom de l’entreprise',
      N'اسم الشركة',
      "Company Name",
      "null",
@@ -1364,7 +1363,7 @@ VALUES
      "null"
    ),
    (
-     N'Sélectionnez le poste dans l`entreprise',
+     N'Indiquer le poste dans l’entreprise',
      N'حدد الوظيفة في الشركة',
      "Select the position in the company",
      "Stagiaire",
@@ -1377,18 +1376,38 @@ VALUES
      "null"
    ),
    (
-     "Fait le",
-     "null",
-     "The date today",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "true",
-     "null",
+     "Fait le",                 
+     "null",                  
+     "The date today",                  
+     "null",                  
+     "null",                  
+     "null",                  
+     "null",                  
+     "null",                  
+     "true",                  
+     "null",                  
      "null"
    );
+INSERT INTO etafakna.questions(id,content_FR,content_AR,content_EN,part2_FR,part2_AR,part2_EN,inputType,options,date,explanation,text_Area)
+VALUES
+
+
+(93, N'Quel est le nom de votre Société ?', N'Quel est le nom de votre Société ?', N'Quel est le nom de votre Société ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(94, N'Quel est votre gouvernorat ?', N'Quel est votre gouvernorat ?', N' Quel est votre gouvernorat ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(95, N'Quel est la date de votre facture ?', N' Quel est la date de votre facture ?', N' Quel est la date de votre facture ?', 'n', 'n', 'n', 'n', NULL, 'true', 'n', 'null'),
+(97, N'Quel est le nom de la société de votre client ?', N' Quel est le nom de la société de votre client ?', N' Quel est le nom de la société de votre client ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(98, N'Quel est la Matricule Fiscale de votre client ?', N'Quel est la Matricule Fiscale de votre client ?', N'Quel est la Matricule Fiscale de votre client ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(99, N'Quel est le numéro de votre facture ?', N'Quel est le numéro de votre facture ?', N'Quel est le numéro de votre facture ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(100, N'Quel est l’année de la facture ?', N'Quel est l’année de la facture ?', 'Quel est l’année de la facture ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(101, N'Insérez le nom de votre produit ?', N'Insérez le nom de votre produit ?', N'Insérez le nom de votre produit ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(102, N'Insérez la quantité de ce produit?', N'Insérez la quantité de ce produit?', N'la quantité de ce produit ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(103, N'Insérez le prix du produit', N'Insérez le prix du produit', N'Insérez le prix du produit', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(104, N'Quel est l’adresse de votre société?', N'Quel est l’adresse de votre société?', N'Quel est l’adresse de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(105, N'Quel est la Matricule Fiscale de votre société ?', N'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(106, N'Quel est votre code postale ', N'Quel est la Matricule Fiscale de votre société ?', N'Quel est la Matricule Fiscale de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(107, N'Quel est la somme de la facture', N'Quel est la somme de la facture', N'Quel est la somme de la facture', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'null'),
+(109, N'Quelle est les nombre des Produit', N'Quelle est les nombre des Produit', N'Quelle est les nombre des Produit', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n');
+
   
   
   
@@ -1504,9 +1523,27 @@ VALUES
   (87, 20, 6),
   (88, 20, 7),
   (89, 20, 8),
-  (80, 20, 9),
+  (90, 20, 9),
   (91, 20, 10),
-  (92, 20, 11);
+  (92, 20, 11) ,
+
+  -- Contract Devis Facture
+  (93, 40, 1),
+  (94, 40, 2),
+  (95, 40, 3),
+  (97, 40, 5),
+  (98, 40, 6),
+  (99, 40, 7),
+  (100, 40, 8),
+  (101, 40, 10),
+  (102, 40, 11),
+  (103, 40, 12),
+  (104, 40, 13),
+  (105, 40, 14),
+  (106, 40, 15),
+  (07,  40, 16),
+  (109, 40,  9);
+
 
 
  
@@ -1551,6 +1588,19 @@ VALUES
     "https://res.cloudinary.com/dew6e8h2m/image/upload/v1664624356/cld-sample-3.jpg",
     "Activated",
     "2022-09-29"
+  ),
+  (
+    "Norchen",
+    "Mezni",
+    "Norchen Mezni",
+    "Norchenmezni1@gmail.com",
+    "$2b$10$kzeiOtT.FvnFlD175KxSHe1VhrFJ.OUtIcq.5C4YprY6qjDvWz3/a",
+    "Tunis",
+    "52979979",
+    "user",
+    "null",
+    "Activated",
+    "2022-09-29"
   );
 
 
@@ -1581,7 +1631,7 @@ VALUES
     0,
     5,
     "Employment contract",
-    "Contrat de travaille",
+    "Contrat de travail",
     N'عقد التوظيف',
     "Anything can be rented using E-tafakna e-greement... From a room, to an appartement or a car...",
     "desc_AR",
@@ -1623,7 +1673,7 @@ VALUES
     "desc_AR",
     "In the broadest sense, a training certificate is a document certifying that the holder has taken a specific course of training.",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665949431/icons/attestation_de_stage_sn9jhb.png",
-    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665774426/WORD-CONTRACTS/Attestation-de-stage_n2_rjvm0l_v5c4wo.docx",
+    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1666356239/Attestation-de-stage_n2_rjvm0l_v5c4wo_o76cg7.docx",
     "null",
     "null",
     "Tunisia",
@@ -1749,7 +1799,7 @@ VALUES
     "desc_AR",
     "desc_EN",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665949431/icons/engagement_p8xhg9.png",
-    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665770960/WORD-CONTRACTS/Engagement_contract_n2_x14mz3_wg8rm1_gukspl.docx",
+    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1666361761/Engagement_contract_n2_x14mz3_wg8rm1_gukspl_1_ihtbkp.docx",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665770960/WORD-CONTRACTS/Engagement_contract_n2_x14mz3_wg8rm1_gukspl.docx",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665770960/WORD-CONTRACTS/Engagement_contract_n2_x14mz3_wg8rm1_gukspl.docx",
     "Tunisia",
@@ -1943,7 +1993,7 @@ VALUES
     0,
     5,
     "Rental of real estate",
-    N'location à usage de bureau',
+    N'Location à usage de bureau',
     "Referencement",
     N'Tout peut être loué en utilisant le contrat de location de E-Tafakna. D`une chambre, une villa, un appartement, à un bureau. Qu`il s’agisse d`une location à court terme ou à long terme',
     "desc_AR",
@@ -1975,3 +2025,44 @@ VALUES
     "null",
     "inside_categorie"
   );
+
+INSERT INTO
+  etafakna.contract_types(
+    id,
+    signed_time,
+    time_answering,
+    title_EN,
+    title_FR,
+    title_AR,
+    description_FR,
+    description_AR,
+    description_EN,
+    image_url,
+    template_FR,
+    template_AR,
+    template_EN,
+    country,
+    types,
+    categories,
+    inside_categories
+  )
+VALUES
+
+
+(
+40, 
+0, 
+5, 
+'Facture', '
+Facture', 
+'Facture', 'Facture', 
+'Facture', 
+'Facture', 
+'https://res.cloudinary.com/dn6kxvylo/image/upload/v1665584941/quotation_cx1xtp.png',
+'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx',
+'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx',
+'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx',
+'tunisie', 
+'types',
+NULL, 
+NULL);
