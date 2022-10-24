@@ -203,7 +203,7 @@ VALUES
     "null",
     "civilite",
     "false",
-    "null",
+    "Nom du destinataire",
     "null"
   ),
    (
@@ -229,7 +229,7 @@ VALUES
     "null",
     "null",
     "false",
-    "null",
+    "yes",
     "null"
   ),
   (
@@ -242,7 +242,7 @@ VALUES
     "null",
     "null",
     "false",
-    "null",
+    "yes",
     "textArea"
   ),
   (
@@ -609,7 +609,7 @@ VALUES
      "n",
      "n",
      "false",
-     "null",
+     "yes",
      "null"
    ),
    (
@@ -622,7 +622,7 @@ VALUES
      "n",
      "n",
      "false",
-     "null",
+     "yes",
      "null"
    ),
    (
@@ -635,7 +635,7 @@ VALUES
      "n",
      "n",
      "false",
-     "null",
+     "yes",
      "null"
    ),
    (
@@ -1054,7 +1054,7 @@ VALUES
      "null",
      "null",
      "null",
-     "null",
+     "yes",
      "null"
    ),
    (
@@ -1080,7 +1080,7 @@ VALUES
      "null",
      "null",
      "null",
-     "null",
+     "yes",
      "null"
    ),
    (
@@ -1093,7 +1093,7 @@ VALUES
      "null",
      "null",
      "null",
-     "null",
+     "yes",
      "null"
    ),
    (
@@ -1291,7 +1291,7 @@ VALUES
      "null",
      "null",
      "null",
-     "null",
+     "yes",
      "null"
    ),
    (
@@ -1330,7 +1330,7 @@ VALUES
      "null",
      "null",
      "null",
-     "null",
+     "yes",
      "null"
    ),
    (
@@ -1382,7 +1382,7 @@ VALUES
      "null",
      "null",
      "null",
-     "null",
+     "yes",
      "null"
    ),
    (
@@ -1609,7 +1609,7 @@ VALUES
     5,
     "Nda",
     "Accord de non-divulgation(NDA)",
-    "Accord de non-divulgation(NDA)",
+    N'اتفاق غير معلن',
     "This is Description",
     "desc_AR",
     "desc_EN",
@@ -1627,7 +1627,7 @@ VALUES
     5,
     "Training Certificate",
     "Attestation de stage",
-    "شهادة تدريب",
+    N'شهادة تدريب',
     N'L`attestation de stage E-Tafakna, aussi appelée le certificat de stage, est un document remis au stagiaire permettant de valider une expérience professionnelle au sein de l`entreprise.',
     "desc_AR",
     "In the broadest sense, a training certificate is a document certifying that the holder has taken a specific course of training.",
@@ -1645,7 +1645,7 @@ VALUES
     5,
     "Freelancer",
     "Freelance",
-    "مستقل",
+  N'مستقل',
     "This is Freelancer Description",
     "desc_AR",
     "desc_EN",
@@ -1663,7 +1663,7 @@ VALUES
     5,
     "Microcredit",
     N'Contrat de Prêt numéraire (microcrédit)',
-    "قرض",
+    N'قرض',
     "This is loan Description",
     "desc_AR",
     "desc_EN",
@@ -1681,7 +1681,7 @@ VALUES
     5,
     "Car rental",
     "Location de voiture",
-    "كراء سيارة",
+    N'كراء سيارة',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1699,7 +1699,7 @@ VALUES
     5,
     "Car sale",
     "Achat de voiture",
-    "بيع سيارة",
+    N'بيع سيارة',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1717,7 +1717,7 @@ VALUES
     5,
     "Rental of real estate",
     "Location de biens",
-    "Referencement",
+    N'تأجير العقارات',
     N'Tout peut être loué en utilisant le contrat de location de E-Tafakna. D`une chambre, une villa, un appartement, à un bureau. Qu`il s&#39;agisse d`une location à court terme ou à long terme',
     "desc_AR",
     "desc_EN",
@@ -1735,7 +1735,7 @@ VALUES
     5,
     "Sale",
     "Vente",
-    "عقد كراء",
+    N'عقد كراء',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1753,7 +1753,7 @@ VALUES
     5,
     N'Contrat d’engagement',
     N'Contrat d’engagement',
-    N'Contrat d’engagement',
+    N'عقد التوظيف',
     N'Le contrat d’engagement E-Tafakna nous permet de nous assurer que vous soyez prêt à entreprendre des travaux, avant de commencer à travailler plus en profondeur sur votre projet.',
     "desc_AR",
     "desc_EN",
@@ -1771,7 +1771,7 @@ VALUES
     5,
     "Partnership",
     "Partenariat",
-    "شراكة",
+    N'شراكة',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1789,7 +1789,7 @@ VALUES
     5,
     "Quotation/Bill",
     "Devis/Facture ",
-    "Devis/Facture ",
+    N'فاتورة/التسعير',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1807,7 +1807,7 @@ VALUES
     5,
     "Travel insurance",
     "Assurance Voyage",
-    "Assurance Voyage",
+    N'تامين السفر',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1861,7 +1861,7 @@ VALUES
     5,
     "Safe of real estate",
     "Contrat de Domiciliation",
-    "Contrat de Domiciliation",
+    N'عقد التوطين',
     N'Le contrat de domiciliation E-Tafakna est une obligation pour toutes les sociétés, mais également pour les associations. Il s`agit de l`adresse administrative et fiscale à laquelle tous les courriers seront envoyés.',
     "desc_AR",
     "desc_EN",
