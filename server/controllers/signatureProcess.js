@@ -107,7 +107,7 @@ const fillContract = async (req, res) => {
   let renderObject = {};
   let answersArray = [];
   let template_FR =
-    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665934725/formulaire_de_certificat_1_pol5su.docx";
+    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1666606027/formulaire_de_certificat_2f_sw0qxl.docx";
    let template_FR2= "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665937096/formulaire_de_certificat_4_w8jxky.docx"
   let questions_id = [70, 71, 72, 73, 74,75,76,77,78,79,80];
   let content = req.body.content;
