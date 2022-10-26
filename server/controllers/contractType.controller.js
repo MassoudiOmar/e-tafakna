@@ -249,7 +249,7 @@ const fillContract = async (req, res) => {
   let renderObject = {};
   let answersArray = [];
   const { id } = req.params;
-  const sql = `select template_FR, questions_id,content from contract_types
+  const sql = `select template_FR,template_AR,template_EN, questions_id,content from contract_types
   inner join answers on (contract_types.id = answers.contracts_contract_types_id)
   where answers.contracts_id = ?`;
   db.query(sql, [id], async (err, result) => {
@@ -270,6 +270,7 @@ const fillContract = async (req, res) => {
       }, {});
       // res.send(result);
       var url = result[0].template_FR;
+      var urlAR = result[0].template_AR;
 
       if (type == "facture" || type == "devis") {
         console.log("Welcome");
