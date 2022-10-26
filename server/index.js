@@ -59,6 +59,9 @@ app.use("/api/contracts", contractRoutes);
 app.use("/api/signature", signature);
 app.use("/api", contractRoutess);
 
+app.get('/', (req, res) => {
+  res.send('Welcome To E-Tafakna server')
+})
 
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
