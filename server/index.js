@@ -60,9 +60,14 @@ app.use("/api/signature", signature);
 app.use("/api", contractRoutess);
 
 
+
+
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
 
+
+
+//"start with nodejs expres?"
 app.post("/create-payment-intent", async (req, res) => {
   try {
     const paymentIntent = await stripe.paymentIntents.create({
