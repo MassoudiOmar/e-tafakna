@@ -68,14 +68,38 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`contracts` (
 -- -----------------------------------------------------
 -- Table `etafakna`.` 
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `etafakna`.`questions` (
+CREATE TABLE IF NOT EXISTS `etafakna`.`questions_EN` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `content_EN` VARCHAR(100) NOT NULL,
+  `part2_EN` VARCHAR(50) NULL,
+  `inputType` LONGTEXT NOT NULL,
+  `options` VARCHAR(250),
+  `date` VARCHAR(10) NOT NULL,
+  `explanation` VARCHAR(1000),
+  `text_Area` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci;
+-- -----------------------------------------------------
+-- Table `etafakna`.` 
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `etafakna`.`questions_FR` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `content_FR` VARCHAR(100) NOT NULL,
-  `content_AR` VARCHAR(100) NOT NULL,
-  `content_EN` VARCHAR(100) NOT NULL,
   `part2_FR` VARCHAR(50) NULL,
+  `inputType` LONGTEXT NULL,
+  `options` VARCHAR(250),
+  `date` VARCHAR(10)  NULL,
+  `explanation` VARCHAR(1000),
+  `text_Area` VARCHAR(10)  NULL,
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci;
+-- -----------------------------------------------------
+-- Table `etafakna`.` 
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `etafakna`.`questions_AR` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `content_AR` VARCHAR(100) NOT NULL,
   `part2_AR` VARCHAR(50) NULL,
-  `part2_EN` VARCHAR(50) NULL,
   `inputType` LONGTEXT NOT NULL,
   `options` VARCHAR(250),
   `date` VARCHAR(10) NOT NULL,
@@ -100,23 +124,52 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`answers` (
     `questions_id`
   ),
   INDEX `fk_answers_questions2_idx` (`questions_id` ASC) VISIBLE,
-  CONSTRAINT `fk_answers_questions1` FOREIGN KEY (`contracts_id`, `contracts_contract_types_id`) REFERENCES `etafakna`.`contracts` (`id`, `contract_types_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_answers_questions2` FOREIGN KEY (`questions_id`) REFERENCES `etafakna`.`questions` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_answers_questions2` FOREIGN KEY (`questions_id`) REFERENCES `etafakna`.`questions_FR` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
 -- Table `etafakna`.`questions_has_contract_types`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `etafakna`.`questions_has_contract_types` (
+CREATE TABLE IF NOT EXISTS `etafakna`.`questions_has_contract_types_EN` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `questions_id` INT NOT NULL,
   `contract_types_id` INT NOT NULL,
   `order_question` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_questions_has_contract_types_questions` (`questions_id` ASC) VISIBLE,
-  INDEX `fk_questions_has_contract_types_contract_types1` (`contract_types_id` ASC) VISIBLE,
-  CONSTRAINT `fk_questions_has_contract_types_contract_types1` FOREIGN KEY (`contract_types_id`) REFERENCES `etafakna`.`contract_types` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_questions_has_contract_types_questions` FOREIGN KEY (`questions_id`) REFERENCES `etafakna`.`questions` (`id`) ON DELETE CASCADE
+  INDEX `fk_questions_has_contract_types_questions_EN` (`questions_id` ASC) VISIBLE,
+  INDEX `fk_questions_has_contract_types_contract_types0` (`contract_types_id` ASC) VISIBLE,
+  CONSTRAINT `fk_questions_has_contract_types_contract_types0` FOREIGN KEY (`contract_types_id`) REFERENCES `etafakna`.`contract_types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_questions_has_contract_types_questions_EN` FOREIGN KEY (`questions_id`) REFERENCES `etafakna`.`questions` (`id`) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+
+-- -----------------------------------------------------
+-- Table `etafakna`.`questions_has_contract_types`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `etafakna`.`questions_has_contract_types_FR` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `questions_id` INT NOT NULL,
+  `contract_types_id` INT NOT NULL,
+  `order_question` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_questions_has_contract_types_questions_FR` (`questions_id` ASC) VISIBLE,
+  INDEX `fk_questions_has_contract_types_contract_types2` (`contract_types_id` ASC) VISIBLE,
+  CONSTRAINT `fk_questions_has_contract_types_contract_types2` FOREIGN KEY (`contract_types_id`) REFERENCES `etafakna`.`contract_types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_questions_has_contract_types_questions_FR` FOREIGN KEY (`questions_id`) REFERENCES `etafakna`.`questions` (`id`) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+
+-- -----------------------------------------------------
+-- Table `etafakna`.`questions_has_contract_types`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `etafakna`.`questions_has_contract_types_AR` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `questions_id` INT NOT NULL,
+  `contract_types_id` INT NOT NULL,
+  `order_question` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_questions_has_contract_types_questions_AR` (`questions_id` ASC) VISIBLE,
+  INDEX `fk_questions_has_contract_types_contract_types3` (`contract_types_id` ASC) VISIBLE,
+  CONSTRAINT `fk_questions_has_contract_types_contract_types3` FOREIGN KEY (`contract_types_id`) REFERENCES `etafakna`.`contract_types` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_questions_has_contract_types_questions_AR` FOREIGN KEY (`questions_id`) REFERENCES `etafakna`.`questions` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
@@ -136,6 +189,15 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users` (
   `status` VARCHAR(200) NOT NULL,
   `created_at` DATE NULL DEFAULT NULL,
   `notification` VARCHAR(200) NULL DEFAULT NULL,
+  `signatureUrl` VARCHAR(200) NULL DEFAULT NULL,
+  `carteCinFront` VARCHAR(200) NULL DEFAULT NULL,
+  `carteCinBack` VARCHAR(200) NULL DEFAULT NULL,
+  `faceVideo` VARCHAR(200) NULL DEFAULT NULL,
+  `scanSignature` VARCHAR(200) NULL DEFAULT NULL,
+  `scanSignatureCheck` VARCHAR(200) NULL DEFAULT false,
+  `formulaireCheck` VARCHAR(200) NULL DEFAULT false,
+  `CINCheck` VARCHAR(200) NULL DEFAULT false,
+  `videiSelfieCheck` VARCHAR(200) NULL DEFAULT false,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -166,7 +228,6 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users_has_notifications` (
   `receiver` INT NULL DEFAULT NULL,
   `date` VARCHAR(45) NULL DEFAULT NULL,
   `seen` VARCHAR(45) NULL DEFAULT NULL,
-
   PRIMARY KEY (`id`),
   INDEX `fk_users_has_notification_contracts1_idx` (`contracts_id` ASC) VISIBLE,
   INDEX `fk_users_has_notification_users1_idx` (`owner` ASC) VISIBLE,
@@ -179,186 +240,11 @@ SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS;
 
 -- insert questions 
-INSERT INTO etafakna.questions(content_FR,content_AR,content_EN,part2_FR,part2_AR,part2_EN,inputType,options,date,explanation,text_Area)
+INSERT INTO etafakna.questions_EN(content_EN,part2_EN,inputType,options,date,explanation,text_Area)
 VALUES
-
 -- CONTRACT Demande Officielle
-   (
-    "A l'attention",
-    N'الانتباه الى',
-    "To the attention of",
-    N'Civilité du destinataire',
-    N'المرسل إليه',
-    N'Recipient',
-    "null",
-    "civilite",
-    "false",
-    "null",
-    "null"
-  ),
-   (
-    N'Nom et prénom',
-    N'اسمك الأول والأخير',
-    "Full name",
-    "Du destinataire",
-    N'اسم المرسل إليه',
-    N'Recipient`s name',
-    "null",
-    "null",
-    "false",
-    "null",
-    "null"
-  ),
-  (
-    N'Quel est l’objet de votre demande',
-    N'ما هو الغرض من طلبك',
-    "What is the purpose of your request",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "false",
-    "null",
-    "null"
-  ),
-  (
-    N'Veuillez préciser votre demande',
-    N'يرجى تحديد طلبك',
-    "Please specify your request",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "false",
-    "null",
-    "textArea"
-  ),
-  (
-    N'Fait à',
-    "null",
-    "Made in",
-    N'Veuillez préciser votre gouvernorat',
-    N'يرجى تحديد محافظتك',
-    "Please specify your governorate",
-    "null",
-    "null",
-    "false",
-    "null",
-    "null"
-  ),
-  (
-    "Date de la demande",
-    N'تاريخ',
-    "Date",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "true",
-    "null",
-    "null"
-  ),
-  (
-    N'Votre nom et prénom',
-    N'اسمك الأول والأخير',
-    "Full name",
-    "Du demandeur",
-    "null",
-    "null",
-    "null",
-    "null",
-    "false",
-    "null",
-    "null"
-  ),
-  -- --CONTRACT DE TRAVAILLE
-  (
-    N'Nom de la société',
-    "karth",
-    "Company Name",
-    "null",
-    "part2ar",
-    "part2en",
-    "null",
-    "null",
-    "null",
-    "prrrrrrr",
-    "null"
-  ),
-  (
-    N'Activité de la société',
-    N'قرض',
-    "Company activity",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null"
-  ),
-  (
-    N'Adresse de la société',
-    N'قرض',
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null"
-  ),
-  (
-    N'N° du registre de commerce',
-    "null",
-    "part2fr",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null",
-    "null"
-  ),
-  (
-    N'Civilité',
-    N'قرض',
-    "Civility",
-    N'Du gérant',
-    N'من المدير',
-    "of manager",
-    "n",
-    "civilite",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    N'Nom et prénom',
-    N'الإسم واللقب',
-    "Full name",
-    N'Du gérant(e)',
-    N'من المدير',
-    "Of the manager",
-    "n",
-    "n",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    N'Civilité',
-    "n",
-    "n",
-    N'De l’employé',
-    "n",
+( 
+    "c34",
     "n",
     "n",
     "civilite",
@@ -367,11 +253,7 @@ VALUES
     "null"
   ),
   (
-    N'Nom et prénom',
-    N'الإسم واللقب',
-    "Full name",
-    N'De l’employé',
-    "n",
+    "c34",
     "n",
     "n",
     "n",
@@ -380,12 +262,8 @@ VALUES
     "null"
   ),
   (
-    "Statut",
-    "n",
-    "n",
-    N'De l’employé',
-    "n",
-    "n",
+    "c34",
+    "c34",
     "n",
     "status",
     "n",
@@ -393,11 +271,7 @@ VALUES
     "null"
   ),
   (
-    "Lieu de naissance",
-    N'مكان الولادة',
-    "Place of birth",
-    "null",
-    "n",
+    "c34",
     "n",
     "n",
     "n",
@@ -406,11 +280,7 @@ VALUES
     "null"
   ),
   (
-    "Date de naissance",
-    N'تاريخ الميلاد',
-    "Date of Birth",
-    "null",
-    "n",
+    "c34",
     "n",
     "n",
     "n",
@@ -418,853 +288,33 @@ VALUES
     "null",
     "null"
   ),
-  (
-    N'Numéro de la carte d identité',
-    N'رقم بطاقة الهوية',
-    "Identity card number",
-    "null",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    N'CIN délivrée le',
-    "n",
-    "n",
-    "null",
-    "n",
-    "n",
-    "n",
-    "n",
-    "true",
-    "null",
-    "null"
-  ),
-  (
-    "Adresse",
-    "n",
-    "n",
-    N'De l’employé',
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    "Fonction",
-    "n",
-    "n",
-    N'De l’employé',
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    N'Début du contrat',
-    "n",
-    "n",
-    "null",
-    "n",
-    "n",
-    "n",
-    "n",
-    "true",
-    "null",
-    "null"
-  ),
-  (
-    "Fin du contract",
-    "n",
-    "n",
-    "null",
-    "n",
-    "n",
-    "n",
-    "n",
-    "true",
-    "null",
-    "null"
-  ),
-  (
-    "Salaire mensuel",
-    "n",
-    "n",
-    "En dinars",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    N'Fait à',
-    "n",
-    "n",
-    "null",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    "Date du contract",
-    "n",
-    "n",
-    "null",
-    "n",
-    "n",
-    "n",
-    "n",
-    "true",
-    "null",
-    "null"
-  ),
-  -- -- contract de location a usage administratif
-   (
-     N'Civilité',
-     "n",
-     "n",
-     "Le bailleur",
-     "n",
-     "n",
-     "n",
-     "civilite",
-     "n",
-     "null",
-     "null"
-   ),
-   (
-     N'Nom et prénom du propriétaire',
-     "null",
-     "null",
-     "Le bailleur",
-     "null",
-     "null",
-     "null",
-     "null",
-     "false",
-     "null",
-     "null"
-   ),
-    (
-     N'Civilité',
-     "n",
-     "n",
-     "Le locataire",
-     "n",
-     "n",
-     "n",
-     "civilite",
-     "n",
-     "null",
-     "null"
-   ),
-   (
-     N'Nom et prénom',
-     "n",
-     "n",
-     "Le locataire",
-     "n",
-     "n",
-     "n",
-     "n",
-     "false",
-     "null",
-     "null"
-   ),
-  
-   (
-     N'Type de propriété',
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "n",
-     "false",
-     "null",
-     "null"
-   ),
-   (
-     N'Adresse de la propriété',
-     "n",
-     "n",
-     "Rue, gouvernorat et code postal",
-     "n",
-     "n",
-     "n",
-     "n",
-     "false",
-     "null",
-     "null"
-   ),
-   (
-     N'Durée de la location',
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "n",
-     "false",
-     "null",
-     "null"
-   ),
-   (
-     N'Location à partir de',
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "n",
-     "true",
-     "null",
-     "null"
-   ),
-   (
-     N'Jusqu’à',
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "n",
-     "true",
-     "null",
-     "null"
-   ),
-   (
-     "Montant du loyer",
-     "n",
-     "n",
-     "En dinars",
-     "n",
-     "n",
-     "n",
-     "n",
-     "false",
-     "null",
-     "null"
-   ),
-   (
-     N'Contrat fait à',
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "n",
-     "false",
-     "null",
-     "null"
-   ),
-   (
-     "Date du contrat",
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "n",
-     "true",
-     "null",
-     "null"
-   ),
--- CONTRACT DE LOCATION à usage d'habitation
- (
-     N'Civilité',
-     "n",
-     "n",
-     N'Le propriétaire',
-     "n",
-     "n",
-     "n",
-     "civilite",
-     "n",
-     "null",
-     "null"
-   ),
-    (
-      N'Entrez le nom et prénom',
-      N'الإسم واللقب',
-      "Full name",
-      N'Le propriétaire',
-      N'prop',
-      N'Le propriétaire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-     (
-      N'Demeurant à',
-      N'demeurant',
-      "Full name",
-      N'Le propriétaire: Rue,gouvernorat et code postal',
-      N'prop',
-      N'Le propriétaire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-    (
-      N'N° de la CIN',
-      N'الإسم واللقب',
-      "Full name",
-      N'Le propriétaire',
-      N'prop',
-      N'Le propriétaire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-     (
-      N'CIN délivrée le',
-      N'الإسم واللقب',
-      "Full name",
-      N'Le propriétaire',
-      N'prop',
-      N'Le propriétaire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-     (
-     N'Civilité',
-     "n",
-     "n",
-     N'Le locataire',
-     "n",
-     "n",
-     "n",
-     "civilite",
-     "n",
-     "null",
-     "null"
-   ),
-     (
-      N'Entrez le nom et prénom',
-      N'الإسم واللقب',
-      "Full name",
-      N'Le locataire',
-      N'prop',
-      N'Le propriétaire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-     (
-      N'Entrez la nationalité',
-      N'الإسم واللقب',
-      "Full name",
-      N'Le locataire',
-      N'prop',
-      N'Le propriétaire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-    (
-      N'Date de naissance',
-      N'تاريخ بدء التدريب',
-      "Internship start date",
-      "Le locataire",
-      "null",
-      "Beginning",
-      "true",
-      "null",
-      "true",
-      "null",
-      "null"
-    ),
-     (
-      N'N° de la CIN',
-      N'الإسم واللقب',
-      "Full name",
-      N'Le locataire',
-      N'prop',
-      N'Le propriétaire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-      (
-      N'CIN délivrée le',
-      N'تاريخ بدء التدريب',
-      "Internship start date",
-      "Le locataire",
-      "null",
-      "Beginning",
-      "true",
-      "null",
-      "true",
-      "null",
-      "null"
-    ),
-     (
-      N'Demeurant à',
-      N'demeurant',
-      "Full name",
-      N'Le locataire: Rue,gouvernorat et code postal',
-      N'prop',
-      N'Le locataire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-    (
-      N'Décrivez le type de propriété',
-      N'demeurant',
-      "Full name",
-      N'null',
-      N'prop',
-      N'Le locataire',
-      "null",
-      "typeproprite",
-      "null",
-      "null",
-      "null"
-    ),
-     (
-      N'Adresse de la propriété',
-      N'demeurant',
-      "Full name",
-      "Rue,gouvernorat et code postal",
-      N'prop',
-      N'Le locataire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-      (
-      N'Durée de la location',
-      N'demeurant',
-      "Full name",
-      "null",
-      N'prop',
-      N'Le locataire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-      (
-      N'Date de début de la location',
-      N'تاريخ بدء التدريب',
-      "Internship start date",
-      "null",
-      "null",
-      "Beginning",
-      "true",
-      "null",
-      "true",
-      "null",
-      "null"
-    ),
-       (
-      N'Date de fin de la location',
-      N'تاريخ بدء التدريب',
-      "Internship start date",
-      "null",
-      "null",
-      "Beginning",
-      "true",
-      "null",
-      "true",
-      "null",
-      "null"
-    ),
         (
-      N'Montant de la location ',
-      N'demeurant',
-      "Full name",
-      N'En dinars',
-      N'prop',
-      N'Le locataire',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-    (
-      N'Location est :',
-      N'demeurant',
-      "Full name",
-      "null",
-      N'prop',
-      N'Le locataire',
-      "null",
-      "jour",
-      "null",
-      "null",
-      "null"
-    ),
-     (
-      N'Montant du cautionnement en TND',
-      N'demeurant',
-      "Full name",
-      N'En dinars',
-      N'prop',
-      N'null',
-      "null",
-      "null",
-      "null",
-      "null",
-      "null"
-    ),
-     (
-      N'Prise en charge des consommations (eau/électricité) par',
-      N'demeurant',
-      "Full name",
-      N'null',
-      N'prop',
-      N'null',
-      "null",
-      "locprop",
-      "null",
-      "null",
-      "null"
-    ),
-    (
-      N'Date du contrat',
-      N'تاريخ بدء التدريب',
-      "Internship start date",
-      "null",
-      "null",
-      "Beginning",
-      "true",
-      "null",
-      "true",
-      "null",
-      "null"
-    ),
-
--- contract dengagement
-   (
-     N'Civilité',
-     "n",
-     "n",
-     N'De l’engagé(e)',
-     "n",
-     "n",
-     "n",
-     "civilite",
-     "n",
-     "null",
-     "null"
-   ),
-   (
-     N'Nom et prénom',
-     N'الإسم واللقب',
-     "Full name",
-     N'De l’engagé(e)',
-     N'من المشارك',
-     "Of the participant",
-     "null",
-     "null",
-     "false",
-     "null",
-     "null"
-   ),
-   (
-    N'Numéro de CIN',
-     "null",
-     "Number of CIN",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-   (
-     N'CIN délivrée le',
-     "null",
-     "CIN issued on",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "true",
-     "null",
-     "null"
-   ),
-   (
-     "Indiquer la fonction",
-     "null",
-     "null",
-     N'De l’engagé(e)',
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-   (
-     N'Nom de ma société',
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-   (
-     "Identifiant unique",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-   (
-     N'Je m`engage',
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-   (
-     "Fait le",
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "n",
-     "true",
-     "null",
-     "null"
-   ),
-   (
-     N'Fait à',
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "n",
-     "null",
-     "null",
-     "null"
-   ),
-  --   contract domicilliation
-    (
-      N'Nom et prénom',
-      "null",
-      "Full name",
-      "null",
-      "null",
-      "null",
-      "null",
-      "null",
-      "false",
-      "null",
-      "null"
-    ),
-    (
-      N'Numéro de carte CIN',
-      "null",
-      "Number of CIN",
-      "null",
-      "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-      "null"
-   ),
-   (
-     N'CIN délivrée le',
-     "null",
-     "CIN issued on",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "true",
-     "null",
-      "null"
-   ),
-   (
-     "Raison social",
-     "n",
-     "n",
-     N'Nom de la société',
-     "n",
-     "n",
-     "n",
-     "n",
-     "n",
-     "null",
-      "null"
-   ),
-   (
-     "Forme juridique",
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "form",
-     "n",
-     "null",
-      "null"
-   ),
-   (
-     N'Capital de la société',
-     "n",
-     "n",
-     "En dinars",
-     "n",
-     "n",
-     "n",
-     "n",
-     "n",
-     "null",
-      "null"
-   ),
-   (
-     N'Adress du siège',
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "n",
-     "n",
-     "null",
-      "null"
-   ),
-   (
-     N'A titre',
-     "n",
-     "n",
-     "null",
-     "n",
-     "n",
-     "n",
-     "titre",
-     "n",
-     "null",
-      "null"
-   ),
-   (
-    N'Fait à',
-    "n",
-    "n",
-    "null",
-    "n",
-    "n",
-    "n",
-    "n",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    "Fait le",
-    "n",
-    "n",
-    "null",
-    "n",
+    "c19",
     "n",
     "n",
     "n",
     "true",
     "null",
     "null"
-  ),
-
--- Attestation de stage 
+  );
+  INSERT INTO etafakna.questions_AR(content_AR,part2_AR,inputType,options,date,explanation,text_Area)
+VALUES
+-- attestation de stage
  (
     N'Civilité',
-     "arabe",
-     "Civility",
      "Employeur",
-     N'صاحب العمل',
-     "Employer",
      "civilite",
      "civilite",
      "null",
      "null",
      "null"
    ),
-   (
+  (
+   
      N'Nom et prénom',
-     N'الإسم واللقب',
-     "Full name",
+
      "Employeur",
-     N'صاحب العمل',
-     "(Employer)",
+   
      "null",
      "null",
      "null",
@@ -1273,50 +323,39 @@ VALUES
    ),
    (
      N'Indiquer le fonction dans l’entreprise',
-     N'حدد الوظيفة في الشركة',
-     "Select the position in the company",
      "Employeur",
      "null",
      "null",
      "null",
      "null",
-     "null",
-     "null",
      "null"
    ),
-   (
+      (
      N'Civilité',
-     "civilite",
-     "Civility",
+
      "Stagiare",
-     "null",
-     "The intern",
      "null",
      "civilite",
      "null",
      "null",
      "null"
    ),
-   (
+   (   
      N'Nom et prénom',
-     N'الإسم واللقب',
-     "Full name",
+
      "Stagiare",
-     "(Stagiare)",
-     "(The intern)",
+ 
      "null",
      "null",
      "null",
      "null",
      "null"
    ),
-   (
+      (
      "Adresse du Stagiare",
-     N'عنوان المتدرب',
-     "Trainee's address",
+
      "Rue, gouvernorat et code postal",
-     "null",
-     "The intern",
+
      "null",
      "null",
      "null",
@@ -1325,10 +364,8 @@ VALUES
    ),
    (
      N'Nom de l’entreprise',
-     N'اسم الشركة',
-     "Company Name",
-     "null",
-     "null",
+
+
      "null",
      "null",
      "null",
@@ -1336,51 +373,43 @@ VALUES
      "null",
      "null"
    ),
-   (
+      (
      N'Date du début de stage',
-     N'تاريخ بدء التدريب',
-     "Internship start date",
+ 
      "null",
-     "null",
-     "Beginning",
+
      "true",
      "null",
      "true",
      "null",
      "null"
    ),
-   (
+      (
      "Date de fin du stage",
-     N'تاريخ انتهاء فترة التدريب',
-     "Internship end date",
+
      "null",
-     "null",
-     "End",
+ 
      "true",
      "null",
      "true",
      "null",
      "null"
    ),
-   (
+      (
      N'Indiquer le poste dans l’entreprise',
-     N'حدد الوظيفة في الشركة',
-     "Select the position in the company",
+
      "Stagiaire",
-     N'المتدرب',
-     "Intern",
+ 
      "null",
      "null",
      "null",
      "null",
      "null"
    ),
-   (
+      (
      "Fait le",                 
-     "null",                  
-     "The date today",                  
-     "null",                  
-     "null",                  
+               
+                
      "null",                  
      "null",                  
      "null",                  
@@ -1388,35 +417,144 @@ VALUES
      "null",                  
      "null"
    );
-INSERT INTO etafakna.questions(id,content_FR,content_AR,content_EN,part2_FR,part2_AR,part2_EN,inputType,options,date,explanation,text_Area)
+INSERT INTO etafakna.questions_FR(content_FR,part2_FR,inputType,options,date,explanation,text_Area)
 VALUES
-
-
-(93, N'Quel est le nom de votre Société ?', N'Quel est le nom de votre Société ?', N'Quel est le nom de votre Société ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(94, N'Quel est votre gouvernorat ?', N'Quel est votre gouvernorat ?', N' Quel est votre gouvernorat ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(95, N'Quel est la date de votre facture ?', N' Quel est la date de votre facture ?', N' Quel est la date de votre facture ?', 'n', 'n', 'n', 'n', NULL, 'true', 'n', 'null'),
-(97, N'Quel est le nom de la société de votre client ?', N' Quel est le nom de la société de votre client ?', N' Quel est le nom de la société de votre client ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(98, N'Quel est la Matricule Fiscale de votre client ?', N'Quel est la Matricule Fiscale de votre client ?', N'Quel est la Matricule Fiscale de votre client ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(99, N'Quel est le numéro de votre facture ?', N'Quel est le numéro de votre facture ?', N'Quel est le numéro de votre facture ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(100, N'Quel est l’année de la facture ?', N'Quel est l’année de la facture ?', 'Quel est l’année de la facture ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(101, N'Insérez le nom de votre produit ?', N'Insérez le nom de votre produit ?', N'Insérez le nom de votre produit ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(102, N'Insérez la quantité de ce produit?', N'Insérez la quantité de ce produit?', N'la quantité de ce produit ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(103, N'Insérez le prix du produit', N'Insérez le prix du produit', N'Insérez le prix du produit', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(104, N'Quel est l’adresse de votre société?', N'Quel est l’adresse de votre société?', N'Quel est l’adresse de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(105, N'Quel est la Matricule Fiscale de votre société ?', N'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(106, N'Quel est votre code postale ', N'Quel est la Matricule Fiscale de votre société ?', N'Quel est la Matricule Fiscale de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(107, N'Quel est la somme de la facture', N'Quel est la somme de la facture', N'Quel est la somme de la facture', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'null'),
-(109, N'Quelle est les nombre des Produit', N'Quelle est les nombre des Produit', N'Quelle est les nombre des Produit', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n');
-
-  
-  
-  
-
+("A l'attention","Civilité du destinataire",null,"civilite","false",null,null),
+("Nom et prénom","Du destinataire",null,null,"false",null,null),
+("Quel est l’objet de votre demande",null,null,null,"false",null,null),
+("Veuillez préciser votre demande",null,null,null,"false",null,"textArea"),
+("Fait à","Veuillez préciser votre gouvernorat",null,null,"false",null,null),
+("Date de la demande",null,null,null,"true",null,null),
+("Votre nom et prénom","Du demandeur",null,null,"false",null,null),
+("Nom de la société",null,null,null,null,"prrrrrrr",null),
+("Activité de la société",null,null,null,null,null,null),
+("Adresse de la société",null,null,null,null,null,null),
+("N° du registre de commerce",null,null,null,null,null,null),
+(N'Civilité',"Du gérant","n","civilite","n",null,null),
+("Nom et prénom","Du gérant(e)","n","n","n",null,null),
+(N'Civilité',"De l’employé","n","civilite","n",null,null),
+("Nom et prénom","De l’employé","n","n","n",null,null),
+("Statut","De l’employé","n","status","n",null,null),
+("Lieu de naissance",null,"n","n","n",null,null),
+("Date de naissance",null,"n","n","true",null,null),
+("Numéro de la carte d identité",null,"n","n","n",null,null),
+("CIN délivrée le",null,"n","n","true",null,null),
+("Adresse","De l’employé","n","n","n",null,null),
+("Fonction","De l’employé","n",null,null,null,null),
+("Début du contrat",null,null,null,"true",null,null),
+("Fin du contract",null,null,null,"true",null,null),
+("Salaire mensuel","En dinars",null,null,null,null,null),
+("Fait à",null,null,null,null,null,null),
+("Date du contract",null,null,null,"true",null,null),
+(N'Civilité',"Le bailleur",null,"civilite",null,null,null),
+("Nom et prénom du propriétaire","Le bailleur",null,null,"false",null,null),
+(N'Civilité',"Le locataire",null,"civilite",null,null,null),
+("Nom et prénom","Le locataire",null,null,"false",null,null),
+("Type de propriété",null,null,null,"false",null,null),
+("Adresse de la propriété","Rue, gouvernorat et code postal",null,null,"false",null,null),
+("Durée de la location",null,null,null,"false",null,null),
+("Location à partir de",null,null,null,"true",null,null),
+(N'Jusqu’à',null,null,null,"true",null,null),
+("Montant du loyer","En dinars",null,null,"false",null,null),
+("Contrat fait à",null,null,null,"false",null,null),
+("Date du contrat",null,null,null,"true",null,null),
+(N'Civilité',"Le propriétaire",null,"civilite",null,null,null),
+("Entrez le nom et prénom","Le propriétaire",null,null,null,null,null),
+("Demeurant à","Le propriétaire: Rue,gouvernorat et code postal",null,null,null,null,null),
+("N° de la CIN","Le propriétaire",null,null,null,null,null),
+("CIN délivrée le","Le propriétaire",null,null,null,null,null),
+(N'Civilité',"Le locataire",null,"civilite",null,null,null),
+("Entrez le nom et prénom","Le locataire",null,null,null,null,null),
+("Entrez la nationalité","Le locataire",null,null,null,null,null),
+("Date de naissance","Le locataire","true",null,"true",null,null),
+("N° de la CIN","Le locataire",null,null,null,null,null),
+("CIN délivrée le","Le locataire","true",null,"true",null,null),
+("Demeurant à","Le locataire: Rue,gouvernorat et code postal",null,null,null,null,null),
+("Décrivez le type de propriété",null,null,"typeproprite",null,null,null),
+("Adresse de la propriété","Rue,gouvernorat et code postal",null,null,null,null,null),
+("Durée de la location",null,null,null,null,null,null),
+("Date de début de la location",null,"true",null,"true",null,null),
+("Date de fin de la location",null,"true",null,"true",null,null),
+("Montant de la location ","En dinars",null,null,null,null,null),
+("Location est :",null,null,"jour",null,null,null),
+("Montant du cautionnement en TND","En dinars",null,null,null,null,null),
+("Prise en charge des consommations (eau/électricité) par",null,null,"locprop",null,null,null),
+("Date du contrat",null,"true",null,"true",null,null),
+(N'Civilité',"De l’engagé(e)",null,"civilite","n",null,null),
+("Nom et prénom","De l’engagé(e)",null,null,"false",null,null),
+("Numéro de CIN",null,null,null,null,null,null),
+("CIN délivrée le",null,null,null,"true",null,null),
+("Indiquer la fonction","De l’engagé(e)",null,null,null,null,null),
+("Nom de ma société",null,null,null,null,null,null),
+("Identifiant unique",null,null,null,null,null,null),
+("Je m`engage",null,null,null,null,null,null),
+("Fait le",null,null,null,"true",null,null),
+("Fait à",null,null,null,null,null,null),
+("Nom et prénom",null,null,null,"false",null,null),
+("Numéro de carte CIN",null,null,null,null,null,null),
+("CIN délivrée le",null,null,null,"true",null,null),
+("Raison social","Nom de la société",null,null,null,null,null),
+("Forme juridique",null,null,"form",null,null,null),
+("Capital de la société","En dinars",null,null,null,null,null),
+("Adress du siège",null,null,null,null,null,null),
+("À titre",null,null,"titre",null,null,null),
+("Fait à",null,null,null,null,null,null),
+("Fait le",null,null,null,"true",null,null),
+(N'Civilité',"Employeur","civilite","civilite",null,null,null),
+("Nom et prénom","Employeur",null,null,null,null,null),
+("Indiquer le fonction dans l’entreprise","Employeur",null,null,null,null,null),
+(N'Civilité',"Stagiare",null,"civilite",null,null,null),
+("Nom et prénom","Stagiare",null,null,null,null,null),
+("Adresse du Stagiare","Rue, gouvernorat et code postal",null,null,null,null,null),
+("Nom de l’entreprise",null,null,null,null,null,null),
+("Date du début de stage",null,"true",null,"true",null,null),
+("Date de fin du stage",null,"true",null,"true",null,null),
+("Indiquer le poste dans l’entreprise","Stagiaire",null,null,null,null,null),
+("Fait le",null,null,null,"true",null,null),
+("Quel est le nom de votre Société ?",null,null,NULL,null,null,null),
+("Quel est votre gouvernorat ?",null,null,NULL,null,null,null),
+("Quel est la date de votre facture ?",null,null,NULL,"true",null,null),
+("Quel est le nom de la société de votre client ?",null,null,NULL,null,null,null),
+("Quel est la Matricule Fiscale de votre client ?",null,null,NULL,null,null,null),
+("Quel est le numéro de votre facture ?",null,null,NULL,null,null,null),
+("Quel est l’année de la facture ?",null,null,NULL,null,null,null),
+("Insérez le nom de votre produit ?",null,null,NULL,null,null,null),
+("Insérez la quantité de ce produit?",null,null,NULL,null,null,null),
+("Insérez le prix du produit",null,null,NULL,null,null,null),
+("Quel est l’adresse de votre société?",null,null,NULL,null,null,null),
+("Quel est la Matricule Fiscale de votre société ?",null,null,NULL,null,null,null),
+("Quel est votre code postale ",null,null,NULL,null,null,null),
+("Quel est la somme de la facture",null,null,null,null,null,null),
+("Quelle est les nombre des Produit",null,null,null,null,null,null);
 -- insert question-has-contracttype 
-INSERT INTO
-  etafakna.questions_has_contract_types(questions_id, contract_types_id, order_question)
+INSERT INTO etafakna.questions_has_contract_types_EN(questions_id, contract_types_id, order_question)
 VALUES
 
+ -- Questions Demande Officielle ar
+   (1, 34, 1),
+   (2, 34, 2),
+   (3, 34, 3),
+   (4, 34, 4),
+   (5, 34, 1),
+   (6, 19, 1);
+ -- insert question-has-contracttype 
+INSERT INTO etafakna.questions_has_contract_types_AR(questions_id, contract_types_id, order_question)
+VALUES
+
+   (1, 20, 1),
+   (2, 20, 2),
+   (3, 20, 3),
+   (4, 20, 4),
+   (5, 20, 5),
+   (6, 20, 6),
+   (7, 20, 7),
+   (8, 20, 8),
+   (9, 20, 9),
+   (10, 20, 10),
+   (11, 20, 11),
+   (12, 20, 12);
+INSERT INTO etafakna.questions_has_contract_types_FR(questions_id, contract_types_id, order_question)
+VALUES
  -- Questions Demande Officielle
    (1, 33, 1),
    (2, 33, 2),
@@ -1544,8 +682,6 @@ VALUES
   (107, 28, 16),
   (109, 28,  9);
 
-
-
  
 -- Insert All Contracts
 INSERT INTO
@@ -1650,7 +786,7 @@ VALUES
     5,
     "Nda",
     "Accord de non-divulgation(NDA)",
-    "Accord de non-divulgation(NDA)",
+    N'اتفاق غير معلن',
     "This is Description",
     "desc_AR",
     "desc_EN",
@@ -1668,13 +804,13 @@ VALUES
     5,
     "Training Certificate",
     "Attestation de stage",
-    "شهادة تدريب",
+    N'شهادة تدريب',
     N'L`attestation de stage E-Tafakna, aussi appelée le certificat de stage, est un document remis au stagiaire permettant de valider une expérience professionnelle au sein de l`entreprise.',
     "desc_AR",
     "In the broadest sense, a training certificate is a document certifying that the holder has taken a specific course of training.",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665949431/icons/attestation_de_stage_sn9jhb.png",
-    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1666356239/Attestation-de-stage_n2_rjvm0l_v5c4wo_o76cg7.docx",
-    "null",
+    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665573149/WORD-CONTRACTS/Demande_officielle_n4_m4cbe4_cfrc9c.docx",
+    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665573149/WORD-CONTRACTS/Demande_officielle_n4_m4cbe4_cfrc9c.docx",
     "null",
     "Tunisia",
     "types",
@@ -1686,7 +822,7 @@ VALUES
     5,
     "Freelancer",
     "Freelance",
-    "مستقل",
+  N'مستقل',
     "This is Freelancer Description",
     "desc_AR",
     "desc_EN",
@@ -1704,7 +840,7 @@ VALUES
     5,
     "Microcredit",
     N'Contrat de Prêt numéraire (microcrédit)',
-    "قرض",
+    N'قرض',
     "This is loan Description",
     "desc_AR",
     "desc_EN",
@@ -1721,8 +857,8 @@ VALUES
     0,
     5,
     "Car rental",
-    "Contract de voiture",
-    "كراء سيارة",
+    "Location de voiture",
+    N'كراء سيارة',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1732,7 +868,25 @@ VALUES
     "temp_EN",
     "Tunisia",
     "types",
-    "car",
+    "null",
+    "null"
+  ),
+  (
+    0,
+    5,
+    "Car sale",
+    "Achat de voiture",
+    N'بيع سيارة',
+    "This is Employment Contract Description",
+    "desc_AR",
+    "desc_EN",
+    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665949430/icons/achat_voiture_j3ikzr.png",
+    "temp_FR",
+    "temp_AR",
+    "temp_EN",
+    "Tunisia",
+    "types",
+    "null",
     "null"
   ),
  
@@ -1741,7 +895,7 @@ VALUES
     5,
     "Rental of real estate",
     "Location de biens",
-    "Referencement",
+    N'تأجير العقارات',
     N'Tout peut être loué en utilisant le contrat de location de E-Tafakna. D`une chambre, une villa, un appartement, à un bureau. Qu`il s&#39;agisse d`une location à court terme ou à long terme',
     "desc_AR",
     "desc_EN",
@@ -1759,7 +913,7 @@ VALUES
     5,
     "Sale",
     "Vente",
-    "عقد كراء",
+    N'عقد كراء',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1777,7 +931,7 @@ VALUES
     5,
     N'Contrat d’engagement',
     N'Contrat d’engagement',
-    N'Contrat d’engagement',
+    N'عقد التوظيف',
     N'Le contrat d’engagement E-Tafakna nous permet de nous assurer que vous soyez prêt à entreprendre des travaux, avant de commencer à travailler plus en profondeur sur votre projet.',
     "desc_AR",
     "desc_EN",
@@ -1795,7 +949,7 @@ VALUES
     5,
     "Partnership",
     "Partenariat",
-    "شراكة",
+    N'شراكة',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1813,7 +967,7 @@ VALUES
     5, 
     "Quotation/Bill",
     "Devis/Facture ",
-    "Devis/Facture ",
+    N'فاتورة/التسعير',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN", 
@@ -1831,7 +985,7 @@ VALUES
     5,
     "Travel insurance",
     "Assurance Voyage",
-    "Assurance Voyage",
+    N'تامين السفر',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1867,7 +1021,7 @@ VALUES
     5,
     "CV",
     "CV",
-    "أمر شراء",
+    N'أمر شراء',
     "This is Employment Contract Description",
     "desc_AR",
     "desc_EN",
@@ -1885,7 +1039,7 @@ VALUES
     5,
     "Safe of real estate",
     "Contrat de Domiciliation",
-    "Contrat de Domiciliation",
+    N'عقد التوطين',
     N'Le contrat de domiciliation E-Tafakna est une obligation pour toutes les sociétés, mais également pour les associations. Il s`agit de l`adresse administrative et fiscale à laquelle tous les courriers seront envoyés.',
     "desc_AR",
     "desc_EN",
