@@ -12,6 +12,7 @@ let getAnswers = (req, res) => {
 let AddAnswers = (req, res) => {
   const { content, questions_id, contracts_id, contracts_contract_types_id } =
     req.body;
+    console.log( content, questions_id, contracts_id, contracts_contract_types_id,"ppppppppppppppppppppppppppppppppp" )
   const sql = `INSERT INTO answers (content ,questions_id,contracts_id,contracts_contract_types_id) VALUES (?,?,?,?)`;
   db.query(
     sql,

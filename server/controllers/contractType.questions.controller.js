@@ -29,29 +29,37 @@ const deleteRelation = (req, res) => {
     }
   });
 };
+
 // get questions of specific contract_type by its id
 const findQuestionsOfSpecificContract = (req, res) => {
   let { contract_id, lang } = req.params;
   let column = "";
-
-  lang === "Arabe"
-    ? (column = "content_AR")
-    : lang == "Francais"
-    ? (column = "content_FR")
-    : (column = "content_EN");
-console.log(column,'coll');
-  const query = `SELECT questions.id,${column},questions.date , questions.part2_AR,questions.part2_EN,questions.part2_FR ,questions.options,questions.explanation,questions.text_Area from etafakna.questions
-     inner join etafakna.questions_has_contract_types on (questions.id = questions_has_contract_types.questions_id)
-     inner join etafakna.contract_types on (contract_types.id = questions_has_contract_types.contract_types_id)
+  {
+    lang === "Arabe"
+      ? ((column = "content_AR"),
+        (table = "questions_AR"),
+        (part2 = "part2_AR"),
+        (innerjoin = "questions_has_contract_types_AR"))
+      : lang == "Francais"
+      ? ((column = "content_FR"),
+        (table = "questions_FR"),
+        (part2 = "part2_FR"),
+        (innerjoin = "questions_has_contract_types_FR"))
+      : ((column = "content_EN"),
+        (table = "questions_EN"),
+        (part2 = "part2_EN"),
+        (innerjoin = "questions_has_contract_types_EN"));
+  }
+  const query = `SELECT ${table}.id,${table}.${column},${table}.date , ${table}.${part2},${table}.options,${table}.explanation,${table}.text_Area from etafakna.${table}
+     inner join etafakna.${innerjoin} on (${table}.id =${innerjoin}.questions_id)
+     inner join etafakna.contract_types on (contract_types.id = ${innerjoin}.contract_types_id)
      where contract_types.id = ?
-     order by etafakna.questions_has_contract_types.order_question ASC;`;
-
-  db.query(query, [contract_id], (err, questions) => {
+     order by etafakna.${innerjoin}.order_question ASC;`;
+  db.query(query, [contract_id], (err, table) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(questions, "questions");
-      res.send(questions);
+      res.send(table);
     }
   });
 };
