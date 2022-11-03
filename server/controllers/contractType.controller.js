@@ -2,89 +2,63 @@ const db = require("../database-mysql");
 const superagent = require("superagent");
 const Docxtemplater = require("docxtemplater");
 const PizZip = require("pizzip");
-const http = require('https'); 
+const http = require("https");
 const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
-const Excel = require('exceljs');
-const { type } = require("os")
+const Excel = require("exceljs");
+const { type } = require("os");
+var convertapi = require("convertapi")("Rx14TzHF2PIOhfTG");
 
-var createDocAndImage= async (str , index, renderObject)=>{
+var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
-  .get(str)
-  .parse(superagent.parse.image)
-  .buffer();
-const buffer = response.body;
-const zip = new PizZip(buffer);
-const doc = new Docxtemplater(zip, {
-  paragraphLoop: true,
-  linebreaks: true,
-});
-doc.render(renderObject);
-const buf = doc.getZip().generate({
-  type: "nodebuffer",
-  // compression: DEFLATE adds a compression step.
-  // For a 50MB output document, expect 500ms additional CPU time
-  compression: "DEFLATE",
-});
-console.log(buf, "check buf");
-fs.writeFileSync(`output${index}.docx`, buf);
-try {
-const formData = new FormData();
-formData.append(
-  "instructions",
-  JSON.stringify({
-    parts: [
-      {
-        file: "document",
-      },
-    ],
-    output: {
-      type: "image",
-      format: "jpg",
-      dpi: 500,
-    },
-  })
-);
-formData.append("document", fs.createReadStream(`output${index}.docx`));
-await axios
-  .post("https://api.pspdfkit.com/build", formData, {
-    headers: formData.getHeaders({
-      Authorization:
-        "Bearer pdf_live_wtlDGJdKZJXW8WAIt3nWAii2nhwneGzWfiDCUxoVPYB",
-    }),
-    responseType: "stream",
-  })
-  .then((response) => {
-    // console.log(response,'response')
-    response.data.pipe(fs.createWriteStream(`image${index}.jpg`))
-    //  cloudinary.uploader.upload("image.jpg")
-    // urlImage = uploadimage.secure_url;
-    // console.log(urlImage, "image url");
-    // // fs.unlinkSync("image.jpg");
-  })
-  .catch(async function (e) {
-    console.log(e);
-    console.log("Test Eroor")
-    const errorString = await streamToString(e.response.data);
-    console.log(errorString, "from catch");
+    .get(str)
+    .parse(superagent.parse.image)
+    .buffer();
+    console.log(Locale.GERMAN)
+  const buffer = response.body;
+  const zip = new PizZip(buffer);
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
   });
-function streamToString(stream) {
-  const chunks = [];
-  return new Promise((resolve, reject) => {
-    stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-    stream.on("error", (err) => reject(err));
-    stream.on("end", () =>
-      resolve(Buffer.concat(chunks).toString("utf8"))
+  doc.render(renderObject);
+  const buf = doc.getZip().generate({
+    type: "nodebuffer",
+    // compression: DEFLATE adds a compression step.
+    // For a 50MB output document, expect 500ms additional CPU time
+    compression: "DEFLATE",
+  });
+  console.log(buf, "check buf");
+  fs.writeFileSync(`output${index}.docx`, buf);
+  try {
+    const formData = new FormData();
+    formData.append(
+      "instructions",
+      JSON.stringify({
+        parts: [
+          {
+            file: "document",
+          },
+        ],
+        output: {
+          type: "image",
+          format: "jpg",
+          dpi: 500,
+        },
+      })
     );
-  });
+ 
+    return ('added docx and image')  
+
+  }
+  
+  catch (error) {
+    return ("from cloudinary image");
+  }
 }
-  return ('added docx and image')  
-} catch (error) {
-  return ("from cloudinary image");
-}
-}
+
 const makeFactureOrDevis = async ( url, ans , type)=>{
   console.log(ans , "RRR")
   console.log("RR")
@@ -223,62 +197,60 @@ console.log("We are Here ")
         }))
         formData.append('document', fs.createReadStream('output0.xlsx'))
         
-             await axios.post('https://api.pspdfkit.com/build', formData, {
-              headers: formData.getHeaders({
-                  'Authorization': 'Bearer pdf_live_wtlDGJdKZJXW8WAIt3nWAii2nhwneGzWfiDCUxoVPYB'
-              }),
-              responseType: "stream"
-            })
-            .then( async response =>{
+         
+          formData.append("document", fs.createReadStream("output0.xlsx"));
 
-              await response.data.pipe(fs.createWriteStream("image0.jpg"))
-              
+          await axios
+            .post("https://api.pspdfkit.com/build", formData, {
+              headers: formData.getHeaders({
+                Authorization:
+                  "Bearer pdf_live_wtlDGJdKZJXW8WAIt3nWAii2nhwneGzWfiDCUxoVPYB",
+              }),
+              responseType: "stream",
             })
-              
-        
-          } catch (e) {
-            const errorString = await streamToString(e.response.data)
-            console.log(errorString)
-          }
-        //A1 => 1 Question 
-        //B9 => B9 = Question 2 + le , Question 3 
-        //D12 => Question 4 
-        // D13 => Question 5 
-        //C17 => C17+=Question 6 
-        //From B TO E COl 22 To Number Of product   
-        //E34 => Sum of all Productions 
+            .then(async (response) => {
+              await response.data.pipe(fs.createWriteStream("image0.jpg"));
+            });
+        } catch (e) {
+          const errorString = await streamToString(e.response.data);
+          console.log(errorString);
+        }
+        //A1 => 1 Question
+        //B9 => B9 = Question 2 + le , Question 3
+        //D12 => Question 4
+        // D13 => Question 5
+        //C17 => C17+=Question 6
+        //From B TO E COl 22 To Number Of product
+        //E34 => Sum of all Productions
         //E36 => TVA => sum * 19
         //E41 => E36 + E34 + 0.600
-        
-      
-      
-      })        
-        function streamToString(stream) {
-          const chunks = []
-          return new Promise((resolve, reject) => {
-            stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)))
-            stream.on("error", (err) => reject(err))
-            stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")))
-          })
-        }
-
-
+      });
+      function streamToString(stream) {
+        const chunks = [];
+        return new Promise((resolve, reject) => {
+          stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+          stream.on("error", (err) => reject(err));
+          stream.on("end", () =>
+            resolve(Buffer.concat(chunks).toString("utf8"))
+          );
+        });
+      }
     });
- });
-return ("Hi")
-}
+  });
+  return "Hi";
+};
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
- let {type , idT} = req.body
+  let {type ,  lang } = req.body;
 
- let {questions} =req.body
- console.log(questions ,"this is the true one")
-console.log(type)
+  let { questions } = req.body;
+  console.log(questions, "this is the true one");
+  console.log(type);
   let renderObject = {};
   let answersArray = [];
   const { id } = req.params;
-  const sql = `select template_FR, questions_id,content from contract_types
+  const sql = `select template_FR,template_AR,template_EN, questions_id,content from contract_types
   inner join answers on (contract_types.id = answers.contracts_contract_types_id)
   where answers.contracts_id = ?`;
   db.query(sql, [id], async (err, result) => {
@@ -296,9 +268,16 @@ console.log(type)
         let value = Object.values(e)[0];
         acc[key] = value;
         return acc;
-      }, {} );
+      }, {});
       // res.send(result);
-      var url = result[0].template_FR;
+      var url = "";
+      if (lang === "Arabe") {
+        url = result[0].template_AR;
+      } else if (lang === "Francais") {
+        url = result[0].template_FR;
+      } else {
+        url = result[0].template_EN;
+      }
 
   if(type =="facture" || type == "devis"){
   console.log("Welcome")
@@ -307,8 +286,6 @@ console.log(type)
   setTimeout(()=>{
     console.log("Hello") 
 res.send("facture")
-
-
   },5000)
 
     })
@@ -332,51 +309,54 @@ res.send(err)
 res.send(Has_Two_Pages)
   }    
     }
-  }
-  });
-};
+  };
+})
+}
 
-const updateContractImage = async (req,res)=>{
-  const { id  } = req.params;
-  console.log(twoPages , " " , typeof twoPages)
-  console.log(req.body) 
-  var twoPages = req.body.twoPages
- var urlImage = ""
- var Cmpt = 0
- if(twoPages === true ){
- Cmpt=1
- }
- console.log(Cmpt)
- for (let i = 0 ; i <=Cmpt ; i ++){ 
-  if(twoPages=="facture"){
-    console.log("I'm Here")
-  var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
-    resource_type: "auto",
-  });
-}
-else {
-  console.log("Baad")
-   uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
-      resource_type: "auto",
-    });
-  }
-  var  docUrl = uploadDoc.secure_url;
-    console.log(docUrl, "doc url");
-    let uploadImage = await cloudinary.uploader.upload(`image${i}.jpg`, {
-      resource_type: "auto",
-    });
-    console.log(i ,"  link " , uploadImage.secure_url)
-    urlImage+=uploadImage.secure_url;
-    if(i<Cmpt)
-    urlImage+=','
-  }
-console.log(urlImage)
-  const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =? `;
-    db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
-      err ? console.log(err) : console.log(result);
-    });
-    res.send(urlImage)
-}
+const updateContractImage = async (req, res) => {
+    const { id } = req.params;
+    console.log(twoPages, " ", typeof twoPages);
+    console.log(req.body);
+    var twoPages = req.body.twoPages;
+    var urlImage = "";
+    var Cmpt = 0;
+    if (twoPages === true) {
+      Cmpt = 1;
+    }
+    console.log(Cmpt);
+    for (let i = 0; i <= Cmpt; i++) {
+      if (twoPages == "facture") {
+        console.log("I'm Here");
+        var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
+          resource_type: "auto",
+        });
+      } else {
+        console.log("Baad");
+        uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
+          resource_type: "auto",
+        });
+      }
+      var docUrl = uploadDoc.secure_url;
+      convertapi
+        .convert(
+          "jpg",
+          {
+            File: docUrl,
+          },
+          "docx"
+        )
+        .then(function (result) {
+          var urlImage = result.file.url;
+          const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?` ;
+          db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
+            err ? console.log(err) : console.log(result);
+          });
+          res.send(urlImage);
+        });
+    }
+  };
+  
+
 const insertContractType = (req, res) => {
   let {
     signed_time,
@@ -469,5 +449,5 @@ module.exports = {
   getDataById,
   deleteContractById,
   fillContract,
-  updateContractImage
+  updateContractImage,
 };
