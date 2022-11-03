@@ -1393,25 +1393,22 @@ INSERT INTO etafakna.questions(id,content_FR,content_AR,content_EN,part2_FR,part
 VALUES
 
 
-   (93, 'Quel est le nom de votre Société ?', 'Quel est le nom de votre Société ?', 'Quel est le nom de votre Société ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(94, 'Quel est votre gouvernorat ?', ' Quel est votre gouvernorat ?', ' Quel est votre gouvernorat ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(95, 'Quel est la date de votre facture ?', ' Quel est la date de votre facture ?', ' Quel est la date de votre facture ?', 'n', 'n', 'n', 'n', NULL, 'true', 'n', 'null'),
-(97, 'Quel est le nom de la société de votre client ?', ' Quel est le nom de la société de votre client ?', ' Quel est le nom de la société de votre client ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(98, 'Quel est la Matricule Fiscale de votre client ?', 'Quel est la Matricule Fiscale de votre client ?', 'Quel est la Matricule Fiscale de votre client ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(99, 'Quel est le numéro de votre facture ?', 'Quel est le numéro de votre facture ?', 'Quel est le numéro de votre facture ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(100, 'Quel est l’année de la facture ?', 'Quel est l’année de la facture ?', 'Quel est l’année de la facture ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(101, 'Insérez le nom de votre produit ?', 'Insérez le nom de votre produit ?', 'Insérez le nom de votre produit ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(102, 'Insérez la quantité de ce produit?', 'Insérez la quantité de ce produit?', 'la quantité de ce produit ?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(103, 'Insérez le prix du produit', 'Insérez le prix du produit', 'Insérez le prix du produit', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(104, 'Quel est l’adresse de votre société?', 'Quel est l’adresse de votre société?', 'Quel est l’adresse de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(105, 'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(106, 'Quel est votre code postale ', 'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société?', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
-(107, 'Quel est la somme de la facture', 'Quel est la somme de la facture', 'Quel est la somme de la facture', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'null'),
-(109, 'Quelle est les nombre des Produit', 'Quelle est les nombre des Produit', 'Quelle est les nombre des Produit', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n');
 
-  
-  
-  
+INSERT INTO `questions` (`id`, `content_FR`, `content_AR`, `content_EN`, `part2_FR`, `part2_AR`, `part2_EN`, `inputType`, `options`, `date`, `explanation`, `text_Area`) VALUES
+(93, 'Quel est le nom de votre Société ?', 'Quel est le nom de votre Société ?', 'Quel est le nom de votre Société ?', 'null', 'n', 'test', 'test', NULL, 'n', '', 'null'),
+(94, 'Quel est votre gouvernorat ?', ' Quel est votre gouvernorat ?', ' Quel est votre gouvernorat ?', 'null', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(95, 'Quel est la date de votre facture ?', ' Quel est la date de votre facture ?', ' Quel est la date de votre facture ?', 'null', 'n', 'n', 'n', NULL, 'true', 'n', 'null'),
+(97, 'Quel est le nom de la société de votre client ?', ' Quel est le nom de la société de votre client ?', ' Quel est le nom de la société de votre client ?', 'Le client', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(98, 'Quel est la Matricule Fiscale de votre client ?', 'Quel est la Matricule Fiscale de votre client ?', 'Quel est la Matricule Fiscale de votre client ?', 'Le client', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(99, 'Quel est le numéro de votre facture ?', 'Quel est le numéro de votre facture ?', 'Quel est le numéro de votre facture ?', 'null', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(100, 'Quel est l’année de la facture ?', 'Quel est l’année de la facture ?', 'Quel est l’année de la facture ?', 'null', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(101, 'Insérez le nom de votre produit ?', 'Insérez le nom de votre produit ?', 'Insérez le nom de votre produit ?', 'null', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(102, 'Insérez la quantité de ce produit?', 'Insérez la quantité de ce produit?', 'la quantité de ce produit ?', 'null', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(103, 'Insérez le prix du produit', 'Insérez le prix du produit', 'Insérez le prix du produit', 'n', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(104, 'Quel est l’adresse de votre société?', 'Quel est l’adresse de votre société?', 'Quel est l’adresse de votre société?', 'Rue, gouvernorat et code postal ', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(105, 'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société ?', 'Quel est la Matricule Fiscale de votre société?', 'Le fourniseur', 'n', 'n', 'n', NULL, 'n', 'n', 'null'),
+(107, 'Quel est la somme de la facture', 'Quel est la somme de la facture', 'Quel est la somme de la facture', 'Veuillez écrire le montant total de votre  facture En lettres', 'n', 'n', 'n', 'n', 'n', 'n', 'null'),
+(109, 'Quel est le nombre de produit', 'Quel est le nombre de produit', 'Quel est le nombre de produit', 'null', 'n', 'n', '', 'n', 'n', '', 'n');
 
 -- insert question-has-contracttype 
 INSERT INTO
@@ -1527,26 +1524,23 @@ VALUES
   (80, 20, 9),
   (91, 20, 10),
   (92, 20, 11) ;
-INSERT INTO
-  etafakna.questions_has_contract_types(id,questions_id, contract_types_id, order_question)
-VALUES
 
-  (93, 93, 40, 1),
-(96, 94, 40, 2),
-(97, 95, 40, 3),
-(99, 97, 40, 5),
-(100, 98, 40, 6),
-(101, 99, 40, 7),
-(102, 100, 40, 8),
-(103, 101, 40, 10),
-(104, 102, 40, 11),
-(105, 103, 40, 12),
-(106, 104, 40, 13),
-(107, 105, 40, 14),
-(110, 106, 40, 15),
-(113, 107, 40, 16),
-(114, 109, 40, 9);
 
+INSERT INTO `questions_has_contract_types` ( `questions_id`, `contract_types_id`, `order_question`) VALUES
+( 93, 40, 1),
+(94, 40, 2),
+(95, 40, 3),
+(97, 40, 5),
+(98, 40, 6),
+( 99, 40, 7),
+( 100, 40, 8),
+( 101, 40, 10),
+( 102, 40, 11),
+( 103, 40, 12),
+( 104, 40, 13),
+( 105, 40, 14),
+( 107, 40, 16),
+( 109, 40, 9);
 
 
  
@@ -2016,43 +2010,6 @@ VALUES
     "inside_categorie"
   );
 
-INSERT INTO
-  etafakna.contract_types(
-    id,
-    signed_time,
-    time_answering,
-    title_EN,
-    title_FR,
-    title_AR,
-    description_FR,
-    description_AR,
-    description_EN,
-    image_url,
-    template_FR,
-    template_AR,
-    template_EN,
-    country,
-    types,
-    categories,
-    inside_categories
-  )
-VALUES
-
-
-(
-40, 
-0, 
-5, 
-'Facture', '
-Facture', 
-'Facture', 'Facture', 
-'Facture', 
-'Facture', 
-'https://res.cloudinary.com/dn6kxvylo/image/upload/v1665584941/quotation_cx1xtp.png',
-'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx',
-'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx',
-'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx',
-'tunisie', 
-'types',
-NULL, 
-NULL);
+INSERT INTO `contract_types` (`id`, `signed_time`, `time_answering`, `title_EN`, `title_FR`, `title_AR`, `description_EN`, `description_FR`, `description_AR`, `image_url`, `template_EN`, `template_FR`, `template_AR`, `country`, `types`, `categories`, `inside_categories`) VALUES
+(40, 0, 5, 'Quotation/Bill', 'Devis/Facture ', 'Facture', 'Facture', '', 'Facture', 'https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665949431/icons/facture_devis_ox5oml.png', 'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx', 'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx', 'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx', 'tunisie', 'types', 'facture', NULL),
+(41, 0, 5, 'Devis', 'Devis', 'Devis', 'Devis', 'Devis', 'Devis', 'https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665949431/icons/facture_devis_ox5oml.png', 'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx', 'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx', 'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx', 'tunisie', 'work', 'facture', 'inside_categorie');

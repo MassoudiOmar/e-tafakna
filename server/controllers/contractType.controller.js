@@ -85,7 +85,7 @@ function streamToString(stream) {
   return ("from cloudinary image");
 }
 }
-const makeFactureOrDevis = async ( url, ans)=>{
+const makeFactureOrDevis = async ( url, ans , type)=>{
   console.log(ans , "RRR")
   console.log("RR")
 console.log(url)
@@ -97,6 +97,20 @@ const file = fs.createWriteStream("file.xlsx");
         console.log("Download Completed");
          const workbook = new Excel.Workbook();
          await workbook.xlsx.readFile(`file.xlsx`).then(async ()=>{
+/*
+
+
+  'Etafkna', 'Tunis', '27/9/2022',
+  'Wajih',   '2000',  '200',
+  '2022',    '',      'Tunis',
+  '2000',    '2120',  'Six dinar',
+  'Dell',    'Asus',  'Hp',
+  1,         2,       3,
+  '1500',    '5404',  '2320'
+
+*/
+workbook.worksheets[0].getCell("C17").value =type.toUpperCase() +" N° /"   
+
 
         workbook.worksheets[0].getCell("A1").value = ans[0] 
         workbook.worksheets[0].getCell("B9").value = ans[1]+' le '+ ans[2] 
@@ -104,11 +118,27 @@ const file = fs.createWriteStream("file.xlsx");
         workbook.worksheets[0].getCell("D13").value = ans[4] 
         workbook.worksheets[0].getCell("C17").value += ans[5] 
  let sum = 0 ; 
-let j = 8 ; 
-let k =  8 + Math.ceil((ans.length-12)/3) 
-let r = 8  + Math.ceil(((ans.length-12) * 2 )/3 )
-
 let length  =   Math.ceil((ans.length-12) / 3)
+
+
+let j = ans.length - (length * 3)  ; 
+let f = j 
+let k =  j + (length )
+let r = k + length  
+/*
+let l1 = length * 3  
+var arr2  = ans.slice(0,8)
+console.log(arr2 , "1++++++++++++++++++")
+arr2 = arr2.concat(ans.slice(13,l1))
+console.log(arr2,"2++++++++++++++")
+arr2 = arr2.concat(ans.slice(8,4))
+
+console.log(arr2 , "this is the new answer") 
+*/
+
+
+
+
 console.log("The length is " , length)
         for (let i = 22 ; i<(22+length) ; i ++){
 console.log( " The loop for j  is " , ans[j])
@@ -169,12 +199,12 @@ Etafakn', 'Tunis', '20/9/2022',
  workbook.worksheets[0].getCell("E36").value = sum * 19 / 100
  workbook.worksheets[0].getCell("E41").value = workbook.worksheets[0].getCell("E36").value + workbook.worksheets[0].getCell("E34").value+600     
  var arr = workbook.worksheets[0].getCell("D46").value.split(' ') 
- arr[arr.length-1] = ans[ans.length-1] 
+ arr[arr.length-1] = ans[f-1] 
  arr = arr.join(' ')
  //Fix it 
  workbook.worksheets[0].getCell("D46").value = arr 
- workbook.worksheets[0].getCell("B52").value = ans[ans.length-4] + " et "+ans[ans.length-2] + ",Tunisie"
- workbook.worksheets[0].getCell("B53").value="MF:"+ans[ans.length-3]  
+ workbook.worksheets[0].getCell("B52").value = ans[f-3] 
+ workbook.worksheets[0].getCell("B53").value="MF:"+ ans[f-2]
 console.log("We are Here ")
  await workbook.xlsx.writeFile('output0.xlsx');
  try {
@@ -240,7 +270,7 @@ return ("Hi")
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
- let {type} = req.body
+ let {type , idT} = req.body
 
  let {questions} =req.body
  console.log(questions ,"this is the true one")
@@ -272,7 +302,7 @@ console.log(type)
 
   if(type =="facture" || type == "devis"){
   console.log("Welcome")
-    Promise.all([makeFactureOrDevis(url,questions)]).then((response)=>{
+    Promise.all([makeFactureOrDevis(url,questions , type)]).then((response)=>{
      
   setTimeout(()=>{
     console.log("Hello") 
