@@ -15,6 +15,7 @@ var createDocAndImage = async (str, index, renderObject) => {
     .get(str)
     .parse(superagent.parse.image)
     .buffer();
+    console.log(Locale.GERMAN)
   const buffer = response.body;
   const zip = new PizZip(buffer);
   const doc = new Docxtemplater(zip, {
@@ -270,7 +271,7 @@ const fillContract = async (req, res) => {
       }, {});
       // res.send(result);
       var url = result[0].template_FR;
-      var urlAR = result[0].template_AR;
+      // var urlAR = result[0].template_AR;
 
       if (type == "facture" || type == "devis") {
         console.log("Welcome");
