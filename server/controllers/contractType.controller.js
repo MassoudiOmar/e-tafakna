@@ -49,79 +49,83 @@ var createDocAndImage = async (str, index, renderObject) => {
         },
       })
     );
-    formData.append("document", fs.createReadStream(`output${index}.docx`));
-    await axios
-      .post("https://api.pspdfkit.com/build", formData, {
-        headers: formData.getHeaders({
-          Authorization:
-            "Bearer pdf_live_CAF2HsM79F3NrXUcjOxJlQ41mBA2xrGKUVnLrzpwI7X",
-        }),
-        responseType: "stream",
-      })
-      .then((response) => {
-        // console.log(response,'response')
-        response.data.pipe(fs.createWriteStream(`image${index}.jpg`));
-        //  cloudinary.uploader.upload("image.jpg")
-        // urlImage = uploadimage.secure_url;
-        // console.log(urlImage, "image url");
-        // // fs.unlinkSync("image.jpg");
-      })
-      .catch(async function (e) {
-        console.log(e);
-        console.log("Test Eroor");
-        const errorString = await streamToString(e.response.data);
-        console.log(errorString, "from catch");
-      });
-    function streamToString(stream) {
-      const chunks = [];
-      return new Promise((resolve, reject) => {
-        stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-        stream.on("error", (err) => reject(err));
-        stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
-      });
-    }
-    return "added docx and image";
-  } catch (error) {
-    return "from cloudinary image";
+ 
+    return ('added docx and image')  
+
   }
-};
-const makeFactureOrDevis = async (url, ans) => {
-  console.log(ans, "RRR");
-  console.log("RR");
-  console.log(url);
-  const file = fs.createWriteStream("file.xlsx");
-  http.get(url, function (response) {
+  
+  catch (error) {
+    return ("from cloudinary image");
+  }
+}
+
+const makeFactureOrDevis = async ( url, ans , type)=>{
+  console.log(ans , "RRR")
+  console.log("RR")
+console.log(url)
+const file = fs.createWriteStream("file.xlsx");
+    http.get(url, function(response) {
     response.pipe(file);
-    file.on("finish", async () => {
-      file.close();
-      console.log("Download Completed");
-      const workbook = new Excel.Workbook();
-      await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
-        workbook.worksheets[0].getCell("A1").value = ans[0];
-        workbook.worksheets[0].getCell("B9").value = ans[1] + " le " + ans[2];
-        workbook.worksheets[0].getCell("D12").value = ans[3];
-        workbook.worksheets[0].getCell("D13").value = ans[4];
-        workbook.worksheets[0].getCell("C17").value += ans[5];
-        let sum = 0;
-        let j = 8;
-        let k = 8 + Math.ceil((ans.length - 12) / 3);
-        let r = 8 + Math.ceil(((ans.length - 12) * 2) / 3);
+     file.on("finish", async () => {
+        file.close();
+        console.log("Download Completed");
+         const workbook = new Excel.Workbook();
+         await workbook.xlsx.readFile(`file.xlsx`).then(async ()=>{
+/*
 
-        let length = Math.ceil((ans.length - 12) / 3);
-        console.log("The length is ", length);
-        for (let i = 22; i < 22 + length; i++) {
-          console.log(" The loop for j  is ", ans[j]);
-          console.log(" The loop for k  is ", ans[k]);
-          console.log(" The loop for r  is ", ans[r]);
-          sum += parseFloat(ans[k]) * parseFloat(ans[r]);
 
-          workbook.worksheets[0].getCell(`B${i}`).value = ans[j++];
-          workbook.worksheets[0].getCell(`C${i}`).value = ans[k++];
-          workbook.worksheets[0].getCell(`D${i}`).value = ans[r++];
-          workbook.worksheets[0].getCell(`E${i}`).value =
-            parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
-          console.log("This is the sum so far ", sum);
-        }
+  'Etafkna', 'Tunis', '27/9/2022',
+  'Wajih',   '2000',  '200',
+  '2022',    '',      'Tunis',
+  '2000',    '2120',  'Six dinar',
+  'Dell',    'Asus',  'Hp',
+  1,         2,       3,
+  '1500',    '5404',  '2320'
+
+*/
+workbook.worksheets[0].getCell("C17").value =type.toUpperCase() +" N° /"   
+
+
+        workbook.worksheets[0].getCell("A1").value = ans[0] 
+        workbook.worksheets[0].getCell("B9").value = ans[1]+' le '+ ans[2] 
+        workbook.worksheets[0].getCell("D12").value = ans[3] 
+        workbook.worksheets[0].getCell("D13").value = ans[4] 
+        workbook.worksheets[0].getCell("C17").value += ans[5] 
+ let sum = 0 ; 
+let length  =   Math.ceil((ans.length-12) / 3)
+
+
+let j = ans.length - (length * 3)  ; 
+let f = j 
+let k =  j + (length )
+let r = k + length  
+/*
+let l1 = length * 3  
+var arr2  = ans.slice(0,8)
+console.log(arr2 , "1++++++++++++++++++")
+arr2 = arr2.concat(ans.slice(13,l1))
+console.log(arr2,"2++++++++++++++")
+arr2 = arr2.concat(ans.slice(8,4))
+
+console.log(arr2 , "this is the new answer") 
+*/
+
+
+
+
+console.log("The length is " , length)
+        for (let i = 22 ; i<(22+length) ; i ++){
+console.log( " The loop for j  is " , ans[j])
+console.log( " The loop for k  is " , ans[k])
+console.log( " The loop for r  is " , ans[r])
+sum+=parseFloat(ans[k]) * parseFloat(ans[r]) ;                            
+
+workbook.worksheets[0].getCell(`B${i}`).value = ans[j++]
+        workbook.worksheets[0].getCell(`C${i}`).value = ans[k++]
+        workbook.worksheets[0].getCell(`D${i}`).value = ans[r++]
+        workbook.worksheets[0].getCell(`E${i}`).value = parseFloat(ans[k-1]) * parseFloat(ans[r-1] )
+console.log("This is the sum so far " , sum )
+ }
         /*
   '93': 'Etafkna',
   '94': 'Gafsa',
@@ -165,40 +169,35 @@ Etafakn', 'Tunis', '20/9/2022',
   '107': 'Six dinars' 
 
 */
-        workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
-        workbook.worksheets[0].getCell("E36").value = (sum * 19) / 100;
-        workbook.worksheets[0].getCell("E41").value =
-          workbook.worksheets[0].getCell("E36").value +
-          workbook.worksheets[0].getCell("E34").value +
-          600;
-        var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
-        arr[arr.length - 1] = ans[ans.length - 1];
-        arr = arr.join(" ");
-        //Fix it
-        workbook.worksheets[0].getCell("D46").value = arr;
-        workbook.worksheets[0].getCell("B52").value =
-          ans[ans.length - 4] + " et " + ans[ans.length - 2] + ",Tunisie";
-        workbook.worksheets[0].getCell("B53").value =
-          "MF:" + ans[ans.length - 3];
-        console.log("We are Here ");
-        await workbook.xlsx.writeFile("output0.xlsx");
-        try {
-          const formData = new FormData();
-          formData.append(
-            "instructions",
-            JSON.stringify({
-              parts: [
-                {
-                  file: "document",
-                },
-              ],
-              output: {
-                type: "image",
-                format: "jpg",
-                dpi: 500,
-              },
-            })
-          );
+ workbook.worksheets[0].getCell("E34").value = parseFloat(sum)
+ workbook.worksheets[0].getCell("E36").value = sum * 19 / 100
+ workbook.worksheets[0].getCell("E41").value = workbook.worksheets[0].getCell("E36").value + workbook.worksheets[0].getCell("E34").value+600     
+ var arr = workbook.worksheets[0].getCell("D46").value.split(' ') 
+ arr[arr.length-1] = ans[f-1] 
+ arr = arr.join(' ')
+ //Fix it 
+ workbook.worksheets[0].getCell("D46").value = arr 
+ workbook.worksheets[0].getCell("B52").value = ans[f-3] 
+ workbook.worksheets[0].getCell("B53").value="MF:"+ ans[f-2]
+console.log("We are Here ")
+ await workbook.xlsx.writeFile('output0.xlsx');
+ try {
+        const formData = new FormData()
+        formData.append('instructions', JSON.stringify({
+          parts: [
+            {
+              file: "document"
+            }
+          ],
+          output: {
+            type: "image",
+            format: "jpg",
+            dpi: 500
+          }
+        }))
+        formData.append('document', fs.createReadStream('output0.xlsx'))
+        
+         
           formData.append("document", fs.createReadStream("output0.xlsx"));
 
           await axios
@@ -243,7 +242,7 @@ Etafakn', 'Tunis', '20/9/2022',
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
-  let { type, lang } = req.body;
+  let {type ,  lang } = req.body;
 
   let { questions } = req.body;
   console.log(questions, "this is the true one");
@@ -280,77 +279,84 @@ const fillContract = async (req, res) => {
         url = result[0].template_EN;
       }
 
-      if (type == "facture" || type == "devis") {
-        console.log("Welcome");
-        Promise.all([makeFactureOrDevis(url, questions)]).then((response) => {
-          setTimeout(() => {
-            console.log("Hello");
-            res.send("facture");
-          }, 5000);
-        });
-      } else {
-        console.log(url, "that is the url ");
-        var Has_Two_Pages = true;
-        if (url.search(",") == -1) {
-          var Result = await createDocAndImage(url, 0, renderObject);
-          console.log("********************");
-          Has_Two_Pages = false;
-          res.send(Has_Two_Pages);
-        } else {
-          url = url.split(",");
-          for (let i = 0; i < url.length; i++) {
-            var Result = await createDocAndImage(url[i], i, renderObject);
-            if (Result == "from cloudinary image") res.send(err);
-          }
-          res.send(Has_Two_Pages);
-        }
-      }
+  if(type =="facture" || type == "devis"){
+  console.log("Welcome")
+    Promise.all([makeFactureOrDevis(url,questions , type)]).then((response)=>{
+     
+  setTimeout(()=>{
+    console.log("Hello") 
+res.send("facture")
+  },5000)
+
+    })
+} else {
+      console.log(url  , "that is the url ")
+   var Has_Two_Pages = true 
+      if(url.search(",")==-1){
+   var Result  = await createDocAndImage(url ,0,renderObject)  
+   console.log("********************")
+  Has_Two_Pages = false ; 
+   res.send(Has_Two_Pages)
+  }
+  else 
+  { 
+    url = url.split(",")
+for (let i = 0 ; i< url.length  ; i ++){
+var Result = await createDocAndImage(url[i] , i,renderObject) 
+if(Result == "from cloudinary image")
+res.send(err)
+}
+res.send(Has_Two_Pages)
+  }    
     }
-  });
-};
+  };
+})
+}
 
 const updateContractImage = async (req, res) => {
-  const { id } = req.params;
-  console.log(twoPages, " ", typeof twoPages);
-  console.log(req.body);
-  var twoPages = req.body.twoPages;
-  var urlImage = "";
-  var Cmpt = 0;
-  if (twoPages === true) {
-    Cmpt = 1;
-  }
-  console.log(Cmpt);
-  for (let i = 0; i <= Cmpt; i++) {
-    if (twoPages == "facture") {
-      console.log("I'm Here");
-      var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
-        resource_type: "auto",
-      });
-    } else {
-      console.log("Baad");
-      uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
-        resource_type: "auto",
-      });
+    const { id } = req.params;
+    console.log(twoPages, " ", typeof twoPages);
+    console.log(req.body);
+    var twoPages = req.body.twoPages;
+    var urlImage = "";
+    var Cmpt = 0;
+    if (twoPages === true) {
+      Cmpt = 1;
     }
-    var docUrl = uploadDoc.secure_url;
-    convertapi
-      .convert(
-        "jpg",
-        {
-          File: docUrl,
-        },
-        "docx"
-      )
-      .then(function (result) {
-        var urlImage = result.file.url;
-        const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =? `;
-        db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
-          err ? console.log(err) : console.log(result);
+    console.log(Cmpt);
+    for (let i = 0; i <= Cmpt; i++) {
+      if (twoPages == "facture") {
+        console.log("I'm Here");
+        var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
+          resource_type: "auto",
         });
-        res.send(urlImage);
-      });
-  }
-};
+      } else {
+        console.log("Baad");
+        uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
+          resource_type: "auto",
+        });
+      }
+      var docUrl = uploadDoc.secure_url;
+      convertapi
+        .convert(
+          "jpg",
+          {
+            File: docUrl,
+          },
+          "docx"
+        )
+        .then(function (result) {
+          var urlImage = result.file.url;
+          const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?` ;
+          db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
+            err ? console.log(err) : console.log(result);
+          });
+          res.send(urlImage);
+        });
+    }
+  };
+  
+
 const insertContractType = (req, res) => {
   let {
     signed_time,
