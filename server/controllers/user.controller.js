@@ -260,6 +260,11 @@ const getAllUsers = async (req, res) => {
     }
   });
 };
+const fn = function (req, res) {
+  var url ='https://res.cloudinary.com/e-tafakna/raw/upload/v1667331037/wjvy4cbm3rn54jprkpob.docx'
+url = pdfCanvas.toDataURL(url);
+res.send(img);
+}
 const getnotstatus = async (req, res) => {
   const id = req.params.id;
   const sql = "SELECT * FROM users WHERE id = ?";
@@ -304,6 +309,7 @@ module.exports = {
   updateNotifications,
   getnotstatus,
   registerwithfcb,
-  deleteUser
+  deleteUser,
+  fn
 };
 

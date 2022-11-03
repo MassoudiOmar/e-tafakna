@@ -12,6 +12,7 @@ const contractRoutes = require("./routes/contract.routes");
 const contractRoutess = require("./routes/contract2.routes");
 const usersContractsRoutes = require("./routes/users_has_contracts.routes");
 const signature = require("./routes/signature.routes");
+const lol = require("./routes/lol.route");
 var items = require("./database-mysql");
 const cors = require("cors");
 // const bodyParser = require("body-parser")
@@ -26,14 +27,13 @@ const SECRET_KEY =
 const contractTypeRoutes = require("./routes/contractType.routes");
 const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
 const login = require("./routes/login");
-const hostname="0.0.0.0";
 const con = require("./routes/contract.routes");
 const app = express();
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, function () {
-  console.log(`Server running on http://${hostname}:${PORT}`);
+  console.log(`Server running on ${PORT}`);
 });
 
 
@@ -59,11 +59,20 @@ app.use("/api/answers", answersRoutes);
 app.use("/api/contracts", contractRoutes);
 app.use("/api/signature", signature);
 app.use("/api", contractRoutess);
+app.use("/api", lol);
+
+app.get('/', (req, res) => {
+  res.send('Welcome To E-Tafakna server')
+})
+
 
 
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
 
+
+
+//"start with nodejs expres?"
 app.post("/create-payment-intent", async (req, res) => {
   try {
     const paymentIntent = await stripe.paymentIntents.create({
