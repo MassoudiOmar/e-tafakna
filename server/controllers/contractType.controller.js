@@ -9,12 +9,14 @@ const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
 const { type } = require("os");
+var convertapi = require("convertapi")("Rx14TzHF2PIOhfTG");
 
 var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
     .get(str)
     .parse(superagent.parse.image)
     .buffer();
+    console.log(Locale.GERMAN)
   const buffer = response.body;
   const zip = new PizZip(buffer);
   const doc = new Docxtemplater(zip, {
@@ -52,7 +54,7 @@ var createDocAndImage = async (str, index, renderObject) => {
       .post("https://api.pspdfkit.com/build", formData, {
         headers: formData.getHeaders({
           Authorization:
-            "Bearer pdf_live_wtlDGJdKZJXW8WAIt3nWAii2nhwneGzWfiDCUxoVPYB",
+            "Bearer pdf_live_CAF2HsM79F3NrXUcjOxJlQ41mBA2xrGKUVnLrzpwI7X",
         }),
         responseType: "stream",
       })
@@ -241,7 +243,7 @@ Etafakn', 'Tunis', '20/9/2022',
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
-  let { type } = req.body;
+  let { type, lang } = req.body;
 
   let { questions } = req.body;
   console.log(questions, "this is the true one");
@@ -269,8 +271,14 @@ const fillContract = async (req, res) => {
         return acc;
       }, {});
       // res.send(result);
-      var url = result[0].template_FR;
-      var urlAR = result[0].template_AR;
+      var url = "";
+      if (lang === "Arabe") {
+        url = result[0].template_AR;
+      } else if (lang === "Francais") {
+        url = result[0].template_FR;
+      } else {
+        url = result[0].template_EN;
+      }
 
       if (type == "facture" || type == "devis") {
         console.log("Welcome");
@@ -325,20 +333,23 @@ const updateContractImage = async (req, res) => {
       });
     }
     var docUrl = uploadDoc.secure_url;
-    console.log(docUrl, "doc url");
-    let uploadImage = await cloudinary.uploader.upload(`image${i}.jpg`, {
-      resource_type: "auto",
-    });
-    console.log(i, "  link ", uploadImage.secure_url);
-    urlImage += uploadImage.secure_url;
-    if (i < Cmpt) urlImage += ",";
+    convertapi
+      .convert(
+        "jpg",
+        {
+          File: docUrl,
+        },
+        "docx"
+      )
+      .then(function (result) {
+        var urlImage = result.file.url;
+        const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =? `;
+        db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
+          err ? console.log(err) : console.log(result);
+        });
+        res.send(urlImage);
+      });
   }
-  console.log(urlImage);
-  const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =? `;
-  db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
-    err ? console.log(err) : console.log(result);
-  });
-  res.send(urlImage);
 };
 const insertContractType = (req, res) => {
   let {
