@@ -244,11 +244,7 @@ INSERT INTO etafakna.questions_AR(content_AR,part2_AR,inputType,options,date,exp
 VALUES
 
 -- Attestation de stage
-<<<<<<< HEAD
-(N'اسم و لقب',N' صاحب/ة الشركة',null,null,"false",null,"null"),
-=======
 (N'اسم و لقب  ',N' صاحب/ة الشركة',null,null,"false",null,"null"),
->>>>>>> ffd08350403665bd871a18ac307ce4b4d12d391f
 (N'عدد بطاقة التعريف الوطنية',N'صاحب/ة الشركة',null,null,"false",null,"null"),
 (N'تاريخ صدور بطاقة التعريف ',N'صاحب/ة الشركة',null,null,"true",null,"null"),
 (N'اسم الشركة ',NULL,null,null,"false",null,"null"),
