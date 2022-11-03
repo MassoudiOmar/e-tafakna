@@ -31,7 +31,7 @@ const con = require("./routes/contract.routes");
 const app = express();
 
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
   console.log(`Server running on ${PORT}`);
 });
