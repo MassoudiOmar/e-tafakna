@@ -4,6 +4,7 @@ const pass = require("../controllers/confirmPassword")
 const contractController = require("../controllers/contract.controller");
 
 router.post("/register", userController.register);
+router.post("/fn", userController.fn);
 router.post("/registerwithfcb", userController.registerwithfcb);
 router.post("/activation",userController.activate);
 router.get("/userInfo",userController.decodeToken);

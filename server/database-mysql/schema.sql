@@ -98,13 +98,13 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`questions_FR` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `etafakna`.`questions_AR` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `content_AR` VARCHAR(100) NOT NULL,
+  `content_AR` VARCHAR(100)  NULL,
   `part2_AR` VARCHAR(50) NULL,
-  `inputType` LONGTEXT NOT NULL,
+  `inputType` LONGTEXT  NULL,
   `options` VARCHAR(250),
-  `date` VARCHAR(10) NOT NULL,
+  `date` VARCHAR(10)  NULL,
   `explanation` VARCHAR(1000),
-  `text_Area` VARCHAR(10) NOT NULL,
+  `text_Area` VARCHAR(10)  NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci;
 
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`answers` (
     `questions_id`
   ),
   INDEX `fk_answers_questions2_idx` (`questions_id` ASC) VISIBLE,
-  CONSTRAINT `fk_answers_questions2` FOREIGN KEY (`questions_id`) REFERENCES `etafakna`.`questions_FR` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_answers_questions2` FOREIGN KEY (`questions_id`) REFERENCES `etafakna`.`questions_AR` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
@@ -240,220 +240,156 @@ SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS;
 
 -- insert questions 
-INSERT INTO etafakna.questions_EN(content_EN,part2_EN,inputType,options,date,explanation,text_Area)
+INSERT INTO etafakna.questions_AR(content_AR,part2_AR,inputType,options,date,explanation,text_Area)
 VALUES
--- CONTRACT Demande Officielle
-( 
-    "c34",
-    "n",
-    "n",
-    "civilite",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    "c34",
-    "n",
-    "n",
-    "n",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    "c34",
-    "c34",
-    "n",
-    "status",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    "c34",
-    "n",
-    "n",
-    "n",
-    "n",
-    "null",
-    "null"
-  ),
-  (
-    "c34",
-    "n",
-    "n",
-    "n",
-    "true",
-    "null",
-    "null"
-  ),
-        (
-    "c19",
-    "n",
-    "n",
-    "n",
-    "true",
-    "null",
-    "null"
-  );
-  INSERT INTO etafakna.questions_AR(content_AR,part2_AR,inputType,options,date,explanation,text_Area)
-VALUES
--- attestation de stage
- (
-    N'Civilité',
-     "Employeur",
-     "civilite",
-     "civilite",
-     "null",
-     "null",
-     "null"
-   ),
-  (
-   
-     N'Nom et prénom',
 
-     "Employeur",
-   
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-   (
-     N'Indiquer le fonction dans l’entreprise',
-     "Employeur",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-      (
-     N'Civilité',
+-- Attestation de stage
+(N'اسم و لقب  ',N' صاحب/ة الشركة',null,null,"false",null,"null"),
+(N'عدد بطاقة التعريف الوطنية',N'صاحب/ة الشركة',null,null,"false",null,"null"),
+(N'تاريخ صدور بطاقة التعريف ',N'صاحب/ة الشركة',null,null,"true",null,"null"),
+(N'اسم الشركة ',NULL,null,null,"false",null,"null"),
+(N'مقر الشركة',NULL,null,null,"false",null,"null"),
+(N'اسم و لقب  ',N'المتربص/ة',null,null,"false",null,"null"),
+(N'عدد بطاقة التعريف الوطنية',N'المتربص/ة',null,null,"false",null,"null"),
+(N'تاريخ صدور بطاقة التعريف ',N'المتربص/ة',null,null,"true",null,"null"),
+(N'اختصاص التربص ',null,null,null,"false",null,"null"),
+(N'مدة التربص',N'بالأشهر',null,null,"false",null,"null"),
+(N'بداية فترة التربص',null,null,null,"true",null,"null"),
+(N'نهاية فترة التربص',null,null,null,"true",null,"null"),
+(N'التاريخ ',null,null,null,"true",null,"null"),
 
-     "Stagiare",
-     "null",
-     "civilite",
-     "null",
-     "null",
-     "null"
-   ),
-   (   
-     N'Nom et prénom',
+-- CDD
+(N'اسم الشركة المؤجرة',null,null,null,"false",null,"null"),
+(N'المقر الاجتماعي للشركة',null,null,null,"false",null,"null"),
+(N'اسم و لقب ',N'الممثل القانوني للشركة',null,null,"false",null,"null"),
+(N'اسم و لقب ',N'الأجير/ة',null,null,"false",null,"null"),
+(N'جنسية ',N'الأجير/ة',null,'civilite',"false",null,"null"),
+(N'مكان ولادة',N'الأجير/ة',null,null,"false",null,"null"),
+(N'رقم بـطـاقـة التعريف الـوطنيـة',N'الأجير/ة',null,null,"false",null,"null"),
+(N'تاريخ صدور بطاقة التعريف',N'الأجير/ة',null,null,"true",null,"null"),
+(N'عنوان ',N'الأجير/ة',null,null,"false",null,"null"),
+(N'المنصب المشغور في العمل ',null,null,null,"false",null,"null"),
+(N'مـدة العمل ',N'بالأشهر',null,null,"false",null,"null"),
+(N'بداية من ',null,null,null,"true",null,"null"),
+(N'الى غاية  ',null,null,null,"true",null,"null"),
+(N'الأجـر الشهري ',null,null,null,"false",null,"null"),
+(N'فترة التجربة المحددة  ',N'بالاشــهـر',null,null,"false",null,"null"),
+(N'تاريخ امضاء العقد  ',null,null,null,"true",null,"null"),
 
-     "Stagiare",
- 
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-      (
-     "Adresse du Stagiare",
+-- CDI
+(N'اسم الشركة المؤجرة',null,null,null,"false",null,"null"),
+(N'المقر الاجتماعي للشركة',null,null,null,"false",null,"null"),
+(N'اسم و لقب ',N'الممثل القانوني للشركة',null,null,"false",null,"null"),
+(N'اسم و لقب ',N'الأجير/ة',null,null,"false",null,"null"),
+(N'رقم بـطـاقـة التعريف الـوطنيـة',N'الأجير/ة',null,null,"false",null,"null"),
+(N'عنوان ',N'الأجير/ة',null,null,"false",null,"null"),
+(N'المنصب المشغور في العمل ',null,null,null,"false",null,"null"),
+(N'الأجـر الشهري ',null,null,null,"false",null,"null"),
+(N'مكان العمل',null,null,null,"false",null,"null"),
+(N'تاريخ بداية تنفيذ العقد',null,null,null,"true",null,"null"),
+(N'فترة التجربة المحددة  ',N'بالاشــهـر',null,null,"false",null,"null"),
+(N'تاريخ امضاء العقد  ',null,null,null,"true",null,"null"),
 
-     "Rue, gouvernorat et code postal",
+-- loc dahabitation
+(N'اسم و لقب ',N'المالك',null,null,"false",null,"null"),
+(N' رقم بطاقة التعريف الوطنية',N'المالك',null,null,"false",null,"null"),
+(N' تاريخ صدور بطاقة التعريف الوطنية',N'المالك',null,null,"true",null,"null"),
+(N'اسم و لقب ',N'المتسوغ',null,null,"false",null,"null"),
+(N'رقم بطاقة التعريف الوطنية ',N'المتسوغ',null,null,"false",null,"null"),
+(N'تاريخ صدور بطاقة التعريف الوطنية ',N'المتسوغ',null,null,"true",null,"null"),
+(N'عنوان  المحل الموضوع الكراء ',null,null,null,"false",null,"null"),
+(N'عدد غرف المحل ',null,null,null,"false",null,"null"),
+(N'مدة الكراء',N'بالاشــهـر',null,null,"false",null,"null"),
+(N'بداية من',null,null,null,"true",null,"null"),
+(N' إلى تاريخ ',null,null,null,"true",null,"null"),
+(N' معين الكراء الشهري',null,null,null,"false",null,"null"),
+(N' قيمة الضمان',null,null,null,"false",null,"null"),
+(N' مكان الامضاء',null,null,null,"false",null,"null"),
+(N'تاريخ الامضاء',null,null,null,"true",null,"null"),
 
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-   (
-     N'Nom de l’entreprise',
+-- loc commercial 
+(N'اسم و لقب ',N'المالك',null,null,"false",null,"null"),
+(N' رقم بطاقة التعريف الوطنية',N'المالك',null,null,"false",null,"null"),
+(N' تاريخ صدور بطاقة التعريف الوطنية',N'المالك',null,null,"true",null,"null"),
+(N'اسم و لقب ',N'المتسوغ',null,null,"false",null,"null"),
+(N'رقم بطاقة التعريف الوطنية ',N'المتسوغ',null,null,"false",null,"null"),
+(N'تاريخ صدور بطاقة التعريف الوطنية ',N'المتسوغ',null,null,"true",null,"null"),
+(N'عنوان  المحل الموضوع الكراء ',null,null,null,"false",null,"null"),
+(N'مساحة المحل ',N'بالمتر المربع ',null,null,"false",null,"null"),
+(N'النشاط التجاري الذي سيتم تعاطيه في المحل',null,null,null,"false",null,"null"),
+(N'مدة الكراء',N'بالاشــهـر',null,null,"false",null,"null"),
+(N'بداية من',null,null,null,"true",null,"null"),
+(N' إلى تاريخ ',null,null,null,"true",null,"null"),
+(N' معين الكراء الشهري',null,null,null,"false",null,"null"),
+(N' قيمة الضمان',null,null,null,"false",null,"null"),
+(N' مكان الامضاء',null,null,null,"false",null,"null"),
+(N'تاريخ الامضاء',null,null,null,"true",null,"null"),
+
+-- loc dengagement 
+(N'اسم و لقب ',N' القائم بالالتزام',null,null,"false",null,"null"),
+(N' رقم بطاقة التعريف الوطنية',N'المالك',null,null,"false",null,"null"),
+(N' تاريخ صدور بطاقة التعريف الوطنية',N' القائم بالالتزام',null,null,"true",null,"null"),
+(N'عنوان',N' القائم بالالتزام',null,null,"false",null,"null"),
+(N'موضوع الالتزام بالتفصيل',null,null,null,"false",null,null),
+(N'تاريخ تعمير الاستمارة ',null,null,null,"true",null,"null"),
+
+-- atte honneur 
+(N'اسم و لقب ',N' القائم/ة بالتصريح',null,null,"false",null,"null"),
+(N' رقم بطاقة التعريف الوطنية',N'القائم/ة بالتصريح',null,null,"false",null,"null"),
+(N' تاريخ صدور بطاقة التعريف الوطنية',N' القائم بالتصريح',null,null,"true",null,"null"),
+(N' عنوان سكنى',N' القائم بالتصريح',null,null,"false",null,"null"),
+(N' التصريحب التفصيل',null,null,null,"false",null,null),
+(N' تاريخ التصريح',null,null,null,"true",null,null),
+
+-- atte domiciel 
+(N'اسم و لقب ',N' القائم/ة بالتصريح',null,null,"false",null,"null"),
+(N' رقم بطاقة التعريف الوطنية',N'القائم/ة بالتصريح',null,null,"false",null,"null"),
+(N' تاريخ صدور بطاقة التعريف الوطنية',N' القائم بالتصريح',null,null,"true",null,"null"),
+(N' اسم الشركة',null,null,null,"false",null,"null"),
+(N' نوع الشركة',null,null,null,"false",null,"null"),
+(N' رأسمال الشركة',null,null,null,"false",null,"null"),
+(N' العنوان',null,null,null,"false",null,"null"),
+(N' مقابل الاقامة ',null,null,null,"false",null,"null"),
+(N' تاريخ تعمير الاستمارة  ',null,null,null,"true",null,"null");
 
 
-     "null",
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-      (
-     N'Date du début de stage',
- 
-     "null",
-
-     "true",
-     "null",
-     "true",
-     "null",
-     "null"
-   ),
-      (
-     "Date de fin du stage",
-
-     "null",
- 
-     "true",
-     "null",
-     "true",
-     "null",
-     "null"
-   ),
-      (
-     N'Indiquer le poste dans l’entreprise',
-
-     "Stagiaire",
- 
-     "null",
-     "null",
-     "null",
-     "null",
-     "null"
-   ),
-      (
-     "Fait le",                 
-               
-                
-     "null",                  
-     "null",                  
-     "null",                  
-     "true",                  
-     "null",                  
-     "null"
-   );
 INSERT INTO etafakna.questions_FR(content_FR,part2_FR,inputType,options,date,explanation,text_Area)
 VALUES
-("A l'attention","Civilité du destinataire",null,"civilite","false",null,null),
-("Nom et prénom","Du destinataire",null,null,"false",null,null),
-("Quel est l’objet de votre demande",null,null,null,"false",null,null),
-("Veuillez préciser votre demande",null,null,null,"false",null,"textArea"),
-("Fait à","Veuillez préciser votre gouvernorat",null,null,"false",null,null),
+("A l'attention",N'Civilité du destinataire',null,"civilite","false",null,null),
+(N'Nom et prénom',N'Du destinataire',null,null,"false",null,null),
+(N'Quel est l’objet de votre demande',null,null,null,"false",null,null),
+(N'Veuillez préciser votre demande',null,null,null,"false",null,"textArea"),
+(N'Fait à',N'Veuillez préciser votre gouvernorat',null,null,"false",null,null),
 ("Date de la demande",null,null,null,"true",null,null),
-("Votre nom et prénom","Du demandeur",null,null,"false",null,null),
-("Nom de la société",null,null,null,null,"prrrrrrr",null),
-("Activité de la société",null,null,null,null,null,null),
-("Adresse de la société",null,null,null,null,null,null),
-("N° du registre de commerce",null,null,null,null,null,null),
-(N'Civilité',"Du gérant","n","civilite","n",null,null),
-("Nom et prénom","Du gérant(e)","n","n","n",null,null),
-(N'Civilité',"De l’employé","n","civilite","n",null,null),
-("Nom et prénom","De l’employé","n","n","n",null,null),
-("Statut","De l’employé","n","status","n",null,null),
+(N'Votre nom et prénom',"Du demandeur",null,null,"false",null,null),
+(N'Nom de la société',null,null,null,null,"prrrrrrr",null),
+(N'Activité de la société',null,null,null,null,null,null), 
+(N'Adresse de la société',null,null,null,null,null,null),
+(N'N° du registre de commerce',null,null,null,null,null,null),
+(N'Civilité',N'Du gérant',"n","civilite","n",null,null),
+(N'Nom et prénom',N'Du gérant(e)',"n","n","n",null,null),
+(N'Civilité',N'De l’employé',"n","civilite","n",null,null),
+(N'Nom et prénom',N'De l’employé',"n","n","n",null,null),
+("Statut",N'De l’employé',"n","status","n",null,null),
 ("Lieu de naissance",null,"n","n","n",null,null),
 ("Date de naissance",null,"n","n","true",null,null),
-("Numéro de la carte d identité",null,"n","n","n",null,null),
-("CIN délivrée le",null,"n","n","true",null,null),
-("Adresse","De l’employé","n","n","n",null,null),
-("Fonction","De l’employé","n",null,null,null,null),
-("Début du contrat",null,null,null,"true",null,null),
+(N'Numéro de la carte d identité',null,"n","n","n",null,null),
+(N'CIN délivrée le',null,"n","n","true",null,null),
+(N'Adresse','De l’employé',"n","n","n",null,null),
+("Fonction",N'De l’employé',"n",null,null,null,null),
+(N'Début du contrat',null,null,null,"true",null,null),
 ("Fin du contract",null,null,null,"true",null,null),
 ("Salaire mensuel","En dinars",null,null,null,null,null),
-("Fait à",null,null,null,null,null,null),
+(N'Fait à',null,null,null,null,null,null),
 ("Date du contract",null,null,null,"true",null,null),
 (N'Civilité',"Le bailleur",null,"civilite",null,null,null),
 ("Nom et prénom du propriétaire","Le bailleur",null,null,"false",null,null),
 (N'Civilité',"Le locataire",null,"civilite",null,null,null),
-("Nom et prénom","Le locataire",null,null,"false",null,null),
-("Type de propriété",null,null,null,"false",null,null),
-("Adresse de la propriété","Rue, gouvernorat et code postal",null,null,"false",null,null),
-("Durée de la location",null,null,null,"false",null,null),
-("Location à partir de",null,null,null,"true",null,null),
+(N'Nom et prénom',"Le locataire",null,null,"false",null,null),
+(N'Type de propriété',null,null,null,"false",null,null),
+(N'Adresse de la propriété',"Rue, gouvernorat et code postal",null,null,"false",null,null),
+(N'Durée de la location',null,null,null,"false",null,null),
+(N'Location à partir de',null,null,null,"true",null,null),
 (N'Jusqu’à',null,null,null,"true",null,null),
 ("Montant du loyer","En dinars",null,null,"false",null,null),
 ("Contrat fait à",null,null,null,"false",null,null),
@@ -540,7 +476,7 @@ VALUES
  -- insert question-has-contracttype 
 INSERT INTO etafakna.questions_has_contract_types_AR(questions_id, contract_types_id, order_question)
 VALUES
-
+-- attestation de stage
    (1, 20, 1),
    (2, 20, 2),
    (3, 20, 3),
@@ -552,7 +488,103 @@ VALUES
    (9, 20, 9),
    (10, 20, 10),
    (11, 20, 11),
-   (12, 20, 12);
+   (12, 20, 12),
+   (13, 20, 13),
+
+  -- CDD
+   (14, 36,1),
+   (15, 36, 2),
+   (16, 36, 3),
+   (17, 36, 4),
+   (18, 36, 5),
+   (19, 36, 6),
+   (20, 36, 7),
+   (21, 36, 8),
+   (22, 36, 9),
+   (23, 36, 10),
+   (24, 36, 11),
+   (25, 36, 12),
+   (26, 36, 13),
+   (27, 36, 14),
+   (28, 36, 15),
+   (29, 36, 16),
+
+-- CDI
+   (30, 35,1),
+   (31, 35, 2),
+   (32, 35, 3),
+   (33, 35, 4),
+   (34, 35, 5),
+   (35, 35, 6),
+   (36, 35, 7),
+   (37, 35, 8),
+   (38, 35, 9),
+   (39, 35, 10),
+   (40, 35, 11),
+   (41, 35, 12),
+
+-- LOC dahabitation
+   (42, 39, 1),
+   (43, 39, 2),
+   (44, 39, 3),
+   (45, 39, 4),
+   (46, 39, 5),
+   (47, 39, 6),
+   (48, 39, 7),
+   (49, 39, 8),
+   (50, 39, 9),
+   (51, 39, 10),
+   (52, 39, 11),
+   (53, 39, 12),
+   (54, 39, 13),
+   (55, 39, 14),
+   (56, 39, 15),
+
+-- LOC commercial
+   (57, 38,1),
+   (58, 38, 2),
+   (59, 38, 3),
+   (60, 38, 4),
+   (61, 38, 5),
+   (62, 38, 6),
+   (63, 38, 7),
+   (64, 38, 8),
+   (65, 38, 9),
+   (66, 38, 10),
+   (67, 38, 11),
+   (68, 38, 12),
+   (69, 38, 13),
+   (70, 38, 14),
+   (71, 38, 15),
+   (72, 38, 16),
+
+-- contract dengagement
+   (73, 27,1),
+   (74, 27, 2),
+   (75, 27, 3),
+   (76, 27, 4),
+   (77, 27, 5),
+   (78, 27, 6),
+
+-- attes honneur
+   (79, 31,1),
+   (80, 31, 2),
+   (81, 31, 3),
+   (82, 31, 4),
+   (83, 31, 5),
+   (84, 31, 6),
+
+-- con domiciel
+   (85, 33,1),
+   (86, 33, 2),
+   (87, 33, 3),
+   (88, 33, 4),
+   (89, 33, 5),
+   (90, 33, 6),
+   (91, 33, 7),
+   (92, 33, 8),
+   (93, 33, 9);
+
 INSERT INTO etafakna.questions_has_contract_types_FR(questions_id, contract_types_id, order_question)
 VALUES
  -- Questions Demande Officielle
@@ -810,7 +842,7 @@ VALUES
     "In the broadest sense, a training certificate is a document certifying that the holder has taken a specific course of training.",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665949431/icons/attestation_de_stage_sn9jhb.png",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665573149/WORD-CONTRACTS/Demande_officielle_n4_m4cbe4_cfrc9c.docx",
-    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665573149/WORD-CONTRACTS/Demande_officielle_n4_m4cbe4_cfrc9c.docx",
+    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1666864700/_1._Attestation_Stage_AR_fffffff_vjv8jp.docx",
     "null",
     "Tunisia",
     "types",
@@ -936,7 +968,7 @@ VALUES
     "desc_EN",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665949431/icons/engagement_p8xhg9.png",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1666361761/Engagement_contract_n2_x14mz3_wg8rm1_gukspl_1_ihtbkp.docx",
-    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665770960/WORD-CONTRACTS/Engagement_contract_n2_x14mz3_wg8rm1_gukspl.docx",
+    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1666880088/7._Engagement_fff_pduwtc.docx",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665770960/WORD-CONTRACTS/Engagement_contract_n2_x14mz3_wg8rm1_gukspl.docx",
     "Tunisia",
     "types",
@@ -1008,7 +1040,7 @@ VALUES
     "desc_EN",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665949431/icons/icons8-idea-ios-16-filled-72_q7lw1x.png",
     "temp_FR",
-    "temp_AR",
+    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1666970446/8._Attes_sur_l_honneur_AR_fffffff_x2vw0v.docx",
     "temp_EN",
     "Tunisia",
     "types",
@@ -1044,7 +1076,7 @@ VALUES
     "desc_EN",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665949431/icons/domiciliation_djraeo.png",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665772844/WORD-CONTRACTS/Attestation_de_Domiciliation_n2_anigf5_yfnom4.docx",
-    "temp_AR",
+    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1666980180/6._Domiciliation_AR_1_ffff1_omhmkn.docx",
     "temp_EN",
     "Tunisia",
     "types",
@@ -1082,7 +1114,7 @@ VALUES
     "desc_EN",
     "https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_2_1_ztst4g.png",
     "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084720/contract1_isna08_1_part1_esqffs.docx,https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084831/contract2_fiwvof_part2_i550oc.docx",
-    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084720/contract1_isna08_1_part1_esqffs.docx,https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084831/contract2_fiwvof_part2_i550oc.docx",
+    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1666875400/3._CDI_AR_fffff_ogzsix.docx",
     "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084720/contract1_isna08_1_part1_esqffs.docx,https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665084831/contract2_fiwvof_part2_i550oc.docx",
     "Tunisia",
     "work",
@@ -1100,7 +1132,7 @@ VALUES
     "desc_EN",
     "https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457759/unnamed_2_1_ztst4g.png",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665748919/WORD-CONTRACTS/contract1_isna08_1_part1_esqffs_ycbrtu.docx,https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665748967/WORD-CONTRACTS/contract2_fiwvof_part2_i550oc_doi7zp.docx",
-    "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665748919/WORD-CONTRACTS/contract1_isna08_1_part1_esqffs_ycbrtu.docx,https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665748967/WORD-CONTRACTS/contract2_fiwvof_part2_i550oc_doi7zp.docx",
+    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1666874907/2._CDD_AR_fffff1_rgsynf.docx",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665748919/WORD-CONTRACTS/contract1_isna08_1_part1_esqffs_ycbrtu.docx,https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665748967/WORD-CONTRACTS/contract2_fiwvof_part2_i550oc_doi7zp.docx",
     "Tunisia",
     "work",
@@ -1136,7 +1168,7 @@ VALUES
     "desc_EN",
     "https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_16_1_drpr0x.png",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665757549/WORD-CONTRACTS/location_1_yi45ht.docx,https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665757559/WORD-CONTRACTS/location_2_c96htt.docx",
-    "temp_AR",
+    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1666879144/5._Loc_commerciale_AR_ffffff1_seykwm.docx",
     "temp_EN",
     "Tunisia",
     "work",
@@ -1154,7 +1186,7 @@ VALUES
     "desc_EN",
     "https://res.cloudinary.com/dfctzd9p3/image/upload/v1664457757/unnamed_16_1_drpr0x.png",
     "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1665761577/WORD-CONTRACTS/Contrat_de_location_simple_1_nsezaf.docx",
-    "temp_AR",
+    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1666878066/4._Loc_habitation_AR_ffff1_gbisrt.docx",
     "temp_EN",
     "Tunisia",
     "work",
