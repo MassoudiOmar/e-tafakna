@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`answers` (
     `questions_id`
   ),
   INDEX `fk_answers_questions2_idx` (`questions_id` ASC) VISIBLE,
-  CONSTRAINT `fk_answers_questions2` FOREIGN KEY (`questions_id`) REFERENCES `etafakna`.`questions_FR` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_answers_questions2` FOREIGN KEY (`questions_id`) REFERENCES `etafakna`.`questions_AR` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 -- -----------------------------------------------------
@@ -244,7 +244,11 @@ INSERT INTO etafakna.questions_AR(content_AR,part2_AR,inputType,options,date,exp
 VALUES
 
 -- Attestation de stage
+<<<<<<< HEAD
 (N'اسم و لقب',N' صاحب/ة الشركة',null,null,"false",null,"null"),
+=======
+(N'اسم و لقب  ',N' صاحب/ة الشركة',null,null,"false",null,"null"),
+>>>>>>> ffd08350403665bd871a18ac307ce4b4d12d391f
 (N'عدد بطاقة التعريف الوطنية',N'صاحب/ة الشركة',null,null,"false",null,"null"),
 (N'تاريخ صدور بطاقة التعريف ',N'صاحب/ة الشركة',null,null,"true",null,"null"),
 (N'اسم الشركة ',NULL,null,null,"false",null,"null"),
@@ -355,13 +359,13 @@ VALUES
 
 INSERT INTO etafakna.questions_FR(content_FR,part2_FR,inputType,options,date,explanation,text_Area)
 VALUES
-("A l'attention",N'Civilité du destinataire',null,"civilite","false",null,"deded"),
-(N'Nom et prénom',N'Du destinataire',null,null,"false",null,"deded"),
-(N'Quel est l’objet de votre demande',null,null,null,"false",null,"deded"),
+("A l'attention",N'Civilité du destinataire',null,"civilite","false",null,null),
+(N'Nom et prénom',N'Du destinataire',null,null,"false",null,null),
+(N'Quel est l’objet de votre demande',null,null,null,"false",null,null),
 (N'Veuillez préciser votre demande',null,null,null,"false",null,"textArea"),
-(N'Fait à',N'Veuillez préciser votre gouvernorat',null,null,"false",null,"deded"),
-("Date de la demande",null,null,null,"true",null,"deded"),
-(N'Votre nom et prénom',"Du demandeur",null,null,"false",null,"deded"),
+(N'Fait à',N'Veuillez préciser votre gouvernorat',null,null,"false",null,null),
+("Date de la demande",null,null,null,"true",null,null),
+(N'Votre nom et prénom',"Du demandeur",null,null,"false",null,null),
 (N'Nom de la société',null,null,null,null,"prrrrrrr",null),
 (N'Activité de la société',null,null,null,null,null,null), 
 (N'Adresse de la société',null,null,null,null,null,null),
