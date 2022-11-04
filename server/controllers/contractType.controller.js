@@ -330,13 +330,14 @@ const updateContractImage = async (req, res) => {
       });
     }
     var docUrl = uploadDoc.secure_url;
+    var x = twoPages=="facture" ? "xlsx" : "docx"
     convertapi
       .convert(
         "jpg",
         {
           File: docUrl,
         },
-        "docx"
+        x
       )
       .then(async function (result) {
         console.log(result.file.url, "doc");
