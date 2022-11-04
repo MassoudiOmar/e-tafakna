@@ -12,83 +12,48 @@ const { type } = require("os");
 var convertapi = require("convertapi")("Rx14TzHF2PIOhfTG");
 
 var createDocAndImage = async (str, index, renderObject) => {
- 
   const response = await superagent
-  .get(str)
-  .parse(superagent.parse.image)
-  .buffer();
-const buffer = response.body;
-const zip = new PizZip(buffer);
-const doc = new Docxtemplater(zip, {
-  paragraphLoop: true,
-  linebreaks: true,
-});
-doc.render(renderObject);
-const buf = doc.getZip().generate({
-  type: "nodebuffer",
-  // compression: DEFLATE adds a compression step.
-  // For a 50MB output document, expect 500ms additional CPU time
-  compression: "DEFLATE",
-});
-console.log(buf, "check buf");
-fs.writeFileSync(`output${index}.docx`, buf);
-try {
-const formData = new FormData();
-formData.append(
-  "instructions",
-  JSON.stringify({
-    parts: [
-      {
-        file: "document",
-      },
-    ],
-    output: {
-      type: "image",
-      format: "jpg",
-      dpi: 500,
-    },
-  })
-);
-formData.append("document", fs.createReadStream(`output${index}.docx`));
-await axios
-  .post("https://api.pspdfkit.com/build", formData, {
-    headers: formData.getHeaders({
-      Authorization:
-        "Bearer pdf_live_wtlDGJdKZJXW8WAIt3nWAii2nhwneGzWfiDCUxoVPYB",
-       
-    }),
-    responseType: "stream",
-  })
-  .then((response) => {
-    // console.log(response,'response')
-    response.data.pipe(fs.createWriteStream(`image${index}.jpg`))
-    //  cloudinary.uploader.upload("image.jpg")
-    // urlImage = uploadimage.secure_url;
-    // console.log(urlImage, "image url");
-    // // fs.unlinkSync("image.jpg");
-  })
-  .catch(async function (e) {
-    console.log(e);
-    console.log("Test Eroor")
-    const errorString = await streamToString(e.response.data);
-    console.log(errorString, "from catch");
+    .get(str)
+    .parse(superagent.parse.image)
+    .buffer();
+  const buffer = response.body;
+  const zip = new PizZip(buffer);
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
   });
-function streamToString(stream) {
-  const chunks = [];
-  return new Promise((resolve, reject) => {
-    stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-    stream.on("error", (err) => reject(err));
-    stream.on("end", () =>
-      resolve(Buffer.concat(chunks).toString("utf8"))
+  doc.render(renderObject);
+  const buf = doc.getZip().generate({
+    type: "nodebuffer",
+    // compression: DEFLATE adds a compression step.
+    // For a 50MB output document, expect 500ms additional CPU time
+    compression: "DEFLATE",
+  });
+  console.log(buf, "check buf");
+  fs.writeFileSync(`output${index}.docx`, buf);
+  try {
+    const formData = new FormData();
+    formData.append(
+      "instructions",
+      JSON.stringify({
+        parts: [
+          {
+            file: "document",
+          },
+        ],
+        output: {
+          type: "image",
+          format: "jpg",
+          dpi: 500,
+        },
+      })
     );
-  });
-}
- return ('added docx and image')  
-} catch (error) {
-  return ("from cloudinary image");
-}
-}
 
+    return "added docx and image";
+  } catch (error) {
+    return "from cloudinary image";
+  }
+};
 
 const makeFactureOrDevis = async (url, ans, type) => {
   console.log(ans, "RRR");
@@ -129,6 +94,16 @@ const makeFactureOrDevis = async (url, ans, type) => {
         let f = j;
         let k = j + length;
         let r = k + length;
+        /*
+let l1 = length * 3  
+var arr2  = ans.slice(0,8)
+console.log(arr2 , "1++++++++++++++++++")
+arr2 = arr2.concat(ans.slice(13,l1))
+console.log(arr2,"2++++++++++++++")
+arr2 = arr2.concat(ans.slice(8,4))
+
+console.log(arr2 , "this is the new answer") 
+*/
 
         console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
@@ -144,6 +119,49 @@ const makeFactureOrDevis = async (url, ans, type) => {
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
           console.log("This is the sum so far ", sum);
         }
+        /*
+  '93': 'Etafkna',
+  '94': 'Gafsa',
+  '95': '17/9/2022',
+  '97': 'Wajih',
+  '98': '1230',
+  '99': '23',
+  '100': '2022',
+  '101': 'Dell',
+  '102': '5',
+  '103': '5000',
+  '104': 'Tunisa/gabes',
+  '105': 'Mat client',
+  '106': '2120',
+  '107': 'Six dinar'
+**************************************
+Etafakn', 'Tunis', '20/9/2022',
+  'Wajih',   '2000',  '12',
+  '2022',    '',      'Dell',
+  'Hp',      'Asus',  '5',
+  '6',       '7',     '1440',
+  '1320',    '1500',  'Gafsa',
+  '1000',    '2120'
+  **********************************
+
+
+
+ '93': 'A',
+  '94': 'B',
+  '95': '17/9/2022',
+  '97': 'C',
+  '98': 'D',
+  '99': 'E',
+  '100': 'Dell',
+  '101': '5',
+  '102': '5',
+  '103': '600',
+  '104': 'Tunis/gafsa',
+  '105': '2130',
+  '106': '2120',
+  '107': 'Six dinars' 
+
+*/
         workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("E36").value = (sum * 19) / 100;
         workbook.worksheets[0].getCell("E41").value =
@@ -176,8 +194,6 @@ const makeFactureOrDevis = async (url, ans, type) => {
               },
             })
           );
-          formData.append("document", fs.createReadStream("output0.xlsx"));
-
           formData.append("document", fs.createReadStream("output0.xlsx"));
 
           await axios
@@ -309,22 +325,33 @@ const updateContractImage = async (req, res) => {
       });
     } else {
       console.log("Baad");
-      uploadDoc = await cloudinary.uploader.upload(`image${i}.png`, {
+      uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
         resource_type: "auto",
       });
     }
     var docUrl = uploadDoc.secure_url;
-    if(i<=Cmpt-1)
-    urlImage+=","
-
+    convertapi
+      .convert(
+        "jpg",
+        {
+          File: docUrl,
+        },
+        "docx"
+      )
+      .then(async function (result) {
+        console.log(result.file.url, "doc");
+        if (i <= Cmpt - 1) urlImage += result.file.url + ",";
+        else urlImage += result.file.url;
+      });
   }
-
-  const updateContract =`UPDATE contracts set contract_url = ? , contract_image = ? where id =?` ;
-  db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
-    err ? console.log(err) : console.log(result);
-  });
-  res.send(urlImage);
-
+  setTimeout(() => {
+    const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
+    db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
+      err ? console.log(err) : console.log(result);
+    });
+    console.log(urlImage, "Imagaeeeee");
+    res.send(urlImage);
+  }, 10000);
 };
 
 const insertContractType = (req, res) => {
