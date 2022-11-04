@@ -12,48 +12,83 @@ const { type } = require("os");
 var convertapi = require("convertapi")("Rx14TzHF2PIOhfTG");
 
 var createDocAndImage = async (str, index, renderObject) => {
+ 
   const response = await superagent
-    .get(str)
-    .parse(superagent.parse.image)
-    .buffer();
-  const buffer = response.body;
-  const zip = new PizZip(buffer);
-  const doc = new Docxtemplater(zip, {
-    paragraphLoop: true,
-    linebreaks: true,
+  .get(str)
+  .parse(superagent.parse.image)
+  .buffer();
+const buffer = response.body;
+const zip = new PizZip(buffer);
+const doc = new Docxtemplater(zip, {
+  paragraphLoop: true,
+  linebreaks: true,
+});
+doc.render(renderObject);
+const buf = doc.getZip().generate({
+  type: "nodebuffer",
+  // compression: DEFLATE adds a compression step.
+  // For a 50MB output document, expect 500ms additional CPU time
+  compression: "DEFLATE",
+});
+console.log(buf, "check buf");
+fs.writeFileSync(`output${index}.docx`, buf);
+try {
+const formData = new FormData();
+formData.append(
+  "instructions",
+  JSON.stringify({
+    parts: [
+      {
+        file: "document",
+      },
+    ],
+    output: {
+      type: "image",
+      format: "jpg",
+      dpi: 500,
+    },
+  })
+);
+formData.append("document", fs.createReadStream(`output${index}.docx`));
+await axios
+  .post("https://api.pspdfkit.com/build", formData, {
+    headers: formData.getHeaders({
+      Authorization:
+        "Bearer pdf_live_pDxxHkmCM2kuYf5BoqeNs2ruh1QLSPZauMruAphqrbx",
+       
+    }),
+    responseType: "stream",
+  })
+  .then((response) => {
+    // console.log(response,'response')
+    response.data.pipe(fs.createWriteStream(`image${index}.jpg`))
+    //  cloudinary.uploader.upload("image.jpg")
+    // urlImage = uploadimage.secure_url;
+    // console.log(urlImage, "image url");
+    // // fs.unlinkSync("image.jpg");
+  })
+  .catch(async function (e) {
+    console.log(e);
+    console.log("Test Eroor")
+    const errorString = await streamToString(e.response.data);
+    console.log(errorString, "from catch");
   });
-  doc.render(renderObject);
-  const buf = doc.getZip().generate({
-    type: "nodebuffer",
-    // compression: DEFLATE adds a compression step.
-    // For a 50MB output document, expect 500ms additional CPU time
-    compression: "DEFLATE",
-  });
-  console.log(buf, "check buf");
-  fs.writeFileSync(`output${index}.docx`, buf);
-  try {
-    const formData = new FormData();
-    formData.append(
-      "instructions",
-      JSON.stringify({
-        parts: [
-          {
-            file: "document",
-          },
-        ],
-        output: {
-          type: "image",
-          format: "jpg",
-          dpi: 500,
-        },
-      })
+function streamToString(stream) {
+  const chunks = [];
+  return new Promise((resolve, reject) => {
+    stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+    stream.on("error", (err) => reject(err));
+    stream.on("end", () =>
+      resolve(Buffer.concat(chunks).toString("utf8"))
     );
+  });
+}
+ return ('added docx and image')  
+} catch (error) {
+  return ("from cloudinary image");
+}
+}
 
-    return "added docx and image";
-  } catch (error) {
-    return "from cloudinary image";
-  }
-};
 
 const makeFactureOrDevis = async (url, ans, type) => {
   console.log(ans, "RRR");
@@ -274,7 +309,7 @@ const updateContractImage = async (req, res) => {
       });
     } else {
       console.log("Baad");
-      uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
+      uploadDoc = await cloudinary.uploader.upload(`image${i}.png`, {
         resource_type: "auto",
       });
     }
