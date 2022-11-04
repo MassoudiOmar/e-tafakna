@@ -209,7 +209,7 @@ Etafakn', 'Tunis', '20/9/2022',
             });
         } catch (e) {
           const errorString = await streamToString(e.response.data);
-          console.log(errorString);
+          console.log("Eroor IS for omar");
         }
         //A1 => 1 Question
         //B9 => B9 = Question 2 + le , Question 3
