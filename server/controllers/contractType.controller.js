@@ -54,7 +54,7 @@ await axios
   .post("https://api.pspdfkit.com/build", formData, {
     headers: formData.getHeaders({
       Authorization:
-        "Bearer pdf_live_pDxxHkmCM2kuYf5BoqeNs2ruh1QLSPZauMruAphqrbx",
+        "Bearer pdf_live_wtlDGJdKZJXW8WAIt3nWAii2nhwneGzWfiDCUxoVPYB",
        
     }),
     responseType: "stream",
