@@ -242,7 +242,7 @@ const fillContract = async (req, res) => {
 
   let { questions } = req.body;
   console.log(questions, "this is the true one");
-  console.log(type);
+  console.log(type,"edednjineijfenmdok");
   let renderObject = {};
   let answersArray = [];
   const { id } = req.params;
