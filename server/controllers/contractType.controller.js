@@ -337,7 +337,7 @@ const updateContractImage = async (req, res) => {
         {
           File: docUrl,
         },
-        "docx"
+        "xlsx"
       )
       .then(async function (result) {
         console.log(result.file.url, "doc");
