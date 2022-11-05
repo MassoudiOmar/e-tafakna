@@ -194,8 +194,8 @@ Etafakn', 'Tunis', '20/9/2022',
               },
             })
           );
-          console.log("Here");
-          console.log("Here");
+          console.log("Here")
+          console.log("Here")
 
           formData.append("document", fs.createReadStream("output0.xlsx"));
 
@@ -209,10 +209,14 @@ Etafakn', 'Tunis', '20/9/2022',
             })
             .then(async (response) => {
               await response.data.pipe(fs.createWriteStream("image0.jpg"));
-            });
+
+              
+            })
+           
+            
         } catch (e) {
           const errorString = await streamToString(e.response.data);
-          console.log("Eroor IS for omar");
+            console.log("Eroor IS for omar");
         }
         //A1 => 1 Question
         //B9 => B9 = Question 2 + le , Question 3
@@ -238,7 +242,6 @@ Etafakn', 'Tunis', '20/9/2022',
   });
   return "Hi";
 };
-
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
@@ -246,7 +249,7 @@ const fillContract = async (req, res) => {
 
   let { questions } = req.body;
   console.log(questions, "this is the true one");
-  console.log(type, "edednjineijfenmdok");
+  console.log(type , " Waaaaaaaaaaaaaaajiiiiiiiiiiiiiiiiiiiiiiiiihhhhhhhhhhhhh");
   let renderObject = {};
   let answersArray = [];
   const { id } = req.params;
@@ -281,7 +284,7 @@ const fillContract = async (req, res) => {
 
       if (type == "facture" || type == "devis") {
         console.log("Welcome");
-        Promise.all([makeFactureOrDevis(url, questions, type, res)]).then(
+        Promise.all([makeFactureOrDevis(url, questions, type)]).then(
           (response) => {
             setTimeout(() => {
               console.log("Hello");
@@ -326,6 +329,7 @@ const updateContractImage = async (req, res) => {
       console.log("I'm Here");
       var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
         resource_type: "auto",
+
       });
     } else {
       console.log("Baad");
@@ -334,16 +338,15 @@ const updateContractImage = async (req, res) => {
       });
     }
     var docUrl = uploadDoc.secure_url;
-
+    var x = twoPages=="facture" ? "xlsx" : "  "
     convertapi
       .convert(
         "jpg",
         {
           File: docUrl,
         },
-        twoPages == "facture" ? "xlsx" : "docx"
       )
-      .then(async function (result) {
+     .then(async function (result) {
         console.log(result.file.url, "doc");
         if (i <= Cmpt - 1) urlImage += result.file.url + ",";
         else urlImage += result.file.url;
