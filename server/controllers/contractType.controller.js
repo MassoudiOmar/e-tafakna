@@ -198,8 +198,9 @@ Etafakn', 'Tunis', '20/9/2022',
           var uploadDoc = await cloudinary.uploader.upload("output0.xlsx", {
             resource_type: "auto",
           });
-
-          convertapi
+          
+         setTimeout(()=>{
+ convertapi
             .convert(
               "jpg",
               {
@@ -212,6 +213,7 @@ Etafakn', 'Tunis', '20/9/2022',
               console.log(response.file.url, "after await");
               res.send(response.file.url)
             });
+},10000)
         } catch (e) {
           const errorString = await streamToString(e.response.data);
           console.log("Eroor IS for omar");
