@@ -282,7 +282,7 @@ const fillContract = async (req, res) => {
 
       if (type == "facture" || type == "devis") {
         console.log("Welcome");
-        Promise.all([makeFactureOrDevis(url, questions, type)]).then(
+        Promise.all([makeFactureOrDevis(url, questions, type,res)]).then(
           (response) => {
             setTimeout(() => {
               console.log("Hello");
