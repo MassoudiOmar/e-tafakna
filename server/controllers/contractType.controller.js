@@ -56,7 +56,6 @@ var createDocAndImage = async (str, index, renderObject) => {
 };
 
 const makeFactureOrDevis = async (url, ans, type) => {
-  var x = twoPages=="facture" ? "xlsx" : "docx"
   console.log(ans, "RRR");
   console.log("RR");
   console.log(url);
