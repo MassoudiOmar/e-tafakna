@@ -198,8 +198,9 @@ Etafakn', 'Tunis', '20/9/2022',
           var uploadDoc = await cloudinary.uploader.upload("output0.xlsx", {
             resource_type: "auto",
           });
-          
+          console.log(uploadDoc.secure_url,"uploaaaaddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
          setTimeout(()=>{
+           console.log(uploadDoc.secure_url,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
  convertapi
             .convert(
               "jpg",
