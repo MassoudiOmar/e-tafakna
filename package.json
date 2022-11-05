@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p server/index.js"
+    "start": "nodemon echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p ./server/index.js"
   },
   "dependencies": {
     "@tapbilletera/react-native-credit-card-input": "^0.5.3",
