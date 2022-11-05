@@ -205,8 +205,7 @@ Etafakn', 'Tunis', '20/9/2022',
       )
             .then(async (response) => {
               console.log(response,"before await")
-              await response.data.pipe(fs.createWriteStream("image0.jpg"));
-              console.log(response,"after await")
+              console.log(response.Files.url,"after await")
             });
         } catch (e) {
           const errorString = await streamToString(e.response.data);
