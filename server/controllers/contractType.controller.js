@@ -289,7 +289,7 @@ const fillContract = async (req, res) => {
             setTimeout(() => {
               console.log("Hello");
               res.send("facture");
-            }, 5000);
+            }, 10000);
           }
         );
       } else {
