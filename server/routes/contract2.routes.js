@@ -1,4 +1,5 @@
 const router = require("express").Router();
+//const router ="test"
 const contractController = require("../controllers/contract.controller");
 
 
