@@ -55,7 +55,7 @@ var createDocAndImage = async (str, index, renderObject) => {
   }
 };
 
-const makeFactureOrDevis = async (url, ans, type,res) => {
+const makeFactureOrDevis = async (url, ans, type, res) => {
   console.log(ans, "RRR");
   console.log("RR");
   console.log(url);
@@ -198,23 +198,26 @@ Etafakn', 'Tunis', '20/9/2022',
           var uploadDoc = await cloudinary.uploader.upload("output0.xlsx", {
             resource_type: "auto",
           });
-          console.log(uploadDoc.secure_url,"uploaaaaddddddddddddddddddddddddddddddddddddddddddddddddddddddddd")
-         setTimeout(()=>{
-           console.log(uploadDoc.secure_url,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
- convertapi
+          convertapi
             .convert(
               "jpg",
               {
-                File:uploadDoc.secure_url,
+                File: uploadDoc.secure_url,
               },
               "xlsx"
             )
             .then(async (response) => {
-              console.log(response, "before await");
               console.log(response.file.url, "after await");
-              res.send(response.file.url)
+             
             });
-},10000)
+            setTimeout(() => {
+              const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
+              db.query(updateContract, [uploadDoc.secure_url, response.file.url, id], (err, result) => {
+                err ? console.log(err) : console.log(result);
+              });
+              console.log(response.file.url, "Imagaeeeee");
+              res.send(response.file.url);
+            }, 10000);
         } catch (e) {
           const errorString = await streamToString(e.response.data);
           console.log("Eroor IS for omar");
@@ -285,7 +288,7 @@ const fillContract = async (req, res) => {
 
       if (type == "facture" || type == "devis") {
         console.log("Welcome");
-        Promise.all([makeFactureOrDevis(url, questions, type,res)]).then(
+        Promise.all([makeFactureOrDevis(url, questions, type, res)]).then(
           (response) => {
             setTimeout(() => {
               console.log("Hello");
