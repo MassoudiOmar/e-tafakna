@@ -16,7 +16,6 @@ var createDocAndImage = async (str, index, renderObject) => {
     .get(str)
     .parse(superagent.parse.image)
     .buffer();
-  console.log(Locale.GERMAN);
   const buffer = response.body;
   const zip = new PizZip(buffer);
   const doc = new Docxtemplater(zip, {
@@ -30,7 +29,6 @@ var createDocAndImage = async (str, index, renderObject) => {
     // For a 50MB output document, expect 500ms additional CPU time
     compression: "DEFLATE",
   });
-  console.log(buf, "check buf");
   fs.writeFileSync(`output${index}.docx`, buf);
   try {
     const formData = new FormData();
@@ -57,29 +55,13 @@ var createDocAndImage = async (str, index, renderObject) => {
 };
 
 const makeFactureOrDevis = async (url, ans, type) => {
-  console.log(ans, "RRR");
-  console.log("RR");
-  console.log(url);
   const file = fs.createWriteStream("file.xlsx");
   http.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
       file.close();
-      console.log("Download Completed");
       const workbook = new Excel.Workbook();
       await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
-        /*
-
-
-  'Etafkna', 'Tunis', '27/9/2022',
-  'Wajih',   '2000',  '200',
-  '2022',    '',      'Tunis',
-  '2000',    '2120',  'Six dinar',
-  'Dell',    'Asus',  'Hp',
-  1,         2,       3,
-  '1500',    '5404',  '2320'
-
-*/
         workbook.worksheets[0].getCell("C17").value =
           type.toUpperCase() + " N° /";
 
@@ -96,11 +78,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
         let k = j + length;
         let r = k + length;
 
-        console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
-          console.log(" The loop for j  is ", ans[j]);
-          console.log(" The loop for k  is ", ans[k]);
-          console.log(" The loop for r  is ", ans[r]);
           sum += parseFloat(ans[k]) * parseFloat(ans[r]);
 
           workbook.worksheets[0].getCell(`B${i}`).value = ans[j++];
@@ -108,7 +86,6 @@ const makeFactureOrDevis = async (url, ans, type) => {
           workbook.worksheets[0].getCell(`D${i}`).value = ans[r++];
           workbook.worksheets[0].getCell(`E${i}`).value =
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
-          console.log("This is the sum so far ", sum);
         }
         workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("E36").value = (sum * 19) / 100;
@@ -123,7 +100,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
         workbook.worksheets[0].getCell("D46").value = arr;
         workbook.worksheets[0].getCell("B52").value = ans[f - 3];
         workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 2];
-        console.log("We are Here ");
+
         await workbook.xlsx.writeFile("output0.xlsx");
         try {
           const formData = new FormData();
@@ -142,7 +119,6 @@ const makeFactureOrDevis = async (url, ans, type) => {
               },
             })
           );
-          formData.append("document", fs.createReadStream("output0.xlsx"));
 
           formData.append("document", fs.createReadStream("output0.xlsx"));
 
@@ -150,7 +126,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
             .post("https://api.pspdfkit.com/build", formData, {
               headers: formData.getHeaders({
                 Authorization:
-                  "Bearer pdf_live_wtlDGJdKZJXW8WAIt3nWAii2nhwneGzWfiDCUxoVPYB",
+                  "Bearer pdf_live_ITGJUCaRlPepVqyyZxl5h1KXR2NELwMbSW16nzTZZbE",
               }),
               responseType: "stream",
             })
@@ -159,17 +135,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
             });
         } catch (e) {
           const errorString = await streamToString(e.response.data);
-          console.log(errorString);
         }
-        //A1 => 1 Question
-        //B9 => B9 = Question 2 + le , Question 3
-        //D12 => Question 4
-        // D13 => Question 5
-        //C17 => C17+=Question 6
-        //From B TO E COl 22 To Number Of product
-        //E34 => Sum of all Productions
-        //E36 => TVA => sum * 19
-        //E41 => E36 + E34 + 0.600
       });
       function streamToString(stream) {
         const chunks = [];
@@ -191,8 +157,6 @@ const fillContract = async (req, res) => {
   let { type, lang } = req.body;
 
   let { questions } = req.body;
-  console.log(questions, "this is the true one");
-  console.log(type);
   let renderObject = {};
   let answersArray = [];
   const { id } = req.params;
@@ -200,7 +164,6 @@ const fillContract = async (req, res) => {
   inner join answers on (contract_types.id = answers.contracts_contract_types_id)
   where answers.contracts_id = ?`;
   db.query(sql, [id], async (err, result) => {
-    console.log(result);
     if (err) res.send(err);
     else {
       answersArray = result.map((element, index) => {
@@ -226,21 +189,18 @@ const fillContract = async (req, res) => {
       }
 
       if (type == "facture" || type == "devis") {
-        console.log("Welcome");
         Promise.all([makeFactureOrDevis(url, questions, type)]).then(
           (response) => {
             setTimeout(() => {
-              console.log("Hello");
               res.send("facture");
             }, 5000);
           }
         );
       } else {
-        console.log(url, "that is the url ");
         var Has_Two_Pages = true;
         if (url.search(",") == -1) {
           var Result = await createDocAndImage(url, 0, renderObject);
-          console.log("********************");
+
           Has_Two_Pages = false;
           res.send(Has_Two_Pages);
         } else {
@@ -258,23 +218,18 @@ const fillContract = async (req, res) => {
 
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
-  console.log(twoPages, " ", typeof twoPages);
-  console.log(req.body);
   var twoPages = req.body.twoPages;
   var urlImage = "";
   var Cmpt = 0;
   if (twoPages === true) {
     Cmpt = 1;
   }
-  console.log(Cmpt);
   for (let i = 0; i <= Cmpt; i++) {
     if (twoPages == "facture") {
-      console.log("I'm Here");
       var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
         resource_type: "auto",
       });
     } else {
-      console.log("Baad");
       uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
         resource_type: "auto",
       });
@@ -286,10 +241,11 @@ const updateContractImage = async (req, res) => {
         {
           File: docUrl,
         },
-        "docx"
+        twoPages == "facture" ? "xlsx" : "docx"
       )
-      .then(function (result) {
-        var urlImage = result.file.url;
+      .then(async function (result) {
+        if (i <= Cmpt - 1) urlImage += result.file.url + ",";
+        else urlImage += result.file.url;
         const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
         db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
           err ? console.log(err) : console.log(result);
@@ -312,7 +268,6 @@ const insertContractType = (req, res) => {
     template_AR,
     country,
   } = req.body;
-  console.log(req.body);
   const sql = `INSERT INTO contract_types (signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country) values(?,?,?,?,?,?,?,?,?,?)`;
   db.query(
     sql,
