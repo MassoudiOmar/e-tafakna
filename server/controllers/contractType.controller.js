@@ -55,7 +55,7 @@ var createDocAndImage = async (str, index, renderObject) => {
   }
 };
 
-const makeFactureOrDevis = async (url, ans, type, res) => {
+const makeFactureOrDevis = async (url, ans, type) => {
   console.log(ans, "RRR");
   console.log("RR");
   console.log(url);
@@ -194,30 +194,22 @@ Etafakn', 'Tunis', '20/9/2022',
               },
             })
           );
+          console.log("Here");
+          console.log("Here");
+
           formData.append("document", fs.createReadStream("output0.xlsx"));
-          var uploadDoc = await cloudinary.uploader.upload("output0.xlsx", {
-            resource_type: "auto",
-          });
-          convertapi
-            .convert(
-              "jpg",
-              {
-                File: uploadDoc.secure_url,
-              },
-              "xlsx"
-            )
+
+          await axios
+            .post("https://api.pspdfkit.com/build", formData, {
+              headers: formData.getHeaders({
+                Authorization:
+                  "Bearer pdf_live_ITGJUCaRlPepVqyyZxl5h1KXR2NELwMbSW16nzTZZbE",
+              }),
+              responseType: "stream",
+            })
             .then(async (response) => {
-              console.log(response.file.url, "after await");
-             
+              await response.data.pipe(fs.createWriteStream("image0.jpg"));
             });
-            setTimeout(() => {
-              const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
-              db.query(updateContract, [uploadDoc.secure_url, response.file.url, id], (err, result) => {
-                err ? console.log(err) : console.log(result);
-              });
-              console.log(response.file.url, "Imagaeeeee");
-              res.send(response.file.url);
-            }, 10000);
         } catch (e) {
           const errorString = await streamToString(e.response.data);
           console.log("Eroor IS for omar");
@@ -246,6 +238,7 @@ Etafakn', 'Tunis', '20/9/2022',
   });
   return "Hi";
 };
+
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
@@ -348,7 +341,7 @@ const updateContractImage = async (req, res) => {
         {
           File: docUrl,
         },
-        "docx"
+        twoPages == "facture" ? "xlsx" : "docx"
       )
       .then(async function (result) {
         console.log(result.file.url, "doc");
