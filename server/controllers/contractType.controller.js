@@ -195,17 +195,21 @@ Etafakn', 'Tunis', '20/9/2022',
             })
           );
           formData.append("document", fs.createReadStream("output0.xlsx"));
-            convertapi
-      .convert(
-        "jpg",
-        {
-          File: "https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx",
-        },
-        "xlsx"
-      )
+          var uploadDoc = await cloudinary.uploader.upload("output0.xlsx", {
+            resource_type: "auto",
+          });
+
+          convertapi
+            .convert(
+              "jpg",
+              {
+                File:uploadDoc.secure_url,
+              },
+              "xlsx"
+            )
             .then(async (response) => {
-              console.log(response,"before await")
-              console.log(response.file.url,"after await")
+              console.log(response, "before await");
+              console.log(response.file.url, "after await");
             });
         } catch (e) {
           const errorString = await streamToString(e.response.data);
@@ -242,7 +246,7 @@ const fillContract = async (req, res) => {
 
   let { questions } = req.body;
   console.log(questions, "this is the true one");
-  console.log(type,"edednjineijfenmdok");
+  console.log(type, "edednjineijfenmdok");
   let renderObject = {};
   let answersArray = [];
   const { id } = req.params;
@@ -330,7 +334,7 @@ const updateContractImage = async (req, res) => {
       });
     }
     var docUrl = uploadDoc.secure_url;
-    
+
     convertapi
       .convert(
         "jpg",
