@@ -56,6 +56,7 @@ var createDocAndImage = async (str, index, renderObject) => {
 };
 
 const makeFactureOrDevis = async (url, ans, type) => {
+  var x = twoPages=="facture" ? "xlsx" : "docx"
   console.log(ans, "RRR");
   console.log("RR");
   console.log(url);
@@ -195,17 +196,18 @@ Etafakn', 'Tunis', '20/9/2022',
             })
           );
           formData.append("document", fs.createReadStream("output0.xlsx"));
-
-          await axios
-            .post("https://api.pspdfkit.com/build", formData, {
-              headers: formData.getHeaders({
-                Authorization:
-                  "Bearer pdf_live_wtlDGJdKZJXW8WAIt3nWAii2nhwneGzWfiDCUxoVPYB",
-              }),
-              responseType: "stream",
-            })
+            convertapi
+      .convert(
+        "jpg",
+        {
+          File: docUrl,
+        },
+        "xlsx"
+      )
             .then(async (response) => {
+              console.log(response,"before await")
               await response.data.pipe(fs.createWriteStream("image0.jpg"));
+              console.log(response,"after await")
             });
         } catch (e) {
           const errorString = await streamToString(e.response.data);
@@ -330,14 +332,14 @@ const updateContractImage = async (req, res) => {
       });
     }
     var docUrl = uploadDoc.secure_url;
-    var x = twoPages=="facture" ? "xlsx" : "docx"
+    
     convertapi
       .convert(
         "jpg",
         {
           File: docUrl,
         },
-        "xlsx"
+        "docx"
       )
       .then(async function (result) {
         console.log(result.file.url, "doc");
