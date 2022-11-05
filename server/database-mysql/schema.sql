@@ -698,21 +698,21 @@ VALUES
   (92, 20, 11) ,
 
   -- Contract Devis Facture
-  (93, 40, 1),
-  (94, 40, 2),
-  (95, 40, 3),
-  (97, 40, 5),
-  (98, 40, 6),
-  (99, 40, 7),
-  (100, 40, 8),
-  (101, 40, 10),
-  (102, 40, 11),
-  (103, 40, 12),
-  (104, 40, 13),
-  (105, 40, 14),
-  (106, 40, 15),
-  (07,  40, 16),
-  (109, 40,  9);
+  (93, 12, 1),
+  (94, 12, 2),
+  (95, 12, 3),
+  (96,12, 5),
+  (97, 12, 6),
+  (98, 12, 7),
+  (99, 12, 8),
+  (107, 12,  9),
+  (100, 12, 10),
+  (101, 12, 11),
+  (102, 12, 12),
+  (103, 12, 13),
+  (104, 12, 14),
+  (105, 12, 15),
+  (106,  12, 16);
 
  
 -- Insert All Contracts
@@ -1193,43 +1193,3 @@ VALUES
     "null",
     "inside_categorie"
   );
-
-INSERT INTO
-  etafakna.contract_types(
-    id,
-    signed_time,
-    time_answering,
-    title_EN,
-    title_FR,
-    title_AR,
-    description_FR,
-    description_AR,
-    description_EN,
-    image_url,
-    template_FR,
-    template_AR,
-    template_EN,
-    country,
-    types,
-    categories,
-    inside_categories
-  )
-VALUES
-
-(
-40, 
-0, 
-5, 
-'Facture', '
-Facture', 
-'Facture', 'Facture', 
-'Facture', 
-'Facture', 
-'https://res.cloudinary.com/dn6kxvylo/image/upload/v1665584941/quotation_cx1xtp.png',
-'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx',
-'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx',
-'https://res.cloudinary.com/dn6kxvylo/raw/upload/v1665755893/Template_facture_ymmtjd.xlsx',
-'tunisie', 
-'types',
-NULL, 
-NULL);
