@@ -55,7 +55,7 @@ var createDocAndImage = async (str, index, renderObject) => {
   }
 };
 
-const makeFactureOrDevis = async (url, ans, type) => {
+const makeFactureOrDevis = async (url, ans, type,res) => {
   console.log(ans, "RRR");
   console.log("RR");
   console.log(url);
@@ -210,6 +210,7 @@ Etafakn', 'Tunis', '20/9/2022',
             .then(async (response) => {
               console.log(response, "before await");
               console.log(response.file.url, "after await");
+              res.send(response.file.url)
             });
         } catch (e) {
           const errorString = await streamToString(e.response.data);
