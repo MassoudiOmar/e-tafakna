@@ -11,7 +11,6 @@ const Excel = require("exceljs");
 const { type } = require("os");
 var convertapi = require("convertapi")("9hWvgv6JPEObYuRe");
 
-
 var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
     .get(str)
@@ -244,29 +243,20 @@ const updateContractImage = async (req, res) => {
         },
         twoPages == "facture" ? "xlsx" : "docx"
       )
-        .then(async function (result) {
-     
-
-        setTimeout(()=>{
-          const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
-          db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
-            err ? console.log(err) : console.log(result);
-            
-          });
-          res.send(urlImage);
-        },10000)
-        
+      .then(async function (result) {
         if (i <= Cmpt - 1) urlImage += result.file.url + ",";
         else urlImage += result.file.url;
-        console.log(urlImage,"urll imagee")
-     
+        console.log(urlImage, "urll imagee");
       })
-      .catch((error)=>{
-         res.send({message:error})
-      
-    })
-              
+      .catch((error) => {
+        res.send({ message: error });
+      });
 
+    const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
+    db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
+      err ? console.log(err) : console.log(result);
+    });
+    res.end(urlImage);
   }
 };
 
