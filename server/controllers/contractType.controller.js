@@ -254,7 +254,7 @@ const updateContractImage = async (req, res) => {
             
           });
           res.send(urlImage);
-        },20000)
+        },10000)
         
         if (i <= Cmpt - 1) urlImage += result.file.url + ",";
         else urlImage += result.file.url;
