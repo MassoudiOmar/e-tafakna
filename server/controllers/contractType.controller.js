@@ -251,7 +251,6 @@ const updateContractImage = async (req, res) => {
           db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
           });
-          res.send(urlImage);
         },10000)
         
         if (i <= Cmpt - 1) urlImage += result.file.url + ",";
@@ -261,7 +260,10 @@ const updateContractImage = async (req, res) => {
       })
       .catch((error)=>{
          res.send({message:error})
+      
     })
+              res.send(urlImage);
+
   }
 };
 
