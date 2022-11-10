@@ -252,8 +252,8 @@ const updateContractImage = async (req, res) => {
             err ? console.log(err) : console.log(result);
             
           });
-          res.end(urlImage);
-        },10000)
+          res.send(urlImage);
+        },20000)
         
         if (i <= Cmpt - 1) urlImage += result.file.url + ",";
         else urlImage += result.file.url;
