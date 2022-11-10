@@ -10,7 +10,7 @@ const axios = require("axios");
 const Excel = require("exceljs");
 const { type } = require("os");
 var convertapi = require("convertapi")("Rx14TzHF2PIOhfTG");
-const {stringify} = require('flatted');
+
 
 var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
@@ -35,7 +35,7 @@ var createDocAndImage = async (str, index, renderObject) => {
     const formData = new FormData();
     formData.append(
       "instructions",
-      stringify({
+      JSON.stringify({
         parts: [
           {
             file: "document",
@@ -107,7 +107,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
           const formData = new FormData();
           formData.append(
             "instructions",
-            stringify({
+            JSON.stringify({
               parts: [
                 {
                   file: "document",
