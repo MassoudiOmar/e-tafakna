@@ -235,7 +235,7 @@ const updateContractImage = async (req, res) => {
       });
     }
     var docUrl = uploadDoc.secure_url;
-    convertapi
+   await convertapi
       .convert(
         "jpg",
         {
