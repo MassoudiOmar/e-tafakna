@@ -9,8 +9,7 @@ const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
 const { type } = require("os");
-var convertapi = require("convertapi")("Rx14TzHF2PIOhfTG");
-const {stringify} = require('flatted');
+var convertapi = require("convertapi")("9hWvgv6JPEObYuRe");
 
 var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
@@ -35,7 +34,7 @@ var createDocAndImage = async (str, index, renderObject) => {
     const formData = new FormData();
     formData.append(
       "instructions",
-      stringify({
+      JSON.stringify({
         parts: [
           {
             file: "document",
@@ -107,7 +106,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
           const formData = new FormData();
           formData.append(
             "instructions",
-            stringify({
+            JSON.stringify({
               parts: [
                 {
                   file: "document",
@@ -244,29 +243,21 @@ const updateContractImage = async (req, res) => {
         },
         twoPages == "facture" ? "xlsx" : "docx"
       )
-        .then(async function (result) {
-     
-
-        setTimeout(()=>{
+      .then(async function (result) {
+        if (i <= Cmpt - 1) urlImage += result.file.url + ",";
+        else {
+          urlImage += result.file.url;
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
           db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
-            
           });
           res.send(urlImage);
-        },20000)
-        
-        if (i <= Cmpt - 1) urlImage += result.file.url + ",";
-        else urlImage += result.file.url;
-        console.log(urlImage,"urll imagee")
-     
+        }
+        console.log(urlImage, "urll imagee");
       })
-      .catch((error)=>{
-         res.send({message:error})
-      
-    })
-              
-
+      .catch((error) => {
+        res.send({ message: error });
+      });
   }
 };
 
