@@ -179,10 +179,10 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(200) NOT NULL,
   `last_name` VARCHAR(200) NOT NULL,
-  `username` VARCHAR(200) NOT NULL,
+  `username` VARCHAR(200) ,
   `email` VARCHAR(200) NOT NULL,
   `password` VARCHAR(200) NOT NULL,
-  `address` VARCHAR(200) NOT NULL,
+  `address` VARCHAR(200) ,
   `phone` VARCHAR(200) NOT NULL,
   `role` VARCHAR(200) NOT NULL,
   `image` VARCHAR(200),
@@ -699,20 +699,6 @@ VALUES
   (93, 12, 1),
   (94, 12, 2),
   (95, 12, 3),
-<<<<<<< HEAD
-  (97, 12, 5),
-  (98, 12, 6),
-  (99, 12, 7),
-  (100, 12, 8),
-  (101, 12, 10),
-  (102, 12, 11),
-  (103, 12, 12),
-  (104, 12, 13),
-  (105, 12, 14),
-  (106, 12, 15),
-  (07,  12, 16),
-  (109, 12,  9);
-=======
   (96,12, 5),
   (97, 12, 6),
   (98, 12, 7),
@@ -725,7 +711,6 @@ VALUES
   (104, 12, 14),
   (105, 12, 15),
   (106,  12, 16);
->>>>>>> 17431988c08bd3c6998ee495ae1fd84eb8a0d4c1
 
  
 -- Insert All Contracts
