@@ -180,6 +180,7 @@ const fillContract = async (req, res) => {
       }, {});
       // res.send(result);
       var url = "";
+      console.log(result[0])
       if (lang === "Arabe") {
         url = result[0].template_AR;
       } else if (lang === "Francais") {
@@ -219,11 +220,15 @@ const fillContract = async (req, res) => {
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
   var twoPages = req.body.twoPages;
+  
+  
   var urlImage = "";
   var Cmpt = 0;
   if (twoPages === true) {
     Cmpt = 1;
   }
+  console.log(twoPages) 
+  console.log(Cmpt)
   for (let i = 0; i <= Cmpt; i++) {
     if (twoPages == "facture") {
       var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
