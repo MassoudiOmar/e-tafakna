@@ -92,7 +92,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
         workbook.worksheets[0].getCell("E41").value =
           workbook.worksheets[0].getCell("E36").value +
           workbook.worksheets[0].getCell("E34").value +
-          600;
+          0.600 + "00";
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
         arr[arr.length - 1] = ans[f - 1];
         arr = arr.join(" ");
