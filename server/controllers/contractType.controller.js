@@ -9,7 +9,7 @@ const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
 const { type } = require("os");
-var convertapi = require("convertapi")("Rx14TzHF2PIOhfTG");
+var convertapi = require("convertapi")("9hWvgv6JPEObYuRe");
 
 var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
@@ -92,7 +92,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
         workbook.worksheets[0].getCell("E41").value =
           workbook.worksheets[0].getCell("E36").value +
           workbook.worksheets[0].getCell("E34").value +
-          600;
+          0.600 + "00";
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
         arr[arr.length - 1] = ans[f - 1];
         arr = arr.join(" ");
@@ -243,27 +243,21 @@ const updateContractImage = async (req, res) => {
         },
         twoPages == "facture" ? "xlsx" : "docx"
       )
-        .then(async function (result) {
-     
-
-        setTimeout(()=>{
+      .then(async function (result) {
+        if (i <= Cmpt - 1) urlImage += result.file.url + ",";
+        else {
+          urlImage += result.file.url;
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
           db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
           });
-        },10000)
-        
-        if (i <= Cmpt - 1) urlImage += result.file.url + ",";
-        else urlImage += result.file.url;
-        console.log(urlImage,"urll imagee")
-     
+          res.send(urlImage);
+        }
+        console.log(urlImage, "urll imagee");
       })
-      .catch((error)=>{
-         res.send({message:error})
-      
-    })
-              res.send(urlImage);
-
+      .catch((error) => {
+        res.send({ message: error });
+      });
   }
 };
 
