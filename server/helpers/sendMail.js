@@ -34,7 +34,6 @@ const sendEmailRegister = (to, url, text,user) => {
   const mailOptions = {
     from: ADMIN_EMAIL,
     to: to,
-    subject: "ACTIVATE YOUR ACCOUNT",
     html: `
     <html>
 

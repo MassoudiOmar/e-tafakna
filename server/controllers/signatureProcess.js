@@ -108,8 +108,9 @@ const fillContract = async (req, res) => {
   let answersArray = [];
   let template_FR =
     "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1666606027/formulaire_de_certificat_2f_sw0qxl.docx";
-   let template_FR2= "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665937096/formulaire_de_certificat_4_w8jxky.docx"
-  let questions_id = [70, 71, 72, 73, 74,75,76,77,78,79,80];
+  let template_FR2 =
+    "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1665937096/formulaire_de_certificat_4_w8jxky.docx";
+  let questions_id = [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80];
   let content = req.body.content;
   let boolean = req.body.boolean;
   console.log(content);
@@ -128,7 +129,7 @@ const fillContract = async (req, res) => {
   }, {});
   // res.send(result);
   console.log(renderObject, "check obj before rendeer");
-  var url = boolean ? template_FR:template_FR2;
+  var url = boolean ? template_FR : template_FR2;
   var Has_Two_Pages = true;
   if (url.search(",") == -1) {
     var Result = await createDocAndImage(url, 0, renderObject);
@@ -165,19 +166,303 @@ const updateContractImage = async (req, res) => {
   });
 };
 
-
 const updateStatus = (req, res) => {
   const { id } = req.params;
   const { string } = req.body;
-  const sql = `UPDATE users SET ${string} = 'true' where id = ${id}`
+  const sql = `UPDATE users SET ${string} = 'true' where id = ${id}`;
   db.query(sql, [string, id], (err, result) => {
     if (err) {
       res.send(err);
     }
     res.send(result);
   });
-}
+};
+////////////////////////////////////////////////// DIGIGO SERVICES BELOW
 
+////////////////////// SERVICE ONE ////// AED-SEND-OTP
+const sendOtp = (req, res) => {
+  const { clientId } = req.params;
+  const { certType, userId, idType, authDelivery, phone } = req.body;
+  axios
+    .post(
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/${clientId}`,
+      { certType, userId, idType, authDelivery, phone }
+    )
+    .then((res) => {
+      res.send(res, "res");
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+
+
+////////////////////// third ONE ////// create-digigo-user
+const createUser = (req, res) => {
+  const { clientId } = req.params;
+  const {
+    txIdEmail,
+    txIdPhone,
+    certType,
+    country,
+    organisation,
+    organisationId,
+    taxIdentifierFile,
+    taxIdentifierFileType,
+    nationalBusinessRegisterFile,
+    nationalBusinessRegisterFileType,
+    legalRepresentativeName,
+    legalRepresentativeFirstname,
+    legalRepresentativeBirthdate,
+    legalRepresentativeIdentityType,
+    legalRepresentativeId,
+    legalRepresentativePhoneNumber,
+    legalRepresentativeEmail,
+    legalRepresentativeIdentityFile,
+    legalRepresentativeIdentityFileType,
+    subscriberName,
+    subscriberFirstname,
+    subscriberBirthdate,
+    subscriberIdentityType,
+    subscriberId,
+    subscriberPhone,
+    subscriberEmail,
+    subscriberIdentityFile,
+    subscriberIdentityFileType,
+    screenshot1File,
+    screeshot1FileType,
+    screenshot2File,
+    screeshot2FileType,
+    requestSignature,
+    urlVideo,
+    videoHash,
+  } = req.body;
+  axios
+    .post(
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/${clientId}`,
+      {
+        txIdEmail,
+        txIdPhone,
+        certType,
+        country,
+        organisation,
+        organisationId,
+        taxIdentifierFile,
+        taxIdentifierFileType,
+        nationalBusinessRegisterFile,
+        nationalBusinessRegisterFileType,
+        legalRepresentativeName,
+        legalRepresentativeFirstname,
+        legalRepresentativeBirthdate,
+        legalRepresentativeIdentityType,
+        legalRepresentativeId,
+        legalRepresentativePhoneNumber,
+        legalRepresentativeEmail,
+        legalRepresentativeIdentityFile,
+        legalRepresentativeIdentityFileType,
+        subscriberName,
+        subscriberFirstname,
+        subscriberBirthdate,
+        subscriberIdentityType,
+        subscriberId,
+        subscriberPhone,
+        subscriberEmail,
+        subscriberIdentityFile,
+        subscriberIdentityFileType,
+        screenshot1File,
+        screeshot1FileType,
+        screenshot2File,
+        screeshot2FileType,
+        requestSignature,
+        urlVideo,
+        videoHash,
+      }
+    )
+    .then((res) => {
+      res.send(res, "res");
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+////////////////////// fifth ONE ////// validate-identity
+const validateIdentity = (req, res) => {
+  const { clientId } = req.params;
+  const {
+    requestId,
+    timestampIdentityVerification,
+    proofFile,
+    proofFileType,
+    requestSignature,
+  } = req.body;
+  axios
+    .post(
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/validate-identity/${clientId}`,
+      {
+        requestId,
+        timestampIdentityVerification,
+        proofFile,
+        proofFileType,
+        requestSignature,
+      }
+    )
+    .then((res) => {
+      res.send(res, "res");
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+////////////////////// eighth ONE ////// AED-USER-STATUS
+const aedUserStatues = (req, res) => {
+  const { clientId, userId, idType, email } = req.params;
+  axios
+    .get(
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-user-status/${clientId}/${userId}/${idType}/${email}`
+    )
+    .then((res) => {
+      res.send(res, "res");
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+////////////////////// tenth ONE ////// revoke-certificate/{clientId}
+const revokeCertificate = (req, res) => {
+  const { clientId } = req.params;
+  const { userId, idType, email, authDel, txIdEmail, revocationReason } =
+    req.body;
+  axios
+    .post(
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/revoke-certificate/${clientId}`,
+      {
+        userId,
+        idType,
+        email,
+        authDel,
+        txIdEmail,
+        revocationReason,
+      }
+    )
+    .then((res) => {
+      res.send(res, "res");
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+////////////////////// eleventh ONE ////// reqeust-affiliation/{clientId}
+const requestAffiliation = (req, res) => {
+  const { clientId } = req.params;
+  const {
+    userId,
+    idType,
+    email,
+    organisationId,
+    affiliationType,
+    requestorIdType,
+    requestorId,
+    requestorEmail,
+    requestSignature,
+  } = req.body;
+  axios
+    .post(
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/request-affiliation/${clientId}`,
+      {
+        userId,
+        idType,
+        email,
+        organisationId,
+        affiliationType,
+        requestorIdType,
+        requestorId,
+        requestorEmail,
+        requestSignature,
+      }
+    )
+    .then((res) => {
+      res.send(res, "res");
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+////////////////////// thirteenth ONE //////  get-affiliation/{clientId}/{affiliationRqtId}
+const getAffiliation = (req, res) => {
+  const { clientId, affiliationRqtId } = req.params;
+  axios
+    .get(
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/get-affiliation/${clientId}/${affiliationRqtId}`
+    )
+    .then((res) => {
+      res.send(res, "res");
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+////////////////////// fiftheenth ONE //////  cancel-affiliation/{clientId}
+const cancelAffiliation = (req, res) => {
+  const { clientId } = req.params;
+  axios
+    .post(
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/cancel-affiliation/${clientId}`,
+      {
+        userId,
+        idType,
+        email,
+        organisationId,
+        requestorIdType,
+        requestorId,
+        requestorEmail,
+        requestSignature,
+      }
+    )
+    .then((res) => {
+      res.send(res, "res");
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+////////////////////// thirteenth ONE //////  get-quota/{clientId}
+///////////// AED
+const getQuotaAed = (req, res) => {
+  const { clientId } = req.params;
+  axios
+    .get(
+      ` https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/get-quota/${clientId}`
+    )
+    .then((res) => {
+      res.send(res, "res");
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
+
+///////////// USER
+const getQuotaUser = (req, res) => {
+  const { clientId, email } = req.params;
+  axios
+    .get(
+      ` https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/get-quota/${clientId}/${email}`
+    )
+    .then((res) => {
+      res.send(res, "res");
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
 
 module.exports = {
   uploadCin,
@@ -185,5 +470,15 @@ module.exports = {
   uploadVideo,
   fillContract,
   updateContractImage,
-  updateStatus
+  updateStatus,
+  sendOtp,
+  createUser,
+  validateIdentity,
+  aedUserStatues,
+  revokeCertificate,
+  requestAffiliation,
+  getAffiliation,
+  cancelAffiliation,
+  getQuotaAed,
+  getQuotaUser,
 };

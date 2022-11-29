@@ -2,7 +2,6 @@ const express = require("express");
 const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
-
 const questionRoutes = require("./routes/question.routes");
 const usersRoutes = require("./routes/user.routes");
 const adminRoutes = require("./routes/admin.routes");
@@ -31,14 +30,14 @@ const con = require("./routes/contract.routes");
 const app = express();
 
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
   console.log(`Server running on ${PORT}`);
 });
 
 
 
-app.use(bodyParser.urlencoded({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "100mb" }));
 
 // app.use(express.bodyParser({limit: '500mb'}))
 app.use(cors({ origin: "*" }));
