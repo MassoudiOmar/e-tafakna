@@ -13,5 +13,8 @@ router.put("/updateSeen/:id",contractController.hasSeen)
 router.get("/notnumber/:id",contractController.getnumbers)
 router.get("/archieve/:ownerId",contractController.getArchieve)
 router.put("/sentoarchieve/:id",contractController.sentoArchieve)
+router.post("/getNotification" , contractController.getNotification)
+router.post("/changeNotification" , contractController.changeNotification)
+router.post("/getContractIdFromPic", contractController.getContractIdFromPic)
 
 module.exports = router;

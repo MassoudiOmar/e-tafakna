@@ -92,7 +92,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
         workbook.worksheets[0].getCell("E41").value =
           workbook.worksheets[0].getCell("E36").value +
           workbook.worksheets[0].getCell("E34").value +
-          0.600 + "00";
+          600;
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
         arr[arr.length - 1] = ans[f - 1];
         arr = arr.join(" ");
@@ -180,7 +180,6 @@ const fillContract = async (req, res) => {
       }, {});
       // res.send(result);
       var url = "";
-      console.log(result[0])
       if (lang === "Arabe") {
         url = result[0].template_AR;
       } else if (lang === "Francais") {
@@ -220,15 +219,11 @@ const fillContract = async (req, res) => {
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
   var twoPages = req.body.twoPages;
-  
-  
   var urlImage = "";
   var Cmpt = 0;
   if (twoPages === true) {
     Cmpt = 1;
   }
-  console.log(twoPages) 
-  console.log(Cmpt)
   for (let i = 0; i <= Cmpt; i++) {
     if (twoPages == "facture") {
       var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
@@ -240,7 +235,7 @@ const updateContractImage = async (req, res) => {
       });
     }
     var docUrl = uploadDoc.secure_url;
-   await convertapi
+    convertapi
       .convert(
         "jpg",
         {

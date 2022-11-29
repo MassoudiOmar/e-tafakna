@@ -58,16 +58,18 @@ let getAllContracts = (req, res) => {
 };
 
 const changeContractStatus = (req, res) => {
-  const contract_url = req.params.contractUrl;
+  const contract_url = req.body.contract_url;
   const status = req.params.status;
-  const sql = `UPDATE contracts SET status = ? WHERE contract_url = ?`;
+  console.log(contract_url)
+  const sql = `UPDATE contracts SET status = ? WHERE contract_image = ?`;
   db.query(sql, [status, contract_url], (err, result) => {
     if (err) {
+      console.log(err)
       res.send(err);
     } else {
       res.send(result);
     }
-  });
+  }); 
 };
 let getNotification = (req, res) => {
   const { id } = req.params;
@@ -86,6 +88,16 @@ let getNotification = (req, res) => {
     }
   });
 };
+
+const updateSeen = (req,res)=>{
+const {id} = req.body 
+db.query(`UPDATE users_has_notifications set seen=1 where id = ${id}`,(err,result)=>{
+if(err)
+res.send(err)
+else 
+res.send(result)
+})
+}
 
 let updateStatus = (req, res) => {
   const { id } = req.params;
@@ -137,5 +149,6 @@ module.exports = {
   updateStatus,
   getNotification,
   changeContractStatus,
-  getAllContractById
+  getAllContractById,
+  updateSeen
 };

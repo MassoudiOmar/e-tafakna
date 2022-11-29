@@ -177,6 +177,180 @@ const updateStatus = (req, res) => {
     res.send(result);
   });
 }
+const aedValidateOtp = (req,res)=> {
+  //clientId , textId ,otp in params 
+  const {clientId  , textId , otp} = req.params
+  //certType ,userId ,idType,authDelivery ,phone ,email 
+  const {certType ,userId ,idType , authDelivery , phone , email} = req.body  
+ axios.post(`https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-validate-otp/${clientId}/${textId}/${otp}`, {certType ,userId ,idType , authDelivery , phone , email}).then(response=>{
+if(err)
+res.send(err)
+res.send(response)
+ })
+}
+
+
+
+
+
+
+
+
+
+
+const aedRequestStatus = (req ,res)=> {
+const {clientId ,requestId } = req.params
+axios.post(`https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-request-status/${clientId}/${requestId}`).then((err,response)=>{
+if(err)
+res.send(err)
+res.send(response)
+})
+}
+const updateDigigoUser = (req,res)=>{
+const {clientId,certType,txIdEmail , subscriberEmail} = req.params
+axios.post(`https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/update-digigo- user/${clientId}/${certType}/${txIdEmail}/${subscriberEmail}`).then((err, response)=>{
+if(err)
+res.send(err)
+else 
+res.send(response)
+})
+}
+
+const unlockPin= (req,res)=> { 
+
+const {clientId} = req.params  
+const {userId , email , idType , authDelivery} = req.body
+if(authDelivery==1)
+{
+const {txIdPhone} = req.body
+axios.post(`https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/unlock-pin/${clientId}` ,{userId,  email , idType , authDelivery ,txIdPhone}).then((err, response)=>{
+if(err)
+res.send(err)
+else 
+res.send(response)
+})
+
+}
+else 
+{
+const {txIdEmail}= req.body
+axios.post(`https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/unlock-pin/${clientId}` ,{userId,  email , idType , authDelivery ,txIdEmail}).then((err, response)=>{
+if(err)
+res.send(err)
+else 
+res.send(response)
+})
+}
+}
+
+
+const approveAffiliation= (req,res)=>{
+const {clientId} = req.params
+const {affiliationRqtId , idType , userId,email,organisationId,affiliationType,RequestorIdType,requestorId,requestorEmail,approvalSignature} =req.body 
+
+axios.post(`https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/approve-affiliation/${clientId}` ,{affiliationRqtId , idType , userId,email,organisationId,affiliationType,RequestorIdType,requestorId,requestorEmail,approvalSignature},(err,result)=>{
+if(err)
+res.send(err)
+else 
+res.send(result)
+})
+}
+
+const aedUserInfo = (req,res)=>{
+const {clientId ,email} =req.params
+const {idType,userId,organisationId} = req.body
+axios.post(`https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-user-info/${clientId}/${email}`,{idType,userId,organisationId},(err,result)=>{
+if(err)
+res.send(err)
+else 
+res.send(result)
+})
+}
+
+const changeAffiliation= (req,res)=>{
+const {clientId} = req.params
+const {idType,userId,email,organisationId,affiliationType,RequestorIdType,requestorId,requestorEmail,requestSignature} = req.body
+
+axios.post(`https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/change-affiliation/${clientId}`,idType,userId,email,organisationId,affiliationType,RequestorIdType,requestorId,requestorEmail,requestSignature ,(err,result)=>{
+if(err)
+res.send(err)
+else 
+res.send(result)
+})
+}
+
+const uploadProof=(req,res)=>{
+const  {clientId ,requestId} = req.params 
+const {legalRepresentativeIdentityFile , legalRepresentativeIdentityFileType,subscriberIdentityFile,subscriberIdentityFileType,screenshotFile1,screenshot1FileType,screenshotFile2,screenshot2FileType,taxIdentifierFile,taxIdentifierFileType,nationalBusinessRegisterFile,nationalBusinessRegisterFileType,urlVideo,videoHash,requestSignature} =req.body
+if(legalRepresentativeIdentityFile!=undefined){
+  if(screenshot1FileType != undefined && screenshot2FileType!=undefined)
+axios.post(`https:// digigo.tuntrust.tn /tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/upload- proof/${clientId}/${requestId}` , {legalRepresentativeIdentityFile,legalRepresentativeIdentityFileType,requestSignature,screenshot1FileType,screenshot2FileType,screenshotFile1,screenshotFile2},(err,result)=>{
+if(err)
+res.send(err)
+else 
+res.send(result)
+})
+
+if(urlVideo!=undefined){
+
+  axios.post(`https:// digigo.tuntrust.tn /tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/upload- proof/${clientId}/${requestId}` , {legalRepresentativeIdentityFile,legalRepresentativeIdentityFileType,requestSignature,urlVideo,videoHash},(err,result)=>{
+    if(err)
+    res.send(err)
+    else 
+    res.send(result)
+    
+    
+    })
+    
+
+
+}
+}
+
+if(subscriberIdentityFile!=undefined){
+  if(screenshot1FileType != undefined && screenshot2FileType!=undefined)
+axios.post(`https:// digigo.tuntrust.tn /tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/upload- proof/${clientId}/${requestId}` , {subscriberIdentityFile,subscriberIdentityFileType,requestSignature,screenshot1FileType,screenshot2FileType,screenshotFile1,screenshotFile2},(err,result)=>{
+if(err)
+res.send(err)
+else 
+res.send(result)
+})
+
+if(urlVideo!=undefined){
+
+  axios.post(`https:// digigo.tuntrust.tn /tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/upload- proof/${clientId}/${requestId}` , {subscriberIdentityFile,subscriberIdentityFileType,requestSignature,urlVideo,videoHash},(err,result)=>{
+    if(err)
+    res.send(err)
+    else 
+    res.send(result)
+    
+    
+    })
+    
+
+
+}
+}
+
+if(taxIdentifierFile!=undefined){
+  if(screenshot1FileType != undefined && screenshot2FileType!=undefined)
+axios.post(`https:// digigo.tuntrust.tn /tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/upload- proof/${clientId}/${requestId}` , {taxIdentifierFile,taxIdentifierFileType,requestSignature,screenshot1FileType,screenshot2FileType,screenshotFile1,screenshotFile2},(err,result)=>{
+if(err)
+res.send(err)
+else 
+res.send(result)
+})
+
+if(urlVideo!=undefined){
+  axios.post(`https:// digigo.tuntrust.tn /tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/upload- proof/${clientId}/${requestId}` , {taxIdentifierFile,taxIdentifierFileType,requestSignature,urlVideo,videoHash},(err,result)=>{
+    if(err)
+    res.send(err)
+    else 
+    res.send(result)
+    })
+}
+}
+}
 
 
 module.exports = {
@@ -185,5 +359,13 @@ module.exports = {
   uploadVideo,
   fillContract,
   updateContractImage,
-  updateStatus
+  updateStatus,
+  aedValidateOtp , 
+  aedRequestStatus,
+  updateDigigoUser , 
+  unlockPin,
+  approveAffiliation,
+  aedUserInfo,
+  changeAffiliation,
+  uploadProof
 };
