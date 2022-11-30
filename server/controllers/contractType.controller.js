@@ -29,7 +29,6 @@ var createDocAndImage = async (str, index, renderObject) => {
     // For a 50MB output document, expect 500ms additional CPU time
     compression: "DEFLATE",
   });
-  console.log(buf, "check buf");
   fs.writeFileSync(`output${index}.docx`, buf);
   try {
     const formData = new FormData();
@@ -56,9 +55,6 @@ var createDocAndImage = async (str, index, renderObject) => {
 };
 
 const makeFactureOrDevis = async (url, ans, type) => {
-  console.log(ans, "RRR");
-  console.log("RR");
-  console.log(url);
   const file = fs.createWriteStream("file.xlsx");
   http.get(url, function (response) {
     response.pipe(file);
@@ -135,7 +131,6 @@ const makeFactureOrDevis = async (url, ans, type) => {
           console.log("Here")
         } catch (e) {
           const errorString = await streamToString(e.response.data);
-            console.log("Eroor IS for omar");
         }
       });
       function streamToString(stream) {
@@ -156,10 +151,8 @@ const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
   let { type, lang } = req.body;
-console.log(type,'tyyyyyyyyyyyyyyyype')
+
   let { questions } = req.body;
-  console.log(questions, "this is the true one");
-  console.log(type , " Waaaaaaaaaaaaaaajiiiiiiiiiiiiiiiiiiiiiiiiihhhhhhhhhhhhh");
   let renderObject = {};
   let answersArray = [];
   const { id } = req.params;
@@ -167,7 +160,6 @@ console.log(type,'tyyyyyyyyyyyyyyyype')
   inner join answers on (contract_types.id = answers.contracts_contract_types_id)
   where answers.contracts_id = ?`;
   db.query(sql, [id], async (err, result) => {
-    console.log(result);
     if (err) res.send(err);
     else {
       answersArray = result.map((element, index) => {
@@ -193,7 +185,6 @@ console.log(type,'tyyyyyyyyyyyyyyyype')
       }
 
       if (type == "facture" || type == "devis") {
-        console.log("Welcome");
         Promise.all([makeFactureOrDevis(url, questions, type)]).then(
           (response) => {
             setTimeout(() => {
@@ -202,11 +193,10 @@ console.log(type,'tyyyyyyyyyyyyyyyype')
           }
         );
       } else {
-        console.log(url, "that is the url ");
         var Has_Two_Pages = true;
         if (url.search(",") == -1) {
           var Result = await createDocAndImage(url, 0, renderObject);
-          console.log("********************");
+
           Has_Two_Pages = false;
           res.send(Has_Two_Pages);
         } else {
@@ -224,52 +214,47 @@ console.log(type,'tyyyyyyyyyyyyyyyype')
 
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
-  console.log(twoPages, " ", typeof twoPages);
-  console.log(req.body);
   var twoPages = req.body.twoPages;
   var urlImage = "";
   var Cmpt = 0;
   if (twoPages === true) {
     Cmpt = 1;
   }
-  console.log(Cmpt);
   for (let i = 0; i <= Cmpt; i++) {
     if (twoPages == "facture") {
-      console.log("I'm Here");
       var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
         resource_type: "auto",
-
       });
     } else {
-      console.log("Baad");
       uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
         resource_type: "auto",
       });
     }
     var docUrl = uploadDoc.secure_url;
-    var x = twoPages=="facture" ? "xlsx" : "  "
     convertapi
       .convert(
         "jpg",
         {
           File: docUrl,
         },
-        twoPages =="facture" ? "xlsx" : "docx"
+        twoPages == "facture" ? "xlsx" : "docx"
       )
-     .then(async function (result) {
-        console.log(result.file.url, "doc");
+      .then(async function (result) {
         if (i <= Cmpt - 1) urlImage += result.file.url + ",";
-        else urlImage += result.file.url;
-        const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
-        db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
-          err ? console.log(err) : console.log(result);
-        });
-        console.log(urlImage, "Imagaeeeee");
-        res.send(urlImage);
-
+        else {
+          urlImage += result.file.url;
+          const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
+          db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
+            err ? console.log(err) : console.log(result);
+          });
+          res.send(urlImage);
+        }
+        console.log(urlImage, "urll imagee");
+      })
+      .catch((error) => {
+        res.send({ message: error });
       });
   }
-
 };
 
 const insertContractType = (req, res) => {
@@ -285,7 +270,6 @@ const insertContractType = (req, res) => {
     template_AR,
     country,
   } = req.body;
-  console.log(req.body);
   const sql = `INSERT INTO contract_types (signed_time,time_answering,title_FR,title_AR,description_FR,description_AR,image_url,template_FR,template_AR,country) values(?,?,?,?,?,?,?,?,?,?)`;
   db.query(
     sql,

@@ -34,6 +34,7 @@ const resetPasswor = async (req, res) => {
           html: `
           <!DOCTYPE html>
           <html>
+
                   <head>
                       <title></title>
                       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -134,136 +135,57 @@ const resetPasswor = async (req, res) => {
                       </style>
                   </head>
                   
-                  <body style="background-color: #f4f4f4; margin: 0 !important; padding: 0 !important;">
+                  <body style="background-color: white; margin-left: 10 !important; border-radius:10px;padding: 0 !important;">
                       <!-- HIDDEN PREHEADER TEXT -->
                       <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;"> We're thrilled to have you here! Get ready to dive into your new account.
                       </div>
-                      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+
+                      <table border="0" width="100%">
                           <!-- LOGO -->
+
                           <tr>
                               <td bgcolor="#1C6AE4" align="center">
                                   <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-                                      <tr>
-                                          <td align="center" valign="top" style="padding: 40px 10px 40px 10px;"> </td>
-                                      </tr>
+                                      <div border-radius:10px;>
+                                          <td align="center" valign="top" style="border-radius:10px; padding: 2px 10px 2px 10px;"> </td>
+                                      </div>
                                   </table>
                               </td>
                           </tr>
+                          <div style="  display: flex; justify-content: space-between;">
+                      
+                                         <a href="https://e-tafakna.com">  <img src="https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665143867/Plan_de_travail_1_copie_d62ajy.png" width="75" height="60" style="display: block; border: 0px;" /> </a><p style="padding-top: 15 ">E-tafakna</p>
+                                           </div><br/><br/>
                           <tr>
-                          <td bgcolor="#1C6AE4" align="center" style="padding: 0px 10px 0px 10px;">
-                              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-                                  <tr>
-                                      <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
-                                          <h1 style="font-size: 48px; font-weight: 400; margin: 2;"> Welcome to E-Tafakna!</h1> <img src="https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/image/upload/v1665143867/Plan_de_travail_1_copie_d62ajy.png" width="125" height="120" style="display: block; border: 0px;" />
-                                      </td>
-                                  </tr>
-                              </table>
-                          </td>
-                      </tr>
-                          <tr>
-                              <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
                                   <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                                       <tr>
-                                          <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                              <p style="margin: 0;">This is your verifying code , please confirm your account by copying this code below  to the App🙂 👇🏻 :</p>
-                                          </td>
+                                          <td bgcolor="#ffffff" align="left" style=" color: black; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 600; line-height: 25px;">
+                                              <p style="margin: 0;">Reset your password</p>
+                                          </td><br/><br/><br/>
                                       </tr>
+                                 
+                                      <td bgcolor="#ffffff" align="left" font-weight: 400; align="left">
+                                      <p style="color: #666666;margin: 0;">Please enter the code into the verification boxes to reset your password</p>
+                                      </td><br/>
                                       <tr>
                                           <td bgcolor="#ffffff" align="left">
-                                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                  <tr>
-                                                      <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px;">
                                                           <table border="0" cellspacing="0" cellpadding="0">
                                                               <tr>
-                                                                  <td align="center" style="border-radius: 3px;" bgcolor="#1C6AE4"><a href="#" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #1C6AE4; display: inline-block;">${resetCode}</a></td>
+                                                                  <td align="center"  font-weight: 600;><p style="font-size: 50px;  font-weight: 600; font-family: Helvetica, Arial, sans-serif;color: blue;">${resetCode}</p></td>
                                                               </tr>
                                                           </table>
-                                                      </td>
-                                                  </tr>
-                                              </table>
+                                                  
                                           </td>
-                                      </tr>
                                       <tr>
                                       </tr>
-                                      <tr>
-                                          <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                              <p style="margin: 0;">Cheers,<br>e-Tafakna Team</p>
+                                    
+                                          <td bgcolor="#ffffff" color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 200;>
+                                          <p style="margin: 0;">Thanks<br>Team <a href="https://e-tafakna.com">e-Tafakna</a></p>
                                           </td>
                                       </tr>
                                   </table>
-                              </td>
                           </tr>
-                          <tr>
-                              <td bgcolor="#f4f4f4" align="center" style="padding: 30px 10px 0px 10px;">
-                                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-                                      <tr>
-                                          <td bgcolor="#FFECD1" align="center" style="padding: 30px 30px 30px 30px; border-radius: 4px 4px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                              <h2 style="font-size: 20px; font-weight: 400; color: #111111; margin: 0;">Need more help?</h2>
-                                              <p style="margin: 0;"><a href="#" target="_blank" style="color: #1C6AE4;">We&rsquo;re here to help you out</a></p>
-                                          </td>
-                                      </tr>
-                                  </table>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
-                                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-                                      <tr>
-                                          <td bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;"> <br>
-                                              <p style="margin: 0;">This email is confirmation that you are now registered to E-Tafakna with this Email<a href="#" target="_blank" style="color: #111111; font-weight: 700;">${email}</a>.</p>
-                                          </td>
-                                      </tr>
-                                  </table>
-                              </td>
-                          </tr>
-                      </table>
-                  </body>
-                  
-                  </html>                                                              </tr>
-                                                          </table>
-                                                      </td>
-                                                  </tr>
-                                              </table>
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                      </tr>
-                                      <tr>
-                                          <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                              <p style="margin: 0;">If you have any questions, just reply to this email&mdash;we're always happy to help out.</p>
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                              <p style="margin: 0;">Cheers,<br>e-Tafakna Team</p>
-                                          </td>
-                                      </tr>
-                                  </table>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td bgcolor="#f4f4f4" align="center" style="padding: 30px 10px 0px 10px;">
-                                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-                                      <tr>
-                                          <td bgcolor="#FFECD1" align="center" style="padding: 30px 30px 30px 30px; border-radius: 4px 4px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                                              <h2 style="font-size: 20px; font-weight: 400; color: #111111; margin: 0;">Need more help?</h2>
-                                              <p style="margin: 0;"><a href="#" target="_blank" style="color: #1C6AE4;">We&rsquo;re here to help you out</a></p>
-                                          </td>
-                                      </tr>
-                                  </table>
-                              </td>
-                          </tr>
-                          <tr>
-                              <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
-                                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-                                      <tr>
-                                          <td bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;"> <br>
-                                              <p style="margin: 0;">This email is confirmation that you are now registered to E-Tafakna with this Email<a href="#" target="_blank" style="color: #111111; font-weight: 700;">${email}</a>.</p>
-                                          </td>
-                                      </tr>
-                                  </table>
-                              </td>
-                          </tr>
+                        
                       </table>
                   </body>
                   

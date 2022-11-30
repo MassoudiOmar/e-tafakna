@@ -37,7 +37,7 @@ app.listen(PORT, function () {
 
 
 
-app.use(bodyParser.urlencoded({ limit: "100mb" }));
+app.use(bodyParser.urlencoded({ limit: "1000mb" }));
 
 // app.use(express.bodyParser({limit: '500mb'}))
 app.use(cors({ origin: "*" }));
