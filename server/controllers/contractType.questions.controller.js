@@ -4,7 +4,9 @@ const db = require("../database-mysql");
 const affectQuestionToContractType = (req, res) => {
   let { questions_id, contract_types_id, order_question } = req.body;
 
-  const sql = `INSERT into etafakna.questions_has_contract_types (questions_id, contract_types_id, order_question) values (?,?,?)`;
+
+  const sql = `INSERT into questions_has_contract_types(questions_id, contract_types_id, order_question) values (?,?,?)`;
+
   db.query(
     sql,
     [questions_id, contract_types_id, order_question],
@@ -19,7 +21,9 @@ const deleteRelation = (req, res) => {
   let questions_id = req.params.questions_id;
   let contract_types_id = req.params.contract_types_id;
   console.log(req.params);
-  let sql = `DELETE from etafakna.questions_has_contract_types  WHERE questions_id = ? && contract_types_id = ? `;
+
+  let sql = `DELETE from questions_has_contract_types  WHERE questions_id = ? && contract_types_id = ? `;
+
   db.query(sql, [questions_id, contract_types_id], (err, result) => {
     if (err) {
       console.log(err);
@@ -50,11 +54,13 @@ const findQuestionsOfSpecificContract = (req, res) => {
         (part2 = "part2_EN"),
         (innerjoin = "questions_has_contract_types_EN"));
   }
-  const query = `SELECT ${table}.id,${table}.${column},${table}.date , ${table}.${part2},${table}.options,${table}.explanation,${table}.text_Area from etafakna.${table}
-     inner join etafakna.${innerjoin} on (${table}.id =${innerjoin}.questions_id)
-     inner join etafakna.contract_types on (contract_types.id = ${innerjoin}.contract_types_id)
+
+  const query = `SELECT ${table}.id,${table}.${column},${table}.date , ${table}.${part2},${table}.options,${table}.explanation,${table}.text_Area from ${table}
+     inner join ${innerjoin} on (${table}.id =${innerjoin}.questions_id)
+     inner join contract_types on (contract_types.id = ${innerjoin}.contract_types_id)
      where contract_types.id = ?
-     order by etafakna.${innerjoin}.order_question ASC;`;
+     order by ${innerjoin}.order_question ASC;`;
+
   db.query(query, [contract_id], (err, table) => {
     if (err) {
       console.log(err);
@@ -82,7 +88,9 @@ const findContractbyQuesId = (req, res) => {
   let sql = `select  title_FR,contract_types.id as id_contract_type, questions.id, content_FR, content_AR,content_EN, order_question from questions_has_contract_types 
   inner join contract_types on (questions_has_contract_types.contract_types_id = contract_types.id)
   inner join questions on (questions_has_contract_types.questions_id = questions.id)
-  order by etafakna.questions_has_contract_types.order_question ASC;`;
+
+  order by questions_has_contract_types.order_question ASC;`;
+
   db.query(
     sql,
     // [questions_id]

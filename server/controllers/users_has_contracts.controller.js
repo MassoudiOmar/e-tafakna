@@ -173,6 +173,69 @@ const sentoArchieve = (req, res) => {
     } else res.send(result);
   });
 };
+const getNotification = (req,res)=>{
+const {receiver_id} = req.body
+db.query(`SELECT * FROM users_has_contracts where receiver=${receiver_id} and seen=0` ,(err,result)=>{
+if(err)
+{
+  console.log(err)
+  res.send("There is an Eroor in user_has_Contract Function GetNotification")
+}
+else { 
+  console.log(result)
+  
+var ans = []
+for (let i = 0 ; i < result.length; i ++ ) {
+db.query(`SELECT * FROM users where id=${result[i]["owner"]}`,(err,result1)=>{
+if(err){
+console.log(err)
+res.end(err)
+}
+ans.push(result1[0])
+if(result.length -1 == i )
+res.send(ans)
+})
+}
+}
+})
+}
+const changeNotification = (req,res)=>{
+const {receiver_id} = req.body 
+db.query(`UPDATE users_has_contracts set seen=1 where receiver=${receiver_id}` ,(err,result)=>{
+if(err){
+console.log(err)
+res.send(err)
+
+}
+else 
+res.send(result)
+})
+}
+
+const getContractIdFromPic = (req,res)=>{
+const {image_url} = req.body
+db.query(`select * from contracts where contract_image="${image_url}"`,(err,result)=>{
+if(err){
+console.log(err)
+  res.send(err)
+}
+else 
+console.log(result[0]["id"])
+db.query(`update users_has_contracts set seen=0 where contracts_id=${result[0]["id"]}`,(err1 ,result1)=>{
+if(err1)
+res.send(err1)
+else 
+res.send(result1)
+
+
+})
+
+
+
+
+})
+
+}
 
 module.exports = {
   userContract,
@@ -184,4 +247,7 @@ module.exports = {
   getnumbers,
   getArchieve,
   sentoArchieve,
+  getNotification , 
+  changeNotification , 
+  getContractIdFromPic
 };

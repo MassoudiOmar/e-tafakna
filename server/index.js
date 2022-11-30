@@ -2,7 +2,6 @@ const express = require("express");
 const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
-
 const questionRoutes = require("./routes/question.routes");
 const usersRoutes = require("./routes/user.routes");
 const adminRoutes = require("./routes/admin.routes");
@@ -27,19 +26,18 @@ const SECRET_KEY =
 const contractTypeRoutes = require("./routes/contractType.routes");
 const contractTypeQuestionsRoutes = require("./routes/contraType.questions.routes");
 const login = require("./routes/login");
-const hostname="0.0.0.0";
 const con = require("./routes/contract.routes");
 const app = express();
 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
-  console.log(`Server running on http://${hostname}:${PORT}`);
+  console.log(`Server running on ${PORT}`);
 });
 
 
 
-app.use(bodyParser.urlencoded({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "1000mb" }));
 
 // app.use(express.bodyParser({limit: '500mb'}))
 app.use(cors({ origin: "*" }));
@@ -62,10 +60,18 @@ app.use("/api/signature", signature);
 app.use("/api", contractRoutess);
 app.use("/api", lol);
 
+app.get('/', (req, res) => {
+  res.send('Welcome To E-Tafakna server')
+})
+
+
 
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
 
+
+
+//"start with nodejs expres?"
 app.post("/create-payment-intent", async (req, res) => {
   try {
     const paymentIntent = await stripe.paymentIntents.create({
