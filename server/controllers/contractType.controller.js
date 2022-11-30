@@ -9,7 +9,7 @@ const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
 const { type } = require("os");
-var convertapi = require("convertapi")("9hWvgv6JPEObYuRe");
+var convertapi = require("convertapi")("6kbycyAmQnMjjQ6w");
 
 var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
@@ -60,8 +60,10 @@ const makeFactureOrDevis = async (url, ans, type) => {
     response.pipe(file);
     file.on("finish", async () => {
       file.close();
+      console.log("Download Completed");
       const workbook = new Excel.Workbook();
       await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
+
         workbook.worksheets[0].getCell("C17").value =
           type.toUpperCase() + " N° /";
 
@@ -78,7 +80,12 @@ const makeFactureOrDevis = async (url, ans, type) => {
         let k = j + length;
         let r = k + length;
 
+
+        console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
+          console.log(" The loop for j  is ", ans[j]);
+          console.log(" The loop for k  is ", ans[k]);
+          console.log(" The loop for r  is ", ans[r]);
           sum += parseFloat(ans[k]) * parseFloat(ans[r]);
 
           workbook.worksheets[0].getCell(`B${i}`).value = ans[j++];
@@ -86,7 +93,9 @@ const makeFactureOrDevis = async (url, ans, type) => {
           workbook.worksheets[0].getCell(`D${i}`).value = ans[r++];
           workbook.worksheets[0].getCell(`E${i}`).value =
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
+          console.log("This is the sum so far ", sum);
         }
+
         workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("E36").value = (sum * 19) / 100;
         workbook.worksheets[0].getCell("E41").value =
@@ -100,7 +109,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
         workbook.worksheets[0].getCell("D46").value = arr;
         workbook.worksheets[0].getCell("B52").value = ans[f - 3];
         workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 2];
-
+        console.log("We are Here ");
         await workbook.xlsx.writeFile("output0.xlsx");
         try {
           const formData = new FormData();
@@ -119,20 +128,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
               },
             })
           );
-
-          formData.append("document", fs.createReadStream("output0.xlsx"));
-
-          await axios
-            .post("https://api.pspdfkit.com/build", formData, {
-              headers: formData.getHeaders({
-                Authorization:
-                  "Bearer pdf_live_ITGJUCaRlPepVqyyZxl5h1KXR2NELwMbSW16nzTZZbE",
-              }),
-              responseType: "stream",
-            })
-            .then(async (response) => {
-              await response.data.pipe(fs.createWriteStream("image0.jpg"));
-            });
+          console.log("Here")
         } catch (e) {
           const errorString = await streamToString(e.response.data);
         }

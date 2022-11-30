@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --max-old-space-size=582222 server/index.js"
+    "start": "nodemon --max-old-space-size=7168 server/index.js"
   },
   "dependencies": {
     "@tapbilletera/react-native-credit-card-input": "^0.5.3",
