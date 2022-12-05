@@ -2,7 +2,6 @@ const express = require("express");
 const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
-
 const questionRoutes = require("./routes/question.routes");
 const usersRoutes = require("./routes/user.routes");
 const adminRoutes = require("./routes/admin.routes");
@@ -38,7 +37,7 @@ app.listen(PORT, function () {
 
 
 
-app.use(bodyParser.urlencoded({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "1000mb" }));
 
 // app.use(express.bodyParser({limit: '500mb'}))
 app.use(cors({ origin: "*" }));
