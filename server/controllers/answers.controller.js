@@ -13,12 +13,11 @@ let AddAnswers = (req, res) => {
   const { content, questions_id, contracts_id, contracts_contract_types_id } =
     req.body;
   console.log(
-    content,
-    questions_id,
-    contracts_id,
-    contracts_contract_types_id,
-    "ppppppppppppppppppppppppppppppppp"
-  );
+    "this is the answer :",
+   "content :", content,
+      "questions_id :",questions_id,
+   "contracts_id :", contracts_id,
+   "contracts_contract_types_id : ", contracts_contract_types_id  );
   const sql = `INSERT INTO answers (content ,questions_id,contracts_id,contracts_contract_types_id) VALUES (?,?,?,?)`;
   db.query(
     sql,
