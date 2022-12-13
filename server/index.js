@@ -31,9 +31,9 @@ const app = express();
 
 
 const PORT = process.env.PORT || 3000;
- var xx = `0.0.0.0:${PORT}`;
-app.listen(xx, function () {
-  console.log(`Server running on ${xx}`);
+
+app.listen(PORT, function () {
+  console.log(`Server running on ${PORT}`);
 });
 
 
