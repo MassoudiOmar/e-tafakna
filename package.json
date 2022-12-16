@@ -13,6 +13,7 @@
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
+    "cheerio": "^1.0.0-rc.12",
     "cloudinary": "^1.30.0",
     "cloudmersive-convert-api-client": "^2.7.4",
     "convertapi": "^1.11.2",
