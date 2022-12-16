@@ -7,10 +7,91 @@ const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
-const Excel = require("exceljs");
-const { type } = require("os");
-var convertapi = require("convertapi")("U1xCWytmLPttdBdD");
-
+  const Excel = require("exceljs");
+var convertapi = require("convertapi")("4ScPArTbo0ijn089");
+//const cheerio = require('cheerio');
+const https = require("https");
+/***
+ * 
+ * 
+ * TODO:
+ * Function For When user Accept Change The Picture Of it  (With Some Optimization)
+ * USE:
+ * https://www.npmjs.com/package/node-html-to-image 
+ * 
+ *
+ * 
+ */
+var ChangeStatusInContract = async (req,res)=>{
+const {image_url , user_name , tag} = req.body 
+const output = fs.createWriteStream("test.html");
+db.query(`SELECT * from contracts where contract_image='${image_url}'`, async (err,result)=>{
+  console.log(result)
+if(err)
+{
+console.log(err)
+res.send("Check the Url ") 
+}
+else 
+ await convertapi.convert('html', {
+  File: result[0].contract_url
+}, 'docx').then(function({file}) { 
+  https.get(file.url,async (response)=>{
+    response.pipe(output);
+    output.on("finish",()=>{
+      fs.readFile("./test.html",{encoding: 'utf-8'},(err,res1)=>{
+     if(err){
+console.log(err)
+     }
+let data = res1 
+let  arr = (data.split("\n"))
+for (let i = 0 ; i< arr.length; i++){
+for (let j = 0 ; j< arr[i].length; j ++){ 
+var str = arr[i].substring(j,"Signature".length+j)
+if(str == "Signature")
+{
+let final = arr[i].split("Signature")
+let Final = final[0]+`Signer Par ${user_name} `+final[1]
+arr[i]=Final
+fs.writeFile("Final.html", arr.join('\n'),(err)=>{
+if(err)
+console.log(err)
+else {
+  console.log(image_url)
+  convertapi.convert('docx', {
+    File:'Final.html'
+}, 'html').then(function(result3) {
+ console.log(result3.file.url)
+ convertapi.convert('png', {
+  File: result3.file.url
+}, 'docx').then(function(result4) {
+  console.log(result4.file.url  ," this is the final picture") 
+  db.query(`UPDATE contracts set contract_image="${result4.file.url}" where contract_image="${image_url}"`,(err,resultF)=>{
+    if(err){    
+    console.log(err)
+    }
+    else { 
+    /**
+     * FIXME:
+     * Chnage The HTML TO DOCX Then TO PNG to get the correct Format 
+     * 
+     * 
+     * 
+     */
+    res.send(resultF)
+    }
+      }) 
+});
+});
+}
+})
+}}
+}})   
+})
+})
+});
+})
+}
 var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
     .get(str)
@@ -47,14 +128,12 @@ var createDocAndImage = async (str, index, renderObject) => {
         },
       })
     );
-
     return "added docx and image";
   } catch (error) {
     return "from cloudinary image";
   }
 };
-
-const makeFactureOrDevis = async (url, ans, type) => {
+const makeFactureOrDevis = async (url, ans, type ,language) => {
   const file = fs.createWriteStream("file.xlsx");
   http.get(url, function (response) {
     response.pipe(file);
@@ -63,31 +142,25 @@ const makeFactureOrDevis = async (url, ans, type) => {
       console.log("Download Completed");
       const workbook = new Excel.Workbook();
       await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
-
         workbook.worksheets[0].getCell("C17").value =
           type.toUpperCase() + " N° /";
-
         workbook.worksheets[0].getCell("A1").value = ans[0];
-        workbook.worksheets[0].getCell("B9").value = ans[1] + " le " + ans[2];
+        workbook.worksheets[0].getCell("B9").value = ans[1] +  language=="fr" ? "le" + ans[2] : ans[2]+ "و" 
         workbook.worksheets[0].getCell("D12").value = ans[3];
         workbook.worksheets[0].getCell("D13").value = ans[4];
         workbook.worksheets[0].getCell("C17").value += ans[5];
         let sum = 0;
         let length = Math.ceil((ans.length - 12) / 3);
-
         let j = ans.length - length * 3;
         let f = j;
         let k = j + length;
         let r = k + length;
-
-
         console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
           console.log(" The loop for j  is ", ans[j]);
           console.log(" The loop for k  is ", ans[k]);
           console.log(" The loop for r  is ", ans[r]);
           sum += parseFloat(ans[k]) * parseFloat(ans[r]);
-
           workbook.worksheets[0].getCell(`B${i}`).value = ans[j++];
           workbook.worksheets[0].getCell(`C${i}`).value = ans[k++];
           workbook.worksheets[0].getCell(`D${i}`).value = ans[r++];
@@ -108,7 +181,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
         //Fix it
         workbook.worksheets[0].getCell("D46").value = arr;
         workbook.worksheets[0].getCell("B52").value = ans[f - 3];
-        workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 2];
+        workbook.worksheets[0].getCell("B53").value =  ans[f - 2] + "الدليل الجبائي للحريف" ;
         console.log("We are Here ");
         await workbook.xlsx.writeFile("output0.xlsx");
         try {
@@ -125,7 +198,7 @@ const makeFactureOrDevis = async (url, ans, type) => {
                 type: "image",
                 format: "jpg",
                 dpi: 500,
-              },
+              },   
             })
           );
           console.log("Here")
@@ -217,34 +290,64 @@ const updateContractImage = async (req, res) => {
   var twoPages = req.body.twoPages;
   var urlImage = "";
   var Cmpt = 0;
+
+
+  if(twoPages=="civp")
+  Cmpt=3
+  else
   if (twoPages === true) {
     Cmpt = 1;
   }
+  
+  console.log(Cmpt,'cmpt')
+  let Temp= []
   for (let i = 0; i <= Cmpt; i++) {
     if (twoPages == "facture") {
       var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
         resource_type: "auto",
       });
     } else {
+      /*
       uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
         resource_type: "auto",
       });
+    */
     }
-    var docUrl = uploadDoc.secure_url;
-    convertapi
+    //var docUrl = uploadDoc.secure_url;
+    
+    await convertapi
       .convert(
         "jpg",
         {
-          File: docUrl,
+          File: `output${i}.docx`,
         },
         twoPages == "facture" ? "xlsx" : "docx"
       )
       .then(async function (result) {
-        if (i <= Cmpt - 1) urlImage += result.file.url + ",";
+        
+        if (i <= Cmpt - 1) 
+        {
+          Temp.push({
+           id: i  , 
+           image : result.file.url
+
+
+          })
+          
+          urlImage += result.file.url + ",";}
         else {
+
+          Temp.push({
+            id: i  , 
+            image : result.file.url
+ 
+ 
+           })
+           
           urlImage += result.file.url;
+          console.log(Temp)
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
-          db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
+          db.query(updateContract, [urlImage, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
           });
           res.send(urlImage);
@@ -252,6 +355,8 @@ const updateContractImage = async (req, res) => {
         console.log(urlImage, "urll imagee");
       })
       .catch((error) => {
+
+             console.log(error.message)
         res.send({ message: error });
       });
   }
@@ -349,4 +454,5 @@ module.exports = {
   deleteContractById,
   fillContract,
   updateContractImage,
+  ChangeStatusInContract
 };
