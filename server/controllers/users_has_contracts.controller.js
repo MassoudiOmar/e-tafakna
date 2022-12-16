@@ -149,7 +149,6 @@ const getnumbers = (req, res) => {
     }
   });
 };
-
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
   const sql = `SELECT * FROM users_has_contracts c
@@ -163,7 +162,6 @@ const getArchieve = (req, res) => {
     } else res.send(result);
   });
 };
-
 const sentoArchieve = (req, res) => {
   const id = req.params.id;
   const sql = `update users_has_contracts set archieve = "true" where id = ? `;
@@ -183,8 +181,9 @@ if(err)
 }
 else { 
   console.log(result)
-  
+  res.send(result)
 var ans = []
+/*
 for (let i = 0 ; i < result.length; i ++ ) {
 db.query(`SELECT * FROM users where id=${result[i]["owner"]}`,(err,result1)=>{
 if(err){
@@ -196,6 +195,7 @@ if(result.length -1 == i )
 res.send(ans)
 })
 }
+*/
 }
 })
 }
@@ -211,7 +211,6 @@ else
 res.send(result)
 })
 }
-
 const getContractIdFromPic = (req,res)=>{
 const {image_url} = req.body
 db.query(`select * from contracts where contract_image="${image_url}"`,(err,result)=>{
