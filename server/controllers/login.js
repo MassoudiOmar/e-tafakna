@@ -12,7 +12,7 @@ let getOneUser = (email, callback) => {
 
 let loginUser = function (req, res) {
   const { email, password } = req.body;
-  console.log(req.body);
+  console.log(email, password,'reqqqqqqqqqqqqqqqq');
   if (!email || !password) {
     return res.send("Please fill all the fields");
   } else {

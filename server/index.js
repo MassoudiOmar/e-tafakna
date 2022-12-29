@@ -16,7 +16,6 @@ var items = require("./database-mysql");
 const cors = require("cors");
 const paginate = require("express-paginate");
 // const bodyParser = require("body-parser")
-
 //Payment
 const Stripe = require("stripe");
 const PUBLISHABLE_KEY =
@@ -30,13 +29,11 @@ const login = require("./routes/login");
 const con = require("./routes/contract.routes");
 const app = express();
 
-
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, function () {
   console.log(`Server running on ${PORT}`);
 });
-
-
 
 app.use(bodyParser.urlencoded({ limit: "1000mb" }));
 
@@ -62,16 +59,12 @@ app.use("/api/signature", signature);
 app.use("/api", contractRoutess);
 app.use("/api", lol);
 
-app.get('/', (req, res) => {
-  res.send('Welcome To E-Tafakna server')
-})
-
-
+app.get("/", (req, res) => {
+  res.send("Welcome To E-Tafakna server");
+});
 
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
-
-
 
 //"start with nodejs expres?"
 app.post("/create-payment-intent", async (req, res) => {

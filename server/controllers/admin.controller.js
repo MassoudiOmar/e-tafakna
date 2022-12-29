@@ -129,7 +129,7 @@ let ChangePassword =  async (req, res) => {
 
 // get all users
 let getAllUsers = (req, res) => {
-  db.query("SELECT * FROM users Where role='user'", (err, result) => {
+  db.query("SELECT * FROM etafakna.users", (err, result) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -174,7 +174,7 @@ let updateStatus = (req, res) => {
 //delete contract_types
 let deleteContractTypes = (req, res) => {
     const id = req.params.id;
-    const sql = `DELETE FROM contract_types WHERE id =?`;
+    const sql = `DELETE FROM etafakna.contract_types WHERE id =?`;
     db.query(sql, [id], (err, result) => {
       if (err) res.send(err);
       else res.send(result);

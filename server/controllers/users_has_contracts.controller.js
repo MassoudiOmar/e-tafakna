@@ -94,18 +94,18 @@ const sendcontracts = (req, res) => {
 const sendNotification = (req, res) => {
   const date = function today(i) {
     var weekday = new Array(7);
-    weekday[0] = "Monday";
-    weekday[1] = "Tuesday";
-    weekday[2] = "Wednesday";
-    weekday[3] = "Thursday";
-    weekday[4] = "Friday";
-    weekday[5] = "Saturday";
-    weekday[6] = "Sunday";
+    weekday[0] = "Lundi";
+    weekday[1] = "Mardi";
+    weekday[2] = "Mercredi";
+    weekday[3] = "Jeudi";
+    weekday[4] = "Vendredi";
+    weekday[5] = "Samedi";
+    weekday[6] = "Dimanche";
     var today = new Date();
     var yyyy = today.getDay();
     var min = today.getMinutes();
     var hours = today.getHours();
-    today = weekday[yyyy] + " at " + hours + ":" + min;
+    today = weekday[yyyy] + " à " + hours + ":" + min;
     return today;
   };
   const seen = false;
@@ -121,6 +121,7 @@ const sendNotification = (req, res) => {
     }
   );
 };
+
 
 const deleteNotification = (req, res) => {
   const { id } = req.params;
@@ -149,28 +150,20 @@ const getnumbers = (req, res) => {
     }
   });
 };
-const getArchieve = (req, res) => {
-  const owner = req.params.ownerId;
-  const sql = `SELECT * FROM users_has_contracts c
-  inner join contracts t on (t.id = c.contracts_id )
-  inner join contract_types f on (f.id=t.contract_types_id)
-  inner join users u on(u.id= c.owner)
-  where c.owner = ? && archieve = "true"`;
-  db.query(sql, [owner], (err, result) => {
-    if (err) {
-      console.log(err);
-    } else res.send(result);
-  });
-};
+
 const sentoArchieve = (req, res) => {
   const id = req.params.id;
-  const sql = `update users_has_contracts set archieve = "true" where id = ? `;
+  const sql = `update contracts set archieve = "true" where id = ? `;
   db.query(sql, [id], (err, result) => {
     if (err) {
       console.log(err);
     } else res.send(result);
   });
 };
+
+
+
+
 const getNotification = (req,res)=>{
 const {receiver_id} = req.body
 db.query(`SELECT * FROM users_has_contracts where receiver=${receiver_id} and seen=0` ,(err,result)=>{
@@ -244,9 +237,9 @@ module.exports = {
   deleteNotification,
   hasSeen,
   getnumbers,
-  getArchieve,
   sentoArchieve,
   getNotification , 
   changeNotification , 
-  getContractIdFromPic
+  getContractIdFromPic,
+  
 };
