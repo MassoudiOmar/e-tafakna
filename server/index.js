@@ -14,6 +14,7 @@ const signature = require("./routes/signature.routes");
 const lol = require("./routes/lol.route");
 var items = require("./database-mysql");
 const cors = require("cors");
+const paginate = require("express-paginate");
 // const bodyParser = require("body-parser")
 
 //Payment
@@ -45,6 +46,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(fileUpload());
 app.use(express.urlencoded({ extended: true }));
+app.use(paginate.middleware(10, 50));
 
 app.use("/api/send", usersContractsRoutes);
 app.use("/api/questions", questionRoutes);

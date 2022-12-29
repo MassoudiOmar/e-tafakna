@@ -11,18 +11,47 @@ const insertContract = (req, res) => {
     else res.send(result);
   });
 };
+
+const resultPerPage = 5;
 const getAllContractByStatus = (req, res) => {
   const status = req.params.status;
   const owner = req.params.ownerId;
-  const sql = `SELECT * FROM users_has_contracts c
+  let sql = `SELECT * FROM users_has_contracts c
   inner join contracts t on (t.id = c.contracts_id )
   inner join contract_types f on (f.id=t.contract_types_id)
   inner join users u on(u.id= c.owner)
-  where t.status = ? && c.owner = ? `;
+  where t.status = ? && c.owner = ?`;
   db.query(sql, [status, owner], (err, result) => {
     if (err) {
       console.log(err);
-    } else res.send(result);
+    }
+    const numOfResults = result.length;
+    const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
+    let page = req.query.page ? Number(req.query.page) : 1;
+    if (page > numberofPAGES0) {
+      res.send("/?page=" + encodeURIComponent(numberofPAGES0));
+    } else if (page < 1) {
+      res.send("/?page=" + encodeURIComponent("1"));
+    }
+
+    const startingLimit = (page - 1) * resultPerPage;
+    sql = `SELECT * FROM users_has_contracts c
+    inner join contracts t on (t.id = c.contracts_id )
+    inner join contract_types f on (f.id=t.contract_types_id)
+    inner join users u on(u.id= c.owner)
+    LIMIT ${startingLimit},${resultPerPage}`;
+    db.query(sql, (err, result) => {
+      if (err) throw err;
+      let iterator = page - 5 < 1 ? 1 : page - 5;
+      let endingLink =
+        iterator + 9 <= numberofPAGES0
+          ? iterator + 9
+          : page + (numberofPAGES0 + 9);
+      if (endingLink < page + 4) {
+        iterator -= page + 4 - numberofPAGES0;
+      }
+      res.send(result, page, iterator, endingLink, numberofPAGES0);
+    });
   });
 };
 const getAllContractById = (req, res) => {
@@ -60,16 +89,16 @@ let getAllContracts = (req, res) => {
 const changeContractStatus = (req, res) => {
   const contract_url = req.body.contract_url;
   const status = req.params.status;
-  console.log(contract_url)
+  console.log(contract_url);
   const sql = `UPDATE contracts SET status = ? WHERE contract_image = ?`;
   db.query(sql, [status, contract_url], (err, result) => {
     if (err) {
-      console.log(err)
+      console.log(err);
       res.send(err);
     } else {
       res.send(result);
     }
-  }); 
+  });
 };
 let getNotification = (req, res) => {
   const { id } = req.params;
@@ -80,7 +109,6 @@ let getNotification = (req, res) => {
       inner join contracts c on (c.id = uhc.contracts_id)
       inner join contract_types ct on (ct.id = c.contract_types_id)
       where ur.id =?`;
-  ;
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
     else {
@@ -89,15 +117,16 @@ let getNotification = (req, res) => {
   });
 };
 
-const updateSeen = (req,res)=>{
-const {id} = req.body 
-db.query(`UPDATE users_has_notifications set seen=1 where id = ${id}`,(err,result)=>{
-if(err)
-res.send(err)
-else 
-res.send(result)
-})
-}
+const updateSeen = (req, res) => {
+  const { id } = req.body;
+  db.query(
+    `UPDATE users_has_notifications set seen=1 where id = ${id}`,
+    (err, result) => {
+      if (err) res.send(err);
+      else res.send(result);
+    }
+  );
+};
 
 let updateStatus = (req, res) => {
   const { id } = req.params;
@@ -150,5 +179,5 @@ module.exports = {
   getNotification,
   changeContractStatus,
   getAllContractById,
-  updateSeen
+  updateSeen,
 };
