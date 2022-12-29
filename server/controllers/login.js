@@ -12,13 +12,15 @@ let getOneUser = (email, callback) => {
 
 let loginUser = function (req, res) {
   const { email, password } = req.body;
-  console.log(req.body);
+  console.log(email, password,'reqqqqqqqqqqqqqqqq');
   if (!email || !password) {
     return res.send("Please fill all the fields");
   } else {
     getOneUser(email, (err, result) => {
       if (err) {
-        return res.send(err);
+        console.log(err)
+        
+        return  res.send(err);
       } else if (!result.length) {
         return res.send("user not found");
       } else {

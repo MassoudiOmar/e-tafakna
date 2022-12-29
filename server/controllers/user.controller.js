@@ -499,7 +499,21 @@ const deleteUser = (req, res) => {
     res.send(result);
   });
 };
-
+let deleteAllNotificationOfUser = (req, res) => {
+  const { user_id } = req.body;
+  console.log(user_id, "this si th");
+  db.query(
+    `delete from users_has_notifications where owner=${user_id}`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+};
 module.exports = {
   register,
   activate,
@@ -510,4 +524,5 @@ module.exports = {
   registerwithfcb,
   deleteUser,
   fn,
+  deleteAllNotificationOfUser,
 };
