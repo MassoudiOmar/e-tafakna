@@ -38,6 +38,7 @@ const getAllContractById = (req, res) => {
     } else res.send(result);
   });
 };
+
 let getAllContracts = (req, res) => {
   const { id } = req.params;
   const sql = `
@@ -56,6 +57,35 @@ let getAllContracts = (req, res) => {
     }
   });
 };
+
+const getArchieve = (req, res) => {
+  const owner = req.params.ownerId;
+  const sql = `SELECT * FROM users_has_contracts c
+  inner join contracts t on (t.id = c.contracts_id )
+  inner join contract_types f on (f.id=t.contract_types_id)
+  inner join users u on(u.id= c.owner)
+  where c.owner = ? && archieve = "true"`;
+  db.query(sql, [owner], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else res.send(result);
+  });
+};
+
+const deleteContract =(req,res)=>{
+  const imageUri = req.body;
+  var imageUrl = imageUri.toString()
+  console.log(imageUrl,"lo")
+const sql = `DELETE FROM etafakna.contracts WHERE (contract_url = ?)`
+db.query(sql, [imageUrl], (err, result) => {
+  if (err) res.send(err);
+  else {
+    console.log(result, "result");
+    res.send(result);
+  }
+});
+
+}
 
 const changeContractStatus = (req, res) => {
   const contract_url = req.body.contract_url;
@@ -150,5 +180,7 @@ module.exports = {
   getNotification,
   changeContractStatus,
   getAllContractById,
-  updateSeen
+  updateSeen,
+  deleteContract,
+  getArchieve
 };

@@ -7,9 +7,7 @@ router.get('/allUsers',adminController.getAllUsers)
 router.get('/oneUsers/:id',adminController.getOneUser)
 router.put('/deleteUser/:id',adminController.deleteUser)
 router.put('/updateStatus/:id', adminController.updateStatus)
-
 router.delete('/deleteContractTypes/:idQuestion',adminController.deleteContractTypes)
-
 router.put('/updateDescriptionFR/:id', adminController.updateContractDiscriptionFR)
 router.put('/updateDescriptionAR/:id', adminController.updateContractDiscriptionAR)
 router.put('/updateUrlFR/:id', adminController.updateUrlContractFR)
