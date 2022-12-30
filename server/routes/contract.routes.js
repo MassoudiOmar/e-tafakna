@@ -12,6 +12,5 @@ router.get("getQuestionsAnswers/:id", contractController.getQuestionsAnswers);
 router.put("/:id", contractController.updateStatus);
 router.post("/updateSeen" , contractController.updateSeen)
 router.post("/deletecontract" , contractController.deleteContract)
-router.post("/deletecontract" , contractController.deleteContract)
 
 module.exports = router;
