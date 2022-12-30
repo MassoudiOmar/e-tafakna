@@ -178,9 +178,7 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
   t=  " و " + ans[2] 
   
    }
-      
-  
-        const workbook = new Excel.Workbook();
+              const workbook = new Excel.Workbook();
         await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
           workbook.worksheets[0].getCell("B39").numFmt="0.000"
           workbook.worksheets[0].getCell("B39").value="0.600"
@@ -191,8 +189,7 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
           workbook.worksheets[0].getCell("B9").value =  ans[1] + t 
           workbook.worksheets[0].getCell("B12").value = ans[3] 
   let Temp = ans[4]
-  
-  workbook.worksheets[0].getCell("B13").value = parseInt(ans[4])
+    workbook.worksheets[0].getCell("B13").value = parseInt(ans[4])
   workbook.worksheets[0].getCell("B13").numFmt= "0"
   
           workbook.worksheets[0].getCell("C17").value= ans[5] + workbook.worksheets[0].getCell("C17").value;
@@ -215,8 +212,7 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
               parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
             console.log("This is the sum so far ", sum);
           }
-  
-          workbook.worksheets[0].getCell("B34").value = parseFloat(sum);
+           workbook.worksheets[0].getCell("B34").value = parseFloat(sum);
           workbook.worksheets[0].getCell("B37").value = (sum * 19) / 100;
           workbook.worksheets[0].getCell("B41").value =
             parseInt(workbook.worksheets[0].getCell("B37").value) +
@@ -237,7 +233,7 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
           workbook.worksheets[0].getCell("B53").value =  ans[f - 2] + " : الدليل الجبائي للحريف" ;
           console.log("We are Here ");
           await workbook.xlsx.writeFile("output0.xlsx");
-          try {
+             try {
             const formData = new FormData();
             formData.append(
               "instructions",
@@ -260,6 +256,7 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
             const errorString = await streamToString(e.response.data);
           }
         });
+           
         function streamToString(stream) {
           const chunks = [];
           return new Promise((resolve, reject) => {
@@ -274,9 +271,7 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
     });
     return "Hi";
   };
-  
-  
-   let  makeFactureOrDevisFr = (url, ans, type ,language)=>{
+     let  makeFactureOrDevisFr = (url, ans, type ,language)=>{
     console.log(ans)
     const file = fs.createWriteStream("file.xlsx");
     http.get(url, function (response) {
@@ -298,8 +293,7 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
   
   workbook.worksheets[0].getCell("D13").value = parseInt(ans[4])
   workbook.worksheets[0].getCell("D13").numFmt= "0"
-  
-          workbook.worksheets[0].getCell("C17").value=   workbook.worksheets[0].getCell("C17").value + ans[5] 
+             workbook.worksheets[0].getCell("C17").value=   workbook.worksheets[0].getCell("C17").value + ans[5] 
           let sum = 0;
           let length = Math.ceil((ans.length - 12) / 3);
           let j = ans.length - length * 3;
@@ -319,6 +313,19 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
               parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
             console.log("This is the sum so far ", sum);
           }
+          
+      
+  
+  
+  
+
+  
+         
+    
+  
+
+  
+       
   
           workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
           workbook.worksheets[0].getCell("E36").value = parseInt(workbook.worksheets[0].getCell("E34").value) *19 /100
@@ -623,3 +630,5 @@ module.exports = {
   updateContractImage,
   ChangeStatusInContract,
 };
+
+                                                    
