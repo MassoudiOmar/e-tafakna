@@ -235,6 +235,15 @@ res.send(result1)
 })
 
 }
+const sentoArchieve = (req, res) => {
+  const id = req.params.id;
+  const sql = `update contracts set archieve = "true" where id = ?` ;
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else res.send(result);
+  });
+};
 
 module.exports = {
   userContract,
@@ -248,6 +257,5 @@ module.exports = {
   getNotification , 
   changeNotification , 
   getContractIdFromPic,
-  sentoArchieve
   
 };
