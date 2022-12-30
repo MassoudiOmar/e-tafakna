@@ -170,6 +170,21 @@ let getContractImage = (req, res) => {
   });
 };
 
+const deleteContract =(req,res)=>{
+  const imageUri = req.body;
+  var imageUrl = imageUri.toString()
+  console.log(imageUrl,"lo")
+const sql = `DELETE FROM etafakna.contracts WHERE (contract_url = ?)`
+db.query(sql, [imageUrl], (err, result) => {
+  if (err) res.send(err);
+  else {
+    console.log(result, "result");
+    res.send(result);
+  }
+});
+
+}
+
 module.exports = {
   insertContract,
   getAllContracts,
@@ -182,5 +197,6 @@ module.exports = {
   getAllContractById,
   updateSeen,
   deleteContract,
-  getArchieve
+  getArchieve,
+  deleteContract
 };
