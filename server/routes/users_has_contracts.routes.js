@@ -15,6 +15,7 @@ router.put("/sentoarchieve/:id",contractController.sentoArchieve)
 router.post("/getNotification" , contractController.getNotification)
 router.post("/changeNotification" , contractController.changeNotification)
 router.post("/getContractIdFromPic", contractController.getContractIdFromPic)
+router.put("/sentoarchieve/:id",contractController.sentoArchieve)
 
 module.exports = router;
 function downloadImage(url) {
