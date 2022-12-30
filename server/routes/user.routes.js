@@ -16,6 +16,7 @@ router.get('/getnotstatus/:id',userController.getnotstatus)
 router.delete('/deleteUser/:userId', userController.deleteUser);
 router.post("/deleteAllNotificationOfUser", userController.deleteAllNotificationOfUser)
 router.post("/getAllAnswerOfUser" , userController.getAllAnswerOfUser)
+router.post("/getNameOfSpecificContract" , userController.getNameOfSpecificContract)
 // router.post("/addAnswer" ,userController.addAnswer)
 // router.post("/getAllAnswerOfUser" , userController.getAllAnswerOfUser)
 // router.post("/getUserInfoWithId" , userController.getUserInfoWithId)
