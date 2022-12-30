@@ -130,7 +130,6 @@ const sendNotification = (req, res) => {
   );
 };
 
-
 const deleteNotification = (req, res) => {
   const { id } = req.params;
   const sql = `DELETE FROM users_has_notifications WHERE id = ?`;
