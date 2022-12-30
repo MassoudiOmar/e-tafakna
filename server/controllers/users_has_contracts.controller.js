@@ -51,7 +51,7 @@ function streamToString(stream) {
 }
 const sentoArchieve = (req, res) => {
   const id = req.params.id;
-  const sql = update contracts set archieve = "true" where id = ? ;
+  const sql = `update contracts set archieve = "true" where id = ?` ;
   db.query(sql, [id], (err, result) => {
     if (err) {
       console.log(err);
