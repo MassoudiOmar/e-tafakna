@@ -178,7 +178,9 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
   t=  " و " + ans[2] 
   
    }
-              const workbook = new Excel.Workbook();
+      
+  
+        const workbook = new Excel.Workbook();
         await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
           workbook.worksheets[0].getCell("B39").numFmt="0.000"
           workbook.worksheets[0].getCell("B39").value="0.600"
@@ -189,7 +191,8 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
           workbook.worksheets[0].getCell("B9").value =  ans[1] + t 
           workbook.worksheets[0].getCell("B12").value = ans[3] 
   let Temp = ans[4]
-    workbook.worksheets[0].getCell("B13").value = parseInt(ans[4])
+  
+  workbook.worksheets[0].getCell("B13").value = parseInt(ans[4])
   workbook.worksheets[0].getCell("B13").numFmt= "0"
   
           workbook.worksheets[0].getCell("C17").value= ans[5] + workbook.worksheets[0].getCell("C17").value;
@@ -212,7 +215,8 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
               parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
             console.log("This is the sum so far ", sum);
           }
-           workbook.worksheets[0].getCell("B34").value = parseFloat(sum);
+  
+          workbook.worksheets[0].getCell("B34").value = parseFloat(sum);
           workbook.worksheets[0].getCell("B37").value = (sum * 19) / 100;
           workbook.worksheets[0].getCell("B41").value =
             parseInt(workbook.worksheets[0].getCell("B37").value) +
@@ -233,7 +237,7 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
           workbook.worksheets[0].getCell("B53").value =  ans[f - 2] + " : الدليل الجبائي للحريف" ;
           console.log("We are Here ");
           await workbook.xlsx.writeFile("output0.xlsx");
-             try {
+          try {
             const formData = new FormData();
             formData.append(
               "instructions",
@@ -256,7 +260,6 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
             const errorString = await streamToString(e.response.data);
           }
         });
-           
         function streamToString(stream) {
           const chunks = [];
           return new Promise((resolve, reject) => {
@@ -271,7 +274,9 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
     });
     return "Hi";
   };
-     let  makeFactureOrDevisFr = (url, ans, type ,language)=>{
+  
+  
+   let  makeFactureOrDevisFr = (url, ans, type ,language)=>{
     console.log(ans)
     const file = fs.createWriteStream("file.xlsx");
     http.get(url, function (response) {
@@ -293,7 +298,8 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
   
   workbook.worksheets[0].getCell("D13").value = parseInt(ans[4])
   workbook.worksheets[0].getCell("D13").numFmt= "0"
-             workbook.worksheets[0].getCell("C17").value=   workbook.worksheets[0].getCell("C17").value + ans[5] 
+  
+          workbook.worksheets[0].getCell("C17").value=   workbook.worksheets[0].getCell("C17").value + ans[5] 
           let sum = 0;
           let length = Math.ceil((ans.length - 12) / 3);
           let j = ans.length - length * 3;
@@ -313,19 +319,6 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
               parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
             console.log("This is the sum so far ", sum);
           }
-          
-      
-  
-  
-  
-
-  
-         
-    
-  
-
-  
-       
   
           workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
           workbook.worksheets[0].getCell("E36").value = parseInt(workbook.worksheets[0].getCell("E34").value) *19 /100
@@ -388,6 +381,175 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
   
   
   }
+
+
+  const verify =  (arr)=>{
+    console.log(arr , " ***/*/")
+     if(arr[8].length==0 && arr[9].length>0)
+     { 
+     arr[8] = arr[9]
+      arr[9]=""
+     }
+     console.log(arr)
+     return arr 
+   }
+   
+   const verifyAr =(arr)=>{
+     console.log(arr , " ***/*/")
+     if(arr[5].length==0 && arr[6].length>0)
+     { 
+     arr[5] = arr[6]
+      arr[6]=""
+     }
+     console.log(arr)
+     return arr 
+   
+   
+   
+   
+   
+   }
+   
+   var makeEgagement = async (url , question , idBegin , length)=>{
+    console.log("this is the url ", url)
+    console.log("francais****************")
+   let renderedDoc = {}
+   let Minis = 0 
+   question=verify(question) 
+   if(question[8].length==0 )
+   Minis=2
+   else    
+   if(question[9].length==0)
+   Minis=1 
+   console.log(idBegin , " **** " , 88-Minis)
+   for (let i =0 ; i<3 ; i ++){
+   renderedDoc[(840 +((i) * 10)).toString()]="-"
+   }
+   console.log(renderedDoc)
+   if(Minis>0){
+   if(Minis==1){
+   renderedDoc["860"]=""
+   }
+   if(Minis==2){
+   renderedDoc["850"]=""
+   renderedDoc["860"]=""
+   }
+   }
+   console.log(renderedDoc)
+   for (let i = idBegin  ; i<=88 ;  i++){
+    renderedDoc[i.toString()]=question[i-idBegin]
+   }
+   console.log(renderedDoc)
+   const response = await superagent
+   .get(url)
+   .parse(superagent.parse.image)
+   .buffer();
+   const buffer = response.body;
+   const zip = new PizZip(buffer);
+   const doc = new Docxtemplater(zip, {
+   paragraphLoop: true,
+   linebreaks: true,
+   });
+   doc.render(renderedDoc);
+   const buf = doc.getZip().generate({
+   type: "nodebuffer",
+   // compression: DEFLATE adds a compression step.
+   // For a 50MB output document, expect 500ms additional CPU time
+   compression: "DEFLATE",
+   });
+   fs.writeFileSync(`output${0}.docx`, buf);
+   try {
+     const formData = new FormData();
+     formData.append(
+       "instructions",
+       JSON.stringify({
+         parts: [
+           {
+             file: "document",
+           },
+         ],
+         output: {
+           type: "image",
+           format: "jpg",
+           dpi: 500,
+         },
+       })
+     );
+     return "added docx and image";
+   } catch (error) {
+     return "from cloudinary image";
+   }
+   }
+   
+   var makeEgagementAr = async (url , question , idBegin , length)=>{
+     let renderedDoc = {}
+     let Minis = 0 
+     question=verifyAr(question) 
+     if(question[5].length==0 )
+     Minis=2
+     else    
+     if(question[6].length==0)
+     Minis=1 
+     for (let i =0 ; i<3 ; i ++){
+     renderedDoc[3640 +((i) * 10)]="-"
+     }
+     console.log(renderedDoc)
+     if(Minis>0){
+     if(Minis==1){
+     renderedDoc["3660"]=""
+     }
+     if(Minis==2){
+     renderedDoc["3650"]=""
+     renderedDoc["3660"]=""
+     }
+     }
+     console.log(renderedDoc)
+     for (let i = idBegin  ; i<=368 ;  i++){
+      renderedDoc[i.toString()]=question[i-idBegin]
+     }
+     console.log(renderedDoc)
+     const response = await superagent
+     .get(url)
+     .parse(superagent.parse.image)
+     .buffer();
+     const buffer = response.body;
+     const zip = new PizZip(buffer);
+     const doc = new Docxtemplater(zip, {
+     paragraphLoop: true,
+     linebreaks: true,
+     });
+     doc.render(renderedDoc);
+     const buf = doc.getZip().generate({
+     type: "nodebuffer",
+     // compression: DEFLATE adds a compression step.
+     // For a 50MB output document, expect 500ms additional CPU time
+     compression: "DEFLATE",
+     });
+     fs.writeFileSync(`output${0}.docx`, buf);
+     try {
+       const formData = new FormData();
+       formData.append(
+         "instructions",
+         JSON.stringify({
+           parts: [
+             {
+               file: "document",
+             },
+           ],
+           output: {
+             type: "image",
+             format: "jpg",
+             dpi: 500,
+           },
+         })
+       );
+       return "added docx and image";
+     } catch (error) {
+       return "from cloudinary image";
+     }
+     }
+     
+
   const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
@@ -425,6 +587,17 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
         url = result[0].template_EN;
       }
       console.log(url);
+      if(type=="engagement"){
+        console.log("Gere")
+        if(lang=="Francais")
+        var result =  await makeEgagement("https://res.cloudinary.com/dn6kxvylo/raw/upload/v1671452515/fff_mutfxc.docx" , questions , 77  , 13 ) 
+        else 
+        var result = await makeEgagementAr("https://res.cloudinary.com/dn6kxvylo/raw/upload/v1672304046/engagementArabe_lojghh_gyvyw3.docx" , questions, 360 , 13)
+res.end(false)
+
+      } 
+        //Demande Officiale
+      
       if (type == "facture" || type == "devis") {
         if(lang=="Arabe"){
 console.log("Arabe")
@@ -630,5 +803,3 @@ module.exports = {
   updateContractImage,
   ChangeStatusInContract,
 };
-
-                                                    
