@@ -514,6 +514,27 @@ let deleteAllNotificationOfUser = (req, res) => {
     }
   );
 };
+const getAllAnswerOfUser =(req,res)=>{
+const {user_id} = req.body 
+db.query(`SELECT * from user_answers  where user_id=${user_id}`,(err,result)=>{
+if(err)
+{
+console.log(err)
+res.send(err)
+}
+else 
+res.send(result)
+})
+}
+const getNameOfSpecificContract = (req,res)=>{
+const {contractId} = req.body 
+db.query(`select  * from contract_types where id=${contractId}`,(err,rez)=>{
+if(err)
+res.send(err)
+else 
+res.send(rez)
+})
+}
 module.exports = {
   register,
   activate,
@@ -525,4 +546,6 @@ module.exports = {
   deleteUser,
   fn,
   deleteAllNotificationOfUser,
+  getAllAnswerOfUser,
+  getNameOfSpecificContract
 };

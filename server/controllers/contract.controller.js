@@ -57,21 +57,6 @@ let getAllContracts = (req, res) => {
     }
   });
 };
-
-const getArchieve = (req, res) => {
-  const owner = req.params.ownerId;
-  const sql = `SELECT * FROM users_has_contracts c
-  inner join contracts t on (t.id = c.contracts_id )
-  inner join contract_types f on (f.id=t.contract_types_id)
-  inner join users u on(u.id= c.owner)
-  where c.owner = ? && archieve = "true"`;
-  db.query(sql, [owner], (err, result) => {
-    if (err) {
-      console.log(err);
-    } else res.send(result);
-  });
-};
-
 const deleteContract =(req,res)=>{
   const imageUri = req.body;
   var imageUrl = imageUri.toString()
@@ -86,6 +71,21 @@ db.query(sql, [imageUrl], (err, result) => {
 });
 
 }
+const getArchieve = (req, res) => {
+  const owner = req.params.ownerId;
+  const sql = `SELECT * FROM users_has_contracts c
+  inner join contracts t on (t.id = c.contracts_id )
+  inner join contract_types f on (f.id=t.contract_types_id)
+  inner join users u on(u.id= c.owner)
+  where c.owner = ? && archieve = "true"`;
+  db.query(sql, [owner], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else res.send(result);
+  });
+};
+
+
 
 const changeContractStatus = (req, res) => {
   const contract_url = req.body.contract_url;
@@ -170,6 +170,8 @@ let getContractImage = (req, res) => {
   });
 };
 
+
+
 module.exports = {
   insertContract,
   getAllContracts,
@@ -182,5 +184,5 @@ module.exports = {
   getAllContractById,
   updateSeen,
   deleteContract,
-  getArchieve
+  getArchieve,
 };
