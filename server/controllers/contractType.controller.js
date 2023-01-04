@@ -783,162 +783,162 @@ const deleteContractById = (req, res) => {
     w;
   });
 };
-require("sharp/package.json"); // sharp is a peer dependency.  npm i sharp join-images
-var joinImages = require("join-images");
+// require("sharp/package.json"); // sharp is a peer dependency.  npm i sharp join-images
+// var joinImages = require("join-images");
 
-const concatImages = (req, response) => {
-  const { nElement, images } = req.body;
-  let arrayOfImages = images.split(",");
+// const concatImages = (req, response) => {
+//   const { nElement, images } = req.body;
+//   let arrayOfImages = images.split(",");
 
-  if (nElement == 2) {
-    const File = fs.createWriteStream("image1.jpg");
-    const File1 = fs.createWriteStream("image2.jpg");
-    http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages);
-      res.pipe(File);
-      File.on("finish", async () => {
-        File.close();
-        console.log("Download Completed");
-        console.log(arrayOfImages);
+//   if (nElement == 2) {
+//     const File = fs.createWriteStream("image1.jpg");
+//     const File1 = fs.createWriteStream("image2.jpg");
+//     http.get(arrayOfImages[0], (res) => {
+//       console.log(arrayOfImages);
+//       res.pipe(File);
+//       File.on("finish", async () => {
+//         File.close();
+//         console.log("Download Completed");
+//         console.log(arrayOfImages);
 
-        http.get(arrayOfImages[1], (res1) => {
-          res1.pipe(File1);
-          File1.on("finish", async () => {
-            File1.close();
-            console.log("Hello");
-            joinImages
-              .joinImages(["image1.jpg", "image2.jpg"])
-              .then(async (img) => {
-                // Save image as file
-                await img.toFile("out.jpg");
+//         http.get(arrayOfImages[1], (res1) => {
+//           res1.pipe(File1);
+//           File1.on("finish", async () => {
+//             File1.close();
+//             console.log("Hello");
+//             joinImages
+//               .joinImages(["image1.jpg", "image2.jpg"])
+//               .then(async (img) => {
+//                 // Save image as file
+//                 await img.toFile("out.jpg");
 
-                let uploadDoc = await cloudinary.uploader.upload(`out.jpg`, {
-                  resource_type: "auto",
-                  attachment: true,
-                });
+//                 let uploadDoc = await cloudinary.uploader.upload(`out.jpg`, {
+//                   resource_type: "auto",
+//                   attachment: true,
+//                 });
 
-                console.log(uploadDoc.secure_url);
-                response.send(uploadDoc.secure_url);
-              })
-              .catch(async (err) => {
-                console.log(err.message);
-              });
-          });
-        });
-      });
-    });
-  } else if (nElement == 3) {
-    const File = fs.createWriteStream("image1.jpg");
-    const File1 = fs.createWriteStream("image2.jpg");
-    const File2 = fs.createWriteStream("image3.jpg");
-    http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages);
-      res.pipe(File);
-      File.on("finish", async () => {
-        File.close();
-        console.log("Download Completed");
-        console.log(arrayOfImages);
+//                 console.log(uploadDoc.secure_url);
+//                 response.send(uploadDoc.secure_url);
+//               })
+//               .catch(async (err) => {
+//                 console.log(err.message);
+//               });
+//           });
+//         });
+//       });
+//     });
+//   } else if (nElement == 3) {
+//     const File = fs.createWriteStream("image1.jpg");
+//     const File1 = fs.createWriteStream("image2.jpg");
+//     const File2 = fs.createWriteStream("image3.jpg");
+//     http.get(arrayOfImages[0], (res) => {
+//       console.log(arrayOfImages);
+//       res.pipe(File);
+//       File.on("finish", async () => {
+//         File.close();
+//         console.log("Download Completed");
+//         console.log(arrayOfImages);
 
-        http.get(arrayOfImages[1], (res1) => {
-          res1.pipe(File1);
-          File1.on("finish", async () => {
-            File1.close();
-            console.log("Hello");
-            http.get(arrayOfImages[2], (res2) => {
-              res2.pipe(File2);
-              File2.on("finish", async () => {
-                File2.close();
+//         http.get(arrayOfImages[1], (res1) => {
+//           res1.pipe(File1);
+//           File1.on("finish", async () => {
+//             File1.close();
+//             console.log("Hello");
+//             http.get(arrayOfImages[2], (res2) => {
+//               res2.pipe(File2);
+//               File2.on("finish", async () => {
+//                 File2.close();
 
-                joinImages
-                  .joinImages(["image1.jpg", "image2.jpg", "image3.jpg"])
-                  .then(async (img) => {
-                    // Save image as file
-                    await img.toFile("out.jpg");
-                    let uploadDoc = await cloudinary.uploader.upload(
-                      `out.jpg`,
-                      {
-                        resource_type: "auto",
-                        attachment: true,
-                      }
-                    );
-                    console.log(uploadDoc.secure_url);
-                    response.send(uploadDoc.secure_url);
-                  })
-                  .catch(async (err) => {
-                    console.log(err.message);
-                  });
-              });
-            });
-          });
-        });
-      });
-    });
-  } else if (nElement == 4) {
-    const File = fs.createWriteStream("image1.jpg");
-    const File1 = fs.createWriteStream("image2.jpg");
-    const File2 = fs.createWriteStream("image3.jpg");
-    const File3 = fs.createWriteStream("image4.jpg");
-    http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages);
-      res.pipe(File);
-      File.on("finish", async () => {
-        File.close();
-        console.log("Download Completed");
-        console.log(arrayOfImages);
+//                 joinImages
+//                   .joinImages(["image1.jpg", "image2.jpg", "image3.jpg"])
+//                   .then(async (img) => {
+//                     // Save image as file
+//                     await img.toFile("out.jpg");
+//                     let uploadDoc = await cloudinary.uploader.upload(
+//                       `out.jpg`,
+//                       {
+//                         resource_type: "auto",
+//                         attachment: true,
+//                       }
+//                     );
+//                     console.log(uploadDoc.secure_url);
+//                     response.send(uploadDoc.secure_url);
+//                   })
+//                   .catch(async (err) => {
+//                     console.log(err.message);
+//                   });
+//               });
+//             });
+//           });
+//         });
+//       });
+//     });
+//   } else if (nElement == 4) {
+//     const File = fs.createWriteStream("image1.jpg");
+//     const File1 = fs.createWriteStream("image2.jpg");
+//     const File2 = fs.createWriteStream("image3.jpg");
+//     const File3 = fs.createWriteStream("image4.jpg");
+//     http.get(arrayOfImages[0], (res) => {
+//       console.log(arrayOfImages);
+//       res.pipe(File);
+//       File.on("finish", async () => {
+//         File.close();
+//         console.log("Download Completed");
+//         console.log(arrayOfImages);
 
-        http.get(arrayOfImages[1], (res1) => {
-          res1.pipe(File1);
-          File1.on("finish", async () => {
-            File1.close();
-            console.log("Hello");
-            http.get(arrayOfImages[2], (res2) => {
-              res2.pipe(File2);
-              File2.on("finish", async () => {
-                console.log("File 3 Finished ");
-                File2.close();
+//         http.get(arrayOfImages[1], (res1) => {
+//           res1.pipe(File1);
+//           File1.on("finish", async () => {
+//             File1.close();
+//             console.log("Hello");
+//             http.get(arrayOfImages[2], (res2) => {
+//               res2.pipe(File2);
+//               File2.on("finish", async () => {
+//                 console.log("File 3 Finished ");
+//                 File2.close();
 
-                http.get(arrayOfImages[3], (res3) => {
-                  res3.pipe(File3);
+//                 http.get(arrayOfImages[3], (res3) => {
+//                   res3.pipe(File3);
 
-                  File3.on("finish", async () => {
-                    console.log("File 4 Finished ");
+//                   File3.on("finish", async () => {
+//                     console.log("File 4 Finished ");
 
-                    File3.close();
+//                     File3.close();
 
-                    joinImages
-                      .joinImages([
-                        "image1.jpg",
-                        "image2.jpg",
-                        "image3.jpg",
-                        "image3.jpg",
-                      ])
-                      .then(async (img) => {
-                        // Save image as file
-                        console.log("Creating The New File");
-                        await img.toFile("out1.jpg");
-                        console.log("Uploading File in Cloudinary");
-                        let uploadDoc = await cloudinary.uploader.upload(
-                          `out1.jpg`,
-                          {
-                            resource_type: "auto",
-                          }
-                        );
-                        console.log(uploadDoc.secure_url);
-                        response.send(uploadDoc.secure_url);
-                      })
-                      .catch(async (err) => {
-                        console.log(err.message);
-                      });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  }
-};
+//                     joinImages
+//                       .joinImages([
+//                         "image1.jpg",
+//                         "image2.jpg",
+//                         "image3.jpg",
+//                         "image3.jpg",
+//                       ])
+//                       .then(async (img) => {
+//                         // Save image as file
+//                         console.log("Creating The New File");
+//                         await img.toFile("out1.jpg");
+//                         console.log("Uploading File in Cloudinary");
+//                         let uploadDoc = await cloudinary.uploader.upload(
+//                           `out1.jpg`,
+//                           {
+//                             resource_type: "auto",
+//                           }
+//                         );
+//                         console.log(uploadDoc.secure_url);
+//                         response.send(uploadDoc.secure_url);
+//                       })
+//                       .catch(async (err) => {
+//                         console.log(err.message);
+//                       });
+//                   });
+//                 });
+//               });
+//             });
+//           });
+//         });
+//       });
+//     });
+//   }
+// };
 module.exports = {
   insertContractType,
   getAllContractType,
@@ -948,5 +948,5 @@ module.exports = {
   fillContract,
   updateContractImage,
   ChangeStatusInContract,
-  concatImages
+ 
 };
