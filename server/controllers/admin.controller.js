@@ -42,27 +42,29 @@ let loginAdmin = (req, res) => {
                       if (err) {
                         res.send(err);
                       }
-                      const user = {
-                        id: result[0].id,
-                        username: result[0].username,
-                        email: result[0].email,
-                        image: result[0].image,
-                        address: result[0].address,
-                        phone: result[0].phone,
-                      };
-                      jwt.sign(
-                        { user },
-                        process.env.JWT_SECRET_KEY,
-                        (err, token) => {
-                          if (err) {
-                            return res.send(err);
-                          }
-                          res.send({
-                            UsertokenInfo: token,
-                            message: "login succssefull",
-                          });
-                        }
-                      );
+                      else{
+                       const user = {
+                         id: result[0].id,
+                         username: result[0].username,
+                         email: result[0].email,
+                         image: result[0].image,
+                         address: result[0].address,
+                         phone: result[0].phone,
+                       };
+                       jwt.sign(
+                         { user },
+                         process.env.JWT_SECRET_KEY,
+                         (err, token) => {
+                           if (err) {
+                             return res.send(err);
+                           }
+                           res.send({
+                             UsertokenInfo: token,
+                             message: "login succssefull",
+                           });
+                         }
+                       )
+                    }
                     });
                   } else {
                     res.send("sorry, you have no access !");
