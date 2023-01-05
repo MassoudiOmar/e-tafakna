@@ -57,7 +57,18 @@ let getAllContracts = (req, res) => {
     }
   });
 };
+const deleteContract =(req,res)=>{
+  const imageUri = req.body;
+  var imageUrl = imageUri.toString()
+const sql = `DELETE FROM etafakna.contracts WHERE (contract_url = ?)`
+db.query(sql, [imageUrl], (err, result) => {
+  if (err) res.send(err);
+  else {
+    res.send(result);
+  }
+});
 
+}
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
   const sql = `SELECT * FROM users_has_contracts c
@@ -72,25 +83,11 @@ const getArchieve = (req, res) => {
   });
 };
 
-const deleteContract =(req,res)=>{
-  const imageUri = req.body;
-  var imageUrl = imageUri.toString()
-  console.log(imageUrl,"lo")
-const sql = `DELETE FROM etafakna.contracts WHERE (contract_url = ?)`
-db.query(sql, [imageUrl], (err, result) => {
-  if (err) res.send(err);
-  else {
-    console.log(result, "result");
-    res.send(result);
-  }
-});
 
-}
 
 const changeContractStatus = (req, res) => {
   const contract_url = req.body.contract_url;
   const status = req.params.status;
-  console.log(contract_url)
   const sql = `UPDATE contracts SET status = ? WHERE contract_image = ?`;
   db.query(sql, [status, contract_url], (err, result) => {
     if (err) {
@@ -153,7 +150,6 @@ let getQuestionsAnswers = (req, res) => {
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
     else {
-      console.log(result, "result");
       res.send(result);
     }
   });
@@ -170,6 +166,8 @@ let getContractImage = (req, res) => {
   });
 };
 
+
+
 module.exports = {
   insertContract,
   getAllContracts,
@@ -182,5 +180,5 @@ module.exports = {
   getAllContractById,
   updateSeen,
   deleteContract,
-  getArchieve
+  getArchieve,
 };

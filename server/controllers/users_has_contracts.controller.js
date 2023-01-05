@@ -49,7 +49,15 @@ function streamToString(stream) {
     stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
   });
 }
-
+const sentoArchieve = (req, res) => {
+  const id = req.params.id;
+  const sql = `update contracts set archieve = "true" where id = ?` ;
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else res.send(result);
+  });
+};
 let userContract = (req, res) => {
   const { owner, receiver, receiver_email, contracts_id } = req.body;
   console.log(req.body, "bodyyy");
@@ -76,7 +84,7 @@ const sendcontracts = (req, res) => {
   const date = function today(i) {
     var today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth();
+    var mm = today.getMonth()+1;
     var yyyy = today.getFullYear();
     today = dd + "-" + mm + "-" + yyyy;
     return today;
@@ -122,7 +130,6 @@ const sendNotification = (req, res) => {
   );
 };
 
-
 const deleteNotification = (req, res) => {
   const { id } = req.params;
   const sql = `DELETE FROM users_has_notifications WHERE id = ?`;
@@ -151,15 +158,6 @@ const getnumbers = (req, res) => {
   });
 };
 
-const sentoArchieve = (req, res) => {
-  const id = req.params.id;
-  const sql = `update contracts set archieve = "true" where id = ? `;
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      console.log(err);
-    } else res.send(result);
-  });
-};
 
 
 
