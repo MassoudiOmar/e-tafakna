@@ -175,7 +175,7 @@ const makeFactureOrDevis = async (url, ans, type ,language) => {
    if(language=="fr")
    t = "le " + ans[2]
    else { 
-  t=  " و " + ans[2] 
+  t=  " و " + ans[2]
   
    }
       
@@ -491,8 +491,8 @@ const updateContractImage = async (req, res) => {
         "jpg",
         {
           File: twoPages == "facture" ? `output${i}.xlsx` : `output${i}.docx`,
-          ImageResolutionH: '2500',
-    ImageResolutionV: '2550',
+          ImageResolutionH: '900',
+    ImageResolutionV: '900',
     ScaleImage: 'true'
 
         },

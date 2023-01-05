@@ -210,7 +210,6 @@ const resetPasswor = async (req, res) => {
 
 const updatepassword = async (req, res) => {
   const { email, newpassword, confirmPassword } = req.body;
-  console.log(email, "udatzeeeeeeeeeeeeeeeeee");
   if (!newpassword || !confirmPassword) {
     res.send("pleas fill all the fields");
   } else {
