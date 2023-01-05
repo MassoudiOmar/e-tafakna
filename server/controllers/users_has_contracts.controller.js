@@ -49,7 +49,15 @@ function streamToString(stream) {
     stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
   });
 }
-
+const sentoArchieve = (req, res) => {
+  const id = req.params.id;
+  const sql = `update contracts set archieve = "true" where id = ?` ;
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else res.send(result);
+  });
+};
 let userContract = (req, res) => {
   const { owner, receiver, receiver_email, contracts_id } = req.body;
   console.log(req.body, "bodyyy");
@@ -122,7 +130,6 @@ const sendNotification = (req, res) => {
   );
 };
 
-
 const deleteNotification = (req, res) => {
   const { id } = req.params;
   const sql = `DELETE FROM users_has_notifications WHERE id = ?`;
@@ -151,15 +158,6 @@ const getnumbers = (req, res) => {
   });
 };
 
-const sentoArchieve = (req, res) => {
-  const id = req.params.id;
-  const sql = `update contracts set archieve = "true" where id = ? `;
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      console.log(err);
-    } else res.send(result);
-  });
-};
 
 
 

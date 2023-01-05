@@ -57,7 +57,18 @@ let getAllContracts = (req, res) => {
     }
   });
 };
+const deleteContract =(req,res)=>{
+  const imageUri = req.body;
+  var imageUrl = imageUri.toString()
+const sql = `DELETE FROM etafakna.contracts WHERE (contract_url = ?)`
+db.query(sql, [imageUrl], (err, result) => {
+  if (err) res.send(err);
+  else {
+    res.send(result);
+  }
+});
 
+}
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
   const sql = `SELECT * FROM users_has_contracts c
@@ -72,18 +83,7 @@ const getArchieve = (req, res) => {
   });
 };
 
-const deleteContract =(req,res)=>{
-  const imageUri = req.body;
-  var imageUrl = imageUri.toString()
-const sql = `DELETE FROM etafakna.contracts WHERE (contract_url = ?)`
-db.query(sql, [imageUrl], (err, result) => {
-  if (err) res.send(err);
-  else {
-    res.send(result);
-  }
-});
 
-}
 
 const changeContractStatus = (req, res) => {
   const contract_url = req.body.contract_url;
@@ -166,6 +166,8 @@ let getContractImage = (req, res) => {
   });
 };
 
+
+
 module.exports = {
   insertContract,
   getAllContracts,
@@ -178,5 +180,5 @@ module.exports = {
   getAllContractById,
   updateSeen,
   deleteContract,
-  getArchieve
+  getArchieve,
 };
