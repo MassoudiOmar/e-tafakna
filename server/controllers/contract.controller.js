@@ -58,16 +58,15 @@ let getAllContracts = (req, res) => {
   });
 };
 const deleteContract =(req,res)=>{
-  const imageUri = req.body;
-  var imageUrl = imageUri.toString()
-const sql = `DELETE FROM etafakna.contracts WHERE (contract_url = ?)`
-db.query(sql, [imageUrl], (err, result) => {
-  if (err) res.send(err);
-  else {
-    res.send(result);
-  }
-});
-
+ const imageUri = req.body.imageUri;
+db.query(`delete from etafakna.contracts where contract_image = "${imageUri}"`,(err,rez)=>{
+if(err)
+res.send(err)
+else {
+console.log(rez)
+res.send(rez)
+}
+})
 }
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
