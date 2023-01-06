@@ -49,7 +49,15 @@ function streamToString(stream) {
     stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
   });
 }
-
+const sentoArchieve = (req, res) => {
+  const id = req.params.id;
+  const sql = `update contracts set archieve = "true" where id = ?` ;
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else res.send(result);
+  });
+};
 let userContract = (req, res) => {
   const { owner, receiver, receiver_email, contracts_id } = req.body;
   console.log(req.body, "bodyyy");
@@ -76,7 +84,7 @@ const sendcontracts = (req, res) => {
   const date = function today(i) {
     var today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth();
+    var mm = today.getMonth()+1;
     var yyyy = today.getFullYear();
     today = dd + "-" + mm + "-" + yyyy;
     return today;
@@ -94,18 +102,18 @@ const sendcontracts = (req, res) => {
 const sendNotification = (req, res) => {
   const date = function today(i) {
     var weekday = new Array(7);
-    weekday[0] = "Monday";
-    weekday[1] = "Tuesday";
-    weekday[2] = "Wednesday";
-    weekday[3] = "Thursday";
-    weekday[4] = "Friday";
-    weekday[5] = "Saturday";
-    weekday[6] = "Sunday";
+    weekday[0] = "Lundi";
+    weekday[1] = "Mardi";
+    weekday[2] = "Mercredi";
+    weekday[3] = "Jeudi";
+    weekday[4] = "Vendredi";
+    weekday[5] = "Samedi";
+    weekday[6] = "Dimanche";
     var today = new Date();
     var yyyy = today.getDay();
     var min = today.getMinutes();
     var hours = today.getHours();
-    today = weekday[yyyy] + " at " + hours + ":" + min;
+    today = weekday[yyyy] + " à " + hours + ":" + min;
     return today;
   };
   const seen = false;
@@ -150,29 +158,74 @@ const getnumbers = (req, res) => {
   });
 };
 
-const getArchieve = (req, res) => {
-  const owner = req.params.ownerId;
-  const sql = `SELECT * FROM users_has_contracts c
-  inner join contracts t on (t.id = c.contracts_id )
-  inner join contract_types f on (f.id=t.contract_types_id)
-  inner join users u on(u.id= c.owner)
-  where c.owner = ? && archieve = "true"`;
-  db.query(sql, [owner], (err, result) => {
-    if (err) {
-      console.log(err);
-    } else res.send(result);
-  });
-};
 
-const sentoArchieve = (req, res) => {
-  const id = req.params.id;
-  const sql = `update users_has_contracts set archieve = "true" where id = ? `;
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      console.log(err);
-    } else res.send(result);
-  });
-};
+
+
+
+const getNotification = (req,res)=>{
+const {receiver_id} = req.body
+db.query(`SELECT * FROM users_has_contracts where receiver=${receiver_id} and seen=0` ,(err,result)=>{
+if(err)
+{
+  console.log(err)
+  res.send("There is an Eroor in user_has_Contract Function GetNotification")
+}
+else { 
+  console.log(result)
+  res.send(result)
+var ans = []
+/*
+for (let i = 0 ; i < result.length; i ++ ) {
+db.query(`SELECT * FROM users where id=${result[i]["owner"]}`,(err,result1)=>{
+if(err){
+console.log(err)
+res.end(err)
+}
+ans.push(result1[0])
+if(result.length -1 == i )
+res.send(ans)
+})
+}
+*/
+}
+})
+}
+const changeNotification = (req,res)=>{
+const {receiver_id} = req.body 
+db.query(`UPDATE users_has_contracts set seen=1 where receiver=${receiver_id}` ,(err,result)=>{
+if(err){
+console.log(err)
+res.send(err)
+
+}
+else 
+res.send(result)
+})
+}
+const getContractIdFromPic = (req,res)=>{
+const {image_url} = req.body
+db.query(`select * from contracts where contract_image="${image_url}"`,(err,result)=>{
+if(err){
+console.log(err)
+  res.send(err)
+}
+else 
+console.log(result[0]["id"])
+db.query(`update users_has_contracts set seen=0 where contracts_id=${result[0]["id"]}`,(err1 ,result1)=>{
+if(err1)
+res.send(err1)
+else 
+res.send(result1)
+
+
+})
+
+
+
+
+})
+
+}
 
 module.exports = {
   userContract,
@@ -182,6 +235,9 @@ module.exports = {
   deleteNotification,
   hasSeen,
   getnumbers,
-  getArchieve,
   sentoArchieve,
+  getNotification , 
+  changeNotification , 
+  getContractIdFromPic,
+  
 };

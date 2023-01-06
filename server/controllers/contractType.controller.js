@@ -8,9 +8,119 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-const { type } = require("os");
-var convertapi = require("convertapi")("9hWvgv6JPEObYuRe");
-
+var convertapi = require("convertapi")("RbJEuO84WZoDqQrJ");
+//const cheerio = require('cheerio');
+const https = require("https");
+/***
+ *
+ *
+ * TODO:
+ * Function For When user Accept Change The Picture Of it  (With Some Optimization)
+ * USE:
+ * https://www.npmjs.com/package/node-html-to-image
+ *
+ *
+ *
+ */
+var ChangeStatusInContract = async (req, res) => {
+  const { image_url, user_name, tag } = req.body;
+  const output = fs.createWriteStream("test.html");
+  db.query(
+    `SELECT * from contracts where contract_image='${image_url}'`,
+    async (err, result) => {
+      console.log(result);
+      if (err) {
+        console.log(err);
+        res.send("Check the Url ");
+      } else
+        await convertapi
+          .convert(
+            "html",
+            {
+              File: result[0].contract_url,
+            },
+            "docx"
+          )
+          .then(function ({ file }) {
+            https.get(file.url, async (response) => {
+              response.pipe(output);
+              output.on("finish", () => {
+                fs.readFile(
+                  "./test.html",
+                  { encoding: "utf-8" },
+                  (err, res1) => {
+                    if (err) {
+                      console.log(err);
+                    }
+                    let data = res1;
+                    let arr = data.split("\n");
+                    for (let i = 0; i < arr.length; i++) {
+                      for (let j = 0; j < arr[i].length; j++) {
+                        var str = arr[i].substring(j, "Signature".length + j);
+                        if (str == "Signature") {
+                          let final = arr[i].split("Signature");
+                          let Final =
+                            final[0] + `Signer Par ${user_name} ` + final[1];
+                          arr[i] = Final;
+                          fs.writeFile("Final.html", arr.join("\n"), (err) => {
+                            if (err) console.log(err);
+                            else {
+                              console.log(image_url);
+                              convertapi
+                                .convert(
+                                  "docx",
+                                  {
+                                    File: "Final.html",
+                                  },
+                                  "html"
+                                )
+                                .then(function (result3) {
+                                  console.log(result3.file.url);
+                                  convertapi
+                                    .convert(
+                                      "png",
+                                      {
+                                        File: result3.file.url,
+                                      },
+                                      "docx"
+                                    )
+                                    .then(function (result4) {
+                                      console.log(
+                                        result4.file.url,
+                                        " this is the final picture"
+                                      );
+                                      db.query(
+                                        `UPDATE contracts set contract_image="${result4.file.url}" where contract_image="${image_url}"`,
+                                        (err, resultF) => {
+                                          if (err) {
+                                            console.log(err);
+                                          } else {
+                                            /**
+                                             * FIXME:
+                                             * Chnage The HTML TO DOCX Then TO PNG to get the correct Format
+                                             *
+                                             *
+                                             *
+                                             */
+                                            res.send(resultF);
+                                          }
+                                        }
+                                      );
+                                    });
+                                });
+                            }
+                          });
+                        }
+                      }
+                    }
+                  }
+                );
+              });
+            });
+          });
+    }
+  );
+};
 var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
     .get(str)
@@ -43,64 +153,90 @@ var createDocAndImage = async (str, index, renderObject) => {
         output: {
           type: "image",
           format: "jpg",
-          dpi: 500,
+          dpi: 50000,
         },
       })
     );
-
     return "added docx and image";
   } catch (error) {
     return "from cloudinary image";
   }
 };
+const makeFactureOrDevis = async (url, ans, type, language) => {
+  console.log(ans);
 
-const makeFactureOrDevis = async (url, ans, type) => {
   const file = fs.createWriteStream("file.xlsx");
   http.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
       file.close();
+      console.log("Download Completed");
+      let t = "";
+      if (language == "fr") t = "le " + ans[2];
+      else {
+        t = " و " + ans[2];
+      }
+
       const workbook = new Excel.Workbook();
       await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
-        workbook.worksheets[0].getCell("C17").value =
-          type.toUpperCase() + " N° /";
+        workbook.worksheets[0].getCell("B39").numFmt = "0.000";
+        workbook.worksheets[0].getCell("B39").value = "0.600";
 
+        workbook.worksheets[0].getCell("C17").value =
+          " /° N " + type.toUpperCase();
         workbook.worksheets[0].getCell("A1").value = ans[0];
-        workbook.worksheets[0].getCell("B9").value = ans[1] + " le " + ans[2];
-        workbook.worksheets[0].getCell("D12").value = ans[3];
-        workbook.worksheets[0].getCell("D13").value = ans[4];
-        workbook.worksheets[0].getCell("C17").value += ans[5];
+        workbook.worksheets[0].getCell("B9").value = ans[1] + t;
+        workbook.worksheets[0].getCell("B12").value = ans[3];
+        let Temp = ans[4];
+
+        workbook.worksheets[0].getCell("B13").value = parseInt(ans[4]);
+        workbook.worksheets[0].getCell("B13").numFmt = "0";
+
+        workbook.worksheets[0].getCell("C17").value =
+          ans[5] + workbook.worksheets[0].getCell("C17").value;
         let sum = 0;
         let length = Math.ceil((ans.length - 12) / 3);
-
         let j = ans.length - length * 3;
         let f = j;
         let k = j + length;
         let r = k + length;
-
+        console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
+          console.log(" The loop for j  is ", ans[j]);
+          console.log(" The loop for k  is ", ans[k]);
+          console.log(" The loop for r  is ", ans[r]);
           sum += parseFloat(ans[k]) * parseFloat(ans[r]);
-
-          workbook.worksheets[0].getCell(`B${i}`).value = ans[j++];
-          workbook.worksheets[0].getCell(`C${i}`).value = ans[k++];
-          workbook.worksheets[0].getCell(`D${i}`).value = ans[r++];
-          workbook.worksheets[0].getCell(`E${i}`).value =
+          workbook.worksheets[0].getCell(`E${i}`).value = ans[j++];
+          workbook.worksheets[0].getCell(`D${i}`).value = ans[k++];
+          workbook.worksheets[0].getCell(`C${i}`).value = ans[r++];
+          workbook.worksheets[0].getCell(`B${i}`).value =
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
+          console.log("This is the sum so far ", sum);
         }
-        workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
-        workbook.worksheets[0].getCell("E36").value = (sum * 19) / 100;
-        workbook.worksheets[0].getCell("E41").value =
-          workbook.worksheets[0].getCell("E36").value +
-          workbook.worksheets[0].getCell("E34").value +
-          0.600 + "00";
-        var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
-        arr[arr.length - 1] = ans[f - 1];
+
+        workbook.worksheets[0].getCell("B34").value = parseFloat(sum);
+        workbook.worksheets[0].getCell("B37").value = (sum * 19) / 100;
+        workbook.worksheets[0].getCell("B41").value =
+          parseInt(workbook.worksheets[0].getCell("B37").value) +
+          parseInt(workbook.worksheets[0].getCell("B34").value) +
+          0.6;
+        workbook.worksheets[0].getCell("B41").numFmt = "0.000";
+
+        var arr = workbook.worksheets[0]
+          .getCell("D46")
+          .value.split("..................................................:");
+        console.log(arr);
+        arr[0] = ans[f - 1];
+        let temp = arr[0];
+        arr[0] = arr[1];
+        arr[1] = temp;
         arr = arr.join(" ");
         //Fix it
         workbook.worksheets[0].getCell("D46").value = arr;
         workbook.worksheets[0].getCell("B52").value = ans[f - 3];
-        workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 2];
-
+        workbook.worksheets[0].getCell("B53").value =
+          ans[f - 2] + " : الدليل الجبائي للحريف";
+        console.log("We are Here ");
         await workbook.xlsx.writeFile("output0.xlsx");
         try {
           const formData = new FormData();
@@ -119,21 +255,9 @@ const makeFactureOrDevis = async (url, ans, type) => {
               },
             })
           );
-
-          formData.append("document", fs.createReadStream("output0.xlsx"));
-
-          await axios
-            .post("https://api.pspdfkit.com/build", formData, {
-              headers: formData.getHeaders({
-                Authorization:
-                  "Bearer pdf_live_ITGJUCaRlPepVqyyZxl5h1KXR2NELwMbSW16nzTZZbE",
-              }),
-              responseType: "stream",
-            })
-            .then(async (response) => {
-              await response.data.pipe(fs.createWriteStream("image0.jpg"));
-            });
+          console.log("Here");
         } catch (e) {
+          console.log(e);
           const errorString = await streamToString(e.response.data);
         }
       });
@@ -151,11 +275,269 @@ const makeFactureOrDevis = async (url, ans, type) => {
   });
   return "Hi";
 };
+
+let makeFactureOrDevisFr = (url, ans, type, language) => {
+  console.log(ans);
+  const file = fs.createWriteStream("file.xlsx");
+  http.get(url, function (response) {
+    response.pipe(file);
+    file.on("finish", async () => {
+      file.close();
+      console.log("Download Completed");
+
+      const workbook = new Excel.Workbook();
+      await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
+        workbook.worksheets[0].getCell("C17").value =
+          type.toUpperCase() + " N ° \\";
+        workbook.worksheets[0].getCell("A1").value = ans[0];
+        workbook.worksheets[0].getCell("B9").value = ans[1] + "le " + ans[2];
+        workbook.worksheets[0].getCell("D12").value = ans[3];
+        let Temp = ans[4];
+
+        workbook.worksheets[0].getCell("D13").value = parseInt(ans[4]);
+        workbook.worksheets[0].getCell("D13").numFmt = "0";
+
+        workbook.worksheets[0].getCell("C17").value =
+          workbook.worksheets[0].getCell("C17").value + ans[5];
+        let sum = 0;
+        let length = Math.ceil((ans.length - 12) / 3);
+        let j = ans.length - length * 3;
+        let f = j;
+        let k = j + length;
+        let r = k + length;
+        console.log("The length is ", length);
+        for (let i = 22; i < 22 + length; i++) {
+          console.log(" The loop for j  is ", ans[j]);
+          console.log(" The loop for k  is ", ans[k]);
+          console.log(" The loop for r  is ", ans[r]);
+          sum += parseFloat(ans[k]) * parseFloat(ans[r]);
+          workbook.worksheets[0].getCell(`B${i}`).value = ans[j++];
+          workbook.worksheets[0].getCell(`C${i}`).value = ans[k++];
+          workbook.worksheets[0].getCell(`D${i}`).value = ans[r++];
+          workbook.worksheets[0].getCell(`E${i}`).value =
+            parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
+          console.log("This is the sum so far ", sum);
+        }
+
+        workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
+        workbook.worksheets[0].getCell("E36").value =
+          (parseInt(workbook.worksheets[0].getCell("E34").value) * 19) / 100;
+        console.log(parseInt(workbook.worksheets[0].getCell("E36").value));
+        console.log(workbook.worksheets[0].getCell("E34").value);
+
+        workbook.worksheets[0].getCell("E41").value =
+          parseInt(workbook.worksheets[0].getCell("E36").value) +
+          parseInt(workbook.worksheets[0].getCell("E34").value) +
+          0.6;
+        //workbook.worksheets[0].getCell("E41").numFmt= "0.000"
+
+        var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
+        console.log(arr);
+        console.log(f);
+        arr[arr.length - 1] = ans[f - 1];
+        arr = arr.join(" ");
+        //Fix it
+        workbook.worksheets[0].getCell("D46").value = arr;
+        workbook.worksheets[0].getCell("B52").value = ans[f - 3];
+        workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 2];
+        console.log("We are Here ");
+        await workbook.xlsx.writeFile("output0.xlsx");
+        try {
+          const formData = new FormData();
+          formData.append(
+            "instructions",
+            JSON.stringify({
+              parts: [
+                {
+                  file: "document",
+                },
+              ],
+              output: {
+                type: "image",
+                format: "jpg",
+                dpi: 500,
+              },
+            })
+          );
+          console.log("Here");
+        } catch (e) {
+          console.log(e);
+          const errorString = await streamToString(e.response.data);
+        }
+      });
+      function streamToString(stream) {
+        const chunks = [];
+        return new Promise((resolve, reject) => {
+          stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+          stream.on("error", (err) => reject(err));
+          stream.on("end", () =>
+            resolve(Buffer.concat(chunks).toString("utf8"))
+          );
+        });
+      }
+    });
+  });
+  return "Hi";
+};
+
+const verify = (arr) => {
+  console.log(arr, " ***/*/");
+  if (arr[8].length == 0 && arr[9].length > 0) {
+    arr[8] = arr[9];
+    arr[9] = "";
+  }
+  console.log(arr);
+  return arr;
+};
+
+const verifyAr = (arr) => {
+  console.log(arr, " ***/*/");
+  if (arr[5].length == 0 && arr[6].length > 0) {
+    arr[5] = arr[6];
+    arr[6] = "";
+  }
+  console.log(arr);
+  return arr;
+};
+
+var makeEgagement = async (url, question, idBegin, length) => {
+  console.log("this is the url ", url);
+  console.log("francais****************");
+  let renderedDoc = {};
+  let Minis = 0;
+  question = verify(question);
+  if (question[8].length == 0) Minis = 2;
+  else if (question[9].length == 0) Minis = 1;
+  console.log(idBegin, " **** ", 88 - Minis);
+  for (let i = 0; i < 3; i++) {
+    renderedDoc[(840 + i * 10).toString()] = "-";
+  }
+  console.log(renderedDoc);
+  if (Minis > 0) {
+    if (Minis == 1) {
+      renderedDoc["860"] = "";
+    }
+    if (Minis == 2) {
+      renderedDoc["850"] = "";
+      renderedDoc["860"] = "";
+    }
+  }
+  console.log(renderedDoc);
+  for (let i = idBegin; i <= 88; i++) {
+    renderedDoc[i.toString()] = question[i - idBegin];
+  }
+  console.log(renderedDoc);
+  const response = await superagent
+    .get(url)
+    .parse(superagent.parse.image)
+    .buffer();
+  const buffer = response.body;
+  const zip = new PizZip(buffer);
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+  });
+  doc.render(renderedDoc);
+  const buf = doc.getZip().generate({
+    type: "nodebuffer",
+    // compression: DEFLATE adds a compression step.
+    // For a 50MB output document, expect 500ms additional CPU time
+    compression: "DEFLATE",
+  });
+  fs.writeFileSync(`output${0}.docx`, buf);
+  try {
+    const formData = new FormData();
+    formData.append(
+      "instructions",
+      JSON.stringify({
+        parts: [
+          {
+            file: "document",
+          },
+        ],
+        output: {
+          type: "image",
+          format: "jpg",
+          dpi: 500,
+        },
+      })
+    );
+    return "added docx and image";
+  } catch (error) {
+    return "from cloudinary image";
+  }
+};
+
+var makeEgagementAr = async (url, question, idBegin, length) => {
+  let renderedDoc = {};
+  let Minis = 0;
+  question = verifyAr(question);
+  if (question[5].length == 0) Minis = 2;
+  else if (question[6].length == 0) Minis = 1;
+  for (let i = 0; i < 3; i++) {
+    renderedDoc[3640 + i * 10] = "-";
+  }
+  console.log(renderedDoc);
+  if (Minis > 0) {
+    if (Minis == 1) {
+      renderedDoc["3660"] = "";
+    }
+    if (Minis == 2) {
+      renderedDoc["3650"] = "";
+      renderedDoc["3660"] = "";
+    }
+  }
+  console.log(renderedDoc);
+  for (let i = idBegin; i <= 368; i++) {
+    renderedDoc[i.toString()] = question[i - idBegin];
+  }
+  console.log(renderedDoc);
+  const response = await superagent
+    .get(url)
+    .parse(superagent.parse.image)
+    .buffer();
+  const buffer = response.body;
+  const zip = new PizZip(buffer);
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+  });
+  doc.render(renderedDoc);
+  const buf = doc.getZip().generate({
+    type: "nodebuffer",
+    // compression: DEFLATE adds a compression step.
+    // For a 50MB output document, expect 500ms additional CPU time
+    compression: "DEFLATE",
+  });
+  fs.writeFileSync(`output${0}.docx`, buf);
+  try {
+    const formData = new FormData();
+    formData.append(
+      "instructions",
+      JSON.stringify({
+        parts: [
+          {
+            file: "document",
+          },
+        ],
+        output: {
+          type: "image",
+          format: "jpg",
+          dpi: 500,
+        },
+      })
+    );
+    return "added docx and image";
+  } catch (error) {
+    return "from cloudinary image";
+  }
+};
+
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
   let { type, lang } = req.body;
-
+console.log(__dirname)
   let { questions } = req.body;
   let renderObject = {};
   let answersArray = [];
@@ -180,7 +562,6 @@ const fillContract = async (req, res) => {
       }, {});
       // res.send(result);
       var url = "";
-      console.log(result[0])
       if (lang === "Arabe") {
         url = result[0].template_AR;
       } else if (lang === "Francais") {
@@ -188,15 +569,47 @@ const fillContract = async (req, res) => {
       } else {
         url = result[0].template_EN;
       }
+      console.log(url);
+      if (type == "engagement") {
+        console.log("Gere");
+        if (lang == "Francais")
+          var result = await makeEgagement(
+            "https://res.cloudinary.com/dn6kxvylo/raw/upload/v1671452515/fff_mutfxc.docx",
+            questions,
+            77,
+            13
+          );
+        else
+          var result = await makeEgagementAr(
+            "https://res.cloudinary.com/dn6kxvylo/raw/upload/v1672304046/engagementArabe_lojghh_gyvyw3.docx",
+            questions,
+            360,
+            13
+          );
+        res.end(false);
+      }
+      //Demande Officiale
 
       if (type == "facture" || type == "devis") {
-        Promise.all([makeFactureOrDevis(url, questions, type)]).then(
-          (response) => {
-            setTimeout(() => {
-              res.send("facture");
-            }, 5000);
-          }
-        );
+        if (lang == "Arabe") {
+          console.log("Arabe");
+          Promise.all([makeFactureOrDevis(url, questions, type)]).then(
+            (response) => {
+              setTimeout(() => {
+                res.send("facture");
+              }, 5000);
+            }
+          );
+        } else {
+          console.log("Drancaiss");
+          Promise.all([makeFactureOrDevisFr(url, questions, type)]).then(
+            (response) => {
+              setTimeout(() => {
+                res.send("facture");
+              }, 5000);
+            }
+          );
+        }
       } else {
         var Has_Two_Pages = true;
         if (url.search(",") == -1) {
@@ -220,40 +633,59 @@ const fillContract = async (req, res) => {
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
   var twoPages = req.body.twoPages;
-  
-  
   var urlImage = "";
   var Cmpt = 0;
-  if (twoPages === true) {
+
+  if (twoPages == "civp") Cmpt = 3;
+  else if (twoPages === true) {
     Cmpt = 1;
   }
-  console.log(twoPages) 
-  console.log(Cmpt)
+
+  console.log(Cmpt, "cmpt");
+  let Temp = [];
   for (let i = 0; i <= Cmpt; i++) {
     if (twoPages == "facture") {
       var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
         resource_type: "auto",
       });
     } else {
+      /*
       uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
         resource_type: "auto",
       });
+    */
     }
-    var docUrl = uploadDoc.secure_url;
-   await convertapi
+    //var docUrl = uploadDoc.secure_url;
+    console.log(twoPages);
+    await convertapi
       .convert(
         "jpg",
         {
-          File: docUrl,
+          File: twoPages == "facture" ? `output${i}.xlsx` : `output${i}.docx`,
+          ImageResolutionH: "900",
+          ImageResolutionV: "900",
+          ScaleImage: "true",
         },
         twoPages == "facture" ? "xlsx" : "docx"
       )
       .then(async function (result) {
-        if (i <= Cmpt - 1) urlImage += result.file.url + ",";
-        else {
+        if (i <= Cmpt - 1) {
+          Temp.push({
+            id: i,
+            image: result.file.url,
+          });
+
+          urlImage += result.file.url + ",";
+        } else {
+          Temp.push({
+            id: i,
+            image: result.file.url,
+          });
+
           urlImage += result.file.url;
+          console.log(Temp);
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
-          db.query(updateContract, [docUrl, urlImage, id], (err, result) => {
+          db.query(updateContract, [urlImage, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
           });
           res.send(urlImage);
@@ -261,6 +693,7 @@ const updateContractImage = async (req, res) => {
         console.log(urlImage, "urll imagee");
       })
       .catch((error) => {
+        console.log(error.message);
         res.send({ message: error });
       });
   }
@@ -347,9 +780,155 @@ const deleteContractById = (req, res) => {
     } else {
       res.json(contracts);
     }
+    w;
   });
 };
+require("sharp/package.json"); // sharp is a peer dependency.  npm i sharp join-images
+var mergeImg = require("merge-img")
+const concatImages = (req,response)=>{
+const {nElement,  images} = req.body  
+let arrayOfImages = images.split(",")
 
+if(nElement==2){
+const File = fs.createWriteStream("image1.jpg")
+const  File1 = fs.createWriteStream("image2.jpg")
+http.get(arrayOfImages[0],(res)=>{
+console.log(arrayOfImages)
+res.pipe(File);
+File.on("finish", async () => {
+  File.close();
+  console.log("Download Completed");
+  console.log(arrayOfImages)
+
+  http.get(arrayOfImages[1], (res1)=>{
+    res1.pipe(File1)
+    File1.on("finish"  , async()=>{
+    File1.close()
+    console.log("Hello")
+    mergeImg(["image1.jpg", 'image2.jpg']).then( async (img) => {
+      // Save image as file
+      await  img.write('out1.jpg' ,async  ()=>{
+
+        console.log("Uploading File in Cloudinary")
+        let uploadDoc = await cloudinary.uploader.upload(`out1.jpg`, {
+        resource_type: "auto", 
+        }) 
+        console.log(uploadDoc.secure_url)
+        response.send(uploadDoc.secure_url)
+        
+      
+      })
+    }).catch( async err =>{
+      console.log(err.message)
+    })
+ 
+
+  })
+})
+})
+})
+}
+else 
+if(nElement==3){
+  const File = fs.createWriteStream("image1.jpg")
+  const  File1 = fs.createWriteStream("image2.jpg")
+  const File2 = fs.createWriteStream("image3.jpg")
+  http.get(arrayOfImages[0],(res)=>{
+  console.log(arrayOfImages)
+  res.pipe(File);
+  File.on("finish", async () => {
+    File.close();
+    console.log("Download Completed");
+    console.log(arrayOfImages)
+  
+    http.get(arrayOfImages[1], (res1)=>{
+      res1.pipe(File1)
+      File1.on("finish"  , async()=>{
+      File1.close()
+      console.log("Hello")
+    http.get(arrayOfImages[2]  , (res2)=>{
+res2.pipe(File2) 
+File2.on("finish" , async ()=>{
+
+File2.close()
+
+mergeImg(["image1.jpg", 'image2.jpg' , 'image3.jpg']).then( async (img) => {
+  // Save image as file
+  await  img.write('out1.jpg' ,async  ()=>{
+
+    console.log("Uploading File in Cloudinary")
+    let uploadDoc = await cloudinary.uploader.upload(`out1.jpg`, {
+    resource_type: "auto", 
+    }) 
+    console.log(uploadDoc.secure_url)
+    response.send(uploadDoc.secure_url)
+    
+  
+  });}).catch( async err =>{
+  console.log(err.message)
+})
+})
+    })
+    })
+  })
+  })
+  })
+}
+else 
+if(nElement==4){
+  const File = fs.createWriteStream("image1.jpg")
+  const  File1 = fs.createWriteStream("image2.jpg")
+  const File2 = fs.createWriteStream("image3.jpg")
+  const File3= fs.createWriteStream("image4.jpg")
+  http.get(arrayOfImages[0],(res)=>{
+  console.log(arrayOfImages)
+  res.pipe(File);
+  File.on("finish", async () => {
+    File.close();
+    console.log("Download Completed");
+    console.log(arrayOfImages)
+    http.get(arrayOfImages[1], (res1)=>{
+      res1.pipe(File1)
+      File1.on("finish"  , async()=>{
+      File1.close()
+      console.log("Hello")
+    http.get(arrayOfImages[2]  , (res2)=>{
+res2.pipe(File2) 
+File2.on("finish" , async ()=>{
+console.log("File 3 Finished ")
+File2.close()
+http.get(arrayOfImages[3] ,  (res3)=>{
+res3.pipe(File3)
+File3.on("finish" , async ()=>{
+  console.log("File 4 Finished ")
+File3.close()
+mergeImg(["image1.jpg", 'image2.jpg' , 'image3.jpg' , 'image3.jpg']).then( async (img) => {
+  // Save image as file
+  console.log("Creating The New File")
+await  img.write('out1.jpg' , async ()=>{
+
+  console.log("Uploading File in Cloudinary")
+  let uploadDoc = await cloudinary.uploader.upload(`out1.jpg`, {
+  resource_type: "auto", 
+  }) 
+  console.log(uploadDoc.secure_url)
+  response.send(uploadDoc.secure_url)
+  
+
+});
+}).catch( async err =>{
+  console.log(err.message)
+})
+})
+})
+})
+})
+})
+})
+})
+})
+}
+}
 module.exports = {
   insertContractType,
   getAllContractType,
@@ -358,4 +937,6 @@ module.exports = {
   deleteContractById,
   fillContract,
   updateContractImage,
+  ChangeStatusInContract,
+  concatImages
 };

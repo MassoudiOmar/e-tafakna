@@ -1,5 +1,28 @@
 var db = require("../database-mysql");
+let updateAnswer = (req,res)=>{
+const {content , questions_id,contracts_id,contracts_contract_types_id} = req.body
+console.log(content ,"*****" , questions_id )
+db.query(`SELECT * FROM answers where questions_id=${questions_id} ORDER BY ID DESC LIMIT 1  `  ,(err,result)=>{
+if(err){
+console.log(err)
+  res.send(err) 
+}
+else {
+let Temp = result
 
+console.log(Temp)
+db.query(`update answers set content = '${content}' where id =${Temp[0].id}`,(err,result1)=>{
+if(err)
+res.send(err)
+else {
+console.log(result1)
+  res.send(result1)
+
+}
+})
+}
+})
+}
 let getAnswers = (req, res) => {
   const { contracts_id } = req.params;
   const sql = `SELECT questions_id,content  FROM answers  where contracts_id=?`;
@@ -8,21 +31,32 @@ let getAnswers = (req, res) => {
     else res.send(result);
   });
 };
-
 let AddAnswers = (req, res) => {
   const { content, questions_id, contracts_id, contracts_contract_types_id } =
     req.body;
   console.log(
-    content,
-    questions_id,
-    contracts_id,
-    contracts_contract_types_id,
-    "ppppppppppppppppppppppppppppppppp"
-  );
+    "this is the answer :",
+   "content :", content,
+      "questions_id :",questions_id,
+   "contracts_id :", contracts_id,
+   "contracts_contract_types_id : ", contracts_contract_types_id  );
   const sql = `INSERT INTO answers (content ,questions_id,contracts_id,contracts_contract_types_id) VALUES (?,?,?,?)`;
   db.query(
     sql,
     [content, questions_id, contracts_id, contracts_contract_types_id],
+    (err, result) => {
+      if (err) res.send(err);
+      else res.send(result);
+    }
+  );
+};
+
+let AddAnswer = (req, res) => {
+  const { content, questions_id, contracts_contract_types_id } = req.body;
+  const sql = `INSERT INTO answers (content ,questions_id,contracts_contract_types_id) VALUES (?,?,?,?)`;
+  db.query(
+    sql,
+    [content, questions_id, contracts_contract_types_id],
     (err, result) => {
       if (err) res.send(err);
       else res.send(result);
@@ -39,7 +73,6 @@ let updateAnswers = (req, res) => {
     else res.send(result);
   });
 };
-
 let getContractImage = (req, res) => {
   let { id } = req.params;
   console.log(id, "from get contract image");
@@ -53,7 +86,6 @@ let getContractImage = (req, res) => {
     }
   });
 };
-
 let getQuestionsAnswers = (req, res) => {
   let id = req.params.id;
   console.log(req.params, "req.params");
@@ -69,11 +101,12 @@ let getQuestionsAnswers = (req, res) => {
     }
   });
 };
-
 module.exports = {
   AddAnswers,
-  updateAnswers,
+  updateAnswers,    
   getAnswers,
   getQuestionsAnswers,
-  getContractImage,
+  AddAnswer,      
+  getContractImage,   
+  updateAnswer,
 };

@@ -38,6 +38,7 @@ const getAllContractById = (req, res) => {
     } else res.send(result);
   });
 };
+
 let getAllContracts = (req, res) => {
   const { id } = req.params;
   const sql = `
@@ -56,18 +57,46 @@ let getAllContracts = (req, res) => {
     }
   });
 };
+const deleteContract =(req,res)=>{
+  const imageUri = req.body;
+  var imageUrl = imageUri.toString()
+const sql = `DELETE FROM etafakna.contracts WHERE (contract_url = ?)`
+db.query(sql, [imageUrl], (err, result) => {
+  if (err) res.send(err);
+  else {
+    res.send(result);
+  }
+});
+
+}
+const getArchieve = (req, res) => {
+  const owner = req.params.ownerId;
+  const sql = `SELECT * FROM users_has_contracts c
+  inner join contracts t on (t.id = c.contracts_id )
+  inner join contract_types f on (f.id=t.contract_types_id)
+  inner join users u on(u.id= c.owner)
+  where c.owner = ? && archieve = "true"`;
+  db.query(sql, [owner], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else res.send(result);
+  });
+};
+
+
 
 const changeContractStatus = (req, res) => {
-  const contract_url = req.params.contractUrl;
+  const contract_url = req.body.contract_url;
   const status = req.params.status;
-  const sql = `UPDATE contracts SET status = ? WHERE contract_url = ?`;
+  const sql = `UPDATE contracts SET status = ? WHERE contract_image = ?`;
   db.query(sql, [status, contract_url], (err, result) => {
     if (err) {
+      console.log(err)
       res.send(err);
     } else {
       res.send(result);
     }
-  });
+  }); 
 };
 let getNotification = (req, res) => {
   const { id } = req.params;
@@ -86,6 +115,16 @@ let getNotification = (req, res) => {
     }
   });
 };
+
+const updateSeen = (req,res)=>{
+const {id} = req.body 
+db.query(`UPDATE users_has_notifications set seen=1 where id = ${id}`,(err,result)=>{
+if(err)
+res.send(err)
+else 
+res.send(result)
+})
+}
 
 let updateStatus = (req, res) => {
   const { id } = req.params;
@@ -111,7 +150,6 @@ let getQuestionsAnswers = (req, res) => {
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
     else {
-      console.log(result, "result");
       res.send(result);
     }
   });
@@ -128,6 +166,8 @@ let getContractImage = (req, res) => {
   });
 };
 
+
+
 module.exports = {
   insertContract,
   getAllContracts,
@@ -137,5 +177,8 @@ module.exports = {
   updateStatus,
   getNotification,
   changeContractStatus,
-  getAllContractById
+  getAllContractById,
+  updateSeen,
+  deleteContract,
+  getArchieve,
 };

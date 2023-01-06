@@ -42,27 +42,29 @@ let loginAdmin = (req, res) => {
                       if (err) {
                         res.send(err);
                       }
-                      const user = {
-                        id: result[0].id,
-                        username: result[0].username,
-                        email: result[0].email,
-                        image: result[0].image,
-                        address: result[0].address,
-                        phone: result[0].phone,
-                      };
-                      jwt.sign(
-                        { user },
-                        process.env.JWT_SECRET_KEY,
-                        (err, token) => {
-                          if (err) {
-                            return res.send(err);
-                          }
-                          res.send({
-                            UsertokenInfo: token,
-                            message: "login succssefull",
-                          });
-                        }
-                      );
+                      else{
+                       const user = {
+                         id: result[0].id,
+                         username: result[0].username,
+                         email: result[0].email,
+                         image: result[0].image,
+                         address: result[0].address,
+                         phone: result[0].phone,
+                       };
+                       jwt.sign(
+                         { user },
+                         process.env.JWT_SECRET_KEY,
+                         (err, token) => {
+                           if (err) {
+                             return res.send(err);
+                           }
+                           res.send({
+                             UsertokenInfo: token,
+                             message: "login succssefull",
+                           });
+                         }
+                       )
+                    }
                     });
                   } else {
                     res.send("sorry, you have no access !");
@@ -129,7 +131,7 @@ let ChangePassword =  async (req, res) => {
 
 // get all users
 let getAllUsers = (req, res) => {
-  db.query("SELECT * FROM users Where role='user'", (err, result) => {
+  db.query("SELECT * FROM etafakna.users", (err, result) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -174,7 +176,7 @@ let updateStatus = (req, res) => {
 //delete contract_types
 let deleteContractTypes = (req, res) => {
     const id = req.params.id;
-    const sql = `DELETE FROM contract_types WHERE id =?`;
+    const sql = `DELETE FROM etafakna.contract_types WHERE id =?`;
     db.query(sql, [id], (err, result) => {
       if (err) res.send(err);
       else res.send(result);
