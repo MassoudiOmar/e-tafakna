@@ -103,7 +103,6 @@ let getAllContracts = (req, res) => {
 };
 const deleteContract = (req, res) => {
   const imageUri = req.body.imageUri;
-  console.log(imageUri, "imageUri");
   db.query(
     `delete from etafakna.contracts where contract_image = "${imageUri}"`,
     (err, rez) => {

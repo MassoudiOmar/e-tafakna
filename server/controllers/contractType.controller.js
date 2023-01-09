@@ -537,7 +537,7 @@ const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
   let { type, lang } = req.body;
-
+console.log(__dirname)
   let { questions } = req.body;
   let renderObject = {};
   let answersArray = [];
