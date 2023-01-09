@@ -535,6 +535,18 @@ else
 res.send(rez)
 })
 }
+const updateUserInfo =(req,res)=>{
+  const {id} = req.params
+  const {a,b,c,d,e} =req.body 
+  console.log(a,b,c,d,e,'data')
+   const sql ='UPDATE users SET first_name = ?, last_name = ?, username = ? , phone = ? , address = ?  WHERE id = ?;'
+   db.query(sql,[a,b,c,d,e,id],(err,result)=>{
+     if(err)
+    { console.log(err)}
+     else 
+     {res.send(result)}
+     })
+}
 module.exports = {
   register,
   activate,
@@ -547,5 +559,6 @@ module.exports = {
   fn,
   deleteAllNotificationOfUser,
   getAllAnswerOfUser,
-  getNameOfSpecificContract
+  getNameOfSpecificContract,
+  updateUserInfo
 };
