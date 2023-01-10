@@ -805,7 +805,7 @@ const concatImages = (req, response) => {
           File1.on("finish", async () => {
             File1.close();
             console.log("Hello");
-            mergeImg(["image1.jpg", "image2.jpg"])
+            mergeImg(["image1.jpg", "image2.jpg"], { direction: true })
               .then(async (img) => {
                 // Save image as file
                 await img.write("out1.jpg", async () => {
@@ -846,7 +846,9 @@ const concatImages = (req, response) => {
               File2.on("finish", async () => {
                 File2.close();
 
-                mergeImg(["image1.jpg", "image2.jpg", "image3.jpg"])
+                mergeImg(["image1.jpg", "image2.jpg", "image3.jpg"], {
+                  direction: true,
+                })
                   .then(async (img) => {
                     // Save image as file
                     await img.write("out1.jpg", async () => {
@@ -897,12 +899,10 @@ const concatImages = (req, response) => {
                   File3.on("finish", async () => {
                     console.log("File 4 Finished ");
                     File3.close();
-                    mergeImg([
-                      "image1.jpg",
-                      "image2.jpg",
-                      "image3.jpg",
-                      "image3.jpg",
-                    ])
+                    mergeImg(
+                      ["image1.jpg", "image2.jpg", "image3.jpg", "image3.jpg"],
+                      { direction: true }
+                    )
                       .then(async (img) => {
                         // Save image as file
                         console.log("Creating The New File");
