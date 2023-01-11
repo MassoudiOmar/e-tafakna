@@ -142,8 +142,8 @@ const getArchieve = (req, res) => {
   inner join contracts t on (t.id = c.contracts_id )
   inner join contract_types f on (f.id=t.contract_types_id)
   inner join users u on(u.id= c.owner)
-  where c.owner = ?   || c.receiver=? && t.status="accepted"`;
-  db.query(sql, [owner, owner], (err, result) => {
+  where c.owner = ? && archieve = "true"`;
+  db.query(sql, [owner], (err, result) => {
     if (err) {
       console.log(err);
     }
@@ -159,13 +159,13 @@ const getArchieve = (req, res) => {
 
     const startingLimit = (page - 1) * resultPerPage;
     sql = ` 
- SELECT * FROM users_has_contracts c
- inner join contracts t on (t.id = c.contracts_id )
- inner join contract_types f on (f.id=t.contract_types_id)
- inner join users u on(u.id= c.owner)
- where c.owner = ?   || c.receiver=? && t.status="accepted" LIMIT ${startingLimit},${resultPerPage} 
+    SELECT * FROM users_has_contracts c
+    inner join contracts t on (t.id = c.contracts_id )
+    inner join contract_types f on (f.id=t.contract_types_id)
+    inner join users u on(u.id= c.owner)
+    where c.owner = ? && archieve = "true" LIMIT ${startingLimit},${resultPerPage} 
  `;
-    db.query(sql, [owner, owner], (err, result) => {
+    db.query(sql, [owner], (err, result) => {
       if (err) throw err;
       let iterator = page - 5 < 1 ? 1 : page - 5;
       let endingLink =
