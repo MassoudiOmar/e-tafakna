@@ -29,18 +29,20 @@ const getAllContractByStatus = (req, res, err) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      return res.send("out of date")
+      return res.send("/?page=" + encodeURIComponent(numberofPAGES0));
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
     }
 
     const startingLimit = (page - 1) * resultPerPage;
+    console.log(resultPerPage, "startingLim");
     sql = `
     SELECT * FROM users_has_contracts c
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
     inner join users u on(u.id= c.owner)
     where t.status = ? && c.owner = ? LIMIT ${startingLimit},${resultPerPage} `;
+    console.log(resultPerPage, "startingLim");
     db.query(sql, [status, owner], (err, result) => {
       if (err) throw err;
       let iterator = page - 5 < 1 ? 1 : page - 5;
@@ -51,7 +53,7 @@ const getAllContractByStatus = (req, res, err) => {
       if (endingLink < page + 4) {
         iterator -= page + 4 - numberofPAGES0;
       }
-      console.log(endingLink, "endingLink");
+
       res.send(result, page, iterator, endingLink, numberofPAGES0);
     });
   });
@@ -91,7 +93,7 @@ let getAllContracts = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      return res.send("out of date")
+      return res.send("/?page=" + encodeURIComponent(numberofPAGES0));
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
     }
@@ -152,7 +154,7 @@ const getArchieve = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      return res.send("out of date")
+      return res.send("/?page=" + encodeURIComponent(numberofPAGES0));
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
     }
@@ -210,7 +212,7 @@ let getNotification = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      return res.send("out of date")
+      return res.send("/?page=" + encodeURIComponent(numberofPAGES0));
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
     }
