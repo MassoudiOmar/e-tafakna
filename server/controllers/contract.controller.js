@@ -29,7 +29,7 @@ const getAllContractByStatus = (req, res, err) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      console.log("No Data ");
+      res.send("/?page=" + encodeURIComponent(numberofPAGES0));
     } else if (page < 1) {
       res.send("/?page=" + encodeURIComponent("1"));
     }
