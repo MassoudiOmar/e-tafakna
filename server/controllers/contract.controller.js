@@ -20,7 +20,7 @@ const getAllContractByStatus = (req, res, err) => {
   inner join contract_types f on (f.id=t.contract_types_id)
   inner join users u on(u.id= c.owner)
   where t.status = ? && c.owner = ?`;
-  db.query(sql, [status, owner], (err, result) => {
+  db.query(sql, [status, owner], (err, result, next) => {
     if (err) {
       console.log(err);
     }
@@ -29,9 +29,9 @@ const getAllContractByStatus = (req, res, err) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      res.send("out of Data");
+      return res.redirect("/?page=" + encodeURIComponent(numberofPAGES0));
     } else if (page < 1) {
-      res.send("/?page=" + encodeURIComponent("1"));
+      return res.send("/?page=" + encodeURIComponent("1"));
     }
 
     const startingLimit = (page - 1) * resultPerPage;
@@ -91,9 +91,9 @@ let getAllContracts = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      res.send("out of Data");
+      return res.redirect("/?page=" + encodeURIComponent(numberofPAGES0));
     } else if (page < 1) {
-      res.send("/?page=" + encodeURIComponent("1"));
+      return res.send("/?page=" + encodeURIComponent("1"));
     }
 
     const startingLimit = (page - 1) * resultPerPage;
@@ -152,9 +152,9 @@ const getArchieve = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      res.send("out of Data");
+      return res.redirect("/?page=" + encodeURIComponent(numberofPAGES0));
     } else if (page < 1) {
-      res.send("/?page=" + encodeURIComponent("1"));
+      return res.send("/?page=" + encodeURIComponent("1"));
     }
 
     const startingLimit = (page - 1) * resultPerPage;
@@ -210,9 +210,9 @@ let getNotification = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      res.send("out of Data");
+      return res.redirect("/?page=" + encodeURIComponent(numberofPAGES0));
     } else if (page < 1) {
-      res.send("/?page=" + encodeURIComponent("1"));
+      return res.send("/?page=" + encodeURIComponent("1"));
     }
 
     const startingLimit = (page - 1) * resultPerPage;
