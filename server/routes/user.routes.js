@@ -11,7 +11,7 @@ router.post("/activation",userController.activate);
 router.get("/userInfo",userController.decodeToken);
 router.get("/allUsers",userController.getAllUsers);
 router.post('/confirmPassword',pass.confirmPassword)
-router.get("/notification/:id",auth, contractController.getNotification);
+router.get("/notification/:id", contractController.getNotification);
 router.put('/updatenot/:id',userController.updateNotifications)
 router.get('/getnotstatus/:id',userController.getnotstatus)
 router.delete('/deleteUser/:userId', userController.deleteUser);
