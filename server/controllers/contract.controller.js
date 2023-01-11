@@ -29,7 +29,7 @@ const getAllContractByStatus = (req, res, err) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      res.redirect("/?page=" + encodeURIComponent(numberofPAGES0));
+      res.send("out of Data");
     } else if (page < 1) {
       res.send("/?page=" + encodeURIComponent("1"));
     }
@@ -91,7 +91,7 @@ let getAllContracts = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      console.log("No Data ");
+      res.send("out of Data");
     } else if (page < 1) {
       res.send("/?page=" + encodeURIComponent("1"));
     }
@@ -152,7 +152,7 @@ const getArchieve = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      console.log("No Data ");
+      res.send("out of Data");
     } else if (page < 1) {
       res.send("/?page=" + encodeURIComponent("1"));
     }
@@ -210,7 +210,7 @@ let getNotification = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      console.log("No Data ");
+      res.send("out of Data");
     } else if (page < 1) {
       res.send("/?page=" + encodeURIComponent("1"));
     }
