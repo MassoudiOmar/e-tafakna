@@ -29,7 +29,7 @@ const getAllContractByStatus = (req, res, err) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-       return res.redirect("/?page=" + encodeURIComponent(numberofPAGES0));
+       return res.status(304).send("no")
       // return res.send("No Data")
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
@@ -156,10 +156,10 @@ const getArchieve = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? Number(req.query.page) : 1;
     if (page > numberofPAGES0) {
-       return res.redirect("/?page=" + encodeURIComponent(numberofPAGES0));
-      // return res.send("No Data")
+      res.send("/?page=" + encodeURIComponent(numberofPAGES0));
+      // console.log("no data")
     } else if (page < 1) {
-      return res.send("/?page=" + encodeURIComponent("1"));
+       res.send("/?page=" + encodeURIComponent("1"));
     }
 
     const startingLimit = (page - 1) * resultPerPage;
