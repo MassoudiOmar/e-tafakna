@@ -15,22 +15,19 @@ const resultPerPage = 10;
 const getAllContractByStatus = (req, res, err) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
-  let sql = `SELECT * FROM users_has_contracts c
-  inner join contracts t on (t.id = c.contracts_id )
-  inner join contract_types f on (f.id=t.contract_types_id)
-  inner join users u on(u.id= c.owner)
-  where t.status = ? && c.owner = ?`;
-  db.query(sql, [status, owner], (err, result, next) => {
+  let sql = `SELECT * FROM users_has_contracts`;
+  db.query(sql,  (err, result, next) => {
     if (err) {
       console.log(err);
     }
     //Pagination
     const numOfResults = result.length;
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? Number(req.query.page) : 1;
+    let page = req.query.page ? parseInt(req.query.page) : 1;
+    console.log(page)
     if (page > numberofPAGES0) {
-       return res.status(304).send("no")
-      // return res.send("No Data")
+      //  return res.status(304).send("no")
+      return res.send("-1")
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
     }
@@ -92,9 +89,9 @@ let getAllContracts = (req, res) => {
     //Pagination
     const numOfResults = result.length;
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? Number(req.query.page) : 1;
+    let page = req.query.page ? parseInt(req.query.page) : 1;
     if (page > numberofPAGES0) {
-       return res.redirect("/?page=" + encodeURIComponent(numberofPAGES0));
+       return res.send("-1")
       // return res.send("No Data")
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
@@ -154,10 +151,10 @@ const getArchieve = (req, res) => {
     //Pagination
     const numOfResults = result.length;
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? Number(req.query.page) : 1;
+    let page = req.query.page ? parseInt(req.query.page) : 1;
     if (page > numberofPAGES0) {
       res.send("/?page=" + encodeURIComponent(numberofPAGES0));
-      // console.log("no data")
+      console.log("no data")
     } else if (page < 1) {
        res.send("/?page=" + encodeURIComponent("1"));
     }
@@ -213,9 +210,9 @@ let getNotification = (req, res) => {
     //Pagination
     const numOfResults = result.length;
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? Number(req.query.page) : 1;
+    let page = req.query.page ? parseInt(req.query.page) : 1;
     if (page > numberofPAGES0) {
-       return res.redirect("/?page=" + encodeURIComponent(numberofPAGES0));
+       return res.send("-1")
       // return res.send("No Data")
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
