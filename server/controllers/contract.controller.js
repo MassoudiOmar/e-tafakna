@@ -52,7 +52,7 @@ const getAllContractByStatus = (req, res, err) => {
         iterator -= page + 4 - numberofPAGES0;
       }
 
-      res.send(result, page, iterator, endingLink, numberofPAGES0);
+      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
     });
   });
 };
@@ -117,7 +117,7 @@ let getAllContracts = (req, res) => {
         iterator -= page + 4 - numberofPAGES0;
       }
       console.log(endingLink, "endingLink");
-      res.send(result, page, iterator, endingLink, numberofPAGES0);
+      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
     });
   });
 };
@@ -178,7 +178,7 @@ const getArchieve = (req, res) => {
         iterator -= page + 4 - numberofPAGES0;
       }
       console.log(endingLink, "endingLink");
-      res.send(result, page, iterator, endingLink, numberofPAGES0);
+      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
     });
   });
 };
@@ -238,7 +238,7 @@ let getNotification = (req, res) => {
         iterator -= page + 4 - numberofPAGES0;
       }
       console.log(endingLink, "endingLink");
-      res.send(result, page, iterator, endingLink, numberofPAGES0);
+      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
     });
   });
 };
