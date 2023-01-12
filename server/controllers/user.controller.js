@@ -13,6 +13,12 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 require("dotenv").config();
+const generateColor = () => {
+  const randomColor = Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, "0");
+  return `#${randomColor}`;
+};
 var register = async (req, res) => {
   try {
     //get info of user
@@ -25,9 +31,11 @@ var register = async (req, res) => {
       address,
       username,
       image,
+      
     } = req.body;
     const status = "notActivated";
     const created_at = new Date();
+    const faceVideo = generateColor()
     const role = "user";
     const activate = "false";
     const notification = false;
@@ -64,7 +72,7 @@ var register = async (req, res) => {
             const salt = await bcrypt.genSalt();
             const password = await bcrypt.hash(req.body.password, salt);
             db.query(
-              "INSERT INTO users ( first_name, last_name, email, password, phone,address,username,status,image, role,created_at,notification) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+              "INSERT INTO users ( first_name, last_name, email, password, phone,address,username,status,image, role,created_at,notification,faceVideo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
               [
                 first_name,
                 last_name,
@@ -78,6 +86,7 @@ var register = async (req, res) => {
                 role,
                 created_at,
                 notification,
+                faceVideo
               ],
               async (err, result) => {
                 if (err) {
