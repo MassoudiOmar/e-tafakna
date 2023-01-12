@@ -204,42 +204,11 @@ let getNotification = (req, res) => {
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
       inner join contract_types ct on (ct.id = c.contract_types_id)
-      where ur.id =?`;
+      where ur.id =? LIMIT 20`;
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
-    //Pagination
-    const numOfResults = result.length;
-    const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? parseInt(req.query.page) : 1;
-    if (page > numberofPAGES0) {
-       return res.send("-1")
-      // return res.send("No Data")
-    } else if (page < 1) {
-      return res.send("/?page=" + encodeURIComponent("1"));
-    }
-
-    const startingLimit = (page - 1) * resultPerPage;
-    sql = ` 
-   select uhc.id,seen, uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,c.status ,date from users_has_notifications  uhc
-   inner join users uo on (uo.id = uhc.owner)
-   inner join users ur on (ur.id = uhc.receiver)
-   inner join contracts c on (c.id = uhc.contracts_id)
-   inner join contract_types ct on (ct.id = c.contract_types_id)
-   where ur.id =? LIMIT ${startingLimit},${resultPerPage} 
-`;
-    db.query(sql, [id], (err, result) => {
-      if (err) throw err;
-      let iterator = page - 5 < 1 ? 1 : page - 5;
-      let endingLink =
-        iterator + 9 <= numberofPAGES0
-          ? iterator + 9
-          : page + (numberofPAGES0 + 9);
-      if (endingLink < page + 4) {
-        iterator -= page + 4 - numberofPAGES0;
-      }
-      console.log(endingLink, "endingLink");
-      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
-    });
+    else
+      res.send(result.reverse());
   });
 };
 
