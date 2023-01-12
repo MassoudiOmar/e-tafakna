@@ -76,7 +76,7 @@ const getAllContractById = (req, res) => {
 let getAllContracts = (req, res) => {
   const { id } = req.params;
   let sql = `
-   select c.id, date, uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status from users_has_contracts  uhc
+   select c.id, date,  uo.username,uo.faceVideo ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo,ur.username as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status from users_has_contracts  uhc
       inner join users uo on (uo.id = uhc.owner)
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)

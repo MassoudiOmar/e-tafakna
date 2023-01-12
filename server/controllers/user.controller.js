@@ -114,7 +114,6 @@ var register = async (req, res) => {
                     subject: "Hi! this this your verifying code",
                     html: `
                   <html>
-
                   <head>
                       <title></title>
                       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
