@@ -76,7 +76,7 @@ const getAllContractById = (req, res) => {
 let getAllContracts = (req, res) => {
   const { id } = req.params;
   let sql = `
-   select c.id, date,  uo.first_name,uo.faceVideo ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status from users_has_contracts  uhc
+   select c.id, date,  uo.first_name as username ,uo.faceVideo ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status from users_has_contracts  uhc
       inner join users uo on (uo.id = uhc.owner)
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
@@ -99,7 +99,7 @@ let getAllContracts = (req, res) => {
 
     const startingLimit = (page - 1) * resultPerPage;
     sql = ` 
-    select c.id, date,  uo.first_name,uo.faceVideo as colorOwner ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo as colorReciever,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status from users_has_contracts  uhc
+    select c.id, date,  uo.first_name as username,uo.faceVideo as colorOwner ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo as colorReciever,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status from users_has_contracts  uhc
     inner join users uo on (uo.id = uhc.owner)
     inner join users ur on (ur.id = uhc.receiver)
     inner join contracts c on (c.id = uhc.contracts_id)
@@ -199,7 +199,7 @@ const changeContractStatus = (req, res) => {
 let getNotification = (req, res) => {
   const { id } = req.params;
   let sql = `
-   select uhc.id,seen, uo.first_name ,uo.image as imageOwner,ur.image as imageReciever, ur.first_name as receiver,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,c.status ,date from users_has_notifications  uhc
+   select uhc.id,seen, uo.first_name as username ,uo.image as imageOwner,ur.image as imageReciever, ur.first_name as receiver,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,c.status ,date from users_has_notifications  uhc
       inner join users uo on (uo.id = uhc.owner)
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
