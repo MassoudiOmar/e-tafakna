@@ -3,6 +3,8 @@ const superagent = require("superagent");
 const Docxtemplater = require("docxtemplater");
 const PizZip = require("pizzip");
 const http = require("https");
+  var path = require("path");
+
 const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
@@ -677,6 +679,9 @@ const updateContractImage = async (req, res) => {
     */
     }
     //var docUrl = uploadDoc.secure_url;
+      var absolutePath = path.resolve("output0.docx");
+    console.log(absolutePath)
+
     console.log(twoPages);
     await convertapi
       .convert(
