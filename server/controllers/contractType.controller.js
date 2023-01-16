@@ -8,7 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("r3oMq79Az2lAlrwG");
+var convertapi = require("convertapi")("OobMxWSQk5lI5nMK");
 //const cheerio = require('cheerio');
 const https = require("https");
 /***
@@ -18,7 +18,6 @@ const https = require("https");
  * Function For When user Accept Change The Picture Of it  (With Some Optimization)
  * USE:
  * https://www.npmjs.com/package/node-html-to-image
- *
  *
  *
  */
@@ -284,7 +283,6 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
     file.on("finish", async () => {
       file.close();
       console.log("Download Completed");
-
       const workbook = new Excel.Workbook();
       await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
         workbook.worksheets[0].getCell("C17").value =
@@ -293,10 +291,8 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
         workbook.worksheets[0].getCell("B9").value = ans[1] + "le " + ans[2];
         workbook.worksheets[0].getCell("D12").value = ans[3];
         let Temp = ans[4];
-
         workbook.worksheets[0].getCell("D13").value = parseInt(ans[4]);
         workbook.worksheets[0].getCell("D13").numFmt = "0";
-
         workbook.worksheets[0].getCell("C17").value =
           workbook.worksheets[0].getCell("C17").value + ans[5];
         let sum = 0;
@@ -318,13 +314,11 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
           console.log("This is the sum so far ", sum);
         }
-
         workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("E36").value =
           (parseInt(workbook.worksheets[0].getCell("E34").value) * 19) / 100;
         console.log(parseInt(workbook.worksheets[0].getCell("E36").value));
         console.log(workbook.worksheets[0].getCell("E34").value);
-
         workbook.worksheets[0].getCell("E41").value =
           parseInt(workbook.worksheets[0].getCell("E36").value) +
           parseInt(workbook.worksheets[0].getCell("E34").value) +
@@ -389,7 +383,6 @@ const verify = (arr) => {
   console.log(arr);
   return arr;
 };
-
 const verifyAr = (arr) => {
   console.log(arr, " ***/*/");
   if (arr[5].length == 0 && arr[6].length > 0) {
@@ -399,7 +392,6 @@ const verifyAr = (arr) => {
   console.log(arr);
   return arr;
 };
-
 var makeEgagement = async (url, question, idBegin, length) => {
   console.log("this is the url ", url);
   console.log("francais****************");
@@ -467,7 +459,6 @@ var makeEgagement = async (url, question, idBegin, length) => {
     return "from cloudinary image";
   }
 };
-
 var makeEgagementAr = async (url, question, idBegin, length) => {
   let renderedDoc = {};
   let Minis = 0;
@@ -532,7 +523,35 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
     return "from cloudinary image";
   }
 };
-
+const addAnswersToAnswerTable = async (req, res) => {
+  const { question, initialQuestionId, contracts_id, contract_types_id,questionsLength } = req.body
+  console.log(questionsLength , " * " , question.length )
+  if (initialQuestionId == -1|| questionsLength-1==question.length ||question.length==0) {
+    console.log("Here")
+    res.end("Error Id")
+  }
+  else {
+    console.log(question)
+    console.log(initialQuestionId)
+    console.log(contracts_id)
+    console.log(contract_types_id)
+    console.log(questionsLength)
+    question.map((element, index) => {
+      db.query(`INSERT ""INTO"" answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${initialQuestionId + index})`, (err, result) => {
+        if (err) {
+          console.log(err)
+          res.send(err)
+        }
+        else {
+          console.log(` question id  :${initialQuestionId + index} with content ${element} has been added`)
+          console.log(index , "***" ,   question.length)
+          if (index == question.length - 1)
+            res.send(question.length.toString())
+        }
+      })
+    })
+  }
+}
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
@@ -630,7 +649,6 @@ const fillContract = async (req, res) => {
     }
   });
 };
-
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
   var twoPages = req.body.twoPages;
@@ -702,7 +720,6 @@ const updateContractImage = async (req, res) => {
       });
   }
 };
-
 const insertContractType = (req, res) => {
   let {
     signed_time,
@@ -784,185 +801,144 @@ const deleteContractById = (req, res) => {
     } else {
       res.json(contracts);
     }
-    w;
+
   });
 };
 require("sharp/package.json"); // sharp is a peer dependency.  npm i sharp join-images
 var mergeImg = require("merge-img");
+const { render } = require("react-dom");
 const concatImages = (req, response) => {
-  const { nElement, images } = req.body;
-  let arrayOfImages = images.split(",");
+  const { nElement, images } = req.body
+  let arrayOfImages = images.split(",")
 
   if (nElement == 2) {
-    const File = fs.createWriteStream("image1.jpg");
-    const File1 = fs.createWriteStream("image2.jpg");
+    const File = fs.createWriteStream("image1.jpg")
+    const File1 = fs.createWriteStream("image2.jpg")
     http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages);
+      console.log(arrayOfImages)
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
         console.log("Download Completed");
-        console.log(arrayOfImages);
+        console.log(arrayOfImages)
 
         http.get(arrayOfImages[1], (res1) => {
-          res1.pipe(File1);
+          res1.pipe(File1)
           File1.on("finish", async () => {
-            File1.close();
-            console.log("Hello");
-            mergeImg(["image1.jpg", "image2.jpg"], { direction: true })
-              .then(async (img) => {
-                // Save image as file
-                await img.write("out1.jpg", async () => {
-                  console.log("Uploading File in Cloudinary");
-                  let uploadDoc = await cloudinary.uploader.upload(`out1.jpg`, {
-                    resource_type: "auto",
-                  });
-                  console.log(uploadDoc.secure_url);
-                  response.send(uploadDoc.secure_url);
-                });
-              })
-              .catch(async (err) => {
-                console.log(err.message);
-              });
-          });
-        });
-      });
-    });
-  } else if (nElement == 3) {
-    const File = fs.createWriteStream("image1.jpg");
-    const File1 = fs.createWriteStream("image2.jpg");
-    const File2 = fs.createWriteStream("image3.jpg");
-    http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages);
-      res.pipe(File);
-      File.on("finish", async () => {
-        File.close();
-        console.log("Download Completed");
-        console.log(arrayOfImages);
+            File1.close()
+            console.log("Hello")
+            mergeImg(["image1.jpg", 'image2.jpg'], { direction: true }).then(async (img) => {
+              // Save image as file
+              await img.write('out1.jpg', async () => {
 
-        http.get(arrayOfImages[1], (res1) => {
-          res1.pipe(File1);
-          File1.on("finish", async () => {
-            File1.close();
-            console.log("Hello");
-            http.get(arrayOfImages[2], (res2) => {
-              res2.pipe(File2);
-              File2.on("finish", async () => {
-                File2.close();
-
-                mergeImg(["image1.jpg", "image2.jpg", "image3.jpg"], {
-                  direction: true,
+                console.log("Uploading File in Cloudinary")
+                let uploadDoc = await cloudinary.uploader.upload(`out1.jpg`, {
+                  resource_type: "auto",
                 })
-                  .then(async (img) => {
-                    // Save image as file
-                    await img.write("out1.jpg", async () => {
-                      console.log("Uploading File in Cloudinary");
-                      let uploadDoc = await cloudinary.uploader.upload(
-                        `out1.jpg`,
-                        {
-                          resource_type: "auto",
-                        }
-                      );
-                      console.log(uploadDoc.secure_url);
-                      response.send(uploadDoc.secure_url);
-                    });
-                  })
-                  .catch(async (err) => {
-                    console.log(err.message);
-                  });
-              });
-            });
-          });
-        });
-      });
-    });
-  } else if (nElement == 4) {
-    const File = fs.createWriteStream("image1.jpg");
-    const File1 = fs.createWriteStream("image2.jpg");
-    const File2 = fs.createWriteStream("image3.jpg");
-    const File3 = fs.createWriteStream("image4.jpg");
-    http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages);
-      res.pipe(File);
-      File.on("finish", async () => {
-        File.close();
-        console.log("Download Completed");
-        console.log(arrayOfImages);
-        http.get(arrayOfImages[1], (res1) => {
-          res1.pipe(File1);
-          File1.on("finish", async () => {
-            File1.close();
-            console.log("Hello");
-            http.get(arrayOfImages[2], (res2) => {
-              res2.pipe(File2);
-              File2.on("finish", async () => {
-                console.log("File 3 Finished ");
-                File2.close();
-                http.get(arrayOfImages[3], (res3) => {
-                  res3.pipe(File3);
-                  File3.on("finish", async () => {
-                    console.log("File 4 Finished ");
-                    File3.close();
-                    mergeImg(
-                      ["image1.jpg", "image2.jpg", "image3.jpg", "image3.jpg"],
-                      { direction: true }
-                    )
-                      .then(async (img) => {
-                        // Save image as file
-                        console.log("Creating The New File");
-                        await img.write("out1.jpg", async () => {
-                          console.log("Uploading File in Cloudinary");
-                          let uploadDoc = await cloudinary.uploader.upload(
-                            `out1.jpg`,
-                            {
-                              resource_type: "auto",
-                            }
-                          );
-                          console.log(uploadDoc.secure_url);
-                          response.send(uploadDoc.secure_url);
-                        });
-                      })
-                      .catch(async (err) => {
-                        console.log(err.message);
-                      });
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  }
-};
-const addAnswersToAnswerTable = async (req, res) => {
-  const { question, initialQuestionId, contracts_id, contract_types_id,questionsLength } = req.body
-  console.log(questionsLength , " * " , question.length )
-  if (initialQuestionId == -1 questionsLength-1==question.length question.length==0) {
-    console.log("Here")
-    res.end("Error Id")
-  }
-  else {
-    console.log(question)
-    console.log(initialQuestionId)
-    console.log(contracts_id)
-    console.log(contract_types_id)
-    console.log(questionsLength)
-    question.map((element, index) => {
-      db.query(`INSERT INTO answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${initialQuestionId + index})`, (err, result) => {
-        if (err) {
-          console.log(err)
-          res.send(err)
-        }
-        else {
-          console.log(` question id  :${initialQuestionId + index} with content ${element} has been added `)
-          console.log(index , "***" ,   question.length)
-          if (index == question.length - 1)
-            res.send(question.length.toString())
-        }
+                console.log(uploadDoc.secure_url)
+                response.send(uploadDoc.secure_url)
+              })
+            }).catch(async err => {
+              console.log(err.message)
+            })
+          })
+        })
       })
     })
   }
+  else
+    if (nElement == 3) {
+      const File = fs.createWriteStream("image1.jpg")
+      const File1 = fs.createWriteStream("image2.jpg")
+      const File2 = fs.createWriteStream("image3.jpg")
+      http.get(arrayOfImages[0], (res) => {
+        console.log(arrayOfImages)
+        res.pipe(File);
+        File.on("finish", async () => {
+          File.close();
+          console.log("Download Completed");
+          console.log(arrayOfImages)
+          http.get(arrayOfImages[1], (res1) => {
+            res1.pipe(File1)
+            File1.on("finish", async () => {
+              File1.close()
+              console.log("Hello")
+              http.get(arrayOfImages[2], (res2) => {
+                res2.pipe(File2)
+                File2.on("finish", async () => {
+                  File2.close()
+                  mergeImg(["image1.jpg", 'image2.jpg', 'image3.jpg'], { direction: true }).then(async (img) => {
+                    // Save image as file
+                    await img.write('out1.jpg', async () => {
+                      console.log("Uploading File in Cloudinary")
+                      let uploadDoc = await cloudinary.uploader.upload(`out1.jpg`, {
+                        resource_type: "auto",
+                      })
+                      console.log(uploadDoc.secure_url)
+                      response.send(uploadDoc.secure_url)
+                    });
+                  }).catch(async err => {
+                    console.log(err.message)
+                  })
+                })
+              })
+            })
+          })
+        })
+      })
+    }
+    else
+      if (nElement == 4) {
+        const File = fs.createWriteStream("image1.jpg")
+        const File1 = fs.createWriteStream("image2.jpg")
+        const File2 = fs.createWriteStream("image3.jpg")
+        const File3 = fs.createWriteStream("image4.jpg")
+        http.get(arrayOfImages[0], (res) => {
+          console.log(arrayOfImages)
+          res.pipe(File);
+          File.on("finish", async () => {
+            File.close();
+            console.log("Download Completed");
+            console.log(arrayOfImages)
+            http.get(arrayOfImages[1], (res1) => {
+              res1.pipe(File1)
+              File1.on("finish", async () => {
+                File1.close()
+                console.log("Hello")
+                http.get(arrayOfImages[2], (res2) => {
+                  res2.pipe(File2)
+                  File2.on("finish", async () => {
+                    console.log("File 3 Finished ")
+                    File2.close()
+                    http.get(arrayOfImages[3], (res3) => {
+                      res3.pipe(File3)
+                      File3.on("finish", async () => {
+                        console.log("File 4 Finished ")
+                        File3.close()
+                        mergeImg(["image1.jpg", 'image2.jpg', 'image3.jpg', 'image3.jpg'], { direction: true }).then(async (img) => {
+                          // Save image as file
+                          console.log("Creating The New File")
+                          await img.write('out1.jpg', async () => {
+
+                            console.log("Uploading File in Cloudinary")
+                            let uploadDoc = await cloudinary.uploader.upload(`out1.jpg`, {
+                              resource_type: "auto",
+                            })
+                            console.log(uploadDoc.secure_url)
+                            response.send(uploadDoc.secure_url)
+                          });
+                        }).catch(async err => {
+                          console.log(err.message)
+                        })
+                      })
+                    })
+                  })
+                })
+              })
+            })
+          })
+        })
+      }
 }
 module.exports = {
   insertContractType,
