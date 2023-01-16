@@ -536,22 +536,23 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
-  let { type, lang } = req.body;
-  console.log(__dirname);
+  let { type, lang, initialQuestionId } = req.body;
   let { questions } = req.body;
   let renderObject = {};
   let answersArray = [];
+  console.log(questions, "this is the question array ")
+  console.log(initialQuestionId, "this is the first id")
   const { id } = req.params;
-  const sql = `select template_FR,template_AR,template_EN, questions_id,content from contract_types
-  inner join answers on (contract_types.id = answers.contracts_contract_types_id)
-  where answers.contracts_id = ?`;
+  console.log(id, "this is the id of the contract")
+  const sql = `select template_FR,template_AR,template_EN   from contract_types
+  where contract_types.id = ?`;
   db.query(sql, [id], async (err, result) => {
     if (err) res.send(err);
     else {
-      answersArray = result.map((element, index) => {
-        let key = element.questions_id;
+      answersArray = questions.map((element, index) => {
+        let key = initialQuestionId + index;
         let object = {};
-        object[key] = element.content;
+        object[key] = element;
         return object;
       });
       renderObject = answersArray.reduce((acc, e, i) => {
@@ -560,6 +561,7 @@ const fillContract = async (req, res) => {
         acc[key] = value;
         return acc;
       }, {});
+      console.log(renderObject)
       // res.send(result);
       var url = "";
       if (lang === "Arabe") {
@@ -589,7 +591,6 @@ const fillContract = async (req, res) => {
         res.end(false);
       }
       //Demande Officiale
-
       if (type == "facture" || type == "devis") {
         if (lang == "Arabe") {
           console.log("Arabe");
@@ -616,14 +617,14 @@ const fillContract = async (req, res) => {
           var Result = await createDocAndImage(url, 0, renderObject);
 
           Has_Two_Pages = false;
-          res.send(Has_Two_Pages);
+          res.send('0');
         } else {
           url = url.split(",");
           for (let i = 0; i < url.length; i++) {
             var Result = await createDocAndImage(url[i], i, renderObject);
             if (Result == "from cloudinary image") res.send(err);
           }
-          res.send(Has_Two_Pages);
+          res.send((url.length - 1).toString());
         }
       }
     }
@@ -633,14 +634,16 @@ const fillContract = async (req, res) => {
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
   var twoPages = req.body.twoPages;
+  const { user_name } = req.body
   var urlImage = "";
   var Cmpt = 0;
-
-  if (twoPages == "civp") Cmpt = 3;
-  else if (twoPages === true) {
-    Cmpt = 1;
+  console.log(twoPages)
+  if (!isNaN(twoPages)) {
+    Cmpt = twoPages
   }
-
+  else
+    if (twoPages == null)
+      Cmpt = 0
   console.log(Cmpt, "cmpt");
   let Temp = [];
   for (let i = 0; i <= Cmpt; i++) {
@@ -662,8 +665,9 @@ const updateContractImage = async (req, res) => {
         "jpg",
         {
           File: twoPages == "facture" ? `output${i}.xlsx` : `output${i}.docx`,
-          ImageResolutionH: "300",
-          ImageResolutionV: "300",
+          FileName: `Par_${user_name}`,
+          ImageResolutionH: "250",
+          ImageResolutionV: "250",
           ScaleImage: "true",
         },
         twoPages == "facture" ? "xlsx" : "docx"
@@ -931,6 +935,35 @@ const concatImages = (req, response) => {
     });
   }
 };
+const addAnswersToAnswerTable = async (req, res) => {
+  const { question, initialQuestionId, contracts_id, contract_types_id,questionsLength } = req.body
+  console.log(questionsLength , " * " , question.length )
+  if (initialQuestionId == -1 questionsLength-1==question.length question.length==0) {
+    console.log("Here")
+    res.end("Error Id")
+  }
+  else {
+    console.log(question)
+    console.log(initialQuestionId)
+    console.log(contracts_id)
+    console.log(contract_types_id)
+    console.log(questionsLength)
+    question.map((element, index) => {
+      db.query(`INSERT INTO answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${initialQuestionId + index})`, (err, result) => {
+        if (err) {
+          console.log(err)
+          res.send(err)
+        }
+        else {
+          console.log(` question id  :${initialQuestionId + index} with content ${element} has been added `)
+          console.log(index , "***" ,   question.length)
+          if (index == question.length - 1)
+            res.send(question.length.toString())
+        }
+      })
+    })
+  }
+}
 module.exports = {
   insertContractType,
   getAllContractType,
@@ -941,4 +974,5 @@ module.exports = {
   updateContractImage,
   ChangeStatusInContract,
   concatImages,
+  addAnswersToAnswerTable
 };
