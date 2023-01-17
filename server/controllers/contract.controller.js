@@ -1,5 +1,5 @@
 const db = require("../database-mysql");
-
+//.
 const insertContract = (req, res) => {
   const { contract_types_id } = req.body;
 
