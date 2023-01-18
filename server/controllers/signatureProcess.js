@@ -183,7 +183,7 @@ const updateStatus = (req, res) => {
 
 
 const sendOtp = (req, res) => {
-  // const { clientId } = req.query;
+  const { clientId } = req.query;
   // var {rejectedUnauthorized }= req.query
       
   const { certType, userId, idType, authDelivery, phone } = req.body;
@@ -193,7 +193,7 @@ const sendOtp = (req, res) => {
       { certType, userId, idType, authDelivery, phone },
     )
     .then((res) => {
-      res.send(res, "res");
+      res.send(res,clientId, "res");
     })
     .catch((err) => {
       res.send(err);
