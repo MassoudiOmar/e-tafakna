@@ -199,7 +199,7 @@ const changeContractStatus = (req, res) => {
 let getNotification = (req, res) => {
   const { id } = req.params;
   let sql = `
-   select uhc.id,seen, uo.first_name as username ,uo.image as imageOwner,ur.image as imageReciever, ur.first_name as receiver,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,c.status ,date from users_has_notifications  uhc
+   select uhc.id,seen, uo.first_name as username ,uo.image as imageOwner,uo.faceVideo as color_Username,ur.faceVideo as color_Reciever, ur.image as imageReciever, ur.first_name as receiver,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,c.status ,date from users_has_notifications  uhc
       inner join users uo on (uo.id = uhc.owner)
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
