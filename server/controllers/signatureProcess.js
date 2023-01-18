@@ -180,12 +180,13 @@ const updateStatus = (req, res) => {
 ////////////////////////////////////////////////// DIGIGO SERVICES BELOW
 
 ////////////////////// SERVICE ONE ////// AED-SEND-OTP
+require('https').globalAgent.options.ca = require('ssl-root-cas').create();
 const sendOtp = (req, res) => {
   const { clientId } = req.query;
   const { certType, userId, idType, authDelivery, phone } = req.body;
   axios
     .post(
-      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/`,
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp`,
       { certType, userId, idType, authDelivery, phone }
     )
     .then((res) => {
