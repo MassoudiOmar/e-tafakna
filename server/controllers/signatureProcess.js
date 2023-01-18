@@ -185,7 +185,7 @@ const sendOtp = (req, res) => {
   const { certType, userId, idType, authDelivery, phone } = req.body;
   axios
     .post(
-      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-pro`,
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/`,
       { certType, userId, idType, authDelivery, phone }
     )
     .then((res) => {
