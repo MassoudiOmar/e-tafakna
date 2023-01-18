@@ -26,7 +26,7 @@ router.post("/cancel-affiliation/:clientId", signature.cancelAffiliation);
 router.get("/get-quota-aed/:clientId", signature.getQuotaAed);
 router.get("/get-quota-user/:clientId/:email", signature.getQuotaUser);
 
-module.exports = router;s
+module.exports = router;
 
 
 /*
