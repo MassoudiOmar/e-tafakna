@@ -181,11 +181,11 @@ const updateStatus = (req, res) => {
 
 ////////////////////// SERVICE ONE ////// AED-SEND-OTP
 const sendOtp = (req, res) => {
-  const { clientId } = req.params;
+  const { clientId } = req.query;
   const { certType, userId, idType, authDelivery, phone } = req.body;
   axios
     .post(
-      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/${clientId}`,
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/?${clientId}`,
       { certType, userId, idType, authDelivery, phone }
     )
     .then((res) => {
