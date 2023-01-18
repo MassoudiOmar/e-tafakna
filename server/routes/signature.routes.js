@@ -15,7 +15,7 @@ router.post("/approve-affiliation/:clientId",signature.approveAffiliation)
 router.post("/aed-userI-info/:clientId/:email",signature.aedUserInfo)
 router.post("/change-affiliation/:clientId",signature.changeAffiliation)
 router.post("/upload-proof/:clientId/:requestId",signature.changeAffiliation)
-router.post("/aed-send-otp/ffa", signature.sendOtp);
+router.post("/aed-send-otp/ffa/:clientId", signature.sendOtp);
 router.post("/create-digigo-user/:clientId", signature.createUser);
 router.post("/validate-identity/:clientId", signature.validateIdentity);
 router.get("/aed-user-status/:clientId/:userId/:idType/:email", signature.aedUserStatues);

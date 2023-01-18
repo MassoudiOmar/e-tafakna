@@ -183,7 +183,7 @@ const updateStatus = (req, res) => {
 
 
 const sendOtp = (req, res) => {
-  const { clientId } = req.query;
+  const { clientId } = req.params;
   // var {rejectedUnauthorized }= req.query
       
   const { certType, userId, idType, authDelivery, phone } = req.body;
