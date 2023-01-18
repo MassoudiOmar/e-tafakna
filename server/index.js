@@ -31,11 +31,17 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+
+
 app.listen(PORT, function () {
   console.log(`Server running on ${PORT}`);
 });
 
 app.use(bodyParser.urlencoded({ limit: "1000mb" }));
+
+// CORRECT (should always work)
 
 // app.use(express.bodyParser({limit: '500mb'}))
 app.use(cors({ origin: "*" }));
