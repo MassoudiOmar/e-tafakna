@@ -257,4 +257,39 @@ const verifying = (req, res) => {
     }
   }
 };
-module.exports = { resetPasswor, verifying, updatepassword };
+const payment = async (req, res) => {
+  const { id } = req.params;
+  let amount;
+  id == 1 ? (amount = 2.8) : null;
+  id == 2 ? (amount = 20) : null;
+  id == 3 ? (amount = 55) : null;
+  id == 4 ? (amount = 99) : null;
+
+  var increment = (function (n) {
+    return function () {
+      n += 1;
+      return n;
+    };
+  })(0);
+  let data = {
+    vendor: 2675,
+    amount: amount,
+    note: increment(1),
+  };
+
+  const response = await fetch(
+    "https://sandbox.paymee.tn/api/v1/payments/create",
+    {
+      body: JSON.stringify(data),
+      method: "POST",
+      headers: {
+        "Content-type": "application/json;charset=UTF-8",
+        Authorization: "TOKEN 39ea18210a493b3e63d2b94abeef37f48f74304c",
+      },
+    }
+  ).then(async (response) => {
+    const data = await response.json();
+    res.send(data);
+  });
+};
+module.exports = { resetPasswor, verifying, updatepassword , payment };

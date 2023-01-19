@@ -3,14 +3,12 @@ const superagent = require("superagent");
 const Docxtemplater = require("docxtemplater");
 const PizZip = require("pizzip");
 const http = require("https");
-  var path = require("path");
-
 const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("OobMxWSQk5lI5nMK");
+var convertapi = require("convertapi")("4o8iEFkvzfnGYJo6");
 //const cheerio = require('cheerio');
 const https = require("https");
 /***
@@ -20,7 +18,6 @@ const https = require("https");
  * Function For When user Accept Change The Picture Of it  (With Some Optimization)
  * USE:
  * https://www.npmjs.com/package/node-html-to-image
- *
  *
  */
 var ChangeStatusInContract = async (req, res) => {
@@ -165,7 +162,6 @@ var createDocAndImage = async (str, index, renderObject) => {
 };
 const makeFactureOrDevis = async (url, ans, type, language) => {
   console.log(ans);
-
   const file = fs.createWriteStream("file.xlsx");
   http.get(url, function (response) {
     response.pipe(file);
@@ -177,22 +173,18 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
       else {
         t = " و " + ans[2];
       }
-
       const workbook = new Excel.Workbook();
       await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
         workbook.worksheets[0].getCell("B39").numFmt = "0.000";
         workbook.worksheets[0].getCell("B39").value = "0.600";
-
         workbook.worksheets[0].getCell("C17").value =
           " /° N " + type.toUpperCase();
         workbook.worksheets[0].getCell("A1").value = ans[0];
         workbook.worksheets[0].getCell("B9").value = ans[1] + t;
         workbook.worksheets[0].getCell("B12").value = ans[3];
         let Temp = ans[4];
-
         workbook.worksheets[0].getCell("B13").value = parseInt(ans[4]);
         workbook.worksheets[0].getCell("B13").numFmt = "0";
-
         workbook.worksheets[0].getCell("C17").value =
           ans[5] + workbook.worksheets[0].getCell("C17").value;
         let sum = 0;
@@ -214,7 +206,6 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
           console.log("This is the sum so far ", sum);
         }
-
         workbook.worksheets[0].getCell("B34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("B37").value = (sum * 19) / 100;
         workbook.worksheets[0].getCell("B41").value =
@@ -222,7 +213,6 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
           parseInt(workbook.worksheets[0].getCell("B34").value) +
           0.6;
         workbook.worksheets[0].getCell("B41").numFmt = "0.000";
-
         var arr = workbook.worksheets[0]
           .getCell("D46")
           .value.split("..................................................:");
@@ -276,7 +266,6 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
   });
   return "Hi";
 };
-
 let makeFactureOrDevisFr = (url, ans, type, language) => {
   console.log(ans);
   const file = fs.createWriteStream("file.xlsx");
@@ -326,7 +315,6 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
           parseInt(workbook.worksheets[0].getCell("E34").value) +
           0.6;
         //workbook.worksheets[0].getCell("E41").numFmt= "0.000"
-
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
         console.log(arr);
         console.log(f);
@@ -375,7 +363,6 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
   });
   return "Hi";
 };
-
 const verify = (arr) => {
   console.log(arr, " ***/*/");
   if (arr[8].length == 0 && arr[9].length > 0) {
@@ -539,7 +526,7 @@ const addAnswersToAnswerTable = async (req, res) => {
     console.log(contract_types_id)
     console.log(questionsLength)
     question.map((element, index) => {
-      db.query(`INSERT ""INTO"" answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${initialQuestionId + index})`, (err, result) => {
+      db.query(`INSERT INTO answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${initialQuestionId + index})`, (err, result) => {
         if (err) {
           console.log(err)
           res.send(err)
@@ -628,7 +615,7 @@ const fillContract = async (req, res) => {
             (response) => {
               setTimeout(() => {
                 res.send("facture");
-              }, 5000);
+              }, 9000);
             }
           );
         }
@@ -636,7 +623,6 @@ const fillContract = async (req, res) => {
         var Has_Two_Pages = true;
         if (url.search(",") == -1) {
           var Result = await createDocAndImage(url, 0, renderObject);
-
           Has_Two_Pages = false;
           res.send('0');
         } else {
@@ -662,12 +648,11 @@ const updateContractImage = async (req, res) => {
     Cmpt = twoPages
   }
   else
-    if (twoPages == null)
       Cmpt = 0
   console.log(Cmpt, "cmpt");
   let Temp = [];
   for (let i = 0; i <= Cmpt; i++) {
-    if (twoPages == "facture") {
+    if (twoPages == "facture22") {
       var uploadDoc = await cloudinary.uploader.upload(`output${i}.xlsx`, {
         resource_type: "auto",
       });
@@ -679,23 +664,17 @@ const updateContractImage = async (req, res) => {
     */
     }
     //var docUrl = uploadDoc.secure_url;
-      var absolutePath = path.resolve("output0.docx");
-    console.log(absolutePath)
-
-    console.log(twoPages);
+    console.log(i);
     await convertapi
       .convert(
         "jpg",
         {
-          File: twoPages == "facture" ? `output${i}.xlsx` : `output${i}.docx`,
-          FileName: `Par_${user_name}`,
-          ImageResolutionH: "250",
-          ImageResolutionV: "250",
-          ScaleImage: "true",
+          File:`output${i}.xlsx`,
         },
-        twoPages == "facture" ? "xlsx" : "docx"
+        "xlsx" 
       )
       .then(async function (result) {
+        console.log(result.file.url)
         if (i <= Cmpt - 1) {
           Temp.push({
             id: i,
@@ -708,20 +687,52 @@ const updateContractImage = async (req, res) => {
             id: i,
             image: result.file.url,
           });
-
           urlImage += result.file.url;
           console.log(Temp);
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
           db.query(updateContract, [urlImage, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
-          });
-          res.send(urlImage);
-        }
+          });        
+          Temp =[]
+          let NurlImage =""
+for (let j = 0  ; j<=Cmpt ; j ++){
+  await convertapi
+  .convert(
+    "pdf",
+    {
+      File: twoPages == "facture" ? `output${j}.xlsx` : `output${j}.docx`,
+    },
+    twoPages == "facture" ? "xlsx" : "docx"
+  )
+  .then(async function (result) {
+    if (j <= Cmpt - 1) {
+      Temp.push({
+        id: j,
+        image: result.file.url,
+      });
+
+      NurlImage += result.file.url + ",";
+    } else {
+      Temp.push({
+        id: j,
+        image: result.file.url,
+      });
+      NurlImage += result.file.url;
+      const updateContract1 = `UPDATE contracts set pdfContractImage =? where id =?`;
+      db.query(updateContract1, [ NurlImage, id], (err, result) => {
+        err ? console.log(err) : console.log(result);
+      })
+    }})
+}
+console.log(Temp)
+res.send( urlImage+'|'+NurlImage)
+//    res.send(urlImage);
+      }
         console.log(urlImage, "urll imagee");
       })
       .catch((error) => {
         console.log(error.message);
-        res.send({ message: error });
+        res.send(error.message);
       });
   }
 };
@@ -812,13 +823,31 @@ const deleteContractById = (req, res) => {
 require("sharp/package.json"); // sharp is a peer dependency.  npm i sharp join-images
 var mergeImg = require("merge-img");
 const { render } = require("react-dom");
+const PDFMerger = require('pdf-merger-js');
 const concatImages = (req, response) => {
+  var merger = new PDFMerger();
   const { nElement, images } = req.body
   let arrayOfImages = images.split(",")
-
+if(nElement==1){
+  const File = fs.createWriteStream("image1.pdf")
+   http.get(arrayOfImages[0], (res) => {
+    console.log(arrayOfImages)
+    res.pipe(File);
+    File.on("finish", async () => {
+      File.close();
+      console.log("Download Completed");
+      console.log(arrayOfImages)
+      let uploadDoc = await cloudinary.uploader.upload(`image1.pdf`, {
+        resource_type: "auto",
+      })
+      console.log(uploadDoc.secure_url)
+      response.send(uploadDoc.secure_url)
+    })
+  })
+}
   if (nElement == 2) {
-    const File = fs.createWriteStream("image1.jpg")
-    const File1 = fs.createWriteStream("image2.jpg")
+    const File = fs.createWriteStream("image1.pdf")
+    const File1 = fs.createWriteStream("image2.pdf")
     http.get(arrayOfImages[0], (res) => {
       console.log(arrayOfImages)
       res.pipe(File);
@@ -832,20 +861,18 @@ const concatImages = (req, response) => {
           File1.on("finish", async () => {
             File1.close()
             console.log("Hello")
-            mergeImg(["image1.jpg", 'image2.jpg'], { direction: true }).then(async (img) => {
-              // Save image as file
-              await img.write('out1.jpg', async () => {
-
-                console.log("Uploading File in Cloudinary")
-                let uploadDoc = await cloudinary.uploader.upload(`out1.jpg`, {
+              await merger.add('image1.pdf');  //merge all pages. parameter is the path to file and filename.
+              await merger.add('image2.pdf'); // merge only page 2
+              await merger.save('merged.pdf').then(async res=>{
+                let uploadDoc = await cloudinary.uploader.upload(`merged.pdf`, {
                   resource_type: "auto",
                 })
                 console.log(uploadDoc.secure_url)
                 response.send(uploadDoc.secure_url)
-              })
-            }).catch(async err => {
-              console.log(err.message)
-            })
+              }); //save under given name and reset the internal document
+              // Export the merged PDF as a nodejs Buffer
+              // const mergedPdfBuffer = await merger.saveAsBuffer();
+              // fs.writeSync('merged.pdf', mergedPdfBuffer);
           })
         })
       })
@@ -853,9 +880,9 @@ const concatImages = (req, response) => {
   }
   else
     if (nElement == 3) {
-      const File = fs.createWriteStream("image1.jpg")
-      const File1 = fs.createWriteStream("image2.jpg")
-      const File2 = fs.createWriteStream("image3.jpg")
+      const File = fs.createWriteStream("image1.pdf")
+      const File1 = fs.createWriteStream("image2.pdf")
+      const File2 = fs.createWriteStream("image3.pdf")
       http.get(arrayOfImages[0], (res) => {
         console.log(arrayOfImages)
         res.pipe(File);
@@ -869,22 +896,25 @@ const concatImages = (req, response) => {
               File1.close()
               console.log("Hello")
               http.get(arrayOfImages[2], (res2) => {
+                console.log("Download Of The Second File")
                 res2.pipe(File2)
                 File2.on("finish", async () => {
                   File2.close()
-                  mergeImg(["image1.jpg", 'image2.jpg', 'image3.jpg'], { direction: true }).then(async (img) => {
-                    // Save image as file
-                    await img.write('out1.jpg', async () => {
-                      console.log("Uploading File in Cloudinary")
-                      let uploadDoc = await cloudinary.uploader.upload(`out1.jpg`, {
+                    console.log("Merging")
+                    await merger.add('image1.pdf');  //merge all pages. parameter is the path to file and filename.
+                    await merger.add('image2.pdf'); // merge only page 2
+                    await merger.add('image3.pdf'); // merge the pages 1 and 3
+                    await merger.save('merged.pdf').then(async  res=>{
+                      console.log("Uploading To Cloudinary")
+                      let uploadDoc = await cloudinary.uploader.upload(`merged.pdf`, {
                         resource_type: "auto",
                       })
                       console.log(uploadDoc.secure_url)
                       response.send(uploadDoc.secure_url)
-                    });
-                  }).catch(async err => {
-                    console.log(err.message)
-                  })
+                    }); //save under given name and reset the internal document
+                    // Export the merged PDF as a nodejs Buffer
+                    // const mergedPdfBuffer = await merger.saveAsBuffer();
+                    // fs.writeSync('merged.pdf', mergedPdfBuffer);
                 })
               })
             })
@@ -894,10 +924,10 @@ const concatImages = (req, response) => {
     }
     else
       if (nElement == 4) {
-        const File = fs.createWriteStream("image1.jpg")
-        const File1 = fs.createWriteStream("image2.jpg")
-        const File2 = fs.createWriteStream("image3.jpg")
-        const File3 = fs.createWriteStream("image4.jpg")
+        const File = fs.createWriteStream("image1.pdf")
+        const File1 = fs.createWriteStream("image2.pdf")
+        const File2 = fs.createWriteStream("image3.pdf")
+        const File3 = fs.createWriteStream("image4.pdf")
         http.get(arrayOfImages[0], (res) => {
           console.log(arrayOfImages)
           res.pipe(File);
@@ -920,21 +950,21 @@ const concatImages = (req, response) => {
                       File3.on("finish", async () => {
                         console.log("File 4 Finished ")
                         File3.close()
-                        mergeImg(["image1.jpg", 'image2.jpg', 'image3.jpg', 'image3.jpg'], { direction: true }).then(async (img) => {
-                          // Save image as file
-                          console.log("Creating The New File")
-                          await img.write('out1.jpg', async () => {
-
-                            console.log("Uploading File in Cloudinary")
-                            let uploadDoc = await cloudinary.uploader.upload(`out1.jpg`, {
+                          await merger.add('image1.pdf');  //merge all pages. parameter is the path to file and filename.
+                          await merger.add('image2.pdf'); // merge only page 2
+                          await merger.add('image3.pdf'); // merge the pages 1 and 3
+                          await merger.add('image4.pdf'); // merge the pages 1 and 3
+                          await merger.save('merged.pdf').then(async res=>{
+                            let uploadDoc = await cloudinary.uploader.upload(`merged.pdf`, {
                               resource_type: "auto",
                             })
                             console.log(uploadDoc.secure_url)
                             response.send(uploadDoc.secure_url)
-                          });
-                        }).catch(async err => {
-                          console.log(err.message)
-                        })
+                          }); //save under given name and reset the internal document
+                          // Export the merged PDF as a nodejs Buffer
+                          // const mergedPdfBuffer = await merger.saveAsBuffer();
+                          // fs.writeSync('merged.pdf', mergedPdfBuffer);
+                        
                       })
                     })
                   })

@@ -1,4 +1,5 @@
 const db = require("../database-mysql");
+let nodeGeocoder = require('node-geocoder');
 //.
 const insertContract = (req, res) => {
   const { contract_types_id } = req.body;
@@ -139,47 +140,16 @@ const deleteContract = (req, res) => {
 };
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
-  let sql = ` SELECT * FROM users_has_contracts c
+  console.log(owner)
+  const sql = ` SELECT * FROM users_has_contracts c
   inner join contracts t on (t.id = c.contracts_id )
   inner join contract_types f on (f.id=t.contract_types_id)
   inner join users u on(u.id= c.owner)
-  where c.owner = ? && archieve = "true"`;
-  db.query(sql, [owner], (err, result) => {
+  where c.owner = ? && t.contract_image IS NOT NULL || c.receiver=? && t.status="accepted"`;
+  db.query(sql, [owner,owner], (err, result) => {
     if (err) {
       console.log(err);
-    }
-    //Pagination
-    const numOfResults = result.length;
-    const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? parseInt(req.query.page) : 1;
-    if (page > numberofPAGES0) {
-      res.send("/?page=" + encodeURIComponent(numberofPAGES0));
-      console.log("no data")
-    } else if (page < 1) {
-       res.send("/?page=" + encodeURIComponent("1"));
-    }
-
-    const startingLimit = (page - 1) * resultPerPage;
-    sql = ` 
-    SELECT * FROM users_has_contracts c
-    inner join contracts t on (t.id = c.contracts_id )
-    inner join contract_types f on (f.id=t.contract_types_id)
-    inner join users u on(u.id= c.owner)
-    where c.owner = ? && archieve = "true" LIMIT ${startingLimit},${resultPerPage} 
- `;
-    db.query(sql, [owner], (err, result) => {
-      if (err) throw err;
-      let iterator = page - 5 < 1 ? 1 : page - 5;
-      let endingLink =
-        iterator + 9 <= numberofPAGES0
-          ? iterator + 9
-          : page + (numberofPAGES0 + 9);
-      if (endingLink < page + 4) {
-        iterator -= page + 4 - numberofPAGES0;
-      }
-      console.log(endingLink, "endingLink");
-      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
-    });
+    } else res.send(result);
   });
 };
 
@@ -262,6 +232,23 @@ let getContractImage = (req, res) => {
     }
   });
 };
+const getLoacation =(req,res)=>{
+
+  const {lat,long,lang}=req.body
+  let options = {
+    provider: 'openstreetmap',
+    language : lang
+  };
+
+  let geoCoder = nodeGeocoder(options);
+  geoCoder.reverse({lat:lat, lon:long})
+    .then((result)=> {
+      res.send(result);
+    })
+    .catch((err)=> {
+      console.log(err);
+    });
+}
 
 module.exports = {
   insertContract,
@@ -276,4 +263,5 @@ module.exports = {
   updateSeen,
   deleteContract,
   getArchieve,
+  getLoacation
 };
