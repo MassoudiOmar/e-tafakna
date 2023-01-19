@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`contracts` (
   `contract_image` VARCHAR(1000) NULL DEFAULT NULL,
   `contract_types_id` INT NOT NULL,
   `archieve` VARCHAR(255) NULL DEFAULT NULL,
+  `pdfContractImage` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`, `contract_types_id`),
   INDEX `fk_contracts_contract_types1_idx` (`contract_types_id` ASC) VISIBLE,
   CONSTRAINT `fk_contracts_contract_types1` FOREIGN KEY (`contract_types_id`) REFERENCES `etafakna`.`contract_types` (`id`) ON DELETE CASCADE
@@ -218,7 +219,6 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`users` (
 -- -----------------------------------------------------
 -- Table `etafakna`.`user_answer`
 -- -----------------------------------------------------
-
 CREATE TABLE user_answers (
   id int NOT NULL AUTO_INCREMENT,
   question varchar(45) DEFAULT NULL,
@@ -696,7 +696,7 @@ VALUES
 -- DEMANDE OFFICIEL
 (N'A l’attention',N'Civilité du destinataire',null,"double","false",null,"nukk"),
 (N'Nom et Prénom',N'Du destinataire',null,null,"false",null,"nukk"),
-(N'Quel est l’objet de votre demande',null,null,null,"false",null,"nukk"),
+(N'Quel est l’objet de votre demande',null,null,"demande","false",null,null),
 (N'Veuillez préciser votre demande',null,null,null,"false",null,"textArea"),
 (N'Fait à',N'Veuillez préciser votre gouvernorat',null,null,"false",null,null),
 ("Date de la demande",null,null,null,"true",null,null),
@@ -706,7 +706,7 @@ VALUES
 -- CDD
 (N'Nom de la société',null,null,null,null,null,null),
 (N'Activité de la société',null,null,null,null,N'Activités informatiques, Formations professionnelles, Organisations de séminaires, Agricole..',null), 
-(N'Adresse de la société',N'Rue, Gouvernorat, Code postal',null,null,null,null,null),
+(N'Adresse de la société',N'Rue, Gouvernorat, Code postal',null,null,null,null,"big"),
 (N'N° du registre de commerce',null,null,null,null,N'Ex:1236549/C',null),
 (N'Civilité',N'Du gérant(e)',"n","double","n",null,null),
 (N'Nom et Prénom',N'Du gérant(e)',"n","n","n",null,null),
