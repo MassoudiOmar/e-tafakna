@@ -2,7 +2,7 @@ var db = require("../database-mysql");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-//  get one admin
+//  get one admin Admin 
 let getAdmin = (email, callback) => {
   const sql = "SELECT * FROM `users` WHERE email = ? ";
   db.query(sql, [email], (err, user) => {
