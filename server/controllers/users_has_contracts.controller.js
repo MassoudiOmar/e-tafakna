@@ -102,13 +102,13 @@ const sendcontracts = (req, res) => {
 const sendNotification = (req, res) => {
   const date = function today(i) {
     var weekday = new Array(7);
-    weekday[1] = "Lundi";
-    weekday[2] = "Mardi";
-    weekday[3] = "Mercredi";
-    weekday[4] = "Jeudi";
-    weekday[5] = "Vendredi";
-    weekday[6] = "Samedi";
-    weekday[7] = "Dimanche";
+    weekday[0] = "Lundi";
+    weekday[1] = "Mardi";
+    weekday[2] = "Mercredi";
+    weekday[3] = "Jeudi";
+    weekday[4] = "Vendredi";
+    weekday[5] = "Samedi";
+    weekday[6] = "Dimanche";
     var today = new Date();
     var yyyy = today.getDay();
     var min = today.getMinutes();
@@ -116,7 +116,6 @@ const sendNotification = (req, res) => {
     today = weekday[yyyy] + " à " + hours + ":" + min;
     return today;
   };
-
   const seen = false;
   const { owner, receiver, contracts_id } = req.body;
   console.log(req.body, "bodyyy");
