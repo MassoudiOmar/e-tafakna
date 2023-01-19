@@ -292,4 +292,4 @@ const payment = async (req, res) => {
     res.send(data);
   });
 };
-module.exports = { resetPasswor, verifying, updatepassword , payment };
+module.exports = { resetPasswor, verifying, updatepassword, payment };
