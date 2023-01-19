@@ -669,9 +669,9 @@ const updateContractImage = async (req, res) => {
       .convert(
         "jpg",
         {
-          File:`output${i}.xlsx`,
+          File: twoPages =="facture" ?`output${i}.xlsx` :`output${i}.docx`,
         },
-        "xlsx" 
+        twoPages =="facture" ? `xlsx` :`docx` 
       )
       .then(async function (result) {
         console.log(result.file.url)
