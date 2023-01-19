@@ -183,13 +183,13 @@ const updateStatus = (req, res) => {
 
 
 const sendOtp = (req, res) => {
-  const { clientId } = req.params;
+  const { clientId } = req.query;
   // var {rejectedUnauthorized }= req.query
       
   const { certType, userId, idType, authDelivery, phone } = req.body;
   axios
     .post(
-      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/c638a72d-5324-405e-b664-de94ed3db77c`,
+      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp`,
       { certType, userId, idType, authDelivery, phone },
     )
     .then((res) => {

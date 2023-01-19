@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/index.js"
+    "start": "nodemon  SET NODE_TLS_REJECT_UNAUTHORIZED=0 server/index.js"
   },
   "dependencies": {
     "@tapbilletera/react-native-credit-card-input": "^0.5.3",
