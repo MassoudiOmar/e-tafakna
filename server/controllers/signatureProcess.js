@@ -182,23 +182,44 @@ const updateStatus = (req, res) => {
 ////////////////////// SERVICE ONE ////// AED-SEND-OTP
 
 
-const sendOtp = (req, res) => {
-  const { clientId } = req.query;
-  // var {rejectedUnauthorized }= req.query
+// const sendOtp = (req, res) => {
+//   const { clientId } = req.query;
+//   // var {rejectedUnauthorized }= req.query
       
-  const { certType, userId, idType, authDelivery, phone } = req.body;
-  axios
-    .post(
-      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp`,
-      { certType, userId, idType, authDelivery, phone },
-    )
-    .then((res) => {
-      res.send(res,clientId, "res");
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-};
+//   const { certType, userId, idType, authDelivery, phone } = req.body;
+//   axios
+//     .post(
+//       `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp`,
+//       { certType, userId, idType, authDelivery, phone },
+//     )
+//     .then((res) => {
+//       res.send(res,clientId, "res");
+//     })
+//     .catch((err) => {
+//       res.send(err);
+//     });
+// };
+const request = require('request-promise');
+const sendOtp = (req, res) => {
+  var options = {
+    method: 'POST',
+    uri: 'https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/c638a72d-5324-405e-b664-de94ed3db77c',
+    body: { certType, userId, idType, authDelivery, phone } = req.body,
+    json: true,
+    headers: {
+        'Content-Type': 'application/json',
+        'Host': 'digigo.tuntrust.tn'
+    }
+}
+request(options).then(function (response){
+    res.status(200).json(response);
+})
+.catch(function (err) {
+    console.log(err);
+})
+}
+
+
 
 
 
