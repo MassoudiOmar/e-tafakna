@@ -555,6 +555,50 @@ const updateUserInfo =(req,res)=>{
      {res.send(result)}
      })
 }
+const updatePassword = (req, res) => {
+  const { id } = req.params;
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+  if (!oldPassword  !newPassword  !confirmPassword) {
+    res.send("Please fill all the fields");
+  } else if (newPassword !== confirmPassword) {
+    res.send("Please confirm your password");
+  } else {
+    const sql = select password from users where id  = ?;
+    db.query(sql, [id], async (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        try {
+          const check = await bcrypt.compare(
+            oldPassword.toString(),
+            result[0].password
+          );
+          if (check) {
+            const salt = await bcrypt.genSalt();
+            console.log(salt, "salt");
+            const password = await bcrypt.hash(oldPassword.toString(), salt);
+            console.log(password, "password");
+
+            const salt1 = await bcrypt.genSalt();
+            const password1 = await bcrypt.hash(newPassword.toString(), salt1);
+            const sql = ` update users set password = ? where id = ?`;
+            db.query(sql, [password1, id], (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.send("Done");
+              }
+            });
+          } else {
+            res.send("password incorect");
+          }
+        } catch (err) {
+          console.log(err, "error");
+        }
+      }
+    });
+  }
+};
 module.exports = {
   register,
   activate,
@@ -568,5 +612,6 @@ module.exports = {
   deleteAllNotificationOfUser,
   getAllAnswerOfUser,
   getNameOfSpecificContract,
-  updateUserInfo
+  updateUserInfo,
+  updatePassword
 };
