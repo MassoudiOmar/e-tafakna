@@ -828,10 +828,11 @@ const concatImages = (req, response) => {
   var merger = new PDFMerger();
   const { nElement, images } = req.body
   console.log(images)
+  let arrayOfImages = []
   if(image.indexOf(",")!=-1)
-  let arrayOfImages = images.split(",")
+   arrayOfImages = images.split(",")
   else 
-  let arrayOfImages = [images]
+   arrayOfImages = [images]
   console.log(nElement ", this is the number of element")
   
   console.log(arrayOfImages ", this is the number of array")
