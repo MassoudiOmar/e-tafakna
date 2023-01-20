@@ -829,7 +829,7 @@ const concatImages = (req, response) => {
   const { nElement, images } = req.body
   console.log(images)
   let arrayOfImages = []
-  if(image.indexOf(",")!=-1)
+  if(images.indexOf(",")!=-1)
    arrayOfImages = images.split(",")
   else 
    arrayOfImages = [images]
