@@ -833,9 +833,9 @@ const concatImages = (req, response) => {
    arrayOfImages = images.split(",")
   else 
    arrayOfImages = [images]
-  console.log(nElement ", this is the number of element")
+  console.log(nElement ,", this is the number of element")
   
-  console.log(arrayOfImages ", this is the number of array")
+  console.log(arrayOfImages ,", this is the number of array")
 if(nElement==1){
   const File = fs.createWriteStream("image1.pdf")
    http.get(arrayOfImages[0], (res) => {
