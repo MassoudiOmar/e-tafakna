@@ -665,13 +665,16 @@ const updateContractImage = async (req, res) => {
     }
     //var docUrl = uploadDoc.secure_url;
     console.log(i);
+    let T =  twoPages=="facture" ? "xlsx" :"docx"
+    let T2 =  twoPages=="facture" ? `output${i}.xlsx` :`output${i}.docx`
+
     await convertapi
       .convert(
         "jpg",
         {
-          File: twoPages =="facture" ?`output${i}.docx` :`output${i}.docx`,
+          File:T2 ,
         },
-        twoPages =="facture" ? `docx` :`docx` 
+         T 
       )
       .then(async function (result) {
         console.log(result.file.url)
@@ -700,11 +703,12 @@ for (let j = 0  ; j<=Cmpt ; j ++){
   .convert(
     "pdf",
     {
-      File: twoPages == "facture" ? `output${j}.xlsx` : `output${j}.docx`,
+      File:  T2,
     },
-    twoPages == "facture" ? "xlsx" : "docx"
+  T
   )
   .then(async function (result) {
+    console.log(result.file.url , "this is the result from pdf")
     if (j <= Cmpt - 1) {
       Temp.push({
         id: j,
