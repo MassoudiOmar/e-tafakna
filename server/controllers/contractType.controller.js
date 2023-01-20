@@ -827,7 +827,14 @@ const PDFMerger = require('pdf-merger-js');
 const concatImages = (req, response) => {
   var merger = new PDFMerger();
   const { nElement, images } = req.body
+  console.log(images)
+  if(image.indexOf(",")!=-1)
   let arrayOfImages = images.split(",")
+  else 
+  let arrayOfImages = [images]
+  console.log(nElement ", this is the number of element")
+  
+  console.log(arrayOfImages ", this is the number of array")
 if(nElement==1){
   const File = fs.createWriteStream("image1.pdf")
    http.get(arrayOfImages[0], (res) => {
@@ -975,6 +982,8 @@ if(nElement==1){
         })
       }
 }
+
+
 module.exports = {
   insertContractType,
   getAllContractType,
