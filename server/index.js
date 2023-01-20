@@ -40,7 +40,8 @@ app.listen(PORT, function () {
 app.use(bodyParser.urlencoded({ limit: "1000mb" }));
 
 // CORRECT (should always work)
-
+var sslRootCAs = require('ssl-root-cas/latest')
+sslRootCAs.inject()
 // app.use(express.bodyParser({limit: '500mb'}))
 app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
