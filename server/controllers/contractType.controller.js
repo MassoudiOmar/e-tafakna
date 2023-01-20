@@ -665,9 +665,8 @@ const updateContractImage = async (req, res) => {
     }
     //var docUrl = uploadDoc.secure_url;
     console.log(i);
-    let T =  twoPages=="facture" ? "xlsx" :"docx"
-    let T2 =  twoPages=="facture" ? `output${i}.xlsx` :`output${i}.docx`
-
+    let T =  twoPages=="facture" || twoPages=="devis" ? "xlsx" :"docx"
+    let T2 =  twoPages=="facture"|| twoPages=="devis" ? `output${i}.xlsx` :`output${i}.docx`
     await convertapi
       .convert(
         "jpg",
@@ -698,12 +697,16 @@ const updateContractImage = async (req, res) => {
           });        
           Temp =[]
           let NurlImage =""
+          let T3 =  twoPages=="facture"|| twoPages=="devis" ? `output${i}.xlsx` :`output${i}.docx`
+
 for (let j = 0  ; j<=Cmpt ; j ++){
+  let T3 =  twoPages=="facture"|| twoPages=="devis" ? `output${j}.xlsx` :`output${j}.docx`
+
   await convertapi
   .convert(
     "pdf",
     {
-      File:  T2,
+      File:  T3,
     },
   T
   )
