@@ -551,12 +551,12 @@ const updateUserInfo =(req,res)=>{
 const updatePassword = (req, res) => {
   const { id } = req.params;
   const { oldPassword, newPassword, confirmPassword } = req.body;
-  if (!oldPassword  !newPassword  !confirmPassword) {
+  if (!oldPassword  && !newPassword  && !confirmPassword) {
     res.send("Please fill all the fields");
   } else if (newPassword !== confirmPassword) {
     res.send("Please confirm your password");
   } else {
-    const sql = select password from users where id  = ?;
+    const sql = `select password from users where id  = ?`;
     db.query(sql, [id], async (err, result) => {
       if (err) {
         console.log(err);
