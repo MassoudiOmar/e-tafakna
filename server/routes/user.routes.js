@@ -18,6 +18,7 @@ router.delete('/deleteUser/:userId', userController.deleteUser);
 router.post("/deleteAllNotificationOfUser", userController.deleteAllNotificationOfUser)
 router.post("/getAllAnswerOfUser" , userController.getAllAnswerOfUser)
 router.post("/getNameOfSpecificContract" , userController.getNameOfSpecificContract)
+router.post("/updatePassword/:id" , userController.updatePassword)
 // router.post("/addAnswer" ,userController.addAnswer)
 // router.post("/getAllAnswerOfUser" , userController.getAllAnswerOfUser)
 // router.post("/getUserInfoWithId" , userController.getUserInfoWithId)
