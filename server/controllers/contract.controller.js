@@ -40,7 +40,7 @@ const getAllContractByStatus = (req, res, err) => {
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
     inner join users u on(u.id= c.owner)
-    where t.status = ? && c.owner = ? LIMIT ${startingLimit},${resultPerPage} `;
+    where t.status = ? && c.owner = ? ORDER BY t.id DESC LIMIT ${startingLimit},${resultPerPage} `;
     console.log(resultPerPage, "startingLim");
     db.query(sql, [status, owner], (err, result) => {
       if (err) throw err;
@@ -53,7 +53,7 @@ const getAllContractByStatus = (req, res, err) => {
         iterator -= page + 4 - numberofPAGES0;
       }
 
-      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
+      res.send(result, page, iterator, endingLink, numberofPAGES0);
     });
   });
 };
@@ -105,7 +105,7 @@ let getAllContracts = (req, res) => {
     inner join users ur on (ur.id = uhc.receiver)
     inner join contracts c on (c.id = uhc.contracts_id)
     inner join contract_types ct on (ct.id = c.contract_types_id)
-    WHERE uo.id=? OR ur.id =? LIMIT ${startingLimit},${resultPerPage} 
+    WHERE uo.id=? OR ur.id =? ORDER BY id DESC LIMIT ${startingLimit},${resultPerPage} 
     `;
     db.query(sql, [id, id], (err, result) => {
       if (err) throw err;
@@ -118,7 +118,7 @@ let getAllContracts = (req, res) => {
         iterator -= page + 4 - numberofPAGES0;
       }
       console.log(endingLink, "endingLink");
-      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
+      res.send(result, page, iterator, endingLink, numberofPAGES0);
     });
   });
 };
