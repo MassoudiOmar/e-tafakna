@@ -111,9 +111,29 @@ const sendNotification = (req, res) => {
     weekday[7] = "Dimanche";
     var today = new Date();
     var yyyy = today.getDay();
-    var min = today.getMinutes();
-    var hours = today.getHours();
-    today = weekday[yyyy] + " à " + hours + ":" + min;
+
+    var funcToaddZeroMin = () =>{
+      var min = today.getMinutes();
+      if (min.toString().length<1){
+        return `0${min}`
+      }
+      else {
+        return min
+      }
+    }
+    var funcToaddZeroHours = () =>{
+      var hours = today.getHours();
+      if (hours.toString().length<1){
+        return `0${hours}`
+      }
+      else {
+        return hours
+      }
+    }
+   
+    
+    today = weekday[yyyy] + " à " 
+    + funcToaddZeroHours + ":" + funcToaddZeroMin();
     return today;
   };
 
