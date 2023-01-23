@@ -114,7 +114,7 @@ const sendNotification = (req, res) => {
 
     var funcToaddZeroMin = () =>{
       var min = today.getMinutes();
-      if (min.toString().length<1){
+      if (min.toString().length<=1){
         return `0${min}`
       }
       else {
@@ -123,7 +123,7 @@ const sendNotification = (req, res) => {
     }
     var funcToaddZeroHours = () =>{
       var hours = today.getHours();
-      if (hours.toString().length<1){
+      if (hours.toString().length<=1){
         return `0${hours}`
       }
       else {
