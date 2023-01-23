@@ -193,7 +193,7 @@ if(err)
 }
 else { 
   console.log(result)
-  res.send(result)
+  res.send(result.reverse())
 var ans = []
 /*
 for (let i = 0 ; i < result.length; i ++ ) {
