@@ -174,7 +174,7 @@ let getNotification = (req, res) => {
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
       inner join contract_types ct on (ct.id = c.contract_types_id)
-      where ur.id =? LIMIT 20`;
+      where ur.id =? order by id DESC LIMIT 20`;
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
     else
