@@ -15,7 +15,7 @@ router.get("/notification/:id", contractController.getNotification);
 router.put('/updatenot/:id',userController.updateNotifications)
 router.get('/getnotstatus/:id',userController.getnotstatus)
 router.delete('/deleteUser/:userId', userController.deleteUser);
-router.post("/deleteAllNotificationOfUser", userController.deleteAllNotificationOfUser)
+router.delete("/deleteAllNotificationOfUser", userController.deleteAllNotificationOfUser)
 router.post("/getAllAnswerOfUser" , userController.getAllAnswerOfUser)
 router.post("/getNameOfSpecificContract" , userController.getNameOfSpecificContract)
 router.post("/updatePassword/:id" , userController.updatePassword)
