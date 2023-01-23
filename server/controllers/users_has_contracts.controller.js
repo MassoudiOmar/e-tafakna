@@ -133,7 +133,7 @@ const sendNotification = (req, res) => {
    
     
     today = weekday[yyyy] + " à " 
-    + funcToaddZeroHours + ":" + funcToaddZeroMin();
+    + funcToaddZeroHours() + ":" + funcToaddZeroMin();
     return today;
   };
 
