@@ -124,10 +124,10 @@ const sendNotification = (req, res) => {
     var funcToaddZeroHours = () =>{
       var hours = today.getHours();
       if (hours.toString().length<=1){
-        return `0${hours}`
+        return `0${hours}` +1 
       }
       else {
-        return hours
+        return hours + 1
       }
     }
    
