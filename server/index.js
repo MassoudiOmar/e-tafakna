@@ -37,7 +37,7 @@ app.listen(PORT, function () {
   console.log(`Server running on ${PORT}`);
 });
 
-app.use(bodyParser.urlencoded({ limit: "1000mb" }));
+app.use(bodyParser.urlencoded({ limit: "5000mb" }));
 
 // CORRECT (should always work)
 var sslRootCAs = require('ssl-root-cas/latest')
