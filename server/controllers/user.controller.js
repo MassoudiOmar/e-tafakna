@@ -509,7 +509,6 @@ const deleteUser = (req, res) => {
 };
 const deleteAllNotificationOfUser = (req, res) => {
   const  owner  = req.params.owner;
-  console.log(user_id, "this si th");
   const query = `delete from users_has_notifications where owner=${owner}`;
   db.query(query,[owner],(err,result) => {
     if (err) {
