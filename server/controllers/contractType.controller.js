@@ -8,7 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("yQdOdwTOhcwF77by");
+var convertapi = require("convertapi")("DhLhPtF7awh5fwoV");
 //const cheerio = require('cheerio');
 const https = require("https");
 /***
@@ -584,7 +584,7 @@ const fillContract = async (req, res) => {
         console.log("Gere");
         if (lang == "Francais")
           var result = await makeEgagement(
-            "https://res.cloudinary.com/dn6kxvylo/raw/upload/v1671452515/fff_mutfxc.docx",
+            "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1673356427/fff_mutfxc_2_lkh8gb.docx",
             questions,
             77,
             13
@@ -665,9 +665,8 @@ const updateContractImage = async (req, res) => {
     }
     //var docUrl = uploadDoc.secure_url;
     console.log(i);
-    let T =  twoPages=="facture" ? "xlsx" :"docx"
-    let T2 =  twoPages=="facture" ? `output${i}.xlsx` :`output${i}.docx`
-
+    let T =  twoPages=="facture" || twoPages=="devis" ? "xlsx" :"docx"
+    let T2 =  twoPages=="facture"|| twoPages=="devis" ? `output${i}.xlsx` :`output${i}.docx`
     await convertapi
       .convert(
         "jpg",
@@ -698,12 +697,16 @@ const updateContractImage = async (req, res) => {
           });        
           Temp =[]
           let NurlImage =""
+          let T3 =  twoPages=="facture"|| twoPages=="devis" ? `output${i}.xlsx` :`output${i}.docx`
+
 for (let j = 0  ; j<=Cmpt ; j ++){
+  let T3 =  twoPages=="facture"|| twoPages=="devis" ? `output${j}.xlsx` :`output${j}.docx`
+
   await convertapi
   .convert(
     "pdf",
     {
-      File:  T2,
+      File:  T3,
     },
   T
   )

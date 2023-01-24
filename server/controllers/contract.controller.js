@@ -43,7 +43,7 @@ const getAllContractByStatus = (req, res, err) => {
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
     inner join users u on(u.id= c.owner)
-    where t.status = ? && c.owner = ? LIMIT ${startingLimit},${resultPerPage} `;
+    where t.status = ? && c.owner = ? ORDER BY t.id DESC LIMIT ${startingLimit},${resultPerPage} `;
     console.log(resultPerPage, "startingLim");
     db.query(sql, [status, owner], (err, result) => {
       if (err) throw err;
@@ -56,7 +56,7 @@ const getAllContractByStatus = (req, res, err) => {
         iterator -= page + 4 - numberofPAGES0;
       }
 
-      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
+      res.send(result, page, iterator, endingLink, numberofPAGES0);
     });
   });
 };
@@ -80,7 +80,7 @@ const getAllContractById = (req, res) => {
 let getAllContracts = (req, res) => {
   const { id } = req.params;
   let sql = `
-   select c.id, date,  uo.first_name as username ,uo.faceVideo ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status from users_has_contracts  uhc
+   select c.id, date,  uo.first_name as username ,uo.faceVideo ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status,c.pdfContractImage from users_has_contracts  uhc
       inner join users uo on (uo.id = uhc.owner)
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
@@ -103,12 +103,12 @@ let getAllContracts = (req, res) => {
 
     const startingLimit = (page - 1) * resultPerPage;
     sql = ` 
-    select c.id, date,  uo.first_name as username,uo.faceVideo as colorOwner ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo as colorReciever,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status from users_has_contracts  uhc
+    select c.id, date,  uo.first_name as username,uo.faceVideo as colorOwner ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo as colorReciever,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status,c.pdfContractImage from users_has_contracts  uhc
     inner join users uo on (uo.id = uhc.owner)
     inner join users ur on (ur.id = uhc.receiver)
     inner join contracts c on (c.id = uhc.contracts_id)
     inner join contract_types ct on (ct.id = c.contract_types_id)
-    WHERE uo.id=? OR ur.id =? LIMIT ${startingLimit},${resultPerPage} 
+    WHERE uo.id=? OR ur.id =? ORDER BY id DESC LIMIT ${startingLimit},${resultPerPage} 
     `;
     db.query(sql, [id, id], (err, result) => {
       if (err) throw err;
@@ -121,27 +121,25 @@ let getAllContracts = (req, res) => {
         iterator -= page + 4 - numberofPAGES0;
       }
       console.log(endingLink, "endingLink");
-      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
+      res.send(result, page, iterator, endingLink, numberofPAGES0);
     });
   });
 };
 ///////////////////////////////////////////
 ///////////////////////////////////////////
 ///////////////////////////////////////////
-const deleteContract = (req, res) => {
-  let imageUri = req.body.imageUri;
-  imageUri = imageUri.join(",");
-  db.query(
-    `delete from etafakna.contracts where contract_image = "${imageUri}"`,
-    (err, rez) => {
-      if (err) res.send(err);
-      else {
-        console.log(rez, " tehr");
-        res.send(rez);
-      }
-    }
-  );
-};
+const deleteContract =(req,res)=>{
+  let  imageUri = req.body.imageUri;
+  imageUri=(imageUri.join(","))
+db.query(`delete from contracts where contract_image = "${imageUri}"`,(err,rez)=>{
+if(err)
+res.send(err)
+else {
+console.log(rez ," tehr")
+res.send(rez)
+}
+})
+}
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
   let sql = ` SELECT * FROM users_has_contracts c
@@ -206,10 +204,11 @@ let getNotification = (req, res) => {
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
       inner join contract_types ct on (ct.id = c.contract_types_id)
-      where ur.id =? LIMIT 20`;
+      where ur.id =? order by id DESC LIMIT 20`;
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
-    else res.send(result.reverse());
+    else
+      res.send(result);
   });
 };
 

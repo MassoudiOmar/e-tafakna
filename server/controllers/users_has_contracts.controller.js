@@ -114,8 +114,7 @@ const sendNotification = (req, res) => {
 
     var funcToaddZeroMin = () =>{
       var min = today.getMinutes();
-      console.log(min,"MIN BEFORE")
-      if (min.toString().length<1){
+      if (min.toString().length<=1){
         return `0${min}`
       }
       else {
@@ -124,14 +123,17 @@ const sendNotification = (req, res) => {
     }
     var funcToaddZeroHours = () =>{
       var hours = today.getHours();
-      if (hours.toString().length<1){
-        return `0${hours}`
+      if (hours.toString().length<=1){
+        return `${hours +1 }` 
       }
       else {
-        return hours +1 
+        return hours + 1
       }
     }
-    today = weekday[yyyy] + " à "+ funcToaddZeroHours() + ":" + funcToaddZeroMin();
+   
+    
+    today = weekday[yyyy] + " à " 
+    + funcToaddZeroHours() + ":" + funcToaddZeroMin();
     return today;
   };
 
@@ -191,7 +193,7 @@ if(err)
 }
 else { 
   console.log(result)
-  res.send(result)
+  res.send(result.reverse())
 var ans = []
 /*
 for (let i = 0 ; i < result.length; i ++ ) {

@@ -507,61 +507,57 @@ const deleteUser = (req, res) => {
   });
 };
 const deleteAllNotificationOfUser = (req, res) => {
-  const owner = req.params.owner;
-  console.log(owner, "this si th");
-  const query = `delete from users_has_notifications where owner=${owner}`;
-  db.query(query, [owner], (err, result) => {
+  const  receiver  = req.params.receiver;
+  const query = `delete from users_has_notifications where receiver=${receiver}`;
+  db.query(query,[receiver],(err,result) => {
     if (err) {
       res.send(err);
     }
     res.send(result);
   });
 };
-const getAllAnswerOfUser = (req, res) => {
-  const { user_id } = req.body;
-  db.query(
-    `SELECT * from user_answers  where user_id=${user_id}`,
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        res.send(err);
-      } else res.send(result);
-    }
-  );
-};
-const getNameOfSpecificContract = (req, res) => {
-  const { contractId } = req.body;
-  db.query(
-    `select  * from contract_types where id=${contractId}`,
-    (err, rez) => {
-      if (err) res.send(err);
-      else res.send(rez);
-    }
-  );
-};
-const updateUserInfo = (req, res) => {
-  const { id } = req.params;
-  const { a, b, c, d, e } = req.body;
-  console.log(a, b, c, d, e, "data");
-  const sql =
-    "UPDATE users SET first_name = ?, last_name = ?, username = ? , phone = ? , address = ?  WHERE id = ?;";
-  db.query(sql, [a, b, c, d, e, id], (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(result);
-    }
-  });
-};
+const getAllAnswerOfUser =(req,res)=>{
+const {user_id} = req.body 
+db.query(`SELECT * from user_answers  where user_id=${user_id}`,(err,result)=>{
+if(err)
+{
+console.log(err)
+res.send(err)
+}
+else 
+res.send(result)
+})
+}
+const getNameOfSpecificContract = (req,res)=>{
+const {contractId} = req.body 
+db.query(`select  * from contract_types where id=${contractId}`,(err,rez)=>{
+if(err)
+res.send(err)
+else 
+res.send(rez)
+})
+}
+const updateUserInfo =(req,res)=>{
+  const {id} = req.params
+  const {a,b,c,d,e} =req.body 
+  console.log(a,b,c,d,e,'data')
+   const sql ='UPDATE users SET first_name = ?, last_name = ?, username = ? , phone = ? , address = ?  WHERE id = ?;'
+   db.query(sql,[a,b,c,d,e,id],(err,result)=>{
+     if(err)
+    { console.log(err)}
+     else 
+     {res.send(result)}
+     })
+}
 const updatePassword = (req, res) => {
   const { id } = req.params;
   const { oldPassword, newPassword, confirmPassword } = req.body;
-  if (!oldPassword || !newPassword || !confirmPassword) {
+  if (!oldPassword  && !newPassword  && !confirmPassword) {
     res.send("Please fill all the fields");
   } else if (newPassword !== confirmPassword) {
     res.send("Please confirm your password");
   } else {
-    const sql = ` select password from users where id  = ?`;
+    const sql = `select password from users where id  = ?`;
     db.query(sql, [id], async (err, result) => {
       if (err) {
         console.log(err);
@@ -611,4 +607,5 @@ module.exports = {
   getAllAnswerOfUser,
   getNameOfSpecificContract,
   updateUserInfo,
+  updatePassword
 };
