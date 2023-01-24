@@ -8,7 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("4o8iEFkvzfnGYJo6");
+var convertapi = require("convertapi")("yQdOdwTOhcwF77by");
 //const cheerio = require('cheerio');
 const https = require("https");
 /***
@@ -665,13 +665,16 @@ const updateContractImage = async (req, res) => {
     }
     //var docUrl = uploadDoc.secure_url;
     console.log(i);
+    let T =  twoPages=="facture" ? "xlsx" :"docx"
+    let T2 =  twoPages=="facture" ? `output${i}.xlsx` :`output${i}.docx`
+
     await convertapi
       .convert(
         "jpg",
         {
-          File: twoPages =="facture" ?`output${i}.docx` :`output${i}.docx`,
+          File:T2 ,
         },
-        twoPages =="facture" ? `docx` :`docx` 
+         T 
       )
       .then(async function (result) {
         console.log(result.file.url)
@@ -700,11 +703,12 @@ for (let j = 0  ; j<=Cmpt ; j ++){
   .convert(
     "pdf",
     {
-      File: twoPages == "facture" ? `output${j}.xlsx` : `output${j}.docx`,
+      File:  T2,
     },
-    twoPages == "facture" ? "xlsx" : "docx"
+  T
   )
   .then(async function (result) {
+    console.log(result.file.url , "this is the result from pdf")
     if (j <= Cmpt - 1) {
       Temp.push({
         id: j,
@@ -827,7 +831,17 @@ const PDFMerger = require('pdf-merger-js');
 const concatImages = (req, response) => {
   var merger = new PDFMerger();
   const { nElement, images } = req.body
-  let arrayOfImages = images.split(",")
+   console.log(nElement ,", this is the number of element")
+
+  console.log(images,"imageeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+  let arrayOfImages = []
+  if(images.indexOf(",")!=-1)
+   arrayOfImages = images.split(",")
+  else 
+   arrayOfImages = [images]
+     console.log(arrayOfImages ,", this is the number of array")
+  
+  
 if(nElement==1){
   const File = fs.createWriteStream("image1.pdf")
    http.get(arrayOfImages[0], (res) => {
@@ -975,6 +989,8 @@ if(nElement==1){
         })
       }
 }
+
+
 module.exports = {
   insertContractType,
   getAllContractType,

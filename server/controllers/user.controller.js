@@ -31,11 +31,10 @@ var register = async (req, res) => {
       address,
       username,
       image,
-      
     } = req.body;
     const status = "notActivated";
     const created_at = new Date();
-    const faceVideo = generateColor()
+    const faceVideo = generateColor();
     const role = "user";
     const activate = "false";
     const notification = false;
@@ -86,7 +85,7 @@ var register = async (req, res) => {
                 role,
                 created_at,
                 notification,
-                faceVideo
+                faceVideo,
               ],
               async (err, result) => {
                 if (err) {
@@ -507,54 +506,97 @@ const deleteUser = (req, res) => {
     res.send(result);
   });
 };
-let deleteAllNotificationOfUser = (req, res) => {
+const deleteAllNotificationOfUser = (req, res) => {
+  const owner = req.params.owner;
+  console.log(owner, "this si th");
+  const query = `delete from users_has_notifications where owner=${owner}`;
+  db.query(query, [owner], (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+    res.send(result);
+  });
+};
+const getAllAnswerOfUser = (req, res) => {
   const { user_id } = req.body;
-  console.log(user_id, "this si th");
   db.query(
-    `delete from users_has_notifications where owner=${user_id}`,
+    `SELECT * from user_answers  where user_id=${user_id}`,
     (err, result) => {
       if (err) {
         console.log(err);
         res.send(err);
-      } else {
-        res.send(result);
-      }
+      } else res.send(result);
     }
   );
 };
-const getAllAnswerOfUser =(req,res)=>{
-const {user_id} = req.body 
-db.query(`SELECT * from user_answers  where user_id=${user_id}`,(err,result)=>{
-if(err)
-{
-console.log(err)
-res.send(err)
-}
-else 
-res.send(result)
-})
-}
-const getNameOfSpecificContract = (req,res)=>{
-const {contractId} = req.body 
-db.query(`select  * from contract_types where id=${contractId}`,(err,rez)=>{
-if(err)
-res.send(err)
-else 
-res.send(rez)
-})
-}
-const updateUserInfo =(req,res)=>{
-  const {id} = req.params
-  const {a,b,c,d,e} =req.body 
-  console.log(a,b,c,d,e,'data')
-   const sql ='UPDATE users SET first_name = ?, last_name = ?, username = ? , phone = ? , address = ?  WHERE id = ?;'
-   db.query(sql,[a,b,c,d,e,id],(err,result)=>{
-     if(err)
-    { console.log(err)}
-     else 
-     {res.send(result)}
-     })
-}
+const getNameOfSpecificContract = (req, res) => {
+  const { contractId } = req.body;
+  db.query(
+    `select  * from contract_types where id=${contractId}`,
+    (err, rez) => {
+      if (err) res.send(err);
+      else res.send(rez);
+    }
+  );
+};
+const updateUserInfo = (req, res) => {
+  const { id } = req.params;
+  const { a, b, c, d, e } = req.body;
+  console.log(a, b, c, d, e, "data");
+  const sql =
+    "UPDATE users SET first_name = ?, last_name = ?, username = ? , phone = ? , address = ?  WHERE id = ?;";
+  db.query(sql, [a, b, c, d, e, id], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
+const updatePassword = (req, res) => {
+  const { id } = req.params;
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+  if (!oldPassword || !newPassword || !confirmPassword) {
+    res.send("Please fill all the fields");
+  } else if (newPassword !== confirmPassword) {
+    res.send("Please confirm your password");
+  } else {
+    const sql = ` select password from users where id  = ?`;
+    db.query(sql, [id], async (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        try {
+          const check = await bcrypt.compare(
+            oldPassword.toString(),
+            result[0].password
+          );
+          if (check) {
+            const salt = await bcrypt.genSalt();
+            console.log(salt, "salt");
+            const password = await bcrypt.hash(oldPassword.toString(), salt);
+            console.log(password, "password");
+
+            const salt1 = await bcrypt.genSalt();
+            const password1 = await bcrypt.hash(newPassword.toString(), salt1);
+            const sql = ` update users set password = ? where id = ?`;
+            db.query(sql, [password1, id], (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.send("Done");
+              }
+            });
+          } else {
+            res.send("password incorect");
+          }
+        } catch (err) {
+          console.log(err, "error");
+        }
+      }
+    });
+  }
+};
 module.exports = {
   register,
   activate,
@@ -568,5 +610,5 @@ module.exports = {
   deleteAllNotificationOfUser,
   getAllAnswerOfUser,
   getNameOfSpecificContract,
-  updateUserInfo
+  updateUserInfo,
 };

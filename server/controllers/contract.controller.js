@@ -1,5 +1,5 @@
 const db = require("../database-mysql");
-let nodeGeocoder = require('node-geocoder');
+let nodeGeocoder = require("node-geocoder");
 //.
 const insertContract = (req, res) => {
   const { contract_types_id } = req.body;
@@ -16,8 +16,11 @@ const resultPerPage = 10;
 const getAllContractByStatus = (req, res, err) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
+  console.log("====================================");
+  console.log();
+  console.log("====================================");
   let sql = `SELECT * FROM users_has_contracts`;
-  db.query(sql,  (err, result, next) => {
+  db.query(sql, (err, result, next) => {
     if (err) {
       console.log(err);
     }
@@ -25,10 +28,10 @@ const getAllContractByStatus = (req, res, err) => {
     const numOfResults = result.length;
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? parseInt(req.query.page) : 1;
-    console.log(page)
+    console.log(page);
     if (page > numberofPAGES0) {
       //  return res.status(304).send("no")
-      return res.send("-1")
+      return res.send("-1");
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
     }
@@ -92,7 +95,7 @@ let getAllContracts = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? parseInt(req.query.page) : 1;
     if (page > numberofPAGES0) {
-       return res.send("-1")
+      return res.send("-1");
       // return res.send("No Data")
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
@@ -126,13 +129,14 @@ let getAllContracts = (req, res) => {
 ///////////////////////////////////////////
 ///////////////////////////////////////////
 const deleteContract = (req, res) => {
-  const imageUri = req.body.imageUri;
+  let imageUri = req.body.imageUri;
+  imageUri = imageUri.join(",");
   db.query(
     `delete from etafakna.contracts where contract_image = "${imageUri}"`,
     (err, rez) => {
       if (err) res.send(err);
       else {
-        console.log(rez);
+        console.log(rez, " tehr");
         res.send(rez);
       }
     }
@@ -140,16 +144,44 @@ const deleteContract = (req, res) => {
 };
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
-  console.log(owner)
-  const sql = ` SELECT * FROM users_has_contracts c
+  let sql = ` SELECT * FROM users_has_contracts c
   inner join contracts t on (t.id = c.contracts_id )
   inner join contract_types f on (f.id=t.contract_types_id)
   inner join users u on(u.id= c.owner)
   where c.owner = ? && t.contract_image IS NOT NULL || c.receiver=? && t.status="accepted"`;
-  db.query(sql, [owner,owner], (err, result) => {
+  db.query(sql, [owner, owner], (err, result) => {
     if (err) {
-      console.log(err);
-    } else res.send(result);
+      res.send(err);
+    }
+    //Pagination
+    const numOfResults = result.length;
+    const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
+    let page = req.query.page ? parseInt(req.query.page) : 1;
+    if (page > numberofPAGES0) {
+      return res.send("-1");
+      // return res.send("No Data")
+    } else if (page < 1) {
+      return res.send("/?page=" + encodeURIComponent("1"));
+    }
+    const startingLimit = (page - 1) * resultPerPage;
+    sql = ` SELECT * FROM users_has_contracts c
+     inner join contracts t on (t.id = c.contracts_id )
+     inner join contract_types f on (f.id=t.contract_types_id)
+     inner join users u on(u.id= c.owner)
+     where c.owner = ? && t.contract_image IS NOT NULL || c.receiver=? && t.status="accepted" ORDER BY t.id DESC LIMIT ${startingLimit},${resultPerPage}`;
+    db.query(sql, [owner, owner], (err, result) => {
+      if (err) throw err;
+      let iterator = page - 5 < 1 ? 1 : page - 5;
+      let endingLink =
+        iterator + 9 <= numberofPAGES0
+          ? iterator + 9
+          : page + (numberofPAGES0 + 9);
+      if (endingLink < page + 4) {
+        iterator -= page + 4 - numberofPAGES0;
+      }
+      console.log(endingLink, "endingLink");
+      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
+    });
   });
 };
 
@@ -177,8 +209,7 @@ let getNotification = (req, res) => {
       where ur.id =? LIMIT 20`;
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
-    else
-      res.send(result.reverse());
+    else res.send(result.reverse());
   });
 };
 
@@ -232,23 +263,23 @@ let getContractImage = (req, res) => {
     }
   });
 };
-const getLoacation =(req,res)=>{
-
-  const {lat,long,lang}=req.body
+const getLoacation = (req, res) => {
+  const { lat, long, lang } = req.body;
   let options = {
-    provider: 'openstreetmap',
-    language : lang
+    provider: "openstreetmap",
+    language: lang,
   };
 
   let geoCoder = nodeGeocoder(options);
-  geoCoder.reverse({lat:lat, lon:long})
-    .then((result)=> {
+  geoCoder
+    .reverse({ lat: lat, lon: long })
+    .then((result) => {
       res.send(result);
     })
-    .catch((err)=> {
+    .catch((err) => {
       console.log(err);
     });
-}
+};
 
 module.exports = {
   insertContract,
@@ -263,5 +294,5 @@ module.exports = {
   updateSeen,
   deleteContract,
   getArchieve,
-  getLoacation
+  getLoacation,
 };
