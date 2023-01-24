@@ -178,7 +178,7 @@ let getNotification = (req, res) => {
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
     else
-      res.send(result.reverse());
+      res.send(result);
   });
 };
 
