@@ -125,19 +125,18 @@ let getAllContracts = (req, res) => {
 ///////////////////////////////////////////
 ///////////////////////////////////////////
 ///////////////////////////////////////////
-const deleteContract = (req, res) => {
-  const imageUri = req.body.imageUri;
-  db.query(
-    `delete from etafakna.contracts where contract_image = "${imageUri}"`,
-    (err, rez) => {
-      if (err) res.send(err);
-      else {
-        console.log(rez);
-        res.send(rez);
-      }
-    }
-  );
-};
+const deleteContract =(req,res)=>{
+  let  imageUri = req.body.imageUri;
+  imageUri=(imageUri.join(","))
+db.query(`delete from etafakna.contracts where contract_image = "${imageUri}"`,(err,rez)=>{
+if(err)
+res.send(err)
+else {
+console.log(rez ," tehr")
+res.send(rez)
+}
+})
+}
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
   console.log(owner)
