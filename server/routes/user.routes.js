@@ -19,6 +19,7 @@ router.delete("/deleteAllNotificationOfUser/:receiver",userController.deleteAllN
 router.post("/getAllAnswerOfUser" , userController.getAllAnswerOfUser)
 router.post("/getNameOfSpecificContract" , userController.getNameOfSpecificContract)
 router.post("/updatePassword/:id" , userController.updatePassword)
+router.put("/updateInfo/:id" , userController.updateUserInfo)
 // router.post("/addAnswer" ,userController.addAnswer)
 // router.post("/getAllAnswerOfUser" , userController.getAllAnswerOfUser)
 // router.post("/getUserInfoWithId" , userController.getUserInfoWithId)
