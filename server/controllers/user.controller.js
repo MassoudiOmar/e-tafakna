@@ -507,12 +507,15 @@ const deleteUser = (req, res) => {
     res.send(result);
   });
 };
-let deleteAllNotificationOfUser = (req, res) => {
-  const { id } = req.params;
-  const sql = `DELETE FROM users_has_notifications WHERE owner = ? and seen = true`;
-  db.query(sql, [id], (err, result) => {
-    if (err) res.send(err);
-    else res.send(result);
+const deleteAllNotificationOfUser = (req, res) => {
+  const  owner  = req.params.owner;
+  console.log(user_id, "this si th");
+  const query = `delete from users_has_notifications where owner=${owner}`;
+  db.query(query,[owner],(err,result) => {
+    if (err) {
+      res.send(err);
+    }
+    res.send(result);
   });
 };
 const getAllAnswerOfUser =(req,res)=>{
