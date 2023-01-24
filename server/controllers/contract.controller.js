@@ -140,15 +140,17 @@ res.send(rez)
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
   console.log(owner)
-  const sql = ` SELECT * FROM users_has_contracts c
+  const sql = `SELECT * FROM users_has_contracts c
   inner join contracts t on (t.id = c.contracts_id )
   inner join contract_types f on (f.id=t.contract_types_id)
   inner join users u on(u.id= c.owner)
-  where c.owner = ? && t.contract_image IS NOT NULL || c.receiver=? && t.status="accepted"`;
+  where (c.owner = ? && t.contract_image IS NOT NULL) || c.receiver=? && t.status="accepted" `;
   db.query(sql, [owner,owner], (err, result) => {
     if (err) {
       console.log(err);
-    } else res.send(result);
+    } else 
+      console.log("Result from archieve",result)
+      res.send(result);
   });
 };
 
