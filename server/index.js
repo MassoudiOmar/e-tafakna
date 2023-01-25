@@ -62,7 +62,7 @@ app.use("/api/answers", answersRoutes);
 app.use("/api/contracts", contractRoutes);
 app.use("/api/signature", signature);
 app.use("/api", contractRoutess);
-app.use("/", express.static("./"));
+app.use("/", express.static("../uploads")); 
 app.get("/", (req, res) => {
   res.send("Welcome To E-Tafakna server");
 });
