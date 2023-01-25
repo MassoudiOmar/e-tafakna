@@ -178,7 +178,7 @@ const getArchieve = (req, res) => {
         iterator -= page + 4 - numberofPAGES0;
       }
       console.log(endingLink, "endingLink");
-      res.send(result.reverse(), page, iterator, endingLink, numberofPAGES0);
+      res.send(result, page, iterator, endingLink, numberofPAGES0);
     });
   });
 };
