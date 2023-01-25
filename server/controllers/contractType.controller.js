@@ -596,7 +596,7 @@ const fillContract = async (req, res) => {
             360,
             13
           );
-        res.end(false);
+        res.send(false);
       }
       //Demande Officiale
       if (type == "facture" || type == "devis") {
