@@ -598,6 +598,7 @@ const fillContract = async (req, res) => {
           );
         res.send(false);
       }
+      else
       //Demande Officiale
       if (type == "facture" || type == "devis") {
         if (lang == "Arabe") {
