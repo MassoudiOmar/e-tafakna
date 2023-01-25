@@ -8,7 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("DhLhPtF7awh5fwoV");
+var convertapi = require("convertapi")("NPQdQpdcM83jtV1i");
 //const cheerio = require('cheerio');
 const https = require("https");
 /***
@@ -584,20 +584,21 @@ const fillContract = async (req, res) => {
         console.log("Gere");
         if (lang == "Francais")
           var result = await makeEgagement(
-            "https://res.cloudinary.com/dew6e8h2m/raw/upload/v1673356427/fff_mutfxc_2_lkh8gb.docx",
+            "https://res.cloudinary.com/dn6kxvylo/raw/upload/v1671452515/fff_mutfxc.docx",
             questions,
             77,
             13
           );
         else
           var result = await makeEgagementAr(
-            "https://res.cloudinary.com/dn6kxvylo/raw/upload/v1672304046/engagementArabe_lojghh_gyvyw3.docx",
+            "https://res.cloudinary.com/dn6kxvylo/raw/upload/v1674637277/engagementArabeV2_peu5it.docx",
             questions,
             360,
             13
           );
-        res.end(false);
+        res.send(false);
       }
+      else
       //Demande Officiale
       if (type == "facture" || type == "devis") {
         if (lang == "Arabe") {
