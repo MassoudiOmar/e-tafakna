@@ -69,7 +69,6 @@ var createDocAndImage = async (str, index, renderObject) => {
     // For a 50MB output document, expect 500ms additional CPU time
     compression: "DEFLATE",
   });
-  console.log(buf, "check buf");
   fs.writeFileSync(`output${index}.docx`, buf);
   try {
     const formData = new FormData();
@@ -113,7 +112,6 @@ const fillContract = async (req, res) => {
   let questions_id = [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80];
   let content = req.body.content;
   let boolean = req.body.boolean;
-  console.log(content);
   answersArray = questions_id.map((element, index) => {
     let key = questions_id[index];
     let object = {};
@@ -128,7 +126,6 @@ const fillContract = async (req, res) => {
     return acc;
   }, {});
   // res.send(result);
-  console.log(renderObject, "check obj before rendeer");
   var url = boolean ? template_FR : template_FR2;
   var Has_Two_Pages = true;
   if (url.search(",") == -1) {
@@ -147,18 +144,15 @@ const fillContract = async (req, res) => {
 };
 
 const updateContractImage = async (req, res) => {
-  console.log(req.body);
   let id = req.params.id;
   var Cmpt = 1;
   var twoPages = false;
   if (twoPages == false) Cmpt = 0;
-  console.log(Cmpt, "Compteur");
   for (let i = 0; i <= Cmpt; i++) {
     let uploadDoc = await cloudinary.uploader.upload(`output${i}.docx`, {
       resource_type: "auto",
     });
     var docUrl = uploadDoc.secure_url;
-    console.log(docUrl, "doc url");
   }
   const updateContract = `UPDATE users set signatureUrl  = ? where id =? `;
   db.query(updateContract, [docUrl, id], (err, result) => {

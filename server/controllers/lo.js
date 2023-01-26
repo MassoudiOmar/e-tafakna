@@ -54,7 +54,6 @@ import {
             .then((contracts) => {
               setdraftcontracts([...draftContracts,...contracts.data]);
               setIsLoading(false);
-              console.log(draftContracts, "contracrs");
             });
         })
         .catch((error) => {
@@ -98,8 +97,6 @@ import {
             } catch (error) {
               console.log("there is an error while getting the answers", error);
             }
-  
-            console.log(item, "iteeeem");
           }}
         >
           <View

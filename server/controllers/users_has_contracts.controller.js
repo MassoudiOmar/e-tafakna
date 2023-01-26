@@ -51,7 +51,7 @@ function streamToString(stream) {
 }
 const sentoArchieve = (req, res) => {
   const id = req.params.id;
-  const sql = `update contracts set archieve = "true" where id = ?` ;
+  const sql = `update contracts set archieve = "true" where id = ?`;
   db.query(sql, [id], (err, result) => {
     if (err) {
       console.log(err);
@@ -60,7 +60,6 @@ const sentoArchieve = (req, res) => {
 };
 let userContract = (req, res) => {
   const { owner, receiver, receiver_email, contracts_id } = req.body;
-  console.log(req.body, "bodyyy");
   const sql = `INSERT INTO users_has_contracts (owner,receiver ,receiver_email,contracts_id) VALUES (?,?,?,?)`;
   db.query(
     sql,
@@ -84,7 +83,7 @@ const sendcontracts = (req, res) => {
   const date = function today(i) {
     var today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth()+1;
+    var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
     today = dd + "-" + mm + "-" + yyyy;
     return today;
@@ -112,34 +111,30 @@ const sendNotification = (req, res) => {
     var today = new Date();
     var yyyy = today.getDay();
 
-    var funcToaddZeroMin = () =>{
+    var funcToaddZeroMin = () => {
       var min = today.getMinutes();
-      if (min.toString().length<=1){
-        return `0${min}`
+      if (min.toString().length <= 1) {
+        return `0${min}`;
+      } else {
+        return min;
       }
-      else {
-        return min
-      }
-    }
-    var funcToaddZeroHours = () =>{
+    };
+    var funcToaddZeroHours = () => {
       var hours = today.getHours();
-      if (hours.toString().length<=1){
-        return `${hours +1 }` 
+      if (hours.toString().length <= 1) {
+        return `${hours + 1}`;
+      } else {
+        return hours + 1;
       }
-      else {
-        return hours + 1
-      }
-    }
-   
-    
-    today = weekday[yyyy] + " à " 
-    + funcToaddZeroHours() + ":" + funcToaddZeroMin();
+    };
+
+    today =
+      weekday[yyyy] + " à " + funcToaddZeroHours() + ":" + funcToaddZeroMin();
     return today;
   };
 
   const seen = false;
   const { owner, receiver, contracts_id } = req.body;
-  console.log(req.body, "bodyyy");
   const sql = `INSERT INTO users_has_notifications (owner,receiver ,date,contracts_id,seen) VALUES (?,?,?,?,?)`;
   db.query(
     sql,
@@ -179,23 +174,20 @@ const getnumbers = (req, res) => {
   });
 };
 
-
-
-
-
-const getNotification = (req,res)=>{
-const {receiver_id} = req.body
-db.query(`SELECT * FROM users_has_contracts where receiver=${receiver_id} and seen=0` ,(err,result)=>{
-if(err)
-{
-  console.log(err)
-  res.send("There is an Eroor in user_has_Contract Function GetNotification")
-}
-else { 
-  console.log(result)
-  res.send(result.reverse())
-var ans = []
-/*
+const getNotification = (req, res) => {
+  const { receiver_id } = req.body;
+  db.query(
+    `SELECT * FROM users_has_contracts where receiver=${receiver_id} and seen=0`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send(
+          "There is an Eroor in user_has_Contract Function GetNotification"
+        );
+      } else {
+        res.send(result.reverse());
+        var ans = [];
+        /*
 for (let i = 0 ; i < result.length; i ++ ) {
 db.query(`SELECT * FROM users where id=${result[i]["owner"]}`,(err,result1)=>{
 if(err){
@@ -208,45 +200,39 @@ res.send(ans)
 })
 }
 */
-}
-})
-}
-const changeNotification = (req,res)=>{
-const {receiver_id} = req.body 
-db.query(`UPDATE users_has_contracts set seen=1 where receiver=${receiver_id}` ,(err,result)=>{
-if(err){
-console.log(err)
-res.send(err)
-
-}
-else 
-res.send(result)
-})
-}
-const getContractIdFromPic = (req,res)=>{
-const {image_url} = req.body
-db.query(`select * from contracts where contract_image="${image_url}"`,(err,result)=>{
-if(err){
-console.log(err)
-  res.send(err)
-}
-else 
-console.log(result[0]["id"])
-db.query(`update users_has_contracts set seen=0 where contracts_id=${result[0]["id"]}`,(err1 ,result1)=>{
-if(err1)
-res.send(err1)
-else 
-res.send(result1)
-
-
-})
-
-
-
-
-})
-
-}
+      }
+    }
+  );
+};
+const changeNotification = (req, res) => {
+  const { receiver_id } = req.body;
+  db.query(
+    `UPDATE users_has_contracts set seen=1 where receiver=${receiver_id}`,
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else res.send(result);
+    }
+  );
+};
+const getContractIdFromPic = (req, res) => {
+  const { image_url } = req.body;
+  db.query(
+    `select * from contracts where contract_image="${image_url}"`,
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else console.log(result[0]["id"]);
+      db.query(
+        `update users_has_contracts set seen=0 where contracts_id=${result[0]["id"]}`,
+        (err1, result1) => {
+          if (err1) res.send(err1);
+          else res.send(result1);
+        }
+      );
+    }
+  );
+};
 
 module.exports = {
   userContract,
@@ -257,8 +243,7 @@ module.exports = {
   hasSeen,
   getnumbers,
   sentoArchieve,
-  getNotification , 
-  changeNotification , 
+  getNotification,
+  changeNotification,
   getContractIdFromPic,
-  
 };

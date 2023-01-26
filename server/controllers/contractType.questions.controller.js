@@ -4,14 +4,13 @@ const db = require("../database-mysql");
 const affectQuestionToContractType = (req, res) => {
   let { questions_id, contract_types_id, order_question } = req.body;
 
-
   const sql = `INSERT into questions_has_contract_types(questions_id, contract_types_id, order_question) values (?,?,?)`;
 
   db.query(
     sql,
     [questions_id, contract_types_id, order_question],
     (err, result) => {
-      if (err) console.log(err);
+      if (err) res.send(err);
       else res.send(result);
     }
   );
@@ -20,15 +19,13 @@ const affectQuestionToContractType = (req, res) => {
 const deleteRelation = (req, res) => {
   let questions_id = req.params.questions_id;
   let contract_types_id = req.params.contract_types_id;
-  console.log(req.params);
 
   let sql = `DELETE from questions_has_contract_types  WHERE questions_id = ? && contract_types_id = ? `;
 
   db.query(sql, [questions_id, contract_types_id], (err, result) => {
     if (err) {
-      console.log(err);
+      res.send(err);
     } else {
-      console.log(result);
       res.send(result);
     }
   });
@@ -63,7 +60,7 @@ const findQuestionsOfSpecificContract = (req, res) => {
 
   db.query(query, [contract_id], (err, table) => {
     if (err) {
-      console.log(err);
+      res.send(err);
     } else {
       res.send(table);
     }
@@ -79,7 +76,7 @@ const findAll = (req, res) => {
       else res.json(result);
     });
   } catch (err) {
-    console.log(err);
+    res.send(err);
   }
 };
 
@@ -95,8 +92,8 @@ const findContractbyQuesId = (req, res) => {
     sql,
     // [questions_id]
     (err, result) => {
-      if (err) console.log(err);
-      else console.log(result);
+      if (err) res.send(err);
+      else res.send(result);
       {
         res.send(result);
       }

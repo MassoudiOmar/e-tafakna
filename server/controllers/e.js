@@ -19,13 +19,12 @@ const fn =async()=>{
     
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-          console.log(error);
+          res.send(error);
         } else {
           res.send({
             message: "email has been send",
             resetToken: hashedCode,
           });
-          console.log(hashedCode);
         }
       });
 };

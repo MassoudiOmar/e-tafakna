@@ -1,28 +1,27 @@
 var db = require("../database-mysql");
-let updateAnswer = (req,res)=>{
-const {content , questions_id,contracts_id,contracts_contract_types_id} = req.body
-console.log(content ,"*****" , questions_id )
-db.query(`SELECT * FROM answers where questions_id=${questions_id} ORDER BY ID DESC LIMIT 1  `  ,(err,result)=>{
-if(err){
-console.log(err)
-  res.send(err) 
-}
-else {
-let Temp = result
-
-console.log(Temp)
-db.query(`update answers set content = '${content}' where id =${Temp[0].id}`,(err,result1)=>{
-if(err)
-res.send(err)
-else {
-console.log(result1)
-  res.send(result1)
-
-}
-})
-}
-})
-}
+let updateAnswer = (req, res) => {
+  const { content, questions_id, contracts_id, contracts_contract_types_id } =
+    req.body;
+  db.query(
+    `SELECT * FROM answers where questions_id=${questions_id} ORDER BY ID DESC LIMIT 1  `,
+    (err, result) => {
+      if (err) {
+        res.send(err);
+      } else {
+        let Temp = result;
+        db.query(
+          `update answers set content = '${content}' where id =${Temp[0].id}`,
+          (err, result1) => {
+            if (err) res.send(err);
+            else {
+              res.send(result1);
+            }
+          }
+        );
+      }
+    }
+  );
+};
 let getAnswers = (req, res) => {
   const { contracts_id } = req.params;
   const sql = `SELECT questions_id,content  FROM answers  where contracts_id=?`;
@@ -34,12 +33,6 @@ let getAnswers = (req, res) => {
 let AddAnswers = (req, res) => {
   const { content, questions_id, contracts_id, contracts_contract_types_id } =
     req.body;
-  console.log(
-    "this is the answer :",
-   "content :", content,
-      "questions_id :",questions_id,
-   "contracts_id :", contracts_id,
-   "contracts_contract_types_id : ", contracts_contract_types_id  );
   const sql = `INSERT INTO answers (content ,questions_id,contracts_id,contracts_contract_types_id) VALUES (?,?,?,?)`;
   db.query(
     sql,
@@ -75,38 +68,33 @@ let updateAnswers = (req, res) => {
 };
 let getContractImage = (req, res) => {
   let { id } = req.params;
-  console.log(id, "from get contract image");
   const sql = `SELECT contract_image FROM contracts WHERE id = ?`;
   db.query(sql, [id], (err, result) => {
     if (err) {
       res.send(err);
     } else {
-      console.log(result, "result");
       res.send(result);
     }
   });
 };
 let getQuestionsAnswers = (req, res) => {
   let id = req.params.id;
-  console.log(req.params, "req.params");
   const sql = `select a.id,questions_id,content from contract_types
   inner join answers as a on (contract_types.id = a.contracts_contract_types_id)
   where a.contracts_id = ?`;
   db.query(sql, [id], (err, result) => {
-    console.log(id);
     if (err) res.send(err);
     else {
-      console.log(result, "result");
       res.send(result);
     }
   });
 };
 module.exports = {
   AddAnswers,
-  updateAnswers,    
+  updateAnswers,
   getAnswers,
   getQuestionsAnswers,
-  AddAnswer,      
-  getContractImage,   
+  AddAnswer,
+  getContractImage,
   updateAnswer,
 };

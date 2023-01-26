@@ -26,7 +26,6 @@ var ChangeStatusInContract = async (req, res) => {
   db.query(
     `SELECT * from contracts where contract_image='${image_url}'`,
     async (err, result) => {
-      console.log(result);
       if (err) {
         console.log(err);
         res.send("Check the Url ");
@@ -63,7 +62,6 @@ var ChangeStatusInContract = async (req, res) => {
                           fs.writeFile("Final.html", arr.join("\n"), (err) => {
                             if (err) console.log(err);
                             else {
-                              console.log(image_url);
                               convertapi
                                 .convert(
                                   "docx",
@@ -73,7 +71,6 @@ var ChangeStatusInContract = async (req, res) => {
                                   "html"
                                 )
                                 .then(function (result3) {
-                                  console.log(result3.file.url);
                                   convertapi
                                     .convert(
                                       "png",
@@ -83,10 +80,6 @@ var ChangeStatusInContract = async (req, res) => {
                                       "docx"
                                     )
                                     .then(function (result4) {
-                                      console.log(
-                                        result4.file.url,
-                                        " this is the final picture"
-                                      );
                                       db.query(
                                         `UPDATE contracts set contract_image="${result4.file.url}" where contract_image="${image_url}"`,
                                         (err, resultF) => {
@@ -161,13 +154,11 @@ var createDocAndImage = async (str, index, renderObject) => {
   }
 };
 const makeFactureOrDevis = async (url, ans, type, language) => {
-  console.log(ans);
   const file = fs.createWriteStream("file.xlsx");
   http.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
       file.close();
-      console.log("Download Completed");
       let t = "";
       if (language == "fr") t = "le " + ans[2];
       else {
@@ -193,18 +184,13 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
         let f = j;
         let k = j + length;
         let r = k + length;
-        console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
-          console.log(" The loop for j  is ", ans[j]);
-          console.log(" The loop for k  is ", ans[k]);
-          console.log(" The loop for r  is ", ans[r]);
           sum += parseFloat(ans[k]) * parseFloat(ans[r]);
           workbook.worksheets[0].getCell(`E${i}`).value = ans[j++];
           workbook.worksheets[0].getCell(`D${i}`).value = ans[k++];
           workbook.worksheets[0].getCell(`C${i}`).value = ans[r++];
           workbook.worksheets[0].getCell(`B${i}`).value =
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
-          console.log("This is the sum so far ", sum);
         }
         workbook.worksheets[0].getCell("B34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("B37").value = (sum * 19) / 100;
@@ -216,7 +202,6 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
         var arr = workbook.worksheets[0]
           .getCell("D46")
           .value.split("..................................................:");
-        console.log(arr);
         arr[0] = ans[f - 1];
         let temp = arr[0];
         arr[0] = arr[1];
@@ -227,7 +212,6 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
         workbook.worksheets[0].getCell("B52").value = ans[f - 3];
         workbook.worksheets[0].getCell("B53").value =
           ans[f - 2] + " : الدليل الجبائي للحريف";
-        console.log("We are Here ");
         await workbook.xlsx.writeFile("output0.xlsx");
         try {
           const formData = new FormData();
@@ -246,9 +230,7 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
               },
             })
           );
-          console.log("Here");
         } catch (e) {
-          console.log(e);
           const errorString = await streamToString(e.response.data);
         }
       });
@@ -267,13 +249,11 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
   return "Hi";
 };
 let makeFactureOrDevisFr = (url, ans, type, language) => {
-  console.log(ans);
   const file = fs.createWriteStream("file.xlsx");
   http.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
       file.close();
-      console.log("Download Completed");
       const workbook = new Excel.Workbook();
       await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
         workbook.worksheets[0].getCell("C17").value =
@@ -292,39 +272,29 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
         let f = j;
         let k = j + length;
         let r = k + length;
-        console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
-          console.log(" The loop for j  is ", ans[j]);
-          console.log(" The loop for k  is ", ans[k]);
-          console.log(" The loop for r  is ", ans[r]);
           sum += parseFloat(ans[k]) * parseFloat(ans[r]);
           workbook.worksheets[0].getCell(`B${i}`).value = ans[j++];
           workbook.worksheets[0].getCell(`C${i}`).value = ans[k++];
           workbook.worksheets[0].getCell(`D${i}`).value = ans[r++];
           workbook.worksheets[0].getCell(`E${i}`).value =
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
-          console.log("This is the sum so far ", sum);
         }
         workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("E36").value =
           (parseInt(workbook.worksheets[0].getCell("E34").value) * 19) / 100;
-        console.log(parseInt(workbook.worksheets[0].getCell("E36").value));
-        console.log(workbook.worksheets[0].getCell("E34").value);
         workbook.worksheets[0].getCell("E41").value =
           parseInt(workbook.worksheets[0].getCell("E36").value) +
           parseInt(workbook.worksheets[0].getCell("E34").value) +
           0.6;
         //workbook.worksheets[0].getCell("E41").numFmt= "0.000"
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
-        console.log(arr);
-        console.log(f);
         arr[arr.length - 1] = ans[f - 1];
         arr = arr.join(" ");
         //Fix it
         workbook.worksheets[0].getCell("D46").value = arr;
         workbook.worksheets[0].getCell("B52").value = ans[f - 3];
         workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 2];
-        console.log("We are Here ");
         await workbook.xlsx.writeFile("output0.xlsx");
         try {
           const formData = new FormData();
@@ -343,9 +313,7 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
               },
             })
           );
-          console.log("Here");
         } catch (e) {
-          console.log(e);
           const errorString = await streamToString(e.response.data);
         }
       });
@@ -364,36 +332,28 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
   return "Hi";
 };
 const verify = (arr) => {
-  console.log(arr, " ***/*/");
   if (arr[8].length == 0 && arr[9].length > 0) {
     arr[8] = arr[9];
     arr[9] = "";
   }
-  console.log(arr);
   return arr;
 };
 const verifyAr = (arr) => {
-  console.log(arr, " ***/*/");
   if (arr[5].length == 0 && arr[6].length > 0) {
     arr[5] = arr[6];
     arr[6] = "";
   }
-  console.log(arr);
   return arr;
 };
 var makeEgagement = async (url, question, idBegin, length) => {
-  console.log("this is the url ", url);
-  console.log("francais****************");
   let renderedDoc = {};
   let Minis = 0;
   question = verify(question);
   if (question[8].length == 0) Minis = 2;
   else if (question[9].length == 0) Minis = 1;
-  console.log(idBegin, " **** ", 88 - Minis);
   for (let i = 0; i < 3; i++) {
     renderedDoc[(840 + i * 10).toString()] = "-";
   }
-  console.log(renderedDoc);
   if (Minis > 0) {
     if (Minis == 1) {
       renderedDoc["860"] = "";
@@ -403,11 +363,9 @@ var makeEgagement = async (url, question, idBegin, length) => {
       renderedDoc["860"] = "";
     }
   }
-  console.log(renderedDoc);
   for (let i = idBegin; i <= 88; i++) {
     renderedDoc[i.toString()] = question[i - idBegin];
   }
-  console.log(renderedDoc);
   const response = await superagent
     .get(url)
     .parse(superagent.parse.image)
@@ -457,7 +415,6 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
   for (let i = 0; i < 3; i++) {
     renderedDoc[3640 + i * 10] = "-";
   }
-  console.log(renderedDoc);
   if (Minis > 0) {
     if (Minis == 1) {
       renderedDoc["3660"] = "";
@@ -467,11 +424,9 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
       renderedDoc["3660"] = "";
     }
   }
-  console.log(renderedDoc);
   for (let i = idBegin; i <= 368; i++) {
     renderedDoc[i.toString()] = question[i - idBegin];
   }
-  console.log(renderedDoc);
   const response = await superagent
     .get(url)
     .parse(superagent.parse.image)
@@ -520,20 +475,13 @@ const addAnswersToAnswerTable = async (req, res) => {
     contract_types_id,
     questionsLength,
   } = req.body;
-  console.log(questionsLength, " * ", question.length);
   if (
     initialQuestionId == -1 ||
     questionsLength - 1 == question.length ||
     question.length == 0
   ) {
-    console.log("Here");
     res.end("Error Id");
   } else {
-    console.log(question);
-    console.log(initialQuestionId);
-    console.log(contracts_id);
-    console.log(contract_types_id);
-    console.log(questionsLength);
     question.map((element, index) => {
       db.query(
         `INSERT INTO answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${
@@ -541,15 +489,8 @@ const addAnswersToAnswerTable = async (req, res) => {
         })`,
         (err, result) => {
           if (err) {
-            console.log(err);
             res.send(err);
           } else {
-            console.log(
-              ` question id  :${
-                initialQuestionId + index
-              } with content ${element} has been added`
-            );
-            console.log(index, "***", question.length);
             if (index == question.length - 1)
               res.send(question.length.toString());
           }
@@ -558,44 +499,35 @@ const addAnswersToAnswerTable = async (req, res) => {
     });
   }
 };
-let Existe = (begin  , end)=>{
-  let Temp  =[]
-    for (let i = 0 ; i<QuestionIdForMin.length; i ++){
-  if(QuestionIdForMin[i]>=begin && QuestionIdForMin[i]<=end){
-  Temp.push(QuestionIdForMin[i])
-  
-  
+let Existe = (begin, end) => {
+  let Temp = [];
+  for (let i = 0; i < QuestionIdForMin.length; i++) {
+    if (QuestionIdForMin[i] >= begin && QuestionIdForMin[i] <= end) {
+      Temp.push(QuestionIdForMin[i]);
+    }
   }
+  return Temp;
+};
+let makeMin = (question, id) => {
+  let begin = id;
+  let end = question.length + id;
+  let Result = Existe(begin, end);
+  for (let i = 0; i < Result.length; i++) {
+    question[Result[i] - id] = question[Result[i] - id].toLowerCase();
   }
-  return Temp
-  }
-  let makeMin = (question , id)=>{
-  let begin = id 
-  let end  = question.length + id 
-  let Result = Existe(begin ,end)
-  console.log(Result , "this is the Result")
-  console.log(id ,  " "  ,end  ," this is the begin of ids")
-  for (let i =0 ; i <Result.length; i ++){
-    console.log(Result[i]-id , "this is the indx of question ")
-  question[Result[i]-id]=question[Result[i]-id].toLowerCase()
-  }
-  return question
-  }
-  
+  return question;
+};
 
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
   let { type, lang, initialQuestionId } = req.body;
   let { questions } = req.body;
-  questions = makeMin(questions , initialQuestionId )
+  questions = makeMin(questions, initialQuestionId);
 
   let renderObject = {};
   let answersArray = [];
-  console.log(questions, "this is the question array ");
-  console.log(initialQuestionId, "this is the first id");
   const { id } = req.params;
-  console.log(id, "this is the id of the contract");
   const sql = `select template_FR,template_AR,template_EN   from contract_types
   where contract_types.id = ?`;
   db.query(sql, [id], async (err, result) => {
@@ -613,7 +545,6 @@ const fillContract = async (req, res) => {
         acc[key] = value;
         return acc;
       }, {});
-      console.log(renderObject);
       // res.send(result);
       var url = "";
       if (lang === "Arabe") {
@@ -623,9 +554,7 @@ const fillContract = async (req, res) => {
       } else {
         url = result[0].template_EN;
       }
-      console.log(url);
       if (type == "engagement") {
-        console.log("Gere");
         if (lang == "Francais")
           var result = await makeEgagement(
             "https://res.cloudinary.com/dcscfcsdfrefrefreferfersdfersdf/raw/upload/v1674724193/fff_mutfxc_2_u1bwbk.docx",
@@ -645,7 +574,6 @@ const fillContract = async (req, res) => {
       //Demande Officiale
       else if (type == "facture" || type == "devis") {
         if (lang == "Arabe") {
-          console.log("Arabe");
           Promise.all([makeFactureOrDevis(url, questions, type)]).then(
             (response) => {
               setTimeout(() => {
@@ -654,7 +582,6 @@ const fillContract = async (req, res) => {
             }
           );
         } else {
-          console.log("Drancaiss");
           Promise.all([makeFactureOrDevisFr(url, questions, type)]).then(
             (response) => {
               setTimeout(() => {
@@ -687,11 +614,9 @@ const updateContractImage = async (req, res) => {
   const { user_name, contractName } = req.body;
   var urlImage = "";
   var Cmpt = 0;
-  console.log(twoPages);
   if (!isNaN(twoPages)) {
     Cmpt = twoPages;
   } else Cmpt = 0;
-  console.log(Cmpt, "cmpt");
   let Temp = [];
   for (let i = 0; i <= Cmpt; i++) {
     if (twoPages == "facture22") {
@@ -706,7 +631,6 @@ const updateContractImage = async (req, res) => {
     */
     }
     //var docUrl = uploadDoc.secure_url;
-    console.log(i);
     let ArrNumber = [];
     let T = twoPages == "facture" || twoPages == "devis" ? "xlsx" : "docx";
     let T2 =
@@ -745,7 +669,6 @@ const updateContractImage = async (req, res) => {
             image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
           urlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
-          console.log(Temp);
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
           db.query(updateContract, [urlImage, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
@@ -780,7 +703,6 @@ const updateContractImage = async (req, res) => {
                   "pdf",
                   number
                 );
-                console.log(result.file.url, "this is the result from pdf");
                 if (j <= Cmpt - 1) {
                   Temp.push({
                     id: j,
@@ -803,14 +725,11 @@ const updateContractImage = async (req, res) => {
                 }
               });
           }
-          console.log(Temp);
           res.send(urlImage + "|" + NurlImage);
           //    res.send(urlImage);
         }
-        console.log(urlImage, "urll imagee");
       })
       .catch((error) => {
-        console.log(error.message);
         res.send(error.message);
       });
   }
@@ -905,148 +824,138 @@ const PDFMerger = require("pdf-merger-js");
 
 const concatImages = (req, response) => {
   var merger = new PDFMerger();
-  let n = Math.floor(Math.random()*1000000)
-  const { nElement, images , contractName , user_name} = req.body
-  console.log(contractName ," this is the Contract Name From ConcatImage")  
-  console.log(user_name ," this is the User_name From ConcatImage")
-  console.log(images)
-  let arrayOfImages = []
-  if(images.indexOf(",")!=-1)
-   arrayOfImages = images.split(",")
-  else 
-   arrayOfImages = [images]
-  console.log(nElement)
-if(nElement==1){
-  const File = fs.createWriteStream(`./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`)
-   http.get(arrayOfImages[0], (res) => {
-    console.log(arrayOfImages)
-    res.pipe(File);
-    File.on("finish", async () => {
-      File.close();
-      console.log("Download Completed");
-      console.log(arrayOfImages)
-    
-      response.send(`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`)
-    })
-  })
-}
-  if (nElement == 2) {
-    const File = fs.createWriteStream("image1.pdf")
-    const File1 = fs.createWriteStream("image2.pdf")
+  let n = Math.floor(Math.random() * 1000000);
+  const { nElement, images, contractName, user_name } = req.body;
+  let arrayOfImages = [];
+  if (images.indexOf(",") != -1) arrayOfImages = images.split(",");
+  else arrayOfImages = [images];
+  if (nElement == 1) {
+    const File = fs.createWriteStream(
+      `./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+    );
     http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages)
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
-        console.log("Download Completed");
-        console.log(arrayOfImages)
-
-        http.get(arrayOfImages[1], (res1) => {
-          res1.pipe(File1)
-          File1.on("finish", async () => {
-            File1.close()
-            console.log("Hello")
-              await merger.add('image1.pdf');  //merge all pages. parameter is the path to file and filename.
-              await merger.add('image2.pdf'); // merge only page 2
-              await merger.save(`./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`).then(async res=>{
-                response.send(`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`)
-              }); //save under given name and reset the internal document
-              // Export the merged PDF as a nodejs Buffer
-              // const mergedPdfBuffer = await merger.saveAsBuffer();
-              // fs.writeSync('merged.pdf', mergedPdfBuffer);
-          })
-        })
-      })
-    })
+        response.send(
+          `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+        );
+      });
+    });
   }
-  else
-    if (nElement == 3) {
-      const File = fs.createWriteStream("image1.pdf")
-      const File1 = fs.createWriteStream("image2.pdf")
-      const File2 = fs.createWriteStream("image3.pdf")
-      http.get(arrayOfImages[0], (res) => {
-        console.log(arrayOfImages)
-        res.pipe(File);
-        File.on("finish", async () => {
-          File.close();
-          console.log("Download Completed");
-          console.log(arrayOfImages)
-          http.get(arrayOfImages[1], (res1) => {
-            res1.pipe(File1)
-            File1.on("finish", async () => {
-              File1.close()
-              console.log("Hello")
-              http.get(arrayOfImages[2], (res2) => {
-                console.log("Download Of The Second File")
-                res2.pipe(File2)
-                File2.on("finish", async () => {
-                  File2.close()
-                    console.log("Merging")
-                    await merger.add('image1.pdf');  //merge all pages. parameter is the path to file and filename.
-                    await merger.add('image2.pdf'); // merge only page 2
-                    await merger.add('image3.pdf'); // merge the pages 1 and 3
-                    await merger.save(`./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`).then(async res=>{
-                      response.send(`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`)
-                    }); //se under given name and reset the internal document
+  if (nElement == 2) {
+    const File = fs.createWriteStream("image1.pdf");
+    const File1 = fs.createWriteStream("image2.pdf");
+    http.get(arrayOfImages[0], (res) => {
+      res.pipe(File);
+      File.on("finish", async () => {
+        File.close();
+        http.get(arrayOfImages[1], (res1) => {
+          res1.pipe(File1);
+          File1.on("finish", async () => {
+            File1.close();
+            await merger.add("image1.pdf"); //merge all pages. parameter is the path to file and filename.
+            await merger.add("image2.pdf"); // merge only page 2
+            await merger
+              .save(
+                `./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+              )
+              .then(async (res) => {
+                response.send(
+                  `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                );
+              }); //save under given name and reset the internal document
+            // Export the merged PDF as a nodejs Buffer
+            // const mergedPdfBuffer = await merger.saveAsBuffer();
+            // fs.writeSync('merged.pdf', mergedPdfBuffer);
+          });
+        });
+      });
+    });
+  } else if (nElement == 3) {
+    const File = fs.createWriteStream("image1.pdf");
+    const File1 = fs.createWriteStream("image2.pdf");
+    const File2 = fs.createWriteStream("image3.pdf");
+    http.get(arrayOfImages[0], (res) => {
+      res.pipe(File);
+      File.on("finish", async () => {
+        File.close();
+        http.get(arrayOfImages[1], (res1) => {
+          res1.pipe(File1);
+          File1.on("finish", async () => {
+            File1.close();
+            http.get(arrayOfImages[2], (res2) => {
+              res2.pipe(File2);
+              File2.on("finish", async () => {
+                File2.close();
+                await merger.add("image1.pdf"); //merge all pages. parameter is the path to file and filename.
+                await merger.add("image2.pdf"); // merge only page 2
+                await merger.add("image3.pdf"); // merge the pages 1 and 3
+                await merger
+                  .save(
+                    `./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                  )
+                  .then(async (res) => {
+                    response.send(
+                      `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                    );
+                  }); //se under given name and reset the internal document
+                // Export the merged PDF as a nodejs Buffer
+                // const mergedPdfBuffer = await merger.saveAsBuffer();
+                // fs.writeSync('merged.pdf', mergedPdfBuffer);
+              });
+            });
+          });
+        });
+      });
+    });
+  } else if (nElement == 4) {
+    const File = fs.createWriteStream("image1.pdf");
+    const File1 = fs.createWriteStream("image2.pdf");
+    const File2 = fs.createWriteStream("image3.pdf");
+    const File3 = fs.createWriteStream("image4.pdf");
+    http.get(arrayOfImages[0], (res) => {
+      res.pipe(File);
+      File.on("finish", async () => {
+        File.close();
+        http.get(arrayOfImages[1], (res1) => {
+          res1.pipe(File1);
+          File1.on("finish", async () => {
+            File1.close();
+            http.get(arrayOfImages[2], (res2) => {
+              res2.pipe(File2);
+              File2.on("finish", async () => {
+                File2.close();
+                http.get(arrayOfImages[3], (res3) => {
+                  res3.pipe(File3);
+                  File3.on("finish", async () => {
+                    File3.close();
+                    await merger.add("image1.pdf"); //merge all pages. parameter is the path to file and filename.
+                    await merger.add("image2.pdf"); // merge only page 2
+                    await merger.add("image3.pdf"); // merge the pages 1 and 3
+                    await merger.add("image4.pdf"); // merge the pages 1 and 3
+                    await merger
+                      .save(
+                        `./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                      )
+                      .then(async (res) => {
+                        response.send(
+                          `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                        );
+                      }); //s//save under given name and reset the internal document
                     // Export the merged PDF as a nodejs Buffer
                     // const mergedPdfBuffer = await merger.saveAsBuffer();
                     // fs.writeSync('merged.pdf', mergedPdfBuffer);
-                })
-              })
-            })
-          })
-        })
-      })
-    }
-    else
-      if (nElement == 4) {
-        const File = fs.createWriteStream("image1.pdf")
-        const File1 = fs.createWriteStream("image2.pdf")
-        const File2 = fs.createWriteStream("image3.pdf")
-        const File3 = fs.createWriteStream("image4.pdf")
-        http.get(arrayOfImages[0], (res) => {
-          console.log(arrayOfImages)
-          res.pipe(File);
-          File.on("finish", async () => {
-            File.close();
-            console.log("Download Completed");
-            console.log(arrayOfImages)
-            http.get(arrayOfImages[1], (res1) => {
-              res1.pipe(File1)
-              File1.on("finish", async () => {
-                File1.close()
-                console.log("Hello")
-                http.get(arrayOfImages[2], (res2) => {
-                  res2.pipe(File2)
-                  File2.on("finish", async () => {
-                    console.log("File 3 Finished ")
-                    File2.close()
-                    http.get(arrayOfImages[3], (res3) => {
-                      res3.pipe(File3)
-                      File3.on("finish", async () => {
-                        console.log("File 4 Finished ")
-                        File3.close()
-                          await merger.add('image1.pdf');  //merge all pages. parameter is the path to file and filename.
-                          await merger.add('image2.pdf'); // merge only page 2
-                          await merger.add('image3.pdf'); // merge the pages 1 and 3
-                          await merger.add('image4.pdf'); // merge the pages 1 and 3
-                          await merger.save(`./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`).then(async res=>{
-                            response.send(`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`)
-                          }); //s//save under given name and reset the internal document
-                          // Export the merged PDF as a nodejs Buffer
-                          // const mergedPdfBuffer = await merger.saveAsBuffer();
-                          // fs.writeSync('merged.pdf', mergedPdfBuffer);
-                        
-                      })
-                    })
-                  })
-                })
-              })
-            })
-          })
-        })
-      }
-}
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  }
+};
 const SaveImageIntoStorage = async (
   contractName,
   user_name,

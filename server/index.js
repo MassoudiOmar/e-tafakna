@@ -90,7 +90,6 @@ app.post("/create-payment-intent", async (req, res) => {
       clientSecret: clientSecret,
     });
   } catch (e) {
-    console.log(e.message);
     res.json({ error: e.message });
   }
 });

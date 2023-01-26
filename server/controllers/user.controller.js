@@ -53,12 +53,10 @@ var register = async (req, res) => {
     }
     // check email
     else if (!validateEmail(email)) {
-      console.log("email not valid");
       res.send({ msg: "Please enter a valid email address." });
       // Validation Password
     } else if (typeof password !== "number" && password.length !== 5) {
       res.send({ msg: "Please enter a valid password" });
-      console.log("object");
     } else {
       //check user
       const sql = `SELECT * FROM users WHERE email=? `;
@@ -89,11 +87,9 @@ var register = async (req, res) => {
               ],
               async (err, result) => {
                 if (err) {
-                  console.log(err);
                   res.send(err);
                 } else {
                   //create token
-                  console.log("first");
                   var transporter = nodemailer.createTransport({
                     host: "e-tafakna.com",
                     port: 465,
@@ -287,7 +283,6 @@ var register = async (req, res) => {
                         code: code.toString(),
                         email: email,
                       });
-                      console.log(hashedCode);
                     }
                   });
                   // registration success
@@ -397,7 +392,6 @@ var registerwithfcb = async (req, res) => {
 
 var activate = async (req, res) => {
   const { email, activation_token, code } = req.body;
-  console.log(email, activation_token, code, "lollllllllllllllllllllll");
   if (activation_token !== code) {
     res.send("wrong token");
   } else {
@@ -447,7 +441,6 @@ const decodeToken = function (req, res) {
     //token is valid
     const sql = "SELECT * FROM users WHERE id=?";
     db.query(sql, [decoded.user.id], async (err, user) => {
-      console.log(user, "hennnnnnnnnneee");
       if (err) return console.log(err);
       return res.status(200).json(user);
     });
@@ -460,7 +453,6 @@ const getAllUsers = async (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      console.log(questions, "result");
       res.send(questions);
     }
   });
@@ -485,8 +477,6 @@ const getnotstatus = async (req, res) => {
 const updateNotifications = (req, res) => {
   const id = req.params.id;
   const notification = req.body.notification;
-  console.log(req.body);
-  console.log(id, notification);
   const sql = "update users SET notification = ? WHERE id=?";
   db.query(sql, [notification, id], (err, result) => {
     if (err) {
@@ -540,7 +530,6 @@ res.send(rez)
 const updateUserInfo =(req,res)=>{
   const {id} = req.params
   const {a,b,c,d,e} =req.body 
-  console.log(a,b,c,d,e,'data')
    const sql ='UPDATE users SET first_name = ?, last_name = ?, username = ? , phone = ? , address = ?  WHERE id = ?;'
    db.query(sql,[a,b,c,d,e,id],(err,result)=>{
      if(err)
@@ -569,10 +558,7 @@ const updatePassword = (req, res) => {
           );
           if (check) {
             const salt = await bcrypt.genSalt();
-            console.log(salt, "salt");
             const password = await bcrypt.hash(oldPassword.toString(), salt);
-            console.log(password, "password");
-
             const salt1 = await bcrypt.genSalt();
             const password1 = await bcrypt.hash(newPassword.toString(), salt1);
             const sql = ` update users set password = ? where id = ?`;
@@ -612,7 +598,6 @@ const googleOuth = (req, res) => {
   const emeailCheck = true;
   const sql = "select * from users where email = ? ";
   db.query(sql, [email], (err, result) => {
-    console.log(result)
     if (err) {
       console.log(err);
     } else if (result[0]?.email) {

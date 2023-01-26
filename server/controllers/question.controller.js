@@ -12,13 +12,11 @@ let getOneQuestion = function (req, res) {
   });
 };
 let getAllQuestions = function (req, res) {
-  // console.log("first")
   let query = "SELECT * FROM questions ";
   db.query(query, (err, questions) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      console.log(questions, "result");
       res.send(questions);
     }
   });
@@ -30,7 +28,6 @@ let getArQuestions = function (req, res) {
     if (err) {
       res.status(500).send(err);
     } else {
-      console.log(questions, "fwea");
       res.status(200).send(questions);
     }
   });
