@@ -558,11 +558,38 @@ const addAnswersToAnswerTable = async (req, res) => {
     });
   }
 };
+let Existe = (begin  , end)=>{
+  let Temp  =[]
+    for (let i = 0 ; i<QuestionIdForMin.length; i ++){
+  if(QuestionIdForMin[i]>=begin && QuestionIdForMin[i]<=end){
+  Temp.push(QuestionIdForMin[i])
+  
+  
+  }
+  }
+  return Temp
+  }
+  let makeMin = (question , id)=>{
+  let begin = id 
+  let end  = question.length + id 
+  let Result = Existe(begin ,end)
+  console.log(Result , "this is the Result")
+  console.log(id ,  " "  ,end  ," this is the begin of ids")
+  for (let i =0 ; i <Result.length; i ++){
+    console.log(Result[i]-id , "this is the indx of question ")
+  question[Result[i]-id]=question[Result[i]-id].toLowerCase()
+  }
+  return question
+  }
+  
+
 const fillContract = async (req, res) => {
   let urlImage = "";
   let docUrl = "";
   let { type, lang, initialQuestionId } = req.body;
   let { questions } = req.body;
+  questions = makeMin(questions , initialQuestionId )
+
   let renderObject = {};
   let answersArray = [];
   console.log(questions, "this is the question array ");
