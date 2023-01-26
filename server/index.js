@@ -66,6 +66,8 @@ app.use("/api/signature", signature);
 app.use("/api", contractRoutess);
 app.use("/api/throw",notifFCM)
 
+
+
 app.use("/uploads", express.static("./uploads"));
 app.get("/", (req, res) => {
   res.send("Welcome To E-Tafakna server");

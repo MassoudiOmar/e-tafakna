@@ -875,165 +875,151 @@ require("sharp/package.json"); // sharp is a peer dependency.  npm i sharp join-
 var mergeImg = require("merge-img");
 const { render } = require("react-dom");
 const PDFMerger = require("pdf-merger-js");
+
 const concatImages = (req, response) => {
   var merger = new PDFMerger();
-  const { nElement, images } = req.body;
-  console.log(nElement, ", this is the number of element");
-
-  console.log(images, "imageeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-  let arrayOfImages = [];
-  if (images.indexOf(",") != -1) arrayOfImages = images.split(",");
-  else arrayOfImages = [images];
-  console.log(arrayOfImages, ", this is the number of array");
-
-  if (nElement == 1) {
-    const File = fs.createWriteStream("image1.pdf");
-    http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages);
-      res.pipe(File);
-      File.on("finish", async () => {
-        File.close();
-        console.log("Download Completed");
-        console.log(arrayOfImages);
-        let uploadDoc = await cloudinary.uploader.upload(`image1.pdf`, {
-          resource_type: "auto",
-        });
-        console.log(uploadDoc.secure_url);
-        response.send(uploadDoc.secure_url);
-      });
-    });
-  }
+  let n = Math.floor(Math.random()*1000000)
+  const { nElement, images , contractName , user_name} = req.body
+  console.log(contractName ," this is the Contract Name From ConcatImage")  
+  console.log(user_name ," this is the User_name From ConcatImage")
+  console.log(images)
+  let arrayOfImages = []
+  if(images.indexOf(",")!=-1)
+   arrayOfImages = images.split(",")
+  else 
+   arrayOfImages = [images]
+  console.log(nElement)
+if(nElement==1){
+  const File = fs.createWriteStream(`./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`)
+   http.get(arrayOfImages[0], (res) => {
+    console.log(arrayOfImages)
+    res.pipe(File);
+    File.on("finish", async () => {
+      File.close();
+      console.log("Download Completed");
+      console.log(arrayOfImages)
+    
+      response.send(`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`)
+    })
+  })
+}
   if (nElement == 2) {
-    const File = fs.createWriteStream("image1.pdf");
-    const File1 = fs.createWriteStream("image2.pdf");
+    const File = fs.createWriteStream("image1.pdf")
+    const File1 = fs.createWriteStream("image2.pdf")
     http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages);
+      console.log(arrayOfImages)
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
         console.log("Download Completed");
-        console.log(arrayOfImages);
+        console.log(arrayOfImages)
 
         http.get(arrayOfImages[1], (res1) => {
-          res1.pipe(File1);
+          res1.pipe(File1)
           File1.on("finish", async () => {
-            File1.close();
-            console.log("Hello");
-            await merger.add("image1.pdf"); //merge all pages. parameter is the path to file and filename.
-            await merger.add("image2.pdf"); // merge only page 2
-            await merger.save("merged.pdf").then(async (res) => {
-              let uploadDoc = await cloudinary.uploader.upload(`merged.pdf`, {
-                resource_type: "auto",
-              });
-              console.log(uploadDoc.secure_url);
-              response.send(uploadDoc.secure_url);
-            }); //save under given name and reset the internal document
-            // Export the merged PDF as a nodejs Buffer
-            // const mergedPdfBuffer = await merger.saveAsBuffer();
-            // fs.writeSync('merged.pdf', mergedPdfBuffer);
-          });
-        });
-      });
-    });
-  } else if (nElement == 3) {
-    const File = fs.createWriteStream("image1.pdf");
-    const File1 = fs.createWriteStream("image2.pdf");
-    const File2 = fs.createWriteStream("image3.pdf");
-    http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages);
-      res.pipe(File);
-      File.on("finish", async () => {
-        File.close();
-        console.log("Download Completed");
-        console.log(arrayOfImages);
-        http.get(arrayOfImages[1], (res1) => {
-          res1.pipe(File1);
-          File1.on("finish", async () => {
-            File1.close();
-            console.log("Hello");
-            http.get(arrayOfImages[2], (res2) => {
-              console.log("Download Of The Second File");
-              res2.pipe(File2);
-              File2.on("finish", async () => {
-                File2.close();
-                console.log("Merging");
-                await merger.add("image1.pdf"); //merge all pages. parameter is the path to file and filename.
-                await merger.add("image2.pdf"); // merge only page 2
-                await merger.add("image3.pdf"); // merge the pages 1 and 3
-                await merger.save("merged.pdf").then(async (res) => {
-                  console.log("Uploading To Cloudinary");
-                  let uploadDoc = await cloudinary.uploader.upload(
-                    `merged.pdf`,
-                    {
-                      resource_type: "auto",
-                    }
-                  );
-                  console.log(uploadDoc.secure_url);
-                  response.send(uploadDoc.secure_url);
-                }); //save under given name and reset the internal document
-                // Export the merged PDF as a nodejs Buffer
-                // const mergedPdfBuffer = await merger.saveAsBuffer();
-                // fs.writeSync('merged.pdf', mergedPdfBuffer);
-              });
-            });
-          });
-        });
-      });
-    });
-  } else if (nElement == 4) {
-    const File = fs.createWriteStream("image1.pdf");
-    const File1 = fs.createWriteStream("image2.pdf");
-    const File2 = fs.createWriteStream("image3.pdf");
-    const File3 = fs.createWriteStream("image4.pdf");
-    http.get(arrayOfImages[0], (res) => {
-      console.log(arrayOfImages);
-      res.pipe(File);
-      File.on("finish", async () => {
-        File.close();
-        console.log("Download Completed");
-        console.log(arrayOfImages);
-        http.get(arrayOfImages[1], (res1) => {
-          res1.pipe(File1);
-          File1.on("finish", async () => {
-            File1.close();
-            console.log("Hello");
-            http.get(arrayOfImages[2], (res2) => {
-              res2.pipe(File2);
-              File2.on("finish", async () => {
-                console.log("File 3 Finished ");
-                File2.close();
-                http.get(arrayOfImages[3], (res3) => {
-                  res3.pipe(File3);
-                  File3.on("finish", async () => {
-                    console.log("File 4 Finished ");
-                    File3.close();
-                    await merger.add("image1.pdf"); //merge all pages. parameter is the path to file and filename.
-                    await merger.add("image2.pdf"); // merge only page 2
-                    await merger.add("image3.pdf"); // merge the pages 1 and 3
-                    await merger.add("image4.pdf"); // merge the pages 1 and 3
-                    await merger.save("merged.pdf").then(async (res) => {
-                      let uploadDoc = await cloudinary.uploader.upload(
-                        `merged.pdf`,
-                        {
-                          resource_type: "auto",
-                        }
-                      );
-                      console.log(uploadDoc.secure_url);
-                      response.send(uploadDoc.secure_url);
-                    }); //save under given name and reset the internal document
+            File1.close()
+            console.log("Hello")
+              await merger.add('image1.pdf');  //merge all pages. parameter is the path to file and filename.
+              await merger.add('image2.pdf'); // merge only page 2
+              await merger.save(`./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`).then(async res=>{
+                response.send(`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`)
+              }); //save under given name and reset the internal document
+              // Export the merged PDF as a nodejs Buffer
+              // const mergedPdfBuffer = await merger.saveAsBuffer();
+              // fs.writeSync('merged.pdf', mergedPdfBuffer);
+          })
+        })
+      })
+    })
+  }
+  else
+    if (nElement == 3) {
+      const File = fs.createWriteStream("image1.pdf")
+      const File1 = fs.createWriteStream("image2.pdf")
+      const File2 = fs.createWriteStream("image3.pdf")
+      http.get(arrayOfImages[0], (res) => {
+        console.log(arrayOfImages)
+        res.pipe(File);
+        File.on("finish", async () => {
+          File.close();
+          console.log("Download Completed");
+          console.log(arrayOfImages)
+          http.get(arrayOfImages[1], (res1) => {
+            res1.pipe(File1)
+            File1.on("finish", async () => {
+              File1.close()
+              console.log("Hello")
+              http.get(arrayOfImages[2], (res2) => {
+                console.log("Download Of The Second File")
+                res2.pipe(File2)
+                File2.on("finish", async () => {
+                  File2.close()
+                    console.log("Merging")
+                    await merger.add('image1.pdf');  //merge all pages. parameter is the path to file and filename.
+                    await merger.add('image2.pdf'); // merge only page 2
+                    await merger.add('image3.pdf'); // merge the pages 1 and 3
+                    await merger.save(`./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`).then(async res=>{
+                      response.send(`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`)
+                    }); //se under given name and reset the internal document
                     // Export the merged PDF as a nodejs Buffer
                     // const mergedPdfBuffer = await merger.saveAsBuffer();
                     // fs.writeSync('merged.pdf', mergedPdfBuffer);
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  }
-};
+                })
+              })
+            })
+          })
+        })
+      })
+    }
+    else
+      if (nElement == 4) {
+        const File = fs.createWriteStream("image1.pdf")
+        const File1 = fs.createWriteStream("image2.pdf")
+        const File2 = fs.createWriteStream("image3.pdf")
+        const File3 = fs.createWriteStream("image4.pdf")
+        http.get(arrayOfImages[0], (res) => {
+          console.log(arrayOfImages)
+          res.pipe(File);
+          File.on("finish", async () => {
+            File.close();
+            console.log("Download Completed");
+            console.log(arrayOfImages)
+            http.get(arrayOfImages[1], (res1) => {
+              res1.pipe(File1)
+              File1.on("finish", async () => {
+                File1.close()
+                console.log("Hello")
+                http.get(arrayOfImages[2], (res2) => {
+                  res2.pipe(File2)
+                  File2.on("finish", async () => {
+                    console.log("File 3 Finished ")
+                    File2.close()
+                    http.get(arrayOfImages[3], (res3) => {
+                      res3.pipe(File3)
+                      File3.on("finish", async () => {
+                        console.log("File 4 Finished ")
+                        File3.close()
+                          await merger.add('image1.pdf');  //merge all pages. parameter is the path to file and filename.
+                          await merger.add('image2.pdf'); // merge only page 2
+                          await merger.add('image3.pdf'); // merge the pages 1 and 3
+                          await merger.add('image4.pdf'); // merge the pages 1 and 3
+                          await merger.save(`./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`).then(async res=>{
+                            response.send(`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`)
+                          }); //s//save under given name and reset the internal document
+                          // Export the merged PDF as a nodejs Buffer
+                          // const mergedPdfBuffer = await merger.saveAsBuffer();
+                          // fs.writeSync('merged.pdf', mergedPdfBuffer);
+                        
+                      })
+                    })
+                  })
+                })
+              })
+            })
+          })
+        })
+      }
+}
 const SaveImageIntoStorage = async (
   contractName,
   user_name,
