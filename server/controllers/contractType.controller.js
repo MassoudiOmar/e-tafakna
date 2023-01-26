@@ -641,7 +641,7 @@ const fillContract = async (req, res) => {
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
   var twoPages = req.body.twoPages;
-  const { user_name } = req.body
+  const { user_name , contractName } = req.body
   var urlImage = "";
   var Cmpt = 0;
   console.log(twoPages)
@@ -666,6 +666,7 @@ const updateContractImage = async (req, res) => {
     }
     //var docUrl = uploadDoc.secure_url;
     console.log(i);
+    let ArrNumber =[]
     let T =  twoPages=="facture" || twoPages=="devis" ? "xlsx" :"docx"
     let T2 =  twoPages=="facture"|| twoPages=="devis" ? `output${i}.xlsx` :`output${i}.docx`
     await convertapi
@@ -677,20 +678,21 @@ const updateContractImage = async (req, res) => {
          T 
       )
       .then(async function (result) {
-        console.log(result.file.url)
+        let number = Math.floor(Math.random() * 1000000)
+     ArrNumber.push(number)
+    await SaveImageIntoStorage(contractName , user_name , result,"jpg" , number)
         if (i <= Cmpt - 1) {
           Temp.push({
             id: i,
-            image: result.file.url,
+            image:`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
-
-          urlImage += result.file.url + ",";
+          urlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` + ",";
         } else {
           Temp.push({
             id: i,
-            image: result.file.url,
+            image:`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
-          urlImage += result.file.url;
+          urlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
           console.log(Temp);
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
           db.query(updateContract, [urlImage, urlImage, id], (err, result) => {
@@ -712,20 +714,22 @@ for (let j = 0  ; j<=Cmpt ; j ++){
   T
   )
   .then(async function (result) {
+    let number = Math.floor(Math.random() * 1000000)
+    await SaveImageIntoStorage(contractName , user_name , result,"pdf",number)
     console.log(result.file.url , "this is the result from pdf")
     if (j <= Cmpt - 1) {
       Temp.push({
         id: j,
-        image: result.file.url,
+        image:`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
       });
 
-      NurlImage += result.file.url + ",";
+      NurlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` + ",";
     } else {
       Temp.push({
         id: j,
-        image: result.file.url,
+        image:`https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
       });
-      NurlImage += result.file.url;
+      NurlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
       const updateContract1 = `UPDATE contracts set pdfContractImage =? where id =?`;
       db.query(updateContract1, [ NurlImage, id], (err, result) => {
         err ? console.log(err) : console.log(result);
@@ -743,7 +747,9 @@ res.send( urlImage+'|'+NurlImage)
         res.send(error.message);
       });
   }
-};
+}
+message.txt
+5 KB
 const insertContractType = (req, res) => {
   let {
     signed_time,
