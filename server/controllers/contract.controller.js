@@ -12,7 +12,7 @@ const insertContract = (req, res) => {
     else res.send(result);
   });
 };
-const resultPerPage = 10;
+const resultPerPage = 15;
 const getAllContractByStatus = (req, res, err) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
