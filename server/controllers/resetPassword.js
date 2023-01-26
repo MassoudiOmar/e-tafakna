@@ -259,35 +259,30 @@ const verifying = (req, res) => {
 };
 const payment = async (req, res) => {
   const { id } = req.params;
+  const { dataa } = req.body;
   let amount;
-  id == 1 ? (amount = 2.8) : null;
-  id == 2 ? (amount = 20) : null;
-  id == 3 ? (amount = 55) : null;
-  id == 4 ? (amount = 99) : null;
+  id == 1 ? (amount = 2.8) && (note = "Forfait Mobile") : null;
+  id == 2 ? (amount = 20) && (note = "Plan Personnel") : null;
+  id == 3 ? (amount = 55) && (note = "Plan Standar") : null;
+  id == 4 ? (amount = 99) && (note = "Business Pro") : null;
 
-  var increment = (function (n) {
-    return function () {
-      n += 1;
-      return n;
-    };
-  })(0);
   let data = {
-    vendor: 2675,
     amount: amount,
-    note: increment(1),
+    note: note,
+    first_name: dataa[0].first_name,
+    phone: dataa[0].phone,
+    email: dataa[0].email,
+    last_name: dataa[0].last_name,
+    webhook_url: "https://payment/",
   };
-
-  const response = await fetch(
-    "https://sandbox.paymee.tn/api/v1/payments/create",
-    {
-      body: JSON.stringify(data),
-      method: "POST",
-      headers: {
-        "Content-type": "application/json;charset=UTF-8",
-        Authorization: "TOKEN 39ea18210a493b3e63d2b94abeef37f48f74304c",
-      },
-    }
-  ).then(async (response) => {
+  const response = await fetch("https://app.paymee.tn/api/v2/payments/create", {
+    body: JSON.stringify(data),
+    method: "POST",
+    headers: {
+      "Content-type": "application/json;charset=UTF-8",
+      Authorization: "TOKEN 854da4da3b8f36f8772f46a3992a02b9a2cbb199",
+    },
+  }).then(async (response) => {
     const data = await response.json();
     res.send(data);
   });
