@@ -4,10 +4,17 @@ let nodeGeocoder = require("node-geocoder");
 const insertContract = (req, res) => {
   const { contract_types_id } = req.body;
 
-  const created_at = new Date();
+  const created_at = function today(i) {
+    var today = new Date();
+    var yyyy = today.getDate();
+    var m = today.getMonth()+1;
+    var hours = today.getFullYear();
+    today = yyyy + "-"+m + "-" + hours;
+    return today;
+  };
 
   const sql = `INSERT into contracts (status,contract_url,created_at,contract_types_id) values (?,?,?,?)`;
-  db.query(sql, ["draft", "", created_at, contract_types_id], (err, result) => {
+  db.query(sql, ["draft", "", created_at(), contract_types_id], (err, result) => {
     if (err) console.log(err);
     else res.send(result);
   });
@@ -40,9 +47,9 @@ const getAllContractByStatus = (req, res, err) => {
     console.log(resultPerPage, "startingLim");
     sql = `
     SELECT * FROM users_has_contracts c
+    inner join users u on(u.id= c.owner)
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
-    inner join users u on(u.id= c.owner)
     where t.status = ? && c.owner = ? ORDER BY t.id DESC LIMIT ${startingLimit},${resultPerPage} `;
     console.log(resultPerPage, "startingLim");
     db.query(sql, [status, owner], (err, result) => {
