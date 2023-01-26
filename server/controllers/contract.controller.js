@@ -156,7 +156,7 @@ const getArchieve = (req, res) => {
     const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
     let page = req.query.page ? parseInt(req.query.page) : 1;
     if (page > numberofPAGES0) {
-      return res.send("-1");
+      console.log("hi")
       // return res.send("No Data")
     } else if (page < 1) {
       return res.send("/?page=" + encodeURIComponent("1"));
@@ -169,7 +169,7 @@ const getArchieve = (req, res) => {
      where c.owner = ? && t.contract_image IS NOT NULL || c.receiver=? && t.status="accepted" ORDER BY t.id DESC LIMIT ${startingLimit},${resultPerPage}`;
     db.query(sql, [owner, owner], (err, result) => {
       if (err) throw err;
-      let iterator = page - 5 < 1 ? 1 : page - 5;
+      let iterator = page - 10 < 1 ? 1 : page - 10;
       let endingLink =
         iterator + 9 <= numberofPAGES0
           ? iterator + 9
@@ -178,6 +178,7 @@ const getArchieve = (req, res) => {
         iterator -= page + 4 - numberofPAGES0;
       }
       console.log(endingLink, "endingLink");
+      console.log(iterator,"iterator")
       res.send(result, page, iterator, endingLink, numberofPAGES0);
     });
   });
