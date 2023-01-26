@@ -748,8 +748,6 @@ res.send( urlImage+'|'+NurlImage)
       });
   }
 }
-message.txt
-5 KB
 const insertContractType = (req, res) => {
   let {
     signed_time,
@@ -1000,14 +998,14 @@ if(nElement==1){
       }
 }
 const SaveImageIntoStorage =  async (contractName , user_name , request,type, number)=>{
-  if(!fs.existsSync(./uploads/${contractName})){
-  fs.mkdirSync(./uploads/${contractName} ,{recursive:true})
+  if(!fs.existsSync(`./uploads/${contractName}`)){
+  fs.mkdirSync(`./uploads/${contractName} `,{recursive:true})
   }
-  if(!fs.existsSync(./uploads/${contractName}/${user_name})){
-    fs.mkdirSync(./uploads/${contractName}/${user_name} ,{ recursive: true })
-    fs.mkdirSync(./uploads/${contractName}/${user_name}/E-Tafakna ,{ recursive: true })
+  if(!fs.existsSync(`./uploads/${contractName}/${user_name}`)){
+    fs.mkdirSync(`./uploads/${contractName}/${user_name} `,{ recursive: true })
+    fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna` ,{ recursive: true })
     }
-    request.saveFiles(./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type})
+    request.saveFiles(`./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`)
   }
 
 module.exports = {

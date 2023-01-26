@@ -44,8 +44,6 @@ app.listen(PORT, function () {
 app.use(bodyParser.urlencoded({ limit: "5000mb" }));
 
 // CORRECT (should always work)
-var sslRootCAs = require('ssl-root-cas/latest')
-sslRootCAs.inject()
 // app.use(express.bodyParser({limit: '500mb'}))
 app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
@@ -68,7 +66,7 @@ app.use("/api/signature", signature);
 app.use("/api", contractRoutess);
 app.use("/api/throw",notifFCM)
 
-app.use("/", express.static("../uploads")); 
+app.use("/", express.static("./uploads")); 
 app.get("/", (req, res) => {
   res.send("Welcome To E-Tafakna server");
 });
