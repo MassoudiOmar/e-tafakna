@@ -11,6 +11,10 @@ const contractRoutes = require("./routes/contract.routes");
 const contractRoutess = require("./routes/contract2.routes");
 const usersContractsRoutes = require("./routes/users_has_contracts.routes");
 const signature = require("./routes/signature.routes");
+const notifFCM = require("./routes/SendNotifFCM.routes")
+const FCM = require('fcm-node')
+
+
 
 var items = require("./database-mysql");
 const cors = require("cors");
@@ -62,6 +66,8 @@ app.use("/api/answers", answersRoutes);
 app.use("/api/contracts", contractRoutes);
 app.use("/api/signature", signature);
 app.use("/api", contractRoutess);
+app.use("/api/throw",notifFCM)
+
 app.use("/", express.static("../uploads")); 
 app.get("/", (req, res) => {
   res.send("Welcome To E-Tafakna server");
