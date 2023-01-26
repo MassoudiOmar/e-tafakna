@@ -669,5 +669,6 @@ module.exports = {
   getAllAnswerOfUser,
   getNameOfSpecificContract,
   updateUserInfo,
-  updatePassword
+  updatePassword,
+  googleOuth
 };
