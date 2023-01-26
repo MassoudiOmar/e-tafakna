@@ -593,6 +593,68 @@ const updatePassword = (req, res) => {
     });
   }
 };
+const googleOuth = (req, res) => {
+  const { picture, name, given_name, family_name, email } = req.body;
+  const address = null;
+  const notification = false;
+  const phone = "null";
+  const status = "Activated";
+  const password = "pending";
+  const created_at = function today(i) {
+    var today = new Date();
+    var yyyy = today.getDate();
+    var m = today.getMonth() + 1;
+    var hours = today.getFullYear();
+    today = yyyy + "/" + m + "/" + hours;
+    return today;
+  };
+  const role = "user";
+  const emeailCheck = true;
+  const sql = "select * from users where email = ? ";
+  db.query(sql, [email], (err, result) => {
+    console.log(result)
+    if (err) {
+      console.log(err);
+    } else if (result[0]?.email) {
+      res.send('user exist');
+    } else {
+      const sql =
+        `INSERT INTO users (first_name, last_name, email, password, phone,address,username,status,image, role,created_at,notification) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`;
+      db.query(
+        sql,
+        [
+          given_name,
+          family_name,
+          email,
+          password,
+          phone,
+          address,
+          name,
+          status,
+          picture,
+          role,
+          created_at(),
+          notification,
+        ],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            const sql = ` SELECT * FROM users WHERE email=? `;
+            db.query(sql, [email], (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.send(result);
+              }
+            });
+          }
+        }
+      );
+    }
+  });
+};
+
 module.exports = {
   register,
   activate,
