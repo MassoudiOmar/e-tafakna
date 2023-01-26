@@ -7,7 +7,7 @@ const SendFCM = async (req, res, next) => {
   try {
     let fcm = new FCM(SERVER_KEY);
     let message = {
-      token: "R_J2KyJ0OGCMa265pVPNnY" ,
+      to: "/topics/my-topic" + req.body.topic,
       notifications: {
         title: req.body.title,
         body: req.body.body,
