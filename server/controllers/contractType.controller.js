@@ -998,6 +998,7 @@ if(nElement==1){
       }
 }
 const SaveImageIntoStorage =  async (contractName , user_name , request,type, number)=>{
+  // if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
   if(!fs.existsSync(`./uploads/${contractName}`)){
   fs.mkdirSync(`./uploads/${contractName} `,{recursive:true})
   }
