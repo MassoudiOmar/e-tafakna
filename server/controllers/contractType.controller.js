@@ -250,7 +250,7 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
 };
 let makeFactureOrDevisFr = (url, ans, type, language) => {
   const file = fs.createWriteStream("file.xlsx");
-  http.get(url, function (response) {
+  https.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
       file.close();
@@ -633,7 +633,10 @@ const fillContract = async (req, res) => {
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
   var twoPages = req.body.twoPages;
-  const { user_name, contractName } = req.body;
+  let  { user_name, contractName } = req.body;
+     if(twoPages=="facture" || twoPages=="devis")
+  contractName = twoPages
+  
   var urlImage = "";
   var Cmpt = 0;
   if (!isNaN(twoPages)) {
