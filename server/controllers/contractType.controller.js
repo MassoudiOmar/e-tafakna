@@ -592,10 +592,9 @@ const fillContract = async (req, res) => {
   questions =(questions.slice(0,5).concat(questions.slice(5,8).reverse())) .concat(questions.slice(8)) 
   console.log(questions , "this is after reversing..")
 //  [questions[6],questions[7]] = [questions[7],questions[6]]
-let t  = questions[6]
-questions[6] = questions[7]
+let t  = questions[5]
+questions[5] = questions[7]
 questions[7]=t 
-  questions[5]=questions[7]
   console.log(questions , "this is after swapping ")  
 }
 
