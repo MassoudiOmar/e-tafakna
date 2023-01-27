@@ -858,7 +858,7 @@ const concatImages = (req, response) => {
     const File = fs.createWriteStream(
       `./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
     );
-    http.get(arrayOfImages[0], (res) => {
+    https.get(arrayOfImages[0], (res) => {
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
@@ -871,11 +871,11 @@ const concatImages = (req, response) => {
   if (nElement == 2) {
     const File = fs.createWriteStream("image1.pdf");
     const File1 = fs.createWriteStream("image2.pdf");
-    http.get(arrayOfImages[0], (res) => {
+    https.get(arrayOfImages[0], (res) => {
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
-        http.get(arrayOfImages[1], (res1) => {
+        https.get(arrayOfImages[1], (res1) => {
           res1.pipe(File1);
           File1.on("finish", async () => {
             File1.close();
@@ -901,15 +901,15 @@ const concatImages = (req, response) => {
     const File = fs.createWriteStream("image1.pdf");
     const File1 = fs.createWriteStream("image2.pdf");
     const File2 = fs.createWriteStream("image3.pdf");
-    http.get(arrayOfImages[0], (res) => {
+    https.get(arrayOfImages[0], (res) => {
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
-        http.get(arrayOfImages[1], (res1) => {
+        https.get(arrayOfImages[1], (res1) => {
           res1.pipe(File1);
           File1.on("finish", async () => {
             File1.close();
-            http.get(arrayOfImages[2], (res2) => {
+            https.get(arrayOfImages[2], (res2) => {
               res2.pipe(File2);
               File2.on("finish", async () => {
                 File2.close();
@@ -939,19 +939,19 @@ const concatImages = (req, response) => {
     const File1 = fs.createWriteStream("image2.pdf");
     const File2 = fs.createWriteStream("image3.pdf");
     const File3 = fs.createWriteStream("image4.pdf");
-    http.get(arrayOfImages[0], (res) => {
+    https.get(arrayOfImages[0], (res) => {
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
-        http.get(arrayOfImages[1], (res1) => {
+        https.get(arrayOfImages[1], (res1) => {
           res1.pipe(File1);
           File1.on("finish", async () => {
             File1.close();
-            http.get(arrayOfImages[2], (res2) => {
+            https.get(arrayOfImages[2], (res2) => {
               res2.pipe(File2);
               File2.on("finish", async () => {
                 File2.close();
-                http.get(arrayOfImages[3], (res3) => {
+                https.get(arrayOfImages[3], (res3) => {
                   res3.pipe(File3);
                   File3.on("finish", async () => {
                     File3.close();
