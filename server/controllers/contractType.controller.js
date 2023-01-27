@@ -467,6 +467,28 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
     return "from cloudinary image";
   }
 };
+let QuestionIdForMin = [
+23,
+41,
+45,
+100,
+107,
+157,
+164,
+167,
+171,
+186,
+230,
+250,
+261,
+273,
+280,
+290,
+298,
+344,
+360,
+365
+]
 const addAnswersToAnswerTable = async (req, res) => {
   const {
     question,
