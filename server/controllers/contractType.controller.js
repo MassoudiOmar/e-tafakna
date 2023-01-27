@@ -249,52 +249,77 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
   return "Hi";
 };
 let makeFactureOrDevisFr = (url, ans, type, language) => {
+
+
+ console.log(url, "this is the all ")
+
   const file = fs.createWriteStream("file.xlsx");
   https.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
       file.close();
+      console.log("Download Completed");
       const workbook = new Excel.Workbook();
       await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
         workbook.worksheets[0].getCell("C17").value =
           type.toUpperCase() + " N ° \\";
         workbook.worksheets[0].getCell("A1").value = ans[0];
-        workbook.worksheets[0].getCell("B9").value = ans[1] + "le " + ans[2];
+        workbook.worksheets[0].getCell("B9").value = ans[1] + " le " + ans[2];
         workbook.worksheets[0].getCell("D12").value = ans[3];
         let Temp = ans[4];
-        workbook.worksheets[0].getCell("D13").value = parseInt(ans[4]);
+        workbook.worksheets[0].getCell('D14').font = {
+          bold:false
+        };
+        workbook.worksheets[0].getCell("D14").value =ans[5];
+        workbook.worksheets[0].getCell("D13").value = (ans[4]);
         workbook.worksheets[0].getCell("D13").numFmt = "0";
         workbook.worksheets[0].getCell("C17").value =
-          workbook.worksheets[0].getCell("C17").value + ans[5];
+          workbook.worksheets[0].getCell("C17").value + ans[6];
+          workbook.worksheets[0].getCell("E38").value =1,000
         let sum = 0;
         let length = Math.ceil((ans.length - 12) / 3);
         let j = ans.length - length * 3;
         let f = j;
         let k = j + length;
         let r = k + length;
+        console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
+          workbook.worksheets[0].getCell(`B${i}`).font = {
+            bold: false
+          };
+          console.log(" The loop for j  is ", ans[j]);
+          console.log(" The loop for k  is ", ans[k]);
+          console.log(" The loop for r  is ", ans[r]);
           sum += parseFloat(ans[k]) * parseFloat(ans[r]);
           workbook.worksheets[0].getCell(`B${i}`).value = ans[j++];
           workbook.worksheets[0].getCell(`C${i}`).value = ans[k++];
           workbook.worksheets[0].getCell(`D${i}`).value = ans[r++];
           workbook.worksheets[0].getCell(`E${i}`).value =
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
+          console.log("This is the sum so far ", sum);
         }
         workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("E36").value =
           (parseInt(workbook.worksheets[0].getCell("E34").value) * 19) / 100;
+        console.log(parseInt(workbook.worksheets[0].getCell("E36").value));
+        console.log(workbook.worksheets[0].getCell("E34").value);
         workbook.worksheets[0].getCell("E41").value =
           parseInt(workbook.worksheets[0].getCell("E36").value) +
           parseInt(workbook.worksheets[0].getCell("E34").value) +
-          0.6;
+          1.0;
         //workbook.worksheets[0].getCell("E41").numFmt= "0.000"
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
-        arr[arr.length - 1] = ans[f - 1];
+        console.log(arr);
+        console.log(f);
+        arr[1] = type=="devis" ? "le" : "la"
+        arr[arr.length - 1] = inWords(parseInt(workbook.worksheets[0].getCell("E41").value)) +"Dinars"
+        arr[3]=type
         arr = arr.join(" ");
         //Fix it
         workbook.worksheets[0].getCell("D46").value = arr;
-        workbook.worksheets[0].getCell("B52").value = ans[f - 3];
-        workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 2];
+        workbook.worksheets[0].getCell("B52").value = ans[f - 2];
+        workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 1];
+        console.log("We are Here ");
         await workbook.xlsx.writeFile("output0.xlsx");
         try {
           const formData = new FormData();
@@ -313,7 +338,9 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
               },
             })
           );
+          console.log("Here");
         } catch (e) {
+          console.log(e);
           const errorString = await streamToString(e.response.data);
         }
       });
