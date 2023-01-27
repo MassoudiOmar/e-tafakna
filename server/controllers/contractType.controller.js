@@ -20,6 +20,21 @@ const https = require("https");
  * https://www.npmjs.com/package/node-html-to-image
  *
  */
+
+var a = ['','Un ','Deux ','Trois ','Quatre ', 'Cinq ','Six ','Sept ','Huit ','Neuf ','Dix ','Onze ','Douze ','Treize ','Quatorze ','Quinze ','Seize ','Dix-sept','Dix-huit','Dix-neuf'];
+var b = ['', '', 'Vingt','Trente','Quarante','Cinquante', 'Soixante','Soixante-dix','Quatre-vingts','Quatre-vingt-dix'];
+function inWords (num) {
+    if ((num = num.toString()).length > 9) return 'overflow';
+    n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    if (!n) return; var str = '';
+    str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'milliard ' : '';
+    str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'million ' : '';
+    str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'mille ' : '';
+    str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'cents ' : '';
+    str += (n[5] != 0) ? ((str != '') ? 'et ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + '' : '';
+    return str.substring(0,2) == "Un" ? str.slice(3) : str;
+}
+
 var ChangeStatusInContract = async (req, res) => {
   const { image_url, user_name, tag } = req.body;
   const output = fs.createWriteStream("test.html");
