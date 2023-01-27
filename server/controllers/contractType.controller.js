@@ -546,6 +546,15 @@ const fillContract = async (req, res) => {
   let { type, lang, initialQuestionId } = req.body;
   let { questions } = req.body;
   questions = makeMin(questions, initialQuestionId);
+  if(type=="devis"){
+  questions =(questions.slice(0,5).concat(questions.slice(5,8).reverse())) .concat(questions.slice(8)) 
+  console.log(questions , "this is after reversing..")
+//  [questions[6],questions[7]] = [questions[7],questions[6]]
+let t  = questions[6]
+questions[6] = questions[7]
+questions[7]=t 
+  console.log(questions , "this is after swapping ")  
+}
 
   let renderObject = {};
   let answersArray = [];
