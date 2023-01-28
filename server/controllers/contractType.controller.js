@@ -595,6 +595,9 @@ const fillContract = async (req, res) => {
 let t  = questions[5]
 questions[5] = questions[7]
 questions[7]=t 
+      let x = questions[6] 
+      questions[6] = questions[7] 
+      questions[7]=x
   console.log(questions , "this is after swapping ")  
 }
 
