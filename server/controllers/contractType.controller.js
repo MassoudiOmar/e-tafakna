@@ -20,6 +20,21 @@ const https = require("https");
  * https://www.npmjs.com/package/node-html-to-image
  *
  */
+
+var a = ['','Un ','Deux ','Trois ','Quatre ', 'Cinq ','Six ','Sept ','Huit ','Neuf ','Dix ','Onze ','Douze ','Treize ','Quatorze ','Quinze ','Seize ','Dix-sept','Dix-huit','Dix-neuf'];
+var b = ['', '', 'Vingt','Trente','Quarante','Cinquante', 'Soixante','Soixante-dix','Quatre-vingts','Quatre-vingt-dix'];
+function inWords (num) {
+    if ((num = num.toString()).length > 9) return 'overflow';
+    n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    if (!n) return; var str = '';
+    str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'milliard ' : '';
+    str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'million ' : '';
+    str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'mille ' : '';
+    str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'cents ' : '';
+    str += (n[5] != 0) ? ((str != '') ? 'et ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + '' : '';
+    return str.substring(0,2) == "Un" ? str.slice(3) : str;
+}
+
 var ChangeStatusInContract = async (req, res) => {
   const { image_url, user_name, tag } = req.body;
   const output = fs.createWriteStream("test.html");
@@ -249,52 +264,77 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
   return "Hi";
 };
 let makeFactureOrDevisFr = (url, ans, type, language) => {
+
+
+ console.log(url, "this is the all ")
+
   const file = fs.createWriteStream("file.xlsx");
-  http.get(url, function (response) {
+  https.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
       file.close();
+      console.log("Download Completed");
       const workbook = new Excel.Workbook();
       await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
         workbook.worksheets[0].getCell("C17").value =
           type.toUpperCase() + " N ° \\";
         workbook.worksheets[0].getCell("A1").value = ans[0];
-        workbook.worksheets[0].getCell("B9").value = ans[1] + "le " + ans[2];
+        workbook.worksheets[0].getCell("B9").value = ans[1] + " le " + ans[2];
         workbook.worksheets[0].getCell("D12").value = ans[3];
         let Temp = ans[4];
-        workbook.worksheets[0].getCell("D13").value = parseInt(ans[4]);
+        workbook.worksheets[0].getCell('D14').font = {
+          bold:false
+        };
+        workbook.worksheets[0].getCell("D14").value =ans[5];
+        workbook.worksheets[0].getCell("D13").value = (ans[4]);
         workbook.worksheets[0].getCell("D13").numFmt = "0";
         workbook.worksheets[0].getCell("C17").value =
-          workbook.worksheets[0].getCell("C17").value + ans[5];
+          workbook.worksheets[0].getCell("C17").value + ans[6];
+          workbook.worksheets[0].getCell("E38").value =1,000
         let sum = 0;
         let length = Math.ceil((ans.length - 12) / 3);
         let j = ans.length - length * 3;
         let f = j;
         let k = j + length;
         let r = k + length;
+        console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
+          workbook.worksheets[0].getCell(`B${i}`).font = {
+            bold: false
+          };
+          console.log(" The loop for j  is ", ans[j]);
+          console.log(" The loop for k  is ", ans[k]);
+          console.log(" The loop for r  is ", ans[r]);
           sum += parseFloat(ans[k]) * parseFloat(ans[r]);
           workbook.worksheets[0].getCell(`B${i}`).value = ans[j++];
           workbook.worksheets[0].getCell(`C${i}`).value = ans[k++];
           workbook.worksheets[0].getCell(`D${i}`).value = ans[r++];
           workbook.worksheets[0].getCell(`E${i}`).value =
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
+          console.log("This is the sum so far ", sum);
         }
         workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("E36").value =
           (parseInt(workbook.worksheets[0].getCell("E34").value) * 19) / 100;
+        console.log(parseInt(workbook.worksheets[0].getCell("E36").value));
+        console.log(workbook.worksheets[0].getCell("E34").value);
         workbook.worksheets[0].getCell("E41").value =
           parseInt(workbook.worksheets[0].getCell("E36").value) +
           parseInt(workbook.worksheets[0].getCell("E34").value) +
-          0.6;
+          1.0;
         //workbook.worksheets[0].getCell("E41").numFmt= "0.000"
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
-        arr[arr.length - 1] = ans[f - 1];
+        console.log(arr);
+        console.log(f);
+        arr[1] = type=="devis" ? "le" : "la"
+        arr[arr.length - 1] = inWords(parseInt(workbook.worksheets[0].getCell("E41").value)) +"Dinars"
+        arr[3]=type
         arr = arr.join(" ");
         //Fix it
         workbook.worksheets[0].getCell("D46").value = arr;
-        workbook.worksheets[0].getCell("B52").value = ans[f - 3];
-        workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 2];
+        workbook.worksheets[0].getCell("B52").value = ans[f - 2];
+        workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 1];
+        console.log("We are Here ");
         await workbook.xlsx.writeFile("output0.xlsx");
         try {
           const formData = new FormData();
@@ -313,7 +353,9 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
               },
             })
           );
+          console.log("Here");
         } catch (e) {
+          console.log(e);
           const errorString = await streamToString(e.response.data);
         }
       });
@@ -467,6 +509,28 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
     return "from cloudinary image";
   }
 };
+let QuestionIdForMin = [
+23,
+41,
+45,
+100,
+107,
+157,
+164,
+167,
+171,
+186,
+230,
+250,
+261,
+273,
+280,
+290,
+298,
+344,
+360,
+365
+]
 const addAnswersToAnswerTable = async (req, res) => {
   const {
     question,
@@ -524,6 +588,18 @@ const fillContract = async (req, res) => {
   let { type, lang, initialQuestionId } = req.body;
   let { questions } = req.body;
   questions = makeMin(questions, initialQuestionId);
+  if(type=="devis"){
+  questions =(questions.slice(0,5).concat(questions.slice(5,8).reverse())) .concat(questions.slice(8)) 
+  console.log(questions , "this is after reversing..")
+//  [questions[6],questions[7]] = [questions[7],questions[6]]
+let t  = questions[5]
+questions[5] = questions[7]
+questions[7]=t 
+      let x = questions[6] 
+      questions[6] = questions[7] 
+      questions[7]=x
+  console.log(questions , "this is after swapping ")  
+}
 
   let renderObject = {};
   let answersArray = [];
@@ -611,7 +687,10 @@ const fillContract = async (req, res) => {
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
   var twoPages = req.body.twoPages;
-  const { user_name, contractName } = req.body;
+  let  { user_name, contractName } = req.body;
+     if(twoPages=="facture" || twoPages=="devis")
+  contractName = twoPages
+  
   var urlImage = "";
   var Cmpt = 0;
   if (!isNaN(twoPages)) {
@@ -833,7 +912,7 @@ const concatImages = (req, response) => {
     const File = fs.createWriteStream(
       `./uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
     );
-    http.get(arrayOfImages[0], (res) => {
+    https.get(arrayOfImages[0], (res) => {
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
@@ -846,11 +925,11 @@ const concatImages = (req, response) => {
   if (nElement == 2) {
     const File = fs.createWriteStream("image1.pdf");
     const File1 = fs.createWriteStream("image2.pdf");
-    http.get(arrayOfImages[0], (res) => {
+    https.get(arrayOfImages[0], (res) => {
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
-        http.get(arrayOfImages[1], (res1) => {
+        https.get(arrayOfImages[1], (res1) => {
           res1.pipe(File1);
           File1.on("finish", async () => {
             File1.close();
@@ -876,15 +955,15 @@ const concatImages = (req, response) => {
     const File = fs.createWriteStream("image1.pdf");
     const File1 = fs.createWriteStream("image2.pdf");
     const File2 = fs.createWriteStream("image3.pdf");
-    http.get(arrayOfImages[0], (res) => {
+    https.get(arrayOfImages[0], (res) => {
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
-        http.get(arrayOfImages[1], (res1) => {
+        https.get(arrayOfImages[1], (res1) => {
           res1.pipe(File1);
           File1.on("finish", async () => {
             File1.close();
-            http.get(arrayOfImages[2], (res2) => {
+            https.get(arrayOfImages[2], (res2) => {
               res2.pipe(File2);
               File2.on("finish", async () => {
                 File2.close();
@@ -914,19 +993,19 @@ const concatImages = (req, response) => {
     const File1 = fs.createWriteStream("image2.pdf");
     const File2 = fs.createWriteStream("image3.pdf");
     const File3 = fs.createWriteStream("image4.pdf");
-    http.get(arrayOfImages[0], (res) => {
+    https.get(arrayOfImages[0], (res) => {
       res.pipe(File);
       File.on("finish", async () => {
         File.close();
-        http.get(arrayOfImages[1], (res1) => {
+        https.get(arrayOfImages[1], (res1) => {
           res1.pipe(File1);
           File1.on("finish", async () => {
             File1.close();
-            http.get(arrayOfImages[2], (res2) => {
+            https.get(arrayOfImages[2], (res2) => {
               res2.pipe(File2);
               File2.on("finish", async () => {
                 File2.close();
-                http.get(arrayOfImages[3], (res3) => {
+                https.get(arrayOfImages[3], (res3) => {
                   res3.pipe(File3);
                   File3.on("finish", async () => {
                     File3.close();
