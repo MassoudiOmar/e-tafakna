@@ -287,4 +287,31 @@ const payment = async (req, res) => {
     res.send(data);
   });
 };
-module.exports = { resetPasswor, verifying, updatepassword, payment };
+const updateGoogleUserPassword = async (req, res) => {
+  const { newpassword, confirmPassword } = req.body;
+  const { id } = req.params;
+  if (!newpassword || !confirmPassword) {
+    res.send("pleas fill all the fields");
+  } else {
+    if (newpassword !== confirmPassword) {
+      res.send("please confirm your password");
+    } else {
+      try {
+        const salt = await bcrypt.genSalt();
+        const newphashedassword = await bcrypt.hash(newpassword, salt);
+        const query = "UPDATE users SET password = ? WHERE id = ?";
+        db.query(query, [newphashedassword, id], (err, result) => {
+          if (err) {
+            res.send(err);
+          }
+          res.send("password updated successfully");
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+};
+
+
+module.exports = { resetPasswor, verifying, updatepassword, payment ,updateGoogleUserPassword};
