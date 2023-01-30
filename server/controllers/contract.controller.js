@@ -27,7 +27,9 @@ const resultPerPage = 15;
 const getAllContractByStatus = (req, res, err) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
-  let sql = `SELECT * FROM users_has_contracts`;
+console.log("Pagination From Contracts")
+
+  let sql =`SELECT * FROM users_has_contracts`;
   db.query(sql, (err, result, next) => {
     if (err) {
       res.send(err);
@@ -44,8 +46,7 @@ const getAllContractByStatus = (req, res, err) => {
     }
 
     const startingLimit = (page - 1) * resultPerPage;
-    sql = `
-    SELECT * FROM users_has_contracts c
+    sql =  `SELECT DISTINCT *   FROM users_has_contracts c
     inner join users u on(u.id= c.owner)
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
@@ -65,19 +66,6 @@ const getAllContractByStatus = (req, res, err) => {
     });
   });
 };
-const getAllContractById = (req, res) => {
-  const owner = req.params.ownerId;
-  const sql = `SELECT * FROM users_has_contracts c
-  inner join contracts t on (t.id = c.contracts_id )
-  inner join contract_types f on (f.id=t.contract_types_id)
-  inner join users u on(u.id= c.owner)
-  where c.owner = ? `;
-  db.query(sql, [owner], (err, result) => {
-    if (err) {
-      res.send(err);
-    } else res.send(result);
-  });
-};
 
 ///////////////////////////////////////////
 ///////////////////////////////////////////
@@ -85,7 +73,7 @@ const getAllContractById = (req, res) => {
 let getAllContracts = (req, res) => {
   const { id } = req.params;
   let sql = `
-   select c.id, date,  uo.first_name as username , uo.last_name as userLastName, uo.faceVideo ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status,c.pdfContractImage from users_has_contracts  uhc
+  select c.id, date, uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.created_at,c.contract_url , c.pdfContractImage , ct.title_EN , ct.title_AR, ct.title_FR , uo.first_name, uo.last_name ,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status from users_has_contracts  uhc
       inner join users uo on (uo.id = uhc.owner)
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
@@ -108,12 +96,12 @@ let getAllContracts = (req, res) => {
 
     const startingLimit = (page - 1) * resultPerPage;
     sql = ` 
-    select c.id, date,  uo.first_name as username,uo.faceVideo as colorOwner ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo as colorReciever,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status,c.pdfContractImage from users_has_contracts  uhc
-    inner join users uo on (uo.id = uhc.owner)
-    inner join users ur on (ur.id = uhc.receiver)
-    inner join contracts c on (c.id = uhc.contracts_id)
-    inner join contract_types ct on (ct.id = c.contract_types_id)
-    WHERE uo.id=? OR ur.id =? ORDER BY id DESC LIMIT ${startingLimit},${resultPerPage} 
+    select c.id, date, uo.username ,uo.image as imageOwner,ur.image as imageReciever, ur.username as receiver,c.created_at,c.contract_url , c.pdfContractImage , ct.title_EN , ct.title_AR, ct.title_FR , uo.first_name, uo.last_name ,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status from users_has_contracts  uhc
+      inner join users uo on (uo.id = uhc.owner)
+      inner join users ur on (ur.id = uhc.receiver)
+      inner join contracts c on (c.id = uhc.contracts_id)
+      inner join contract_types ct on (ct.id = c.contract_types_id)
+      WHERE uo.id=? OR ur.id =? ORDER BY id DESC LIMIT ${startingLimit},${resultPerPage} 
     `;
     db.query(sql, [id, id], (err, result) => {
       if (err) throw err;
