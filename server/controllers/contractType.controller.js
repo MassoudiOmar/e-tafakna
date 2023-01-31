@@ -8,7 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("WwcssbA1J7TwbnYW");
+var convertapi = require("convertapi")("08lSpihouCep0atK");
 //const cheerio = require('cheerio');
 const https = require("https");
 /***
@@ -589,16 +589,20 @@ const fillContract = async (req, res) => {
   let { questions } = req.body;
   questions = makeMin(questions, initialQuestionId);
   if(type=="devis"){
-  questions =(questions.slice(0,5).concat(questions.slice(5,8).reverse())) .concat(questions.slice(8)) 
-  console.log(questions , "this is after reversing..")
-//  [questions[6],questions[7]] = [questions[7],questions[6]]
-let t  = questions[5]
-questions[5] = questions[7]
-questions[7]=t 
-      let x = questions[6] 
-      questions[6] = questions[7] 
-      questions[7]=x
-  console.log(questions , "this is after swapping ")  
+      questions =(questions.slice(0,5).concat(questions.slice(5,8).reverse())) .concat(questions.slice(8)) 
+    console.log(questions , "this is after reversing..")
+  //  [questions[6],questions[7]] = [questions[7],questions[6]]
+  let t  = questions[5]
+  questions[5] = questions[7]
+  questions[7]=t 
+        let x = questions[6] 
+        questions[6] = questions[7] 
+        questions[7]=x
+
+        let y = questions[5]
+    questions[5]=questions[6]
+    questions[6]=y 
+    console.log(questions , "this is after swapping ")        
 }
 
   let renderObject = {};
