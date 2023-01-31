@@ -29,7 +29,11 @@ const getAllContractByStatus = (req, res, err) => {
   var owner = req.params.ownerId;
   console.log("Pagination From Contracts");
 
-  let sql = `SELECT * FROM users_has_contracts`;
+  let sql = `SELECT DISTINCT * FROM users_has_contracts c
+  inner join users u on(u.id= c.owner)
+  inner join contracts t on (t.id = c.contracts_id )
+  inner join contract_types f on (f.id=t.contract_types_id)
+  where t.status = ? && c.owner = ?`;
   db.query(sql, (err, result, next) => {
     if (err) {
       res.send(err);
@@ -46,7 +50,7 @@ const getAllContractByStatus = (req, res, err) => {
     }
 
     const startingLimit = (page - 1) * resultPerPage;
-    sql = `SELECT DISTINCT *   FROM users_has_contracts c
+    sql = `SELECT DISTINCT * FROM users_has_contracts c
     inner join users u on(u.id= c.owner)
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
