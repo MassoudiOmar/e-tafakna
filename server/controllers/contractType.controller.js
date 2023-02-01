@@ -695,6 +695,8 @@ const updateContractImage = async (req, res) => {
      if(twoPages=="facture" || twoPages=="devis")
   contractName = twoPages
   
+    console.log(contractName)
+    
   var urlImage = "";
   var Cmpt = 0;
   if (!isNaN(twoPages)) {
