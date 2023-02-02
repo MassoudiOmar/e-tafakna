@@ -728,8 +728,8 @@ const updateContractImage = async (req, res) => {
         "jpg",
         {
           File: T2,
-          ImageResolutionH: '1000',
-          ImageResolutionV: '1000'
+          ImageResolutionH: '700',
+          ImageResolutionV: '700'
 
         },
         T
