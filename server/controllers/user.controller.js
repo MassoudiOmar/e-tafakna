@@ -38,7 +38,7 @@ var register = async (req, res) => {
       var yyyy = today.getDate();
       var m = today.getMonth() + 1;
       var hours = today.getFullYear();
-      today = yyyy + "/" + m + "/" + hours;
+      today = hours + "-" + m + "/" + yyyy;
       return today;
     };
     const faceVideo = generateColor();
@@ -532,7 +532,6 @@ var register = async (req, res) => {
     res.json({ msg: err.message });
   }
 };
-
 var registerwithfcb = async (req, res) => {
   try {
     //get info of user
