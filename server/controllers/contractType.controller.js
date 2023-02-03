@@ -510,6 +510,7 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
   }
 };
 let QuestionIdForMin = [
+ 4,
 23,
 41,
 45,
@@ -695,6 +696,8 @@ const updateContractImage = async (req, res) => {
      if(twoPages=="facture" || twoPages=="devis")
   contractName = twoPages
   
+    console.log(contractName)
+    
   var urlImage = "";
   var Cmpt = 0;
   if (!isNaN(twoPages)) {
@@ -725,6 +728,9 @@ const updateContractImage = async (req, res) => {
         "jpg",
         {
           File: T2,
+          ImageResolutionH: '700',
+          ImageResolutionV: '700'
+
         },
         T
       )
