@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const verifyToken = (req, res, next) => {
   const token = req.headers["x-access-token"];
   if (!token) {
-    return res.send("A token is required for authentication");
+    return res.send("Erreur Utilisateur non défini!");
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);

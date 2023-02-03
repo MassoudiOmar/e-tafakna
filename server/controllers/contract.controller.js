@@ -133,10 +133,15 @@ let getAllContracts = (req, res) => {
 ///////////////////////////////////////////
 ///////////////////////////////////////////
 const deleteContract = (req, res) => {
-  let imageUri = req.body.imageUri;
-  imageUri = imageUri.join(",");
+  var imageUri = req.body.imageUri;
+  console.log(imageUri,"imageUri")
+  var arr = [imageUri];
+  console.log(arr,"arr")
+  var imageUrii = arr.join(',');
+  console.log(imageUrii,"imageUrii")
+  // imageUri = imageUri.join(",");
   db.query(
-    `delete from contracts where contract_image = "${imageUri}"`,
+    `delete from contracts where contract_image = "${imageUrii}"`,
     (err, rez) => {
       if (err) res.send(err);
       else {
