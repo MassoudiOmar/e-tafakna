@@ -98,7 +98,7 @@ const getArchieve = (req, res) => {
   db.query(sql, [owner, owner], (err, result) => {
     if (err) throw err;
 
-    res.send(result, page, iterator, endingLink, numberofPAGES0);
+    res.send(result);
   });
 };
 
