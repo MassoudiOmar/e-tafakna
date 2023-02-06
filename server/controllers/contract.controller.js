@@ -23,47 +23,17 @@ const insertContract = (req, res) => {
     }
   );
 };
-const resultPerPage = 15;
 const getAllContractByStatus = (req, res, err) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
-  console.log("Pagination From Contracts");
-
-  let sql = `SELECT * FROM users_has_contracts`;
-  db.query(sql, (err, result, next) => {
-    if (err) {
-      res.send(err);
-    }
-    //Pagination
-    const numOfResults = result.length;
-    const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? parseInt(req.query.page) : 1;
-    if (page > numberofPAGES0) {
-      //  return res.status(304).send("no")
-      return res.send("-1");
-    } else if (page < 1) {
-      return res.send("/?page=" + encodeURIComponent("1"));
-    }
-
-    const startingLimit = (page - 1) * resultPerPage;
-    sql = `SELECT DISTINCT *   FROM users_has_contracts c
-    inner join users u on(u.id= c.owner)
-    inner join contracts t on (t.id = c.contracts_id )
-    inner join contract_types f on (f.id=t.contract_types_id)
-    where t.status = ? && c.owner = ? ORDER BY t.id DESC LIMIT ${startingLimit},${resultPerPage} `;
-    db.query(sql, [status, owner], (err, result) => {
-      if (err) throw err;
-      let iterator = page - 5 < 1 ? 1 : page - 5;
-      let endingLink =
-        iterator + 9 <= numberofPAGES0
-          ? iterator + 9
-          : page + (numberofPAGES0 + 9);
-      if (endingLink < page + 4) {
-        iterator -= page + 4 - numberofPAGES0;
-      }
-
-      res.send(result, page, iterator, endingLink, numberofPAGES0);
-    });
+  const sql = `SELECT DISTINCT *   FROM users_has_contracts c
+  inner join users u on(u.id= c.owner)
+  inner join contracts t on (t.id = c.contracts_id )
+  inner join contract_types f on (f.id=t.contract_types_id)
+  where t.status = ? && c.owner = ? ORDER BY t.id DESC `;
+  db.query(sql, [status, owner], (err, result) => {
+    if (err) throw err;
+    res.send(result);
   });
 };
 const getAllContractById = (req, res) => {
@@ -84,49 +54,17 @@ const getAllContractById = (req, res) => {
 ///////////////////////////////////////////
 let getAllContracts = (req, res) => {
   const { id } = req.params;
-  let sql = `
-  select c.id, date,  uo.first_name as username , uo.last_name as userLastName, uo.faceVideo ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status,c.pdfContractImage from users_has_contracts  uhc
-  inner join users uo on (uo.id = uhc.owner)
-  inner join users ur on (ur.id = uhc.receiver)
-  inner join contracts c on (c.id = uhc.contracts_id)
-  inner join contract_types ct on (ct.id = c.contract_types_id)
-  WHERE uo.id=? OR ur.id =?;
-   `;
-  db.query(sql, [id, id], (err, result) => {
-    if (err) res.send(err);
-
-    //Pagination
-    const numOfResults = result.length;
-    const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? parseInt(req.query.page) : 1;
-    if (page > numberofPAGES0) {
-      return res.send("-1");
-      // return res.send("No Data")
-    } else if (page < 1) {
-      return res.send("/?page=" + encodeURIComponent("1"));
-    }
-
-    const startingLimit = (page - 1) * resultPerPage;
-    sql = ` 
+  const sql = ` 
     select c.id, date,  uo.first_name as username,uo.faceVideo as colorOwner ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo as colorReciever,ur.first_name as receiver,c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status,c.pdfContractImage , uo.first_name, uo.last_name from users_has_contracts  uhc
     inner join users uo on (uo.id = uhc.owner)
     inner join users ur on (ur.id = uhc.receiver)
     inner join contracts c on (c.id = uhc.contracts_id)
     inner join contract_types ct on (ct.id = c.contract_types_id)
-    WHERE uo.id=? OR ur.id =? ORDER BY id DESC LIMIT ${startingLimit},${resultPerPage} 
+    WHERE uo.id=? OR ur.id =? ORDER BY id DESC 
     `;
-    db.query(sql, [id, id], (err, result) => {
-      if (err) throw err;
-      let iterator = page - 5 < 1 ? 1 : page - 5;
-      let endingLink =
-        iterator + 9 <= numberofPAGES0
-          ? iterator + 9
-          : page + (numberofPAGES0 + 9);
-      if (endingLink < page + 4) {
-        iterator -= page + 4 - numberofPAGES0;
-      }
-      res.send(result, page, iterator, endingLink, numberofPAGES0);
-    });
+  db.query(sql, [id, id], (err, result) => {
+    if (err) throw err;
+    res.send(result);
   });
 };
 ///////////////////////////////////////////
@@ -134,11 +72,11 @@ let getAllContracts = (req, res) => {
 ///////////////////////////////////////////
 const deleteContract = (req, res) => {
   var imageUri = req.body.imageUri;
-  console.log(imageUri,"imageUri")
+  console.log(imageUri, "imageUri");
   var arr = [imageUri];
-  console.log(arr,"arr")
-  var imageUrii = arr.join(',');
-  console.log(imageUrii,"imageUrii")
+  console.log(arr, "arr");
+  var imageUrii = arr.join(",");
+  console.log(imageUrii, "imageUrii");
   // imageUri = imageUri.join(",");
   db.query(
     `delete from contracts where pdfContractImage = "${imageUrii}"`,
@@ -152,42 +90,15 @@ const deleteContract = (req, res) => {
 };
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
-  let sql = ` SELECT * FROM users_has_contracts c
-  inner join contracts t on (t.id = c.contracts_id )
-  inner join contract_types f on (f.id=t.contract_types_id)
-  inner join users u on(u.id= c.owner)
-  where c.owner = ? && t.contract_image IS NOT NULL || c.receiver=? && t.status="accepted"`;
-  db.query(sql, [owner, owner], (err, result) => {
-    if (err) {
-      res.send(err);
-    }
-    //Pagination
-    const numOfResults = result.length;
-    const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? parseInt(req.query.page) : 1;
-    if (page > numberofPAGES0) {
-      // return res.send("No Data")
-    } else if (page < 1) {
-      return res.send("/?page=" + encodeURIComponent("1"));
-    }
-    const startingLimit = (page - 1) * resultPerPage;
-    sql = ` SELECT * FROM users_has_contracts c
+  const sql = ` SELECT * FROM users_has_contracts c
     inner join users u on(u.id= c.owner)
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
-     where c.owner = ? && t.contract_image IS NOT NULL || c.receiver=? && t.status="accepted" ORDER BY t.id DESC LIMIT ${startingLimit},${resultPerPage}`;
-    db.query(sql, [owner, owner], (err, result) => {
-      if (err) throw err;
-      let iterator = page - 10 < 1 ? 1 : page - 10;
-      let endingLink =
-        iterator + 9 <= numberofPAGES0
-          ? iterator + 9
-          : page + (numberofPAGES0 + 9);
-      if (endingLink < page + 4) {
-        iterator -= page + 4 - numberofPAGES0;
-      }
-      res.send(result, page, iterator, endingLink, numberofPAGES0);
-    });
+     where c.owner = ? && t.contract_image IS NOT NULL || c.receiver=? && t.status="accepted" ORDER BY t.id DESC`;
+  db.query(sql, [owner, owner], (err, result) => {
+    if (err) throw err;
+
+    res.send(result, page, iterator, endingLink, numberofPAGES0);
   });
 };
 
