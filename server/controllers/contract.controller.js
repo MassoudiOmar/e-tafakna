@@ -102,7 +102,17 @@ const getArchieve = (req, res) => {
     res.send(result);
   });
 };
-
+const deleteArchieve = (req, res) => {
+  const contracts_id = req.body.contracts_id;
+  let sql = `DELETE from  users_has_contracts  WHERE receiver IS NULL && contracts_id = ? `;
+  db.query(sql, [contracts_id], (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
 const UpdateArchive = (req, res) => {
   const contracts_id = req.body.contracts_id;
   const receiver = req.params.receiver;
@@ -228,5 +238,6 @@ module.exports = {
   deleteContract,
   getArchieve,
   getLoacation,
-  UpdateArchive
+  UpdateArchive,
+  deleteArchieve
 };

@@ -18,4 +18,5 @@ router.get("/:status/:ownerId", contractController.getAllContractByStatus);
 router.post("/deletecontract", contractController.deleteContract);
 router.post("/location_specific_service", contractController.getLoacation);
 router.post("/update/:receiver", contractController.UpdateArchive);
+router.delete("/archieve/delete", contractController.deleteArchieve)
 module.exports = router;
