@@ -104,6 +104,7 @@ const getArchieve = (req, res) => {
 };
 const deleteArchieve = (req, res) => {
   const id = req.params.contracts_id;
+  console.log(id,"id")
   let sql = `DELETE from users_has_contracts WHERE receiver IS NULL && contracts_id = ? `;
   db.query(sql, [id], (err, result) => {
     if (err) {
