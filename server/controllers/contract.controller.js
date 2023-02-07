@@ -88,13 +88,14 @@ const deleteContract = (req, res) => {
     }
   );
 };
+//|| c.receiver=? && t.status="accepted"
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
   const sql = ` SELECT * FROM users_has_contracts c
     inner join users u on(u.id= c.owner)
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
-     where c.owner = ? && t.contract_image IS NOT NULL || c.receiver=? && t.status="accepted" ORDER BY t.id DESC`;
+     where c.owner = ? && t.contract_image IS NOT NULL  ORDER BY t.id DESC`;
   db.query(sql, [owner, owner], (err, result) => {
     if (err) throw err;
 
