@@ -88,20 +88,34 @@ const deleteContract = (req, res) => {
     }
   );
 };
-//|| c.receiver=? && t.status="accepted"
+//|| c.receiver=? && t.status="accepted" && t.archieve = "true"
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
   const sql = ` SELECT * FROM users_has_contracts c
     inner join users u on(u.id= c.owner)
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
-     where c.owner = ? && t.contract_image IS NOT NULL && t.archieve = "true" ORDER BY t.id DESC`;
+    where c.owner = ? && t.contract_image IS NOT NULL  ORDER BY t.id DESC`;
   db.query(sql, [owner], (err, result) => {
     if (err) throw err;
 
     res.send(result);
   });
 };
+
+const UpdateArchive = (req, res) => {
+  const contract_image = req.body.contract_image;
+  const receiver = req.params.receiver;
+  const sql = `UPDATE users_has_contracts SET receiver = ? WHERE contract_image = ?`;
+  db.query(sql, [receiver, contract_image], (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
+
 
 const changeContractStatus = (req, res) => {
   const contract_url = req.body.contract_url;
@@ -212,4 +226,5 @@ module.exports = {
   deleteContract,
   getArchieve,
   getLoacation,
+  UpdateArchive
 };
