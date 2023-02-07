@@ -95,7 +95,7 @@ const getArchieve = (req, res) => {
     inner join users u on(u.id= c.owner)
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
-     where c.owner = ? && t.contract_image IS NOT NULL && archieve = "true" ORDER BY t.id DESC`;
+     where c.owner = ? && t.contract_image IS NOT NULL && t.archieve = "true" ORDER BY t.id DESC`;
   db.query(sql, [owner], (err, result) => {
     if (err) throw err;
 
