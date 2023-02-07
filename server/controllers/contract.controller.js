@@ -104,10 +104,10 @@ const getArchieve = (req, res) => {
 };
 
 const UpdateArchive = (req, res) => {
-  const contract_image = req.body.contract_image;
+  const contracts_id = req.body.contracts_id;
   const receiver = req.params.receiver;
-  const sql = `UPDATE users_has_contracts SET receiver = ? WHERE contract_image = ?`;
-  db.query(sql, [receiver, contract_image], (err, result) => {
+  const sql = `UPDATE users_has_contracts SET receiver = ? WHERE contracts_id = ?`;
+  db.query(sql, [receiver, contracts_id], (err, result) => {
     if (err) {
       res.send(err);
     } else {
