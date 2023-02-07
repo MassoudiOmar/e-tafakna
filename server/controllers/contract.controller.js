@@ -106,8 +106,10 @@ const getArchieve = (req, res) => {
 const UpdateArchive = (req, res) => {
   const contracts_id = req.body.contracts_id;
   const receiver = req.params.receiver;
+  console.log(receiver ,"receiver1" , "contracts_id1", contracts_id)
   const sql = `UPDATE users_has_contracts SET receiver = ? WHERE contracts_id = ?`;
   db.query(sql, [receiver, contracts_id], (err, result) => {
+    console.log(receiver ,"receiver" , "contracts_id", contracts_id)
     if (err) {
       res.send(err);
     } else {
