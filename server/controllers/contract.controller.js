@@ -30,7 +30,7 @@ const getAllContractByStatus = (req, res, err) => {
   inner join users u on(u.id= c.owner)
   inner join contracts t on (t.id = c.contracts_id )
   inner join contract_types f on (f.id=t.contract_types_id)
-  where t.status = ? && c.owner = ? ORDER BY t.id DESC `;
+      where t.status = "draft" && c.owner = 49 && t.contract_image IS NULL ORDER BY t.id DESC `;
   db.query(sql, [status, owner], (err, result) => {
     if (err) throw err;
     res.send(result);
