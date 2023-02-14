@@ -2,15 +2,15 @@ const db = require("../database-mysql");
 const superagent = require("superagent");
 const Docxtemplater = require("docxtemplater");
 const PizZip = require("pizzip");
-// *const http = require("https");
+const http = require("https");
 const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
-//const Excel = require("exceljs");
+const Excel = require("exceljs");
 var convertapi = require("convertapi")("nkvtWkK8wsdKe9YZ");
-//*const cheerio = require('cheerio');
-// *const https = require("https");
+const cheerio = require('cheerio');
+const https = require("https");
 /***
  *
  *
