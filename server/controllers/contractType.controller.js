@@ -264,11 +264,7 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
   return "Hi";
 };
 let makeFactureOrDevisFr = (url, ans, type, language) => {
-
-
- console.log(url, "this is the all ")
-
-  const file = fs.createWriteStream("file.xlsx");
+ const file = fs.createWriteStream("file.xlsx");
   https.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
