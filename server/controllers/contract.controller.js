@@ -23,6 +23,7 @@ const insertContract = (req, res) => {
     }
   );
 };
+
 const getAllContractByStatus = (req, res, err) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
@@ -30,12 +31,13 @@ const getAllContractByStatus = (req, res, err) => {
   inner join users u on(u.id= c.owner)
   inner join contracts t on (t.id = c.contracts_id )
   inner join contract_types f on (f.id=t.contract_types_id)
-      where t.status = "draft" && c.owner = ? && t.contract_image IS NULL ORDER BY t.id DESC `;
-  db.query(sql, [status, owner], (err, result) => {
+      where t.status = "draft" && c.owner =${owner} && t.contract_image IS NULL ORDER BY t.id DESC `;
+  db.query(sql, (err, result) => {
     if (err) throw err;
     res.send(result);
   });
 };
+
 const getAllContractById = (req, res) => {
   const owner = req.params.ownerId;
   const sql = `SELECT * FROM users_has_contracts c
