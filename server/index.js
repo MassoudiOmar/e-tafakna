@@ -14,6 +14,7 @@ const signature = require("./routes/signature.routes");
 const notifFCM = require("./routes/SendNotifFCM.routes")
 const FCM = require('fcm-node')
 
+const https = require('https')
 
 
 var items = require("./database-mysql");
@@ -73,6 +74,31 @@ app.use("/uploads", express.static("./uploads"));
 app.get("/", (req, res) => {
   res.send("Welcome To E-Tafakna server");
 });
+
+setInterval(()=>{
+const options = {
+  hostname: 'https://e-tafakna-back.com',
+  port: 443,
+  path: '/',
+  method: 'GET'
+}
+
+const req = https.request(options, (res) => {
+  console.log(`statusCode: ${res.statusCode}`)
+
+  res.on('data', (d) => {
+    process.stdout.write(d)
+  })
+})
+
+req.on('error', (error) => {
+  console.error(error)
+})
+
+req.end()
+},5000)
+
+
 
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
