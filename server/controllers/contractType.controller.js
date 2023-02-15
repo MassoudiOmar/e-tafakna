@@ -8,8 +8,8 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("7UAn9AJJr3JScrVV");
-//const cheerio = require('cheerio');
+var convertapi = require("convertapi")("nkvtWkK8wsdKe9YZ");
+const cheerio = require('cheerio');
 const https = require("https");
 /***
  *
@@ -264,11 +264,7 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
   return "Hi";
 };
 let makeFactureOrDevisFr = (url, ans, type, language) => {
-
-
- console.log(url, "this is the all ")
-
-  const file = fs.createWriteStream("file.xlsx");
+ const file = fs.createWriteStream("file.xlsx");
   https.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
@@ -527,42 +523,40 @@ let QuestionIdForMin = [
 273,
 280,
 290,
+    297, 
 298,
 344,
 360,
 365
 ]
 const addAnswersToAnswerTable = async (req, res) => {
-  const {
-    question,
-    initialQuestionId,
-    contracts_id,
-    contract_types_id,
-    questionsLength,
-  } = req.body;
-  if (
-    initialQuestionId == -1 ||
-    questionsLength - 1 == question.length ||
-    question.length == 0
-  ) {
-    res.end("Error Id");
-  } else {
-    question.map((element, index) => {
-      db.query(
-        `INSERT INTO answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${
-          initialQuestionId + index
-        })`,
-        (err, result) => {
-          if (err) {
-            res.send(err);
-          } else {
-            if (index == question.length - 1)
-              res.send(question.length.toString());
-          }
-        }
-      );
-    });
+   const { question, initialQuestionId, contracts_id, contract_types_id,questionsLength } = req.body
+  console.log(questionsLength , " * " , question.length )
+  if (initialQuestionId == -1|| questionsLength-1==question.length ||question.length==0 ) {
+    console.log("Here")
+    res.end("Error Id")
   }
+  else {
+    console.log(question)
+    console.log(initialQuestionId)
+    console.log(contracts_id)
+    console.log(contract_types_id)
+    console.log(questionsLength)
+    question.map((element, index) => {
+      db.query(`INSERT INTO answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${initialQuestionId + index})`, (err, result) => {
+        if (err) {
+          console.log(err)
+          res.send(err)
+        }
+        else {
+          console.log(` question id  :${initialQuestionId + index} with content ${element} has been added`)
+          console.log(index , "***" ,   question.length)
+          if (index == question.length - 1)
+            res.send(question.length.toString())
+        }
+      })
+    })
+  }  
 };
 let Existe = (begin, end) => {
   let Temp = [];

@@ -23,32 +23,21 @@ const insertContract = (req, res) => {
     }
   );
 };
-// const getAllContractByStatus = (req, res, err) => {
-//   var status = req.params.status;
-//   var owner = req.params.ownerId;
-//   const sql = `SELECT DISTINCT *   FROM users_has_contracts c
-//   inner join users u on(u.id= c.owner)
-//   inner join contracts t on (t.id = c.contracts_id )
-//   inner join contract_types f on (f.id=t.contract_types_id)
-//   where t.status = ? && c.owner = ? ORDER BY t.id DESC `;
-//   db.query(sql, [status, owner], (err, result) => {
-//     if (err) throw err;
-//     res.send(result);
-//   });
-// };
-const getAllContractByStatus = (req, res) => {
+
+const getAllContractByStatus = (req, res, err) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
   const sql = `SELECT DISTINCT * FROM users_has_contracts c
   inner join users u on(u.id= c.owner)
   inner join contracts t on (t.id = c.contracts_id )
   inner join contract_types f on (f.id=t.contract_types_id)
-  where t.status = ? && c.owner = ? ORDER BY t.id DESC`;
-  db.query(sql, [status, owner], (err, result) => {
+      where t.status = "draft" && c.owner =${owner} && t.contract_image IS NULL ORDER BY t.id DESC LIMIT 50`;
+  db.query(sql, (err, result) => {
     if (err) throw err;
     res.send(result);
   });
 };
+
 const getAllContractById = (req, res) => {
   const owner = req.params.ownerId;
   const sql = `SELECT * FROM users_has_contracts c
@@ -73,7 +62,7 @@ let getAllContracts = (req, res) => {
     inner join users ur on (ur.id = uhc.receiver)
     inner join contracts c on (c.id = uhc.contracts_id)
     inner join contract_types ct on (ct.id = c.contract_types_id)
-    WHERE uo.id=? OR ur.id =? ORDER BY id DESC 
+    WHERE uo.id=? OR ur.id =? ORDER BY id DESC  LIMIT 50
     `;
   db.query(sql, [id, id], (err, result) => {
     if (err) throw err;
@@ -108,7 +97,7 @@ const getArchieve = (req, res) => {
     inner join users u on(u.id= c.owner)
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
-    where c.owner = ? && t.contract_image IS NOT NULL  ORDER BY t.id DESC`;
+    where c.owner = ? && t.contract_image IS NOT NULL  ORDER BY t.id DESC LIMIT 50`;
   db.query(sql, [owner], (err, result) => {
     if (err) throw err;
 
@@ -163,7 +152,7 @@ let getNotification = (req, res) => {
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
       inner join contract_types ct on (ct.id = c.contract_types_id)
-      where ur.id =? order by id DESC LIMIT 20`;
+      where ur.id =? order by id DESC LIMIT 50`;
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
     else res.send(result);
