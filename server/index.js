@@ -14,7 +14,6 @@ const signature = require("./routes/signature.routes");
 const notifFCM = require("./routes/SendNotifFCM.routes")
 const FCM = require('fcm-node')
 
-const https = require('https')
 
 
 var items = require("./database-mysql");
@@ -75,27 +74,31 @@ app.get("/", (req, res) => {
   res.send("Welcome To E-Tafakna server");
 });
 
-setInterval(()=>{
+const https = require('https')
 const options = {
-  hostname: 'https://e-tafakna-back.com',
+  hostname: 'e-tafakna-back.com',
   port: 443,
   path: '/',
   method: 'GET'
 }
 
-const req = https.request(options, (res) => {
-  console.log(`statusCode: ${res.statusCode}`)
+setInterval(()=>{
 
-  res.on('data', (d) => {
-    process.stdout.write(d)
-  })
-})
+    const req = https.request(options, (res) => {
+        console.log(`statusCode: ${res.statusCode}`)
+      
+        res.on('data', (d) => {
+          process.stdout.write(d)
+        })
+      })
+      
+      req.on('error', (error) => {
+        console.error(error)
+      })
+      
+      req.end()
+      
 
-req.on('error', (error) => {
-  console.error(error)
-})
-
-req.end()
 },5000)
 
 
