@@ -7,5 +7,5 @@ router.post('/activation',reset.verifying)
 router.put('/update',reset.updatepassword)
 router.post('/forfaitMobilePayment/:id',reset.payment)
 router.put('/updateGoogleUserPassword/:id',reset.updateGoogleUserPassword)
-
+router.post('/getOrderStatusExtended/:orderId/:language',reset.checkPaymentStatus)
 module.exports = router;

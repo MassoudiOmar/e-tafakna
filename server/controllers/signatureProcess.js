@@ -8,7 +8,10 @@ const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
+const multer = require('multer');
 
+
+const upload = multer({ dest: './a.png' });
 const uploadCin = (req, res) => {
   const { id } = req.params;
   const { carteCinFront, carteCinBack, faceVideo } = req.body;
@@ -181,103 +184,50 @@ const sendOtp = (req, res) => {
   const { certType, userId, idType, authDelivery, phone } = req.body;
   axios
     .post(
-      `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp`,
+      `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/${clientId}`,
       { certType, userId, idType, authDelivery, phone }
     )
     .then((res) => {
-      res.send(res, clientId, "res");
+      console.log(res.data);
+      res.send(res.FormData, "res");
     })
     .catch((err) => {
       res.send(err);
     });
 };
 ////////////////////// third ONE ////// create-digigo-user
-const createUser = (req, res) => {
-  const { clientId } = req.params;
-  const {
-    txIdEmail,
-    txIdPhone,
-    certType,
-    country,
-    organisation,
-    organisationId,
-    taxIdentifierFile,
-    taxIdentifierFileType,
-    nationalBusinessRegisterFile,
-    nationalBusinessRegisterFileType,
-    legalRepresentativeName,
-    legalRepresentativeFirstname,
-    legalRepresentativeBirthdate,
-    legalRepresentativeIdentityType,
-    legalRepresentativeId,
-    legalRepresentativePhoneNumber,
-    legalRepresentativeEmail,
-    legalRepresentativeIdentityFile,
-    legalRepresentativeIdentityFileType,
-    subscriberName,
-    subscriberFirstname,
-    subscriberBirthdate,
-    subscriberIdentityType,
-    subscriberId,
-    subscriberPhone,
-    subscriberEmail,
-    subscriberIdentityFile,
-    subscriberIdentityFileType,
-    screenshot1File,
-    screeshot1FileType,
-    screenshot2File,
-    screeshot2FileType,
-    requestSignature,
-    urlVideo,
-    videoHash,
-  } = req.body;
-  axios
-    .post(
-      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/${clientId}`,
-      {
-        txIdEmail,
-        txIdPhone,
-        certType,
-        country,
-        organisation,
-        organisationId,
-        taxIdentifierFile,
-        taxIdentifierFileType,
-        nationalBusinessRegisterFile,
-        nationalBusinessRegisterFileType,
-        legalRepresentativeName,
-        legalRepresentativeFirstname,
-        legalRepresentativeBirthdate,
-        legalRepresentativeIdentityType,
-        legalRepresentativeId,
-        legalRepresentativePhoneNumber,
-        legalRepresentativeEmail,
-        legalRepresentativeIdentityFile,
-        legalRepresentativeIdentityFileType,
-        subscriberName,
-        subscriberFirstname,
-        subscriberBirthdate,
-        subscriberIdentityType,
-        subscriberId,
-        subscriberPhone,
-        subscriberEmail,
-        subscriberIdentityFile,
-        subscriberIdentityFileType,
-        screenshot1File,
-        screeshot1FileType,
-        screenshot2File,
-        screeshot2FileType,
-        requestSignature,
-        urlVideo,
-        videoHash,
-      }
-    )
-    .then((res) => {
-      res.send(res, "res");
-    })
-    .catch((err) => {
-      res.send(err);
-    });
+const createUser = (req, res, e) => {
+   const { clientId } = req.params
+   const buffer = req.file.buffer;
+   axios
+     .post(
+       `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/${clientId}`,
+       upload.single("file"),
+       {
+         txIdEmail: "3fee7ab4-9696-4938-a88d-4c73c0d25a51",
+         txIdPhone: "fca720f4-3646-4710-a85e-7fe62070f964",
+         certType: "PERSO",
+         country: "TN",
+         subscriberName: "mezni",
+         subscriberFirstname: "norchen",
+         subscriberBirthdate: "1577457071000",
+         subscriberPhone: "55740956",
+         subscriberIdentityType: "CIN",
+         subscriberId: "07452388",
+         subscriberEmail: "massoudiomar54321@gmail.com",
+         subscriberIdentityFile: "iVBORw0KGgoAA",
+         subscriberIdentityFileType: "application/png",
+         requestSignature: "+PGRzOlNpZ25hdHVyZSB4bWxuczpkcz0iaHR0cDo",
+       }
+     )
+     .then((res) => {
+       buffer
+       console.log(res,"the res")
+       res.send(res, "res");
+     })
+     .catch((err) => {
+       res.send(err);
+     });
 };
 
 ////////////////////// fifth ONE ////// validate-identity

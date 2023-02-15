@@ -804,7 +804,7 @@ const updatePassword = (req, res) => {
               }
             });
           } else {
-            res.send("password incorect");
+            res.send("Password incorect");
           }
         } catch (err) {
           console.log(err, "error");

@@ -23,14 +23,27 @@ const insertContract = (req, res) => {
     }
   );
 };
-const getAllContractByStatus = (req, res, err) => {
+// const getAllContractByStatus = (req, res, err) => {
+//   var status = req.params.status;
+//   var owner = req.params.ownerId;
+//   const sql = `SELECT DISTINCT *   FROM users_has_contracts c
+//   inner join users u on(u.id= c.owner)
+//   inner join contracts t on (t.id = c.contracts_id )
+//   inner join contract_types f on (f.id=t.contract_types_id)
+//   where t.status = ? && c.owner = ? ORDER BY t.id DESC `;
+//   db.query(sql, [status, owner], (err, result) => {
+//     if (err) throw err;
+//     res.send(result);
+//   });
+// };
+const getAllContractByStatus = (req, res) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
-  const sql = `SELECT DISTINCT *   FROM users_has_contracts c
+  const sql = `SELECT DISTINCT * FROM users_has_contracts c
   inner join users u on(u.id= c.owner)
   inner join contracts t on (t.id = c.contracts_id )
   inner join contract_types f on (f.id=t.contract_types_id)
-  where t.status = ? && c.owner = ? ORDER BY t.id DESC `;
+  where t.status = ? && c.owner = ? ORDER BY t.id DESC`;
   db.query(sql, [status, owner], (err, result) => {
     if (err) throw err;
     res.send(result);
