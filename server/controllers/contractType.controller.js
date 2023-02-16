@@ -885,6 +885,7 @@ const getByIdContractType = (req, res) => {
     if (err) {
       res.status(500).send(err);
     } else {
+      // console.log(contracts,"Log")
       res.json(contracts);
     }
   });
