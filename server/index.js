@@ -70,36 +70,36 @@ app.use("/api/throw",notifFCM)
 
 
 app.use("/uploads", express.static("./uploads"));
-app.get("/", (req, res) => {
-  res.send("Welcome To E-Tafakna server");
-});
+// app.get("/", (req, res) => {
+//   res.send("Welcome To E-Tafakna server");
+// });
 
-const https = require('https')
-const options = {
-  hostname: 'e-tafakna-back.com',
-  port: 443,
-  path: '/',
-  method: 'GET'
-}
+// const https = require('https')
+// const options = {
+//   hostname: 'e-tafakna-back.com',
+//   port: 443,
+//   path: '/',
+//   method: 'GET'
+// }
 
-setInterval(()=>{
+// setInterval(()=>{
 
-    const req = https.request(options, (res) => {
-        console.log(`statusCode: ${res.statusCode}`)
+//     const req = https.request(options, (res) => {
+//         console.log(`statusCode: ${res.statusCode}`)
       
-        res.on('data', (d) => {
-          process.stdout.write(d)
-        })
-      })
+//         res.on('data', (d) => {
+//           process.stdout.write(d)
+//         })
+//       })
       
-      req.on('error', (error) => {
-        console.error(error)
-      })
+//       req.on('error', (error) => {
+//         console.error(error)
+//       })
       
-      req.end()
+//       req.end()
       
 
-},5000)
+// },5000)
 
 
 
