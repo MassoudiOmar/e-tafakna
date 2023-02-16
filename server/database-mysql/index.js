@@ -4,7 +4,7 @@ const PoolManager  = require("mysql-connection-pool-manager")
 dotenv.config();
 
 var connection = mysql.createPool({
-  connectionLimit : 10,
+  connectionLimit : 100,
   host: process.env.MYSQL_HOST || "localhost",
   user: process.env.MYSQL_USER || "root",
   password: process.env.MYSQL_PASSWORD || "root",
