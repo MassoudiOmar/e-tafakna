@@ -70,7 +70,7 @@ app.use("/api/throw",notifFCM)
 
 
 app.use("/uploads", express.static("./uploads"));
-// app.get("/", (req, res) => {
+// app.get("/", (req, res) => { //
 //   res.send("Welcome To E-Tafakna server");
 // });
 
