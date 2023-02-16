@@ -70,37 +70,56 @@ app.use("/api/throw",notifFCM)
 
 
 app.use("/uploads", express.static("./uploads"));
- app.get("/", (req, res) => { 
-   res.send("Welcome To E-Tafakna server");
- });
+app.get("/", (req, res) => {
+  res.send("Welcome To E-Tafakna server");
+});
 
-// const https = require('https')
-// const options = {
-//   hostname: 'e-tafakna-back.com',
-//   port: 443,
-//   path: '/',
-//   method: 'GET'
-// }
+const https = require('https')
+const options = {
+  hostname: 'e-tafakna-back.com',
+  port: 443,
+  path: '/',
+  method: 'GET'
+}
 
-// setInterval(()=>{
+setInterval(()=>{
 
-//     const req = https.request(options, (res) => {
-//         console.log(`statusCode: ${res.statusCode}`)
+    const req = https.request(options, (res) => {
+        console.log(`statusCode: ${res.statusCode}`)
       
-//         res.on('data', (d) => {
-//           process.stdout.write(d)
-//         })
-//       })
+        res.on('data', (d) => {
+          process.stdout.write(d)
+        })
+      })
       
-//       req.on('error', (error) => {
-//         console.error(error)
-//       })
+      req.on('error', (error) => {
+        console.error(error)
+      })
       
-//       req.end()
+      req.end()
       
 
-// },5000)
+},5000)
 
 
 
+//Confirm the API version from your stripe dashboard
+const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
 
+//"start with nodejs expres?"
+app.post("/create-payment-intent", async (req, res) => {
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: 1099, //lowest denomination of particular currency
+      currency: "usd",
+      payment_method_types: ["card"], //by default
+    });
+    const clientSecret = paymentIntent.client_secret;
+
+    res.json({
+      clientSecret: clientSecret,
+    });
+  } catch (e) {
+    res.json({ error: e.message });
+  }
+});
