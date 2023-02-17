@@ -8,7 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("nkvtWkK8wsdKe9YZ");
+var convertapi = require("convertapi")("a462sjrEzllwZHBj");
 const cheerio = require('cheerio');
 const https = require("https");
 /***
@@ -416,10 +416,7 @@ var makeEgagement = async (url, question, idBegin, length) => {
   });
   doc.render(renderedDoc);
   const buf = doc.getZip().generate({
-    type: "nodebuffer",
-    // compression: DEFLATE adds a compression step.
-    // For a 50MB output document, expect 500ms additional CPU time
-    compression: "DEFLATE",
+   
   });
   fs.writeFileSync(`output${0}.docx`, buf);
   try {
@@ -477,10 +474,7 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
   });
   doc.render(renderedDoc);
   const buf = doc.getZip().generate({
-    type: "nodebuffer",
-    // compression: DEFLATE adds a compression step.
-    // For a 50MB output document, expect 500ms additional CPU time
-    compression: "DEFLATE",
+
   });
   fs.writeFileSync(`output${0}.docx`, buf);
   try {
