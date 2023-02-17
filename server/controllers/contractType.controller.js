@@ -35,6 +35,19 @@ function inWords (num) {
     return str.substring(0,2) == "Un" ? str.slice(3) : str;
 }
 
+const getCount= (req,res)=>{
+console.log("test")
+const lang = req.params.lang 
+
+db.query(`select count(*) as count ,  c.${lang} from contracts t inner join contract_types c on (c.id = t.contract_types_id) GROUP BY c.${lang}`,(err,rez)=>{
+if(err)
+res.send(err)
+else 
+res.send(rez)
+})
+}
+
+
 var ChangeStatusInContract = async (req, res) => {
   const { image_url, user_name, tag } = req.body;
   const output = fs.createWriteStream("test.html");
@@ -1075,4 +1088,5 @@ module.exports = {
   ChangeStatusInContract,
   concatImages,
   addAnswersToAnswerTable,
+   getCount
 };
