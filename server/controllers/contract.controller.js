@@ -133,10 +133,10 @@ const UpdateArchive = (req, res) => {
 
 
 const changeContractStatus = (req, res) => {
-  const contracts_id  = req.body.contracts_id ;
+  const contract_url  = req.body.contract_url ;
   const status = req.params.status;
-  const sql = `UPDATE contracts SET status = ? WHERE contracts_id = ?`;
-  db.query(sql, [status, contracts_id ], (err, result) => {
+  const sql = `UPDATE contracts SET status = ? WHERE contract_url = ?`;
+  db.query(sql, [status, contract_url ], (err, result) => {
     if (err) {
       res.send(err);
     } else {
