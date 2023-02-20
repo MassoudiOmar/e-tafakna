@@ -81,7 +81,6 @@ const findAll = (req, res) => {
 };
 
 const findContractbyQuesId = (req, res) => {
-  // let {questions_id} = req.body
   let sql = `select  title_FR,contract_types.id as id_contract_type, questions.id, content_FR, content_AR,content_EN, order_question from questions_has_contract_types 
   inner join contract_types on (questions_has_contract_types.contract_types_id = contract_types.id)
   inner join questions on (questions_has_contract_types.questions_id = questions.id)
@@ -90,7 +89,6 @@ const findContractbyQuesId = (req, res) => {
 
   db.query(
     sql,
-    // [questions_id]
     (err, result) => {
       if (err) res.send(err);
       else res.send(result);

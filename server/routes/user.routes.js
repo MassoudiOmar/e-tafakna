@@ -2,7 +2,6 @@ const router = require('express').Router();
 const userController = require("../controllers/user.controller");
 const pass = require("../controllers/confirmPassword")
 const contractController = require("../controllers/contract.controller");
-const auth = require('../midlleware/auth')
 
 router.post("/register", userController.register);
 router.post("/fn", userController.fn);
@@ -21,8 +20,5 @@ router.post("/getNameOfSpecificContract" , userController.getNameOfSpecificContr
 router.post("/updatePassword/:id" , userController.updatePassword)
 router.put("/updateInfo/:id" , userController.updateUserInfo)
 router.post("/googleOuthLogin" , userController.googleOuth)
-// router.put("/googleOuth" , userController.googleOuth)
-// router.post("/addAnswer" ,userController.addAnswer)
-// router.post("/getAllAnswerOfUser" , userController.getAllAnswerOfUser)
-// router.post("/getUserInfoWithId" , userController.getUserInfoWithId)
+
 module.exports = router;

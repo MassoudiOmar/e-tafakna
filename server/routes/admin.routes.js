@@ -3,7 +3,6 @@ const adminController = require("../controllers/admin.controller");
 const auth = require("../midlleware/auth");
 
 router.post('/login',adminController.loginAdmin)
-
 router.get('/allUsers',auth,adminController.getAllUsers)
 router.get('/oneUsers/:id',auth,adminController.getOneUser)
 router.put('/deleteUser/:id',auth,adminController.deleteUser)
@@ -16,9 +15,5 @@ router.put('/updateUrlAR/:id', auth,adminController.updateUrlContractAR)
 router.put('/updaTitleFR/:id',auth, adminController.updateTitleFR)
 router.put('/updateTitleAR/:id',auth, adminController.updateTitleAR)
 router.put('/changePassword',auth, adminController.ChangePassword)
-
-
-
-
 
 module.exports = router;

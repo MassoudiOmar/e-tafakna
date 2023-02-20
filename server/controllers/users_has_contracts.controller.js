@@ -36,19 +36,10 @@ formData.append("document", fs.createReadStream("output.docx"));
 
     response.data.pipe(fs.createWriteStream("image.jpg"));
   } catch (e) {
-    // const errorString = await streamToString(e.response.data)
     // console.log(errorString)
   }
 })();
 
-function streamToString(stream) {
-  const chunks = [];
-  return new Promise((resolve, reject) => {
-    stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
-    stream.on("error", (err) => reject(err));
-    stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
-  });
-}
 const sentoArchieve = (req, res) => {
   const id = req.params.id;
   const sql = `update contracts set archieve = "true" where id = ?`;
@@ -186,20 +177,6 @@ const getNotification = (req, res) => {
         );
       } else {
         res.send(result.reverse());
-        var ans = [];
-        /*
-for (let i = 0 ; i < result.length; i ++ ) {
-db.query(`SELECT * FROM users where id=${result[i]["owner"]}`,(err,result1)=>{
-if(err){
-console.log(err)
-res.end(err)
-}
-ans.push(result1[0])
-if(result.length -1 == i )
-res.send(ans)
-})
-}
-*/
       }
     }
   );

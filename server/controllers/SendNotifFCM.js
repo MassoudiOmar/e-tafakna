@@ -1,4 +1,3 @@
-const db = require("../database-mysql");
 const FCM = require("fcm-node");
 const SERVER_KEY =
   "AAAA4j8oAgs:APA91bHIEP_9ZhOnedh5ralog6ewH5aZYobuLNAjxz_qcwcyxrpA2-1ReSEQo1glAxTz_kH_a1wWWMv09SZr5KP0T-_Rci6LTGZXqOeOW6S0n2di7KaMqBV5hXvfNCAjviyqebkFQSfa";

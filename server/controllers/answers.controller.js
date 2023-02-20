@@ -1,7 +1,7 @@
 var db = require("../database-mysql");
+
 let updateAnswer = (req, res) => {
-  const { content, questions_id, contracts_id, contracts_contract_types_id } =
-    req.body;
+  const { content, questions_id } = req.body;
   db.query(
     `SELECT * FROM answers where questions_id=${questions_id} ORDER BY ID DESC LIMIT 1  `,
     (err, result) => {
@@ -22,6 +22,7 @@ let updateAnswer = (req, res) => {
     }
   );
 };
+
 let getAnswers = (req, res) => {
   const { contracts_id } = req.params;
   const sql = `SELECT questions_id,content  FROM answers  where contracts_id=?`;
@@ -30,6 +31,7 @@ let getAnswers = (req, res) => {
     else res.send(result);
   });
 };
+
 let AddAnswers = (req, res) => {
   const { content, questions_id, contracts_id, contracts_contract_types_id } =
     req.body;
@@ -66,6 +68,7 @@ let updateAnswers = (req, res) => {
     else res.send(result);
   });
 };
+
 let getContractImage = (req, res) => {
   let { id } = req.params;
   const sql = `SELECT contract_image FROM contracts WHERE id = ?`;
@@ -77,6 +80,7 @@ let getContractImage = (req, res) => {
     }
   });
 };
+
 let getQuestionsAnswers = (req, res) => {
   let id = req.params.id;
   const sql = `select a.id,questions_id,content from contract_types

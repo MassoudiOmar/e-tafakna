@@ -1,6 +1,4 @@
 var db = require("../database-mysql");
-var cloudinar = require("cloudinary");
-var cloudinar = require("cloudinary").v2;
 const superagent = require("superagent");
 const Docxtemplater = require("docxtemplater");
 const PizZip = require("pizzip");
@@ -45,10 +43,6 @@ const uploadVideo = (req, res) => {
   });
 };
 
-//  template_FR: 'https://res.cloudinary.com/e-tafakna/raw/upload/v1664543960/Attestation-de-stage_n2_rjvm0l.docx',
-//  questions_id: 5,
-//  content: '26/9/2022'
-//}
 var createDocAndImage = async (str, index, renderObject) => {
   const response = await superagent
     .get(str)
@@ -65,8 +59,6 @@ var createDocAndImage = async (str, index, renderObject) => {
   doc.render(renderObject);
   const buf = doc.getZip().generate({
     type: "nodebuffer",
-    // compression: DEFLATE adds a compression step.
-    // For a 50MB output document, expect 500ms additional CPU time
     compression: "DEFLATE",
   });
   fs.writeFileSync(`output${index}.docx`, buf);
@@ -125,7 +117,6 @@ const fillContract = async (req, res) => {
     acc[key] = value;
     return acc;
   }, {});
-  // res.send(result);
   var url = boolean ? template_FR : template_FR2;
   var Has_Two_Pages = true;
   if (url.search(",") == -1) {
@@ -171,21 +162,33 @@ const updateStatus = (req, res) => {
     res.send(result);
   });
 };
-////////////////////////////////////////////////// DIGIGO SERVICES BELOW
 
-////////////////////// SERVICE ONE ////// AED-SEND-OTP
-
-const sendOtp = (req, res) => {
-  const { clientId } = req.params;
-  // var {rejectedUnauthorized }= req.query
+const sendOtp = async (req, res) => {
   const { certType, userId, idType, authDelivery, phone } = req.body;
   axios
     .post(
-      `https://193.95.63.230/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp`,
+      `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/c638a72d-5324-405e-b664-de94ed3db77c`,
       { certType, userId, idType, authDelivery, phone }
     )
-    .then((res) => {
-      res.send(res, clientId, "res");
+    .then(async (result) => {
+      res.send(result.data);
+      return;
+    })
+    .catch((err) => {
+      res.send(err, "err");
+    });
+};
+const aedValidateOtp = async (req, res) => {
+  const { textId, otp } = req.params;
+  const { certType, userId, idType, authDelivery, phone, email } = req.body;
+  axios
+    .post(
+      `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-validate-otp/c638a72d-5324-405e-b664-de94ed3db77c/${textId}/${otp}`,
+      { certType, userId, idType, authDelivery, phone, email }
+    )
+    .then(async (result) => {
+      res.send(result.data);
+      return;
     })
     .catch((err) => {
       res.send(err);
@@ -199,21 +202,6 @@ const createUser = (req, res) => {
     txIdPhone,
     certType,
     country,
-    organisation,
-    organisationId,
-    taxIdentifierFile,
-    taxIdentifierFileType,
-    nationalBusinessRegisterFile,
-    nationalBusinessRegisterFileType,
-    legalRepresentativeName,
-    legalRepresentativeFirstname,
-    legalRepresentativeBirthdate,
-    legalRepresentativeIdentityType,
-    legalRepresentativeId,
-    legalRepresentativePhoneNumber,
-    legalRepresentativeEmail,
-    legalRepresentativeIdentityFile,
-    legalRepresentativeIdentityFileType,
     subscriberName,
     subscriberFirstname,
     subscriberBirthdate,
@@ -233,27 +221,12 @@ const createUser = (req, res) => {
   } = req.body;
   axios
     .post(
-      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/${clientId}`,
+      `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/c638a72d-5324-405e-b664-de94ed3db77c`,
       {
         txIdEmail,
         txIdPhone,
         certType,
         country,
-        organisation,
-        organisationId,
-        taxIdentifierFile,
-        taxIdentifierFileType,
-        nationalBusinessRegisterFile,
-        nationalBusinessRegisterFileType,
-        legalRepresentativeName,
-        legalRepresentativeFirstname,
-        legalRepresentativeBirthdate,
-        legalRepresentativeIdentityType,
-        legalRepresentativeId,
-        legalRepresentativePhoneNumber,
-        legalRepresentativeEmail,
-        legalRepresentativeIdentityFile,
-        legalRepresentativeIdentityFileType,
         subscriberName,
         subscriberFirstname,
         subscriberBirthdate,
@@ -273,12 +246,12 @@ const createUser = (req, res) => {
       }
     )
     .then((res) => {
-      res.send(res, "res");
+      res.send(res.data, "res");
     })
     .catch((err) => {
-      res.send(err);
+      console.log(err);
     });
-};
+  };
 
 ////////////////////// fifth ONE ////// validate-identity
 const validateIdentity = (req, res) => {
@@ -309,21 +282,6 @@ const validateIdentity = (req, res) => {
     });
 };
 
-const aedValidateOtp = (req, res) => {
-  //clientId , textId ,otp in params
-  const { clientId, textId, otp } = req.params;
-  //certType ,userId ,idType,authDelivery ,phone ,email
-  const { certType, userId, idType, authDelivery, phone, email } = req.body;
-  axios
-    .post(
-      `https://digigo.tuntrust.tn/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-validate-otp/${clientId}/${textId}/${otp}`,
-      { certType, userId, idType, authDelivery, phone, email }
-    )
-    .then((response) => {
-      if (err) res.send(err);
-      res.send(response);
-    });
-};
 
 const aedRequestStatus = (req, res) => {
   const { clientId, requestId } = req.params;

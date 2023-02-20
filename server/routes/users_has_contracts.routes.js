@@ -1,7 +1,5 @@
 const router = require('express').Router();
 const contractController = require("../controllers/users_has_contracts.controller");
-const auth = require('../midlleware/auth')
-
 
 router.get("/notnumber/:id",contractController.getnumbers)
 router.post('/saveContract',contractController.userContract)

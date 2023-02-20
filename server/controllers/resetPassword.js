@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const db = require("../database-mysql");
 const bcrypt = require("bcrypt");
 const fetch = require("node-fetch");
+
 const resetPasswor = async (req, res) => {
   const { email } = req.body;
   if (!email) {
@@ -26,7 +27,6 @@ const resetPasswor = async (req, res) => {
         const resetCode = Math.floor(10000 + Math.random() * 90000);
         const salt = await bcrypt.genSalt();
         const hashedCode = await bcrypt.hash(resetCode.toString(), salt);
-        //  const check = await bcrypt.compare(resetCode.toString(), hashedCode.toString())
         var mailOptions = {
           from: "no-reply@e-tafakna.com",
           to: email,
@@ -258,25 +258,13 @@ const verifying = (req, res) => {
   }
 };
 const payment = async (req, res) => {
-  const { id } = req.params;
-  const { dataa } = req.body;
-  let amount;
-  id == 1 ? (amount = 2.8) && (note = "Forfait Mobile") : null;
-  id == 2 ? (amount = 20) && (note = "Plan Personnel") : null;
-  id == 3 ? (amount = 55) && (note = "Plan Standar") : null;
-  id == 4 ? (amount = 99) && (note = "Business Pro") : null;
-
-  let data = {
-    amount: amount,
-    note: note,
-    first_name: dataa[0].first_name,
-    phone: dataa[0].phone,
-    email: dataa[0].email,
-    last_name: dataa[0].last_name,
-    webhook_url: "https://payment/",
-  };
-  const response = await fetch("https://app.paymee.tn/api/v2/payments/create", {
-    body: JSON.stringify(data),
+const {amount} = req.params
+let urlDeRedireaction = 'http://localhost:3000'
+console.log(amount)
+  const orderNumber =()=>{
+    return Math.floor((Math.random()*1000000)+1);
+ }
+  const response = await fetch(`https://test.clictopay.com/payment/rest/register.do?amount=${amount}&currency=788&language=fr&orderNumber=${orderNumber()}&password=Df9w2Cd9M&userName=0799902133&jsonParams={"orderNumber":1234567890}&returnUrl=https://e-tafakna.com/PaymentRecieved&failUrl=https://e-tafakna.com/PaymentFailed?&expirationDate=2023-09-08T14:14:14`, {
     method: "POST",
     headers: {
       "Content-type": "application/json;charset=UTF-8",
@@ -284,7 +272,7 @@ const payment = async (req, res) => {
     },
   }).then(async (response) => {
     const data = await response.json();
-    res.send(data);
+    res.send(data.formUrl);
   });
 };
 const updateGoogleUserPassword = async (req, res) => {
@@ -312,6 +300,27 @@ const updateGoogleUserPassword = async (req, res) => {
     }
   }
 };
+const checkPaymentStatus =async(req,res)=>{
+  const {orderId,language} = req.params
+console.log(orderId,language,'lol')
+  const response = await fetch(`https://test.clictopay.com/payment/rest/getOrderStatusExtended.do?userName=0799902133&password=Df9w2Cd9M&orderId=${orderId}&language=${language}&password=Df9w2Cd9M&userName=0799902133`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json;charset=UTF-8",
+      Authorization: "TOKEN 854da4da3b8f36f8772f46a3992a02b9a2cbb199",
+    },
+  }).then(async (response) => {
+    const data = await response.json();
+    res.send([data.orderNumber,data.actionCodeDescription,data.amount]);
+  });
+}
 
 
-module.exports = { resetPasswor, verifying, updatepassword, payment ,updateGoogleUserPassword};
+module.exports = {
+  resetPasswor,
+  verifying,
+  updatepassword,
+  payment,
+  updateGoogleUserPassword,
+  checkPaymentStatus
+};

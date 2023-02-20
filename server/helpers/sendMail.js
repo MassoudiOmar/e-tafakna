@@ -239,5 +239,4 @@ const sendEmailRegister = (to, url, text,user) => {
 
 module.exports = {
   sendEmailRegister,
-  // sendEmailReset
 };

@@ -1,10 +1,8 @@
-var db = require("../database-mysql");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const confirmPassword = (req, res) => {
-  const { email, password, hashedPassword } = req.body;
+  const {password, hashedPassword } = req.body;
   if (!password) {
     return res.send("enter your password");
   } else {

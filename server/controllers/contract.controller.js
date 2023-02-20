@@ -1,5 +1,6 @@
 const db = require("../database-mysql");
 let nodeGeocoder = require("node-geocoder");
+
 //.
 const insertContract = (req, res) => {
   const { contract_types_id } = req.body;
@@ -23,7 +24,8 @@ const insertContract = (req, res) => {
     }
   );
 };
-const getAllContractByStatus = (req, res, err) => {
+
+const getAllContractByStatus = (req, res) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
   const sql = `SELECT DISTINCT *   FROM users_has_contracts c
@@ -36,6 +38,7 @@ const getAllContractByStatus = (req, res, err) => {
     res.send(result);
   });
 };
+
 const getAllContractById = (req, res) => {
   const owner = req.params.ownerId;
   const sql = `SELECT * FROM users_has_contracts c
@@ -49,9 +52,7 @@ const getAllContractById = (req, res) => {
     } else res.send(result);
   });
 };
-///////////////////////////////////////////
-///////////////////////////////////////////
-///////////////////////////////////////////
+
 let getAllContracts = (req, res) => {
   const { id } = req.params;
   const sql = ` 
@@ -67,17 +68,11 @@ let getAllContracts = (req, res) => {
     res.send(result);
   });
 };
-///////////////////////////////////////////
-///////////////////////////////////////////
-///////////////////////////////////////////
+
 const deleteContract = (req, res) => {
   var imageUri = req.body.imageUri;
-  console.log(imageUri, "imageUri");
   var arr = [imageUri];
-  console.log(arr, "arr");
   var imageUrii = arr.join(",");
-  console.log(imageUrii, "imageUrii");
-  // imageUri = imageUri.join(",");
   db.query(
     `delete from contracts where pdfContractImage = "${imageUrii}"`,
     (err, rez) => {

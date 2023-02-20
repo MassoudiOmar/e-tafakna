@@ -9,6 +9,4 @@ router.post('/Addanswer',answersController.AddAnswer)
 router.get("/contract/:id",answersController.getContractImage)
 router.post("/updateAnswer" , answersController.updateAnswer)
 
-
-
 module.exports = router;

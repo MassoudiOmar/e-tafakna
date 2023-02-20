@@ -1,13 +1,8 @@
 var db = require("../database-mysql");
 const bcrypt = require("bcrypt");
 const validateEmail = require("../helpers/validateEmail");
-const createToken = require("../helpers/createToken");
-const sendMail = require("../helpers/sendMail");
 const jwt = require("jsonwebtoken");
 const jwtDecode = require("jwt-decode");
-const cloudinary = require("../utils/cloudinary");
-var cloudinar = require("cloudinary");
-var cloudinar = require("cloudinary").v2;
 const nodemailer = require("nodemailer");
 
 require("dotenv").config();
@@ -45,27 +40,21 @@ var register = async (req, res) => {
     const role = "user";
     const activate = "false";
     const notification = false;
-    // check fields
     if (
       !first_name ||
       !last_name ||
       !email ||
       !password ||
       !phone
-      // ||
-      // !address ||
-      // !username
     ) {
       return res.json({ msg: "please fill in all fields" });
     }
     // check email
     else if (!validateEmail(email)) {
-      console.log("email not valid");
       res.send({ msg: "Please enter a valid email address." });
       // Validation Password
     } else if (typeof password !== "number" && password.length !== 5) {
       res.send({ msg: "Please enter a valid password" });
-      console.log("object");
     } else {
       //check user
       const sql = `SELECT * FROM users WHERE email=? `;
@@ -271,9 +260,6 @@ var register = async (req, res) => {
                         console.log(hashedCode);
                       }
                     });
-                    // registration success
-
-                    // registration success
                     res.json({
                       msg: "Welcome! Please check your email.",
                       code: code.toString(),
@@ -314,7 +300,6 @@ var register = async (req, res) => {
                   res.send(err);
                 } else {
                   //create token
-                  console.log("first");
                   var transporter = nodemailer.createTransport({
                     host: "e-tafakna.com",
                     port: 465,
@@ -512,8 +497,6 @@ var register = async (req, res) => {
                     }
                   });
                   // registration success
-
-                  // registration success
                   res.json({
                     msg: "Welcome! Please check your email.",
                     code: code.toString(),
@@ -534,7 +517,6 @@ var register = async (req, res) => {
 };
 var registerwithfcb = async (req, res) => {
   try {
-    //get info of user
     const { first_name, last_name, username, image } = req.body;
     const email = "null";
     const address = "null";
@@ -543,7 +525,6 @@ var registerwithfcb = async (req, res) => {
     const status = "Activated";
     const created_at = new Date();
     const role = "user";
-    //check user
     const sql = "SELECT * FROM users WHERE username = ?";
     db.query(sql, [username], async (err, result) => {
       if (err) res.send(err);
@@ -817,7 +798,6 @@ const googleOuth = (req, res) => {
     var yyyy = today.getDate();
     var m = today.getMonth() + 1;
     var hours = today.getFullYear();
-    //2023-01-27
     today = hours + "-" + m + "-" + yyyy;
     return today;
   };
@@ -825,7 +805,6 @@ const googleOuth = (req, res) => {
   const emeailCheck = true;
   const sql = "select * from users where email = ? ";
   db.query(sql, [email], (err, result) => {
-    console.log(result)
     if (err) {
       console.log(err);
     } else if (result[0]?.email) {
