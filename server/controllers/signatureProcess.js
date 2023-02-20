@@ -6,7 +6,10 @@ const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
+const multer = require('multer');
 
+
+const upload = multer({ dest: './a.png' });
 const uploadCin = (req, res) => {
   const { id } = req.params;
   const { carteCinFront, carteCinBack, faceVideo } = req.body;

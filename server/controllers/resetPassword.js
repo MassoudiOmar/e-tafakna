@@ -302,7 +302,6 @@ const updateGoogleUserPassword = async (req, res) => {
 };
 const checkPaymentStatus =async(req,res)=>{
   const {orderId,language} = req.params
-console.log(orderId,language,'lol')
   const response = await fetch(`https://test.clictopay.com/payment/rest/getOrderStatusExtended.do?userName=0799902133&password=Df9w2Cd9M&orderId=${orderId}&language=${language}&password=Df9w2Cd9M&userName=0799902133`, {
     method: "POST",
     headers: {
@@ -316,11 +315,5 @@ console.log(orderId,language,'lol')
 }
 
 
-module.exports = {
-  resetPasswor,
-  verifying,
-  updatepassword,
-  payment,
-  updateGoogleUserPassword,
-  checkPaymentStatus
-};
+
+module.exports = { resetPasswor, verifying, updatepassword, payment ,updateGoogleUserPassword,checkPaymentStatus};

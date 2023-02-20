@@ -748,9 +748,18 @@ const updatePassword = (req, res) => {
   const { id } = req.params;
   const { oldPassword, newPassword, confirmPassword } = req.body;
   if (!oldPassword  && !newPassword  && !confirmPassword) {
-    res.send("Please fill all the fields");
-  } else if (newPassword !== confirmPassword) {
-    res.send("Please confirm your password");
+    res.send("Veuillez remplir tous les champs");
+  } else if (!oldPassword ) {
+    res.send("Veuillez insérer l'ancien mot de passe")
+  }
+  else if (!newPassword ) {
+    res.send("Veuillez insérer le nouveau mot de passe")
+  }
+  else if (!confirmPassword ) {
+    res.send("Veuillez insérer le mot de passe de confirmation")
+  }
+  else if (  newPassword !== confirmPassword) {
+    res.send("Veuillez confirmer votre mot de passe");
   } else {
     const sql = `select password from users where id  = ?`;
     db.query(sql, [id], async (err, result) => {
@@ -776,7 +785,7 @@ const updatePassword = (req, res) => {
               }
             });
           } else {
-            res.send("password incorect");
+            res.send("Password incorect");
           }
         } catch (err) {
           console.log(err, "error");

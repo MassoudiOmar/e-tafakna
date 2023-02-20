@@ -20,6 +20,7 @@ const login = require("./routes/login");
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+process.env.NODE_TLS_REJECT_UNAUTHORIZED
 
 app.use(bodyParser.urlencoded({ limit: "5000mb" }));
 app.use(cors({ origin: "*" }));

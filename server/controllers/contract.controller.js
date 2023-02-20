@@ -25,15 +25,15 @@ const insertContract = (req, res) => {
   );
 };
 
-const getAllContractByStatus = (req, res) => {
+const getAllContractByStatus = (req, res, err) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
-  const sql = `SELECT DISTINCT *   FROM users_has_contracts c
+  const sql = `SELECT DISTINCT * FROM users_has_contracts c
   inner join users u on(u.id= c.owner)
   inner join contracts t on (t.id = c.contracts_id )
   inner join contract_types f on (f.id=t.contract_types_id)
-  where t.status = ? && c.owner = ? ORDER BY t.id DESC `;
-  db.query(sql, [status, owner], (err, result) => {
+      where t.status = "draft" && c.owner =${owner} && t.contract_image IS NULL ORDER BY t.id DESC LIMIT 50`;
+  db.query(sql, (err, result) => {
     if (err) throw err;
     res.send(result);
   });
@@ -61,7 +61,7 @@ let getAllContracts = (req, res) => {
     inner join users ur on (ur.id = uhc.receiver)
     inner join contracts c on (c.id = uhc.contracts_id)
     inner join contract_types ct on (ct.id = c.contract_types_id)
-    WHERE uo.id=? OR ur.id =? ORDER BY id DESC 
+    WHERE uo.id=? OR ur.id =? ORDER BY id DESC  LIMIT 50
     `;
   db.query(sql, [id, id], (err, result) => {
     if (err) throw err;
@@ -83,25 +83,53 @@ const deleteContract = (req, res) => {
     }
   );
 };
+//|| c.receiver=? && t.status="accepted" && t.archieve = "true"
 const getArchieve = (req, res) => {
   const owner = req.params.ownerId;
   const sql = ` SELECT * FROM users_has_contracts c
     inner join users u on(u.id= c.owner)
     inner join contracts t on (t.id = c.contracts_id )
     inner join contract_types f on (f.id=t.contract_types_id)
-     where c.owner = ? && t.contract_image IS NOT NULL || c.receiver=? && t.status="accepted" ORDER BY t.id DESC`;
-  db.query(sql, [owner, owner], (err, result) => {
+    where c.owner = ? && t.contract_image IS NOT NULL  ORDER BY t.id DESC LIMIT 50`;
+  db.query(sql, [owner], (err, result) => {
     if (err) throw err;
 
     res.send(result);
   });
 };
+const deleteArchieve = (req, res) => {
+  const contracts_id = req.params.contracts_id;
+  console.log(contracts_id,"id")
+  let sql = `DELETE from users_has_contracts WHERE receiver IS NULL && contracts_id = ? `;
+  db.query(sql, [contracts_id], (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
+const UpdateArchive = (req, res) => {
+  const contracts_id = req.body.contracts_id;
+  const receiver = req.params.receiver;
+  console.log(receiver ,"receiver1" , "contracts_id1", contracts_id)
+  const sql = `UPDATE users_has_contracts SET receiver = ? WHERE contracts_id = ?`;
+  db.query(sql, [receiver, contracts_id], (err, result) => {
+    console.log(receiver ,"receiver" , "contracts_id", contracts_id)
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
+
 
 const changeContractStatus = (req, res) => {
-  const contract_url = req.body.contract_url;
+  const contract_url  = req.body.contract_url ;
   const status = req.params.status;
-  const sql = `UPDATE contracts SET status = ? WHERE contract_image = ?`;
-  db.query(sql, [status, contract_url], (err, result) => {
+  const sql = `UPDATE contracts SET status = ? WHERE contract_url = ?`;
+  db.query(sql, [status, contract_url ], (err, result) => {
     if (err) {
       res.send(err);
     } else {
@@ -117,7 +145,7 @@ let getNotification = (req, res) => {
       inner join users ur on (ur.id = uhc.receiver)
       inner join contracts c on (c.id = uhc.contracts_id)
       inner join contract_types ct on (ct.id = c.contract_types_id)
-      where ur.id =? order by id DESC LIMIT 20`;
+      where ur.id =? order by id DESC LIMIT 50`;
   db.query(sql, [id], (err, result) => {
     if (err) res.send(err);
     else res.send(result);
@@ -206,4 +234,6 @@ module.exports = {
   deleteContract,
   getArchieve,
   getLoacation,
+  UpdateArchive,
+  deleteArchieve
 };

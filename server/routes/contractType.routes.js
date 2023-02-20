@@ -11,5 +11,9 @@ router.post('/fill/:id',contractType.fillContract)
 router.put('/updateImage/:id',contractType.updateContractImage)
 router.post("/concatImages",contractType.concatImages)
 router.post("/addAnswersToAnswerTable",contractType.addAnswersToAnswerTable)
+router.get("/getCount/Contracts/:lang" , contractType.getCount)
+
+// router.post("/concatImages",contractType.concatImages)
+// router.post("/ChangeStatusInContract",contractType.ChangeStatusInContract)
 
 module.exports = router;
