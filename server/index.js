@@ -81,7 +81,7 @@ app.get("/", (req, res) => {
 const serverPort = 80
 
 server = http.createServer(app),
-WebSocket = require("ws"),
+WebSocket = require("wss"),
 websocketServer = new WebSocket.Server({ server , path:"/test" });
 //when a websocket connection is established
 
