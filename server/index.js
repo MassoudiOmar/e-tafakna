@@ -78,7 +78,7 @@ app.get("/", (req, res) => {
 
 
 
-const serverPort = PORT
+const serverPort = 80
 
 server = http.createServer(app),
 WebSocket = require("ws"),
