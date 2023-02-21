@@ -80,9 +80,9 @@ app.get("/", (req, res) => {
 
 const serverPort = 80
 
-server = http.createServer(app),
+//server = http.createServer(app),
 WebSocket = require("ws"),
-websocketServer = new WebSocket.Server({ server , path:"/test" });
+websocketServer = new WebSocket.Server({ port: 8080 });
 //when a websocket connection is established
 
 /*
@@ -156,10 +156,6 @@ webSocketClient.on("close",(res)=>{
 });
 
 //start the web server
-server.listen(serverPort, () => {
-  console.log(`Websocket server started on port ` + serverPort);
-});
-
 
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
