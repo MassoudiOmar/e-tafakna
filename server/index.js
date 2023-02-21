@@ -39,7 +39,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED
 
 
 
-app.listen(PORT, function () {
+let server = app.listen(PORT, function () {
   console.log(`Server running on ${PORT}`);
 });
 
@@ -82,7 +82,7 @@ const serverPort = 80
 
 //server = http.createServer(app),
 WebSocket = require("ws"),
-websocketServer = new WebSocket.Server({ port: 8080 });
+websocketServer = new WebSocket.Server({server:server,path:"/test" });
 //when a websocket connection is established
 
 /*
