@@ -15,6 +15,7 @@ const notifFCM = require("./routes/SendNotifFCM.routes")
 const FCM = require('fcm-node')
 
 
+http = require("http")
 
 var items = require("./database-mysql");
 const cors = require("cors");
@@ -38,7 +39,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED
 
 
 
-app.listen(PORT, function () {
+let server = app.listen(PORT, function () {
   console.log(`Server running on ${PORT}`);
 });
 
@@ -76,6 +77,85 @@ app.get("/", (req, res) => {
 
 
 
+
+const serverPort = 80
+
+//server = http.createServer(app),
+WebSocket = require("ws"),
+websocketServer = new WebSocket.Server({server:server,path:"/test" });
+//when a websocket connection is established
+
+/*
+Create Big array With !Every Index Represent a User If the user has true in his case then  send for refresh 
+and change the case to false 
+else 
+no need to do anything 
+
+
+*/
+let numberOfUsers =  200
+
+let User = Array(numberOfUsers).fill({
+Notification:false , 
+Contracts : false
+
+
+})
+
+
+websocketServer.on('connection', (webSocketClient ) => {
+
+console.log("web Socket Connected")
+webSocketClient.on("open    ",(res)=>{
+console.log("Web Socket Connected")
+
+})
+
+webSocketClient.on("message",(res)=>{
+let Temp = res.toString().split(" ")
+console.log(Temp)
+let index = parseInt(Temp[0]) 
+let action = Temp[1] 
+if(action=="get"){
+if(User[index]?.Notification){
+User[index].Notification=false 
+webSocketClient.send("refresh")
+}
+else {
+webSocketClient.send("Nun")
+}
+}
+else {
+if(action=="send"){
+User[index].Notification=true 
+User[index].Contracts = true
+
+webSocketClient.send("Done")
+}
+else 
+if(action=="getContract"){
+if(User[index]?.Contracts){
+    User[index].Contracts=false 
+    webSocketClient.send("refresh")
+    }
+    else {
+        webSocketClient.send("Nun")
+    }
+}
+}
+})
+webSocketClient.on("close",(res)=>{
+    console.log("Web Socket Disconnected")
+    
+    })
+
+//send feedback to the incoming connection
+    
+    
+
+});
+
+//start the web server
 
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });

@@ -8,8 +8,8 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("a462sjrEzllwZHBj");
-const cheerio = require('cheerio');
+var convertapi = require("convertapi")("9Bsv3c1L08k6ETQk");
+const cheerio = require("cheerio");
 const https = require("https");
 /***
  *
@@ -21,19 +21,84 @@ const https = require("https");
  *
  */
 
-var a = ['','Un ','Deux ','Trois ','Quatre ', 'Cinq ','Six ','Sept ','Huit ','Neuf ','Dix ','Onze ','Douze ','Treize ','Quatorze ','Quinze ','Seize ','Dix-sept','Dix-huit','Dix-neuf'];
-var b = ['', '', 'Vingt','Trente','Quarante','Cinquante', 'Soixante','Soixante-dix','Quatre-vingts','Quatre-vingt-dix'];
-function inWords (num) {
-    if ((num = num.toString()).length > 9) return 'overflow';
-    n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-    if (!n) return; var str = '';
-    str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'milliard ' : '';
-    str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'million ' : '';
-    str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'mille ' : '';
-    str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'cents ' : '';
-    str += (n[5] != 0) ? ((str != '') ? 'et ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) + '' : '';
-    return str.substring(0,2) == "Un" ? str.slice(3) : str;
+var a = [
+  "",
+  "Un ",
+  "Deux ",
+  "Trois ",
+  "Quatre ",
+  "Cinq ",
+  "Six ",
+  "Sept ",
+  "Huit ",
+  "Neuf ",
+  "Dix ",
+  "Onze ",
+  "Douze ",
+  "Treize ",
+  "Quatorze ",
+  "Quinze ",
+  "Seize ",
+  "Dix-sept",
+  "Dix-huit",
+  "Dix-neuf",
+];
+var b = [
+  "",
+  "",
+  "Vingt",
+  "Trente",
+  "Quarante",
+  "Cinquante",
+  "Soixante",
+  "Soixante-dix",
+  "Quatre-vingts",
+  "Quatre-vingt-dix",
+];
+function inWords(num) {
+  if ((num = num.toString()).length > 9) return "overflow";
+  n = ("000000000" + num)
+    .substr(-9)
+    .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+  if (!n) return;
+  var str = "";
+  str +=
+    n[1] != 0
+      ? (a[Number(n[1])] || b[n[1][0]] + " " + a[n[1][1]]) + "milliard "
+      : "";
+  str +=
+    n[2] != 0
+      ? (a[Number(n[2])] || b[n[2][0]] + " " + a[n[2][1]]) + "million "
+      : "";
+  str +=
+    n[3] != 0
+      ? (a[Number(n[3])] || b[n[3][0]] + " " + a[n[3][1]]) + "mille "
+      : "";
+  str +=
+    n[4] != 0
+      ? (a[Number(n[4])] || b[n[4][0]] + " " + a[n[4][1]]) + "cents "
+      : "";
+  str +=
+    n[5] != 0
+      ? (str != "" ? "et " : "") +
+        (a[Number(n[5])] || b[n[5][0]] + " " + a[n[5][1]]) +
+        ""
+      : "";
+  return str.substring(0, 2) == "Un" ? str.slice(3) : str;
 }
+
+const getCount = (req, res) => {
+  console.log("test");
+  const lang = req.params.lang;
+
+  db.query(
+    `select count(*) as count ,  c.${lang} from contracts t inner join contract_types c on (c.id = t.contract_types_id) GROUP BY c.${lang}`,
+    (err, rez) => {
+      if (err) res.send(err);
+      else res.send(rez);
+    }
+  );
+};
 
 var ChangeStatusInContract = async (req, res) => {
   const { image_url, user_name, tag } = req.body;
@@ -264,7 +329,7 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
   return "Hi";
 };
 let makeFactureOrDevisFr = (url, ans, type, language) => {
- const file = fs.createWriteStream("file.xlsx");
+  const file = fs.createWriteStream("file.xlsx");
   https.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
@@ -278,15 +343,15 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
         workbook.worksheets[0].getCell("B9").value = ans[1] + " le " + ans[2];
         workbook.worksheets[0].getCell("D12").value = ans[3];
         let Temp = ans[4];
-        workbook.worksheets[0].getCell('D14').font = {
-          bold:false
+        workbook.worksheets[0].getCell("D14").font = {
+          bold: false,
         };
-        workbook.worksheets[0].getCell("D14").value =ans[5];
-        workbook.worksheets[0].getCell("D13").value = (ans[4]);
+        workbook.worksheets[0].getCell("D14").value = ans[5];
+        workbook.worksheets[0].getCell("D13").value = ans[4];
         workbook.worksheets[0].getCell("D13").numFmt = "0";
         workbook.worksheets[0].getCell("C17").value =
           workbook.worksheets[0].getCell("C17").value + ans[6];
-          workbook.worksheets[0].getCell("E38").value =1,000
+        (workbook.worksheets[0].getCell("E38").value = 1), 000;
         let sum = 0;
         let length = Math.ceil((ans.length - 12) / 3);
         let j = ans.length - length * 3;
@@ -296,7 +361,7 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
         console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
           workbook.worksheets[0].getCell(`B${i}`).font = {
-            bold: false
+            bold: false,
           };
           console.log(" The loop for j  is ", ans[j]);
           console.log(" The loop for k  is ", ans[k]);
@@ -322,9 +387,11 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
         console.log(arr);
         console.log(f);
-        arr[1] = type=="devis" ? "le" : "la"
-        arr[arr.length - 1] = inWords(parseInt(workbook.worksheets[0].getCell("E41").value)) +"Dinars"
-        arr[3]=type
+        arr[1] = type == "devis" ? "le" : "la";
+        arr[arr.length - 1] =
+          inWords(parseInt(workbook.worksheets[0].getCell("E41").value)) +
+          "Dinars";
+        arr[3] = type;
         arr = arr.join(" ");
         //Fix it
         workbook.worksheets[0].getCell("D46").value = arr;
@@ -416,7 +483,10 @@ var makeEgagement = async (url, question, idBegin, length) => {
   });
   doc.render(renderedDoc);
   const buf = doc.getZip().generate({
-   
+    type: "nodebuffer",
+    // compression: DEFLATE adds a compression step.
+    // For a 50MB output document, expect 500ms additional CPU time
+    compression: "DEFLATE",
   });
   fs.writeFileSync(`output${0}.docx`, buf);
   try {
@@ -474,7 +544,10 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
   });
   doc.render(renderedDoc);
   const buf = doc.getZip().generate({
-
+    type: "nodebuffer",
+    // compression: DEFLATE adds a compression step.
+    // For a 50MB output document, expect 500ms additional CPU time
+    compression: "DEFLATE",
   });
   fs.writeFileSync(`output${0}.docx`, buf);
   try {
@@ -500,57 +573,54 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
   }
 };
 let QuestionIdForMin = [
- 4,
-23,
-41,
-45,
-100,
-107,
-157,
-164,
-167,
-171,
-186,
-230,
-250,
-261,
-273,
-280,
-290,
-    297, 
-298,
-344,
-360,
-365
-]
+  4, 23, 41, 45, 100, 107, 157, 164, 167, 171, 186, 230, 250, 261, 273, 280,
+  290, 297, 298, 344, 360, 365,
+];
 const addAnswersToAnswerTable = async (req, res) => {
-   const { question, initialQuestionId, contracts_id, contract_types_id,questionsLength } = req.body
-  console.log(questionsLength , " * " , question.length )
-  if (initialQuestionId == -1|| questionsLength-1==question.length ||question.length==0 ) {
-    console.log("Here")
-    res.end("Error Id")
-  }
-  else {
-    console.log(question)
-    console.log(initialQuestionId)
-    console.log(contracts_id)
-    console.log(contract_types_id)
-    console.log(questionsLength)
+  const {
+    question,
+    initialQuestionId,
+    contracts_id,
+    contract_types_id,
+    questionsLength,
+  } = req.body;
+  console.log(questionsLength, " * ", question.length);
+  if (
+    initialQuestionId == -1 ||
+    questionsLength - 1 == question.length ||
+    question.length == 0
+  ) {
+    console.log("Here");
+    res.end("Error Id");
+  } else {
+    console.log(question);
+    console.log(initialQuestionId);
+    console.log(contracts_id);
+    console.log(contract_types_id);
+    console.log(questionsLength);
     question.map((element, index) => {
-      db.query(`INSERT INTO answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${initialQuestionId + index})`, (err, result) => {
-        if (err) {
-          console.log(err)
-          res.send(err)
+      db.query(
+        `INSERT INTO answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${
+          initialQuestionId + index
+        })`,
+        (err, result) => {
+          if (err) {
+            console.log(err);
+            res.send(err);
+          } else {
+            console.log(
+              ` question id  :${
+                initialQuestionId + index
+              } with content ${element} has been added`
+            );
+            console.log(index, "***", question.length);
+            if (index == question.length - 1)
+              res.send(question.length.toString());
+          }
         }
-        else {
-          console.log(` question id  :${initialQuestionId + index} with content ${element} has been added`)
-          console.log(index , "***" ,   question.length)
-          if (index == question.length - 1)
-            res.send(question.length.toString())
-        }
-      })
-    })
-  }  
+      );
+    });
+  }
 };
 let Existe = (begin, end) => {
   let Temp = [];
@@ -577,22 +647,25 @@ const fillContract = async (req, res) => {
   let { type, lang, initialQuestionId } = req.body;
   let { questions } = req.body;
   questions = makeMin(questions, initialQuestionId);
-  if(type=="devis"){
-      questions =(questions.slice(0,5).concat(questions.slice(5,8).reverse())) .concat(questions.slice(8)) 
-    console.log(questions , "this is after reversing..")
-  //  [questions[6],questions[7]] = [questions[7],questions[6]]
-  let t  = questions[5]
-  questions[5] = questions[7]
-  questions[7]=t 
-        let x = questions[6] 
-        questions[6] = questions[7] 
-        questions[7]=x
+  if (type == "devis") {
+    questions = questions
+      .slice(0, 5)
+      .concat(questions.slice(5, 8).reverse())
+      .concat(questions.slice(8));
+    console.log(questions, "this is after reversing..");
+    //  [questions[6],questions[7]] = [questions[7],questions[6]]
+    let t = questions[5];
+    questions[5] = questions[7];
+    questions[7] = t;
+    let x = questions[6];
+    questions[6] = questions[7];
+    questions[7] = x;
 
-        let y = questions[5]
-    questions[5]=questions[6]
-    questions[6]=y 
-    console.log(questions , "this is after swapping ")        
-}
+    let y = questions[5];
+    questions[5] = questions[6];
+    questions[6] = y;
+    console.log(questions, "this is after swapping ");
+  }
 
   let renderObject = {};
   let answersArray = [];
@@ -680,12 +753,11 @@ const fillContract = async (req, res) => {
 const updateContractImage = async (req, res) => {
   const { id } = req.params;
   var twoPages = req.body.twoPages;
-  let  { user_name, contractName } = req.body;
-     if(twoPages=="facture" || twoPages=="devis")
-  contractName = twoPages
-  
-    console.log(contractName)
-    
+  let { user_name, contractName } = req.body;
+  if (twoPages == "facture" || twoPages == "devis") contractName = twoPages;
+
+  console.log(contractName);
+
   var urlImage = "";
   var Cmpt = 0;
   if (!isNaN(twoPages)) {
@@ -716,9 +788,8 @@ const updateContractImage = async (req, res) => {
         "jpg",
         {
           File: T2,
-          ImageResolutionH: '500',
-          ImageResolutionV: '500'
-
+          ImageResolutionH: "500",
+          ImageResolutionV: "500",
         },
         T
       )
@@ -885,10 +956,10 @@ const getByIdContractType = (req, res) => {
   });
 };
 const UpdateSignedTime = (req, res) => {
-  const title_FR  = req.body.title_FR ;
+  const title_FR = req.body.title_FR;
   const signed_time = req.params.signed_time;
   const sql = `UPDATE contract_types SET signed_time = ? WHERE title_FR = ?`;
-  db.query(sql, [signed_time, title_FR ], (err, result) => {
+  db.query(sql, [signed_time, title_FR], (err, result) => {
     if (err) {
       res.send(err);
     } else {
@@ -1081,5 +1152,6 @@ module.exports = {
   ChangeStatusInContract,
   concatImages,
   addAnswersToAnswerTable,
-  UpdateSignedTime
+  UpdateSignedTime,
+  getCount,
 };
