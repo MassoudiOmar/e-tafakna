@@ -884,6 +884,18 @@ const getByIdContractType = (req, res) => {
     }
   });
 };
+const UpdateSignedTime = (req, res) => {
+  const title_FR  = req.body.title_FR ;
+  const signed_time = req.params.signed_time;
+  const sql = `UPDATE contract_types SET signed_time = ? WHERE title_FR = ?`;
+  db.query(sql, [signed_time, title_FR ], (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
 const deleteContractById = (req, res) => {
   let id = req.params.id;
   let query = `DELETE FROM contract_types WHERE id = ?`;
@@ -1069,4 +1081,5 @@ module.exports = {
   ChangeStatusInContract,
   concatImages,
   addAnswersToAnswerTable,
+  UpdateSignedTime
 };
