@@ -956,7 +956,7 @@ const getByIdContractType = (req, res) => {
   });
 };
 const UpdateSignedTime = (req, res) => {
-  const title_FR = req.body.title_FR;
+  var title_FR = req.body.title_FR;
   const signed_time = req.params.signed_time;
   const sql = `UPDATE contract_types SET signed_time = ? WHERE title_FR = ?`;
   db.query(sql, [signed_time, title_FR], (err, result) => {
