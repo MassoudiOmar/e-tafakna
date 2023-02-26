@@ -89,7 +89,7 @@ const sendcontracts = (req, res) => {
     return today;
   };
   let { owner, contracts_id, receiver } = req.body;
-  const sql = `INSERT INTO users_has_contracts (owner,contracts_id,receiver,date,receiver_email) VALUES (?,?,?,?)`;
+  const sql = `INSERT INTO users_has_contracts (owner,contracts_id,receiver,date) VALUES (?,?,?,?)`;
   db.query(sql, [owner, contracts_id, receiver, date()], (err, result) => {
     {
       if (err) console.log(err);
