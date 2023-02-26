@@ -8,7 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("9Bsv3c1L08k6ETQk");
+var convertapi = require("convertapi")("LN6QR6btqxN1LWp9");
 const cheerio = require("cheerio");
 const https = require("https");
 /***
@@ -573,8 +573,9 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
   }
 };
 let QuestionIdForMin = [
-  4, 23, 41, 45, 100, 107, 157, 164, 167, 171, 186, 230, 250, 261, 273, 280,
-  290, 297, 298, 344, 360, 365,
+  4, 23, 41, 45, 100, 107, 157, 161,
+164,166, 167,170,171, 186, 230, 250, 261, 273, 280,
+  290, 297, 298, 344,359,360,361,357, 360, 365,352
 ];
 const addAnswersToAnswerTable = async (req, res) => {
   const {
