@@ -21,6 +21,7 @@ router.post("/getNameOfSpecificContract" , userController.getNameOfSpecificContr
 router.post("/updatePassword/:id" , userController.updatePassword)
 router.put("/updateInfo/:id" , userController.updateUserInfo)
 router.post("/googleOuthLogin" , userController.googleOuth)
+router.put("/tokenUpdate/:username",userController.UpdateTokenOfDevice)
 // router.put("/googleOuth" , userController.googleOuth)
 // router.post("/addAnswer" ,userController.addAnswer)
 // router.post("/getAllAnswerOfUser" , userController.getAllAnswerOfUser)
