@@ -101,16 +101,59 @@ const getAllContractById = (req, res) => {
 let getAllContracts = (req, res) => {
   const { id } = req.params;
   const sql = ` 
+      LIMIT 50
+    `;
+  db.query(sql, [id, id], (err, result) => {
+    if (err) throw err;
+    res.send(result);
+  });
+};
+
+let getAllContracts = (req, res) => {
+  const { id } = req.params;
+  let sql = `
+  select c.id, date,  uo.first_name as username,uo.faceVideo as colorOwner ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo as colorReciever,ur.first_name as receiver,uo.username as token_owner , c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status,c.pdfContractImage , uo.first_name, uo.last_name from users_has_contracts  uhc
+  inner join users uo on (uo.id = uhc.owner)
+  inner join users ur on (ur.id = uhc.receiver)
+  inner join contracts c on (c.id = uhc.contracts_id)
+  inner join contract_types ct on (ct.id = c.contract_types_id)
+  WHERE uo.id=? OR ur.id =? ;
+   `;
+  db.query(sql, [id, id], (err, result) => {
+    if (err) res.send(err);
+
+    //Pagination
+    const numOfResults = result.length;
+    const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
+    let page = req.query.page ? parseInt(req.query.page) : 1;
+    if (page > numberofPAGES0) {
+      return res.send("-1");
+      // return res.send("No Data")
+    } else if (page < 1) {
+      return res.send("/?page=" + encodeURIComponent("1"));
+    }
+
+    const startingLimit = (page - 1) * resultPerPage;
+    sql = ` 
     select c.id, date,  uo.first_name as username,uo.faceVideo as colorOwner ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo as colorReciever,ur.first_name as receiver,uo.username as token_owner , c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status,c.pdfContractImage , uo.first_name, uo.last_name from users_has_contracts  uhc
     inner join users uo on (uo.id = uhc.owner)
     inner join users ur on (ur.id = uhc.receiver)
     inner join contracts c on (c.id = uhc.contracts_id)
     inner join contract_types ct on (ct.id = c.contract_types_id)
-    WHERE uo.id=? OR ur.id =? ORDER BY id DESC  LIMIT 50
+    WHERE uo.id=? OR ur.id =? ORDER BY id DESC LIMIT ${startingLimit},${resultPerPage} 
     `;
-  db.query(sql, [id, id], (err, result) => {
-    if (err) throw err;
-    res.send(result);
+    db.query(sql, [id, id], (err, result) => {
+      if (err) throw err;
+      let iterator = page - 5 < 1 ? 1 : page - 5;
+      let endingLink =
+        iterator + 9 <= numberofPAGES0
+          ? iterator + 9
+          : page + (numberofPAGES0 + 9);
+      if (endingLink < page + 4) {
+        iterator -= page + 4 - numberofPAGES0;
+      }
+      res.send(result, page, iterator, endingLink, numberofPAGES0);
+    });
   });
 };
 ///////////////////////////////////////////
