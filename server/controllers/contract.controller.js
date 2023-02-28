@@ -24,63 +24,19 @@ const insertContract = (req, res) => {
   );
 };
 
-const resultPerPage = 15;
-
 const getAllContractByStatus = (req, res, err) => {
   var status = req.params.status;
   var owner = req.params.ownerId;
-  console.log("Pagination From Contracts");
-
-  let sql = `SELECT * FROM users_has_contracts`;
-  db.query(sql, (err, result, next) => {
-    if (err) {
-      res.send(err);
-    }
-    //Pagination
-    const numOfResults = result.length;
-    const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? parseInt(req.query.page) : 1;
-    if (page > numberofPAGES0) {
-      //  return res.status(304).send("no")
-      return res.send("-1");
-    } else if (page < 1) {
-      return res.send("/?page=" + encodeURIComponent("1"));
-    }
-
-    const startingLimit = (page - 1) * resultPerPage;
-    sql = `SELECT DISTINCT * FROM users_has_contracts c
-    inner join users u on(u.id= c.owner)
-    inner join contracts t on (t.id = c.contracts_id )
-    inner join contract_types f on (f.id=t.contract_types_id)
-        where t.status = "draft" && c.owner =${owner} && t.contract_image IS NULL ORDER BY t.id DESC LIMIT ${startingLimit},${resultPerPage} `;
-    db.query(sql, [status, owner], (err, result) => {
-      if (err) throw err;
-      let iterator = page - 5 < 1 ? 1 : page - 5;
-      let endingLink =
-        iterator + 9 <= numberofPAGES0
-          ? iterator + 9
-          : page + (numberofPAGES0 + 9);
-      if (endingLink < page + 4) {
-        iterator -= page + 4 - numberofPAGES0;
-      }
-
-      res.send(result, page, iterator, endingLink, numberofPAGES0);
-    });
+  const sql = `SELECT DISTINCT * FROM users_has_contracts c
+  inner join users u on(u.id= c.owner)
+  inner join contracts t on (t.id = c.contracts_id )
+  inner join contract_types f on (f.id=t.contract_types_id)
+      where t.status = "draft" && c.owner =${owner} && t.contract_image IS NULL ORDER BY t.id DESC LIMIT 50`;
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    res.send(result);
   });
 };
-
-// const getAllContractByStatus = (req, res, err) => {
-//   var status = req.params.status;
-//   var owner = req.params.ownerId;
-
-//   let sql = `SELECT * FROM users_has_contracts`;
-
-//   const sql = ` ORDER BY t.id DESC LIMIT 50`;
-//   db.query(sql, (err, result) => {
-//     if (err) throw err;
-//     res.send(result);
-//   });
-// };
 
 const getAllContractById = (req, res) => {
   const owner = req.params.ownerId;
@@ -98,52 +54,19 @@ const getAllContractById = (req, res) => {
 ///////////////////////////////////////////
 ///////////////////////////////////////////
 ///////////////////////////////////////////
-
 let getAllContracts = (req, res) => {
   const { id } = req.params;
-  let sql = `
-  select c.id, date,  uo.first_name as username,uo.faceVideo as colorOwner ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo as colorReciever,ur.first_name as receiver,uo.username as token_owner , c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status,c.pdfContractImage , uo.first_name, uo.last_name from users_has_contracts  uhc
-  inner join users uo on (uo.id = uhc.owner)
-  inner join users ur on (ur.id = uhc.receiver)
-  inner join contracts c on (c.id = uhc.contracts_id)
-  inner join contract_types ct on (ct.id = c.contract_types_id)
-  WHERE uo.id=? OR ur.id =? ;
-   `;
-  db.query(sql, [id, id], (err, result) => {
-    if (err) res.send(err);
-
-    //Pagination
-    const numOfResults = result.length;
-    const numberofPAGES0 = Math.ceil(numOfResults / resultPerPage);
-    let page = req.query.page ? parseInt(req.query.page) : 1;
-    if (page > numberofPAGES0) {
-      return res.send("-1");
-      // return res.send("No Data")
-    } else if (page < 1) {
-      return res.send("/?page=" + encodeURIComponent("1"));
-    }
-
-    const startingLimit = (page - 1) * resultPerPage;
-    sql = ` 
+  const sql = ` 
     select c.id, date,  uo.first_name as username,uo.faceVideo as colorOwner ,uo.image as imageOwner,ur.image as imageReciever, ur.faceVideo as colorReciever,ur.first_name as receiver,uo.username as token_owner , c.created_at,c.contract_url,c.contract_image,ct.signed_time,ct.title_FR,ct.title_AR,ct.title_EN,c.status,c.pdfContractImage , uo.first_name, uo.last_name from users_has_contracts  uhc
     inner join users uo on (uo.id = uhc.owner)
     inner join users ur on (ur.id = uhc.receiver)
     inner join contracts c on (c.id = uhc.contracts_id)
     inner join contract_types ct on (ct.id = c.contract_types_id)
-    WHERE uo.id=? OR ur.id =? ORDER BY id DESC LIMIT ${startingLimit},${resultPerPage} 
+    WHERE uo.id=? OR ur.id =? ORDER BY id DESC  LIMIT 50
     `;
-    db.query(sql, [id, id], (err, result) => {
-      if (err) throw err;
-      let iterator = page - 5 < 1 ? 1 : page - 5;
-      let endingLink =
-        iterator + 9 <= numberofPAGES0
-          ? iterator + 9
-          : page + (numberofPAGES0 + 9);
-      if (endingLink < page + 4) {
-        iterator -= page + 4 - numberofPAGES0;
-      }
-      res.send(result, page, iterator, endingLink, numberofPAGES0);
-    });
+  db.query(sql, [id, id], (err, result) => {
+    if (err) throw err;
+    res.send(result);
   });
 };
 ///////////////////////////////////////////
@@ -183,7 +106,7 @@ const getArchieve = (req, res) => {
 };
 const deleteArchieve = (req, res) => {
   const contracts_id = req.params.contracts_id;
-  console.log(contracts_id, "id");
+  console.log(contracts_id,"id")
   let sql = `DELETE from users_has_contracts WHERE receiver IS NULL && contracts_id = ? `;
   db.query(sql, [contracts_id], (err, result) => {
     if (err) {
@@ -196,10 +119,10 @@ const deleteArchieve = (req, res) => {
 const UpdateArchive = (req, res) => {
   const contracts_id = req.body.contracts_id;
   const receiver = req.params.receiver;
-  console.log(receiver, "receiver1", "contracts_id1", contracts_id);
+  console.log(receiver ,"receiver1" , "contracts_id1", contracts_id)
   const sql = `UPDATE users_has_contracts SET receiver = ? WHERE contracts_id = ?`;
   db.query(sql, [receiver, contracts_id], (err, result) => {
-    console.log(receiver, "receiver", "contracts_id", contracts_id);
+    console.log(receiver ,"receiver" , "contracts_id", contracts_id)
     if (err) {
       res.send(err);
     } else {
@@ -208,11 +131,12 @@ const UpdateArchive = (req, res) => {
   });
 };
 
+
 const changeContractStatus = (req, res) => {
-  const contract_url = req.body.contract_url;
+  const contract_url  = req.body.contract_url ;
   const status = req.params.status;
   const sql = `UPDATE contracts SET status = ? WHERE contract_url = ?`;
-  db.query(sql, [status, contract_url], (err, result) => {
+  db.query(sql, [status, contract_url ], (err, result) => {
     if (err) {
       res.send(err);
     } else {
@@ -318,5 +242,5 @@ module.exports = {
   getArchieve,
   getLoacation,
   UpdateArchive,
-  deleteArchieve,
+  deleteArchieve
 };
