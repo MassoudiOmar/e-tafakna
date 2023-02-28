@@ -98,16 +98,6 @@ const getAllContractById = (req, res) => {
 ///////////////////////////////////////////
 ///////////////////////////////////////////
 ///////////////////////////////////////////
-let getAllContracts = (req, res) => {
-  const { id } = req.params;
-  const sql = ` 
-      LIMIT 50
-    `;
-  db.query(sql, [id, id], (err, result) => {
-    if (err) throw err;
-    res.send(result);
-  });
-};
 
 let getAllContracts = (req, res) => {
   const { id } = req.params;
