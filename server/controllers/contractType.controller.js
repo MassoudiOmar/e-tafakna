@@ -8,7 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("QNFYfWW3q2z4r7W8");
+var convertapi = require("convertapi")("gxEThKnlXDf21lrx");
 const cheerio = require("cheerio");
 const https = require("https");
 /***
@@ -875,6 +875,7 @@ const updateContractImage = async (req, res) => {
               });
           }
           res.send(urlImage + "|" + NurlImage);
+            console.log(urlImage + "|" + NurlImage)
           //    res.send(urlImage);
         }
       })
