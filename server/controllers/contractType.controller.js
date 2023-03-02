@@ -234,6 +234,9 @@ var createDocAndImage = async (str, index, renderObject) => {
   }
 };
 const makeFactureOrDevis = async (url, ans, type, language) => {
+  console.log(ans,"ans ::11111")
+  console.log(type,"ans ::type")
+  console.log(url,"ans ::url")
   const file = fs.createWriteStream("file.xlsx");
   http.get(url, function (response) {
     response.pipe(file);
