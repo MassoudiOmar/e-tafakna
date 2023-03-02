@@ -11,11 +11,10 @@ const contractRoutes = require("./routes/contract.routes");
 const contractRoutess = require("./routes/contract2.routes");
 const usersContractsRoutes = require("./routes/users_has_contracts.routes");
 const signature = require("./routes/signature.routes");
-const notifFCM = require("./routes/SendNotifFCM.routes")
-const FCM = require('fcm-node')
+const notifFCM = require("./routes/SendNotifFCM.routes");
+const FCM = require("fcm-node");
 
-
-http = require("http")
+http = require("http");
 
 var items = require("./database-mysql");
 const cors = require("cors");
@@ -35,9 +34,7 @@ const con = require("./routes/contract.routes");
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-process.env.NODE_TLS_REJECT_UNAUTHORIZED
-
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED;
 
 let server = app.listen(PORT, function () {
   console.log(`Server running on ${PORT}`);
@@ -66,23 +63,20 @@ app.use("/api/answers", answersRoutes);
 app.use("/api/contracts", contractRoutes);
 app.use("/api/signature", signature);
 app.use("/api", contractRoutess);
-app.use("/api/throw",notifFCM)
-
-
+app.use("/api/throw", notifFCM);
 
 app.use("/uploads", express.static("./uploads"));
 app.get("/", (req, res) => {
   res.send("Welcome To E-Tafakna server");
 });
 
-
 //abctest
 
-const serverPort = 80
+const serverPort = 80;
 
 //server = http.createServer(app),
-WebSocket = require("ws"),
-websocketServer = new WebSocket.Server({server:server,path:"/test" });
+(WebSocket = require("ws")),
+  (websocketServer = new WebSocket.Server({ server: server, path: "/test" }));
 //when a websocket connection is established
 
 /*
@@ -93,66 +87,52 @@ no need to do anything
 
 
 */
-let numberOfUsers =  200
+let numberOfUsers = 200;
 
 let User = Array(numberOfUsers).fill({
-Notification:false , 
-Contracts : false
+  Notification: false,
+  Contracts: false,
+});
 
+websocketServer.on("connection", (webSocketClient) => {
+  console.log("web Socket Connected");
+  webSocketClient.on("open    ", (res) => {
+    console.log("Web Socket Connected");
+  });
 
-})
+  webSocketClient.on("message", (res) => {
+    let Temp = res.toString().split(" ");
+    console.log(Temp);
+    let index = parseInt(Temp[0]);
+    let action = Temp[1];
+    if (action == "get") {
+      if (User[index]?.Notification) {
+        User[index].Notification = false;
+        webSocketClient.send("refresh");
+      } else {
+        webSocketClient.send("Nun");
+      }
+    } else {
+      if (action == "send") {
+        User[index].Notification = true;
+        User[index].Contracts = true;
 
-
-websocketServer.on('connection', (webSocketClient ) => {
-
-console.log("web Socket Connected")
-webSocketClient.on("open    ",(res)=>{
-console.log("Web Socket Connected")
-
-})
-
-webSocketClient.on("message",(res)=>{
-let Temp = res.toString().split(" ")
-console.log(Temp)
-let index = parseInt(Temp[0]) 
-let action = Temp[1] 
-if(action=="get"){
-if(User[index]?.Notification){
-User[index].Notification=false 
-webSocketClient.send("refresh")
-}
-else {
-webSocketClient.send("Nun")
-}
-}
-else {
-if(action=="send"){
-User[index].Notification=true 
-User[index].Contracts = true
-
-webSocketClient.send("Done")
-}
-else 
-if(action=="getContract"){
-if(User[index]?.Contracts){
-    User[index].Contracts=false 
-    webSocketClient.send("refresh")
+        webSocketClient.send("Done");
+      } else if (action == "getContract") {
+        if (User[index]?.Contracts) {
+          User[index].Contracts = false;
+          webSocketClient.send("refresh");
+        } else {
+          webSocketClient.send("Nun");
+        }
+      }
     }
-    else {
-        webSocketClient.send("Nun")
-    }
-}
-}
-})
-webSocketClient.on("close",(res)=>{
-    console.log("Web Socket Disconnected")
-    
-    })
+  });
+  webSocketClient.on("close", (res) => {
+    console.log("Web Socket Disconnected");
+  });
 
-//send feedback to the incoming connection
-    
-    
-
+  //send feedback to the incoming connection
 });
 
 //start the web server

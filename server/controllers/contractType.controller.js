@@ -329,6 +329,7 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
   return "Hi";
 };
 let makeFactureOrDevisFr = (url, ans, type, language) => {
+  
   const file = fs.createWriteStream("file.xlsx");
   https.get(url, function (response) {
     response.pipe(file);
@@ -789,8 +790,8 @@ const updateContractImage = async (req, res) => {
         "jpg",
         {
           File: T2,
-          ImageResolutionH: "500",
-          ImageResolutionV: "500",
+          ImageResolutionH: '1000',
+          ImageResolutionV: '1000'
         },
         T
       )
