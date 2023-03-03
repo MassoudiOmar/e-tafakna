@@ -73,7 +73,6 @@ module.exports = {
   updateAnswers,
   getAnswers,
   getQuestionsAnswers,
-  AddAnswer,
   getContractImage,
   updateAnswer,
 };
