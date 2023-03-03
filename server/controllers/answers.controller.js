@@ -71,7 +71,6 @@ let getQuestionsAnswers = (req, res) => {
 module.exports = {
   AddAnswers,
   updateAnswers,
-  getAnswers,
   getQuestionsAnswers,
   getContractImage,
   updateAnswer,
