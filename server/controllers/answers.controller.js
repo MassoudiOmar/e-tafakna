@@ -33,7 +33,14 @@ let AddAnswers = (req, res) => {
   });
 };
 
-
+let getAnswers = (req, res) => {
+  const { contracts_id } = req.params;
+  const sql = `SELECT questions_id,content  FROM answers  where contracts_id=?`;
+  db.query(sql, [contracts_id], (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
+};
 
 
 let updateAnswers = (req, res) => {
@@ -74,4 +81,5 @@ module.exports = {
   getQuestionsAnswers,
   getContractImage,
   updateAnswer,
+  getAnswers
 };
