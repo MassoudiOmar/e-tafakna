@@ -46,18 +46,7 @@ let AddAnswers = (req, res) => {
   );
 };
 
-let AddAnswer = (req, res) => {
-  const { content, questions_id, contracts_contract_types_id } = req.body;
-  const sql = `INSERT INTO answers (content ,questions_id,contracts_contract_types_id) VALUES (?,?,?,?)`;
-  db.query(
-    sql,
-    [content, questions_id, contracts_contract_types_id],
-    (err, result) => {
-      if (err) res.send(err);
-      else res.send(result);
-    }
-  );
-};
+
 
 let updateAnswers = (req, res) => {
   const id = req.params.id;
