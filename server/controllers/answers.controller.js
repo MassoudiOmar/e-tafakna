@@ -22,10 +22,12 @@ let updateAnswer = (req, res) => {
     }
   );
 };
-let getAnswers = (req, res) => {
-  const { contracts_id } = req.params;
-  const sql = `SELECT questions_id,content  FROM answers  where contracts_id=?`;
-  db.query(sql, [contracts_id], (err, result) => {
+let AddAnswers = (req, res) => {
+  const { content, questions_id, contracts_id, contracts_contract_types_id } =
+    req.body;
+  const escapedContent = db.escape(content);
+  const sql = `INSERT INTO answers (content, questions_id, contracts_id, contracts_contract_types_id) VALUES (${escapedContent}, ${questions_id}, ${contracts_id}, ${contracts_contract_types_id})`;
+  db.query(sql, (err, result) => {
     if (err) res.send(err);
     else res.send(result);
   });
