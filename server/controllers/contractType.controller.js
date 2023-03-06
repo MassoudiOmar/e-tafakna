@@ -833,17 +833,21 @@ const updateContractImage = async (req, res) => {
         if (i <= Cmpt - 1) {
           Temp.push({
             id: i,
-            image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
+            image: `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
           urlImage +=
-            `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` +
+            `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` +
             ",";
         } else {
           Temp.push({
             id: i,
-            image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
+            image: `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
-          urlImage += `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
+          urlImage += `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
           db.query(updateContract, [urlImage, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
@@ -887,18 +891,22 @@ const updateContractImage = async (req, res) => {
                 if (j <= Cmpt - 1) {
                   Temp.push({
                     id: j,
-                    image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
+                    image: `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
                   });
 
                   NurlImage +=
-                    `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` +
+                    `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` +
                     ",";
                 } else {
                   Temp.push({
                     id: j,
-                    image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
+                    image: `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
                   });
-                  NurlImage += `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
+                  NurlImage += `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
                   const updateContract1 = `UPDATE contracts set pdfContractImage =? where id =?`;
                   db.query(updateContract1, [NurlImage, id], (err, result) => {
                     err ? console.log(err) : console.log(result);
@@ -1033,7 +1041,8 @@ const concatImages = (req, response) => {
       File.on("finish", async () => {
         File.close();
         response.send(
-          `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+          `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
         );
       });
     });
@@ -1057,7 +1066,8 @@ const concatImages = (req, response) => {
               )
               .then(async (res) => {
                 response.send(
-                  `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                  `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                 );
               }); //save under given name and reset the internal document
             // Export the merged PDF as a nodejs Buffer
@@ -1092,7 +1102,8 @@ const concatImages = (req, response) => {
                   )
                   .then(async (res) => {
                     response.send(
-                      `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                      `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                     );
                   }); //se under given name and reset the internal document
                 // Export the merged PDF as a nodejs Buffer
@@ -1135,7 +1146,8 @@ const concatImages = (req, response) => {
                       )
                       .then(async (res) => {
                         response.send(
-                          `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                          `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                         );
                       }); //s//save under given name and reset the internal document
                     // Export the merged PDF as a nodejs Buffer
