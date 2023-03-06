@@ -15,7 +15,7 @@ const notifFCM = require("./routes/SendNotifFCM.routes");
 const FCM = require("fcm-node");
 
 http = require("http");
-
+NODE_TLS_REJECT_UNAUTHORIZED=0
 var items = require("./database-mysql");
 const cors = require("cors");
 const paginate = require("express-paginate");
