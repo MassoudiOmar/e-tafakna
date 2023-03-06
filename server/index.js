@@ -20,7 +20,7 @@ var items = require("./database-mysql");
 const cors = require("cors");
 const paginate = require("express-paginate");
 // const bodyParser = require("body-parser")
-//Payment
+//Paymentddd
 const Stripe = require("stripe");
 const PUBLISHABLE_KEY =
   "pk_test_51L6X72Hejc9XlfCikQdaY9J17A4v46tUebq9sgFLimch2Axe4uQivcx5oTwGk3r7m8XMSCdm1OwAaghn4HqAl9Ps0042FYDgM6";
