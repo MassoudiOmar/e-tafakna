@@ -34,7 +34,6 @@ const con = require("./routes/contract.routes");
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-process.env.NODE_TLS_REJECT_UNAUTHORIZED;
 
 let server = app.listen(PORT, function () {
   console.log(`Server running on ${PORT}`);
@@ -135,7 +134,7 @@ websocketServer.on("connection", (webSocketClient) => {
   //send feedback to the incoming connection
 });
 
-//start the web serverrr
+//start the web server
 
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
