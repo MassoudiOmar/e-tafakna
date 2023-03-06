@@ -11,7 +11,6 @@ const Excel = require("exceljs");
 var convertapi = require("convertapi")("gxEThKnlXDf21lrx");
 const cheerio = require("cheerio");
 const https = require("https");
-
 /***
  *
  *
@@ -235,9 +234,9 @@ var createDocAndImage = async (str, index, renderObject) => {
   }
 };
 const makeFactureOrDevis = async (url, ans, type, language) => {
-  console.log(ans,"ans ::11111")
-  console.log(type,"ans ::type")
-  console.log(url,"ans ::url")
+  console.log(ans, "ans ::11111");
+  console.log(type, "ans ::type");
+  console.log(url, "ans ::url");
   const file = fs.createWriteStream("file.xlsx");
   http.get(url, function (response) {
     response.pipe(file);
@@ -333,7 +332,6 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
   return "Hi";
 };
 let makeFactureOrDevisFr = (url, ans, type, language) => {
-  
   const file = fs.createWriteStream("file.xlsx");
   https.get(url, function (response) {
     response.pipe(file);
@@ -578,9 +576,8 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
   }
 };
 let QuestionIdForMin = [
-  4, 23, 41, 45, 100, 107, 157, 161,
-164,166, 167,170,171, 186, 230, 250, 261, 273, 280,
-  290, 297, 298, 344,359,360,361,357, 360, 365,352
+  4, 23, 41, 45, 100, 107, 157, 161, 164, 166, 167, 170, 171, 186, 230, 250,
+  261, 273, 280, 290, 297, 298, 344, 359, 360, 361, 357, 360, 365, 352,
 ];
 const addAnswersToAnswerTable = async (req, res) => {
   const {
@@ -662,7 +659,8 @@ const fillContract = async (req, res) => {
     //  [questions[6],questions[7]] = [questions[7],questions[6]]
     let t = questions[5];
     questions[5] = questions[7];
-    questions[7] = t;nodvar
+    questions[7] = t;
+    nodvar;
     let x = questions[6];
     questions[6] = questions[7];
     questions[7] = x;
@@ -794,8 +792,8 @@ const updateContractImage = async (req, res) => {
         "jpg",
         {
           File: T2,
-          ImageResolutionH: '1000',
-          ImageResolutionV: '1000'
+          ImageResolutionH: "1000",
+          ImageResolutionV: "1000",
         },
         T
       )
@@ -850,6 +848,7 @@ const updateContractImage = async (req, res) => {
               )
               .then(async function (result) {
                 let number = Math.floor(Math.random() * 1000000);
+                
                 await SaveImageIntoStorage(
                   contractName,
                   user_name,
@@ -879,10 +878,8 @@ const updateContractImage = async (req, res) => {
                 }
               });
           }
-           res.send(urlImage + "|" + NurlImage)
-          
-         
-            console.log(urlImage + "|" + NurlImage)
+          res.send(urlImage + "|" + NurlImage);
+          console.log(urlImage + "|" + NurlImage);
           //    res.send(urlImage);
         }
       })
@@ -1126,86 +1123,43 @@ const concatImages = (req, response) => {
     });
   }
 };
-// const SaveImageIntoStorage = async (
-//   contractName,
-//   user_name,
-//   request,
-//   type,
-//   number
-// ) => {
-//   // if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
-//   if (!fs.existsSync(`./uploads/${contractName}`)) {
-//     fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
-//   }
-//   if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
-//     fs.mkdirSync(`./uploads/${contractName}/${user_name} `, {
-//       recursive: true,
-//     });
-//     fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
-//       recursive: true,
-//     });
-//   }
-//   request.saveFiles(
-//     `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
+// const SaveImageIntoStorage = async (contractName, user_name, request, type, number) => {
+//   axios.post(
+//     ("http://localhost:3001/Send",
+//     { contractName, user_name, request, type, number }).then((res)=>{console.log(res)})
 //   );
+//   // // if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
+//   // if (!fs.existsSync(`./uploads/${contractName}`)) {
+//   //   fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
+//   // }
+//   // if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
+//   //   fs.mkdirSync(`./uploads/${contractName}/${user_name} `, {
+//   //     recursive: true,
+//   //   });
+//   //   fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
+//   //     recursive: true,
+//   //   });
+//   // }
+//   // request.saveFiles(
+//   //   `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
+//   // );
 // };
-
-
-const SaveImageIntoStorage = async (
-  contractName,
-  user_name,
-  request,
-  type,
-  number
-) => {
-  if (!fs.existsSync(`./uploads/${contractName}`)) {
-    fs.mkdirSync(`./uploads/${contractName}`, { recursive: true });
-  }
-  if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
-    fs.mkdirSync(`./uploads/${contractName}/${user_name}`, {
-      recursive: true,
-    });
-    fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
-      recursive: true,
-    });
-  }
-
-  // Save the file locally
-  request.saveFiles(
-    `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
-  );
-
-  // Read the file data
-  const fileData = fs.readFileSync(`./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`);
-
-  // Set up the HTTP request options
-  const options = {
-    hostname: 'localhost',
-    port: 3001,
-    path: '/upload',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/octet-stream',
-      'Content-Length': fileData.length,
-    },
-  };
-
-  // Send the file data to the receiving server
-  const req = http.request(options, (res) => {
-    console.log(`statusCode: ${res.statusCode}`);
-    res.on('data', (d) => {
-      process.stdout.write(d);
-    });
+const SaveImageIntoStorage = async (contractName, user_name, request, type, number, imageData) => {
+ await axios.post("http://localhost:3001/Send", {
+    contractName,
+    user_name,
+    request,
+    type,
+    number,
+    imageData
+  })
+  .then((res) => {
+    console.log(res);
+  })
+  .catch((err) => {
+    console.error(err);
   });
-
-  req.on('error', (error) => {
-    console.error(error);
-  });
-
-  req.write(fileData);
-  req.end();
 };
-
 module.exports = {
   insertContractType,
   getAllContractType,
