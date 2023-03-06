@@ -1,5 +1,5 @@
 var db = require("../database-mysql");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const validateEmail = require("../helpers/validateEmail");
 const createToken = require("../helpers/createToken");
 const sendMail = require("../helpers/sendMail");
