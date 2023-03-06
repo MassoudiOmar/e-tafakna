@@ -11,6 +11,7 @@ const Excel = require("exceljs");
 var convertapi = require("convertapi")("gxEThKnlXDf21lrx");
 const cheerio = require("cheerio");
 const https = require("https");
+
 /***
  *
  *
@@ -661,7 +662,7 @@ const fillContract = async (req, res) => {
     //  [questions[6],questions[7]] = [questions[7],questions[6]]
     let t = questions[5];
     questions[5] = questions[7];
-    questions[7] = t;
+    questions[7] = t;nodvar
     let x = questions[6];
     questions[6] = questions[7];
     questions[7] = x;
@@ -811,17 +812,17 @@ const updateContractImage = async (req, res) => {
         if (i <= Cmpt - 1) {
           Temp.push({
             id: i,
-            image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
+            image: `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
           urlImage +=
-            `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` +
+            `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` +
             ",";
         } else {
           Temp.push({
             id: i,
-            image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
+            image: `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
-          urlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
+          urlImage += `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
           db.query(updateContract, [urlImage, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
@@ -859,18 +860,18 @@ const updateContractImage = async (req, res) => {
                 if (j <= Cmpt - 1) {
                   Temp.push({
                     id: j,
-                    image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
+                    image: `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
                   });
 
                   NurlImage +=
-                    `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` +
+                    `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` +
                     ",";
                 } else {
                   Temp.push({
                     id: j,
-                    image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
+                    image: `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
                   });
-                  NurlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
+                  NurlImage += `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
                   const updateContract1 = `UPDATE contracts set pdfContractImage =? where id =?`;
                   db.query(updateContract1, [NurlImage, id], (err, result) => {
                     err ? console.log(err) : console.log(result);
@@ -878,7 +879,9 @@ const updateContractImage = async (req, res) => {
                 }
               });
           }
-          res.send(urlImage + "|" + NurlImage);
+           res.send(urlImage + "|" + NurlImage)
+          
+         
             console.log(urlImage + "|" + NurlImage)
           //    res.send(urlImage);
         }
@@ -1005,7 +1008,7 @@ const concatImages = (req, response) => {
       File.on("finish", async () => {
         File.close();
         response.send(
-          `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+          `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
         );
       });
     });
@@ -1029,7 +1032,7 @@ const concatImages = (req, response) => {
               )
               .then(async (res) => {
                 response.send(
-                  `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                  `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                 );
               }); //save under given name and reset the internal document
             // Export the merged PDF as a nodejs Buffer
@@ -1064,7 +1067,7 @@ const concatImages = (req, response) => {
                   )
                   .then(async (res) => {
                     response.send(
-                      `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                      `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                     );
                   }); //se under given name and reset the internal document
                 // Export the merged PDF as a nodejs Buffer
@@ -1107,7 +1110,7 @@ const concatImages = (req, response) => {
                       )
                       .then(async (res) => {
                         response.send(
-                          `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                          `http://localhost:3001/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                         );
                       }); //s//save under given name and reset the internal document
                     // Export the merged PDF as a nodejs Buffer
@@ -1123,6 +1126,31 @@ const concatImages = (req, response) => {
     });
   }
 };
+// const SaveImageIntoStorage = async (
+//   contractName,
+//   user_name,
+//   request,
+//   type,
+//   number
+// ) => {
+//   // if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
+//   if (!fs.existsSync(`./uploads/${contractName}`)) {
+//     fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
+//   }
+//   if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
+//     fs.mkdirSync(`./uploads/${contractName}/${user_name} `, {
+//       recursive: true,
+//     });
+//     fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
+//       recursive: true,
+//     });
+//   }
+//   request.saveFiles(
+//     `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
+//   );
+// };
+
+
 const SaveImageIntoStorage = async (
   contractName,
   user_name,
@@ -1130,21 +1158,52 @@ const SaveImageIntoStorage = async (
   type,
   number
 ) => {
-  // if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
   if (!fs.existsSync(`./uploads/${contractName}`)) {
-    fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
+    fs.mkdirSync(`./uploads/${contractName}`, { recursive: true });
   }
   if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
-    fs.mkdirSync(`./uploads/${contractName}/${user_name} `, {
+    fs.mkdirSync(`./uploads/${contractName}/${user_name}`, {
       recursive: true,
     });
     fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
       recursive: true,
     });
   }
+
+  // Save the file locally
   request.saveFiles(
     `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
   );
+
+  // Read the file data
+  const fileData = fs.readFileSync(`./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`);
+
+  // Set up the HTTP request options
+  const options = {
+    hostname: 'localhost',
+    port: 3001,
+    path: '/upload',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/octet-stream',
+      'Content-Length': fileData.length,
+    },
+  };
+
+  // Send the file data to the receiving server
+  const req = http.request(options, (res) => {
+    console.log(`statusCode: ${res.statusCode}`);
+    res.on('data', (d) => {
+      process.stdout.write(d);
+    });
+  });
+
+  req.on('error', (error) => {
+    console.error(error);
+  });
+
+  req.write(fileData);
+  req.end();
 };
 
 module.exports = {
