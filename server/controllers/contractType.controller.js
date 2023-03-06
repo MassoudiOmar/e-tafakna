@@ -1152,7 +1152,7 @@ const SaveImageIntoStorage = async (
   type,
   number
 ) => {
-  // if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
+   if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
 
    if (!fs.existsSync(`./uploads/${contractName}`)) {
      fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
