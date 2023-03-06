@@ -55,37 +55,61 @@ var b = [
   "Quatre-vingts",
   "Quatre-vingt-dix",
 ];
-function inWords(num) {
-  if ((num = num.toString()).length > 9) return "overflow";
-  n = ("000000000" + num)
-    .substr(-9)
-    .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-  if (!n) return;
-  var str = "";
-  str +=
-    n[1] != 0
-      ? (a[Number(n[1])] || b[n[1][0]] + " " + a[n[1][1]]) + "milliard "
-      : "";
-  str +=
-    n[2] != 0
-      ? (a[Number(n[2])] || b[n[2][0]] + " " + a[n[2][1]]) + "million "
-      : "";
-  str +=
-    n[3] != 0
-      ? (a[Number(n[3])] || b[n[3][0]] + " " + a[n[3][1]]) + "mille "
-      : "";
-  str +=
-    n[4] != 0
-      ? (a[Number(n[4])] || b[n[4][0]] + " " + a[n[4][1]]) + "cents "
-      : "";
-  str +=
-    n[5] != 0
-      ? (str != "" ? "et " : "") +
-        (a[Number(n[5])] || b[n[5][0]] + " " + a[n[5][1]]) +
-        ""
-      : "";
-  return str.substring(0, 2) == "Un" ? str.slice(3) : str;
+function inWords(number) {
+  const units = [
+    { value: 1000000000, name: 'milliard' },
+    { value: 1000000, name: 'million' },
+    { value: 1000, name: 'mille' },
+    { value: 100, name: 'cent' },
+    { value: 80, name: 'quatre-vingts' },
+    { value: 60, name: 'soixante' },
+    { value: 50, name: 'cinquante' },
+    { value: 40, name: 'quarante' },
+    { value: 30, name: 'trente' },
+    { value: 20, name: 'vingt' },
+    { value: 19, name: 'dix-neuf' },
+    { value: 18, name: 'dix-huit' },
+    { value: 17, name: 'dix-sept' },
+    { value: 16, name: 'seize' },
+    { value: 15, name: 'quinze' },
+    { value: 14, name: 'quatorze' },
+    { value: 13, name: 'treize' },
+    { value: 12, name: 'douze' },
+    { value: 11, name: 'onze' },
+    { value: 10, name: 'dix' },
+    { value: 9, name: 'neuf' },
+    { value: 8, name: 'huit' },
+    { value: 7, name: 'sept' },
+    { value: 6, name: 'six' },
+    { value: 5, name: 'cinq' },
+    { value: 4, name: 'quatre' },
+    { value: 3, name: 'trois' },
+    { value: 2, name: 'deux' },
+    { value: 1, name: 'un' },
+  ];
+
+  if (number === 0) {
+    return 'zéro';
+  }
+
+  let result = '';
+
+  for (let i = 0; i < units.length; i++) {
+    if (number >= units[i].value) {
+      const count = Math.floor(number / units[i].value);
+      if (count > 1) {
+        result += numberToWords(count) + ' ';
+      }
+      result += units[i].name;
+      number %= units[i].value;
+      if (number > 0) {
+        result += ' ';
+      }
+    }
+  }
+  return result;
 }
+// numberToWords(1425800) + " millimes"
 
 const getCount = (req, res) => {
   console.log("test");
@@ -278,8 +302,8 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
         workbook.worksheets[0].getCell("B34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("B37").value = (sum * 19) / 100;
         workbook.worksheets[0].getCell("B41").value =
-          parseInt(workbook.worksheets[0].getCell("B37").value) +
-          parseInt(workbook.worksheets[0].getCell("B34").value) +
+          workbook.worksheets[0].getCell("B37").value +
+          workbook.worksheets[0].getCell("B34").value +
           0.6;
         workbook.worksheets[0].getCell("B41").numFmt = "0.000";
         var arr = workbook.worksheets[0]
@@ -383,8 +407,8 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
         console.log(parseInt(workbook.worksheets[0].getCell("E36").value));
         console.log(workbook.worksheets[0].getCell("E34").value);
         workbook.worksheets[0].getCell("E41").value =
-          parseInt(workbook.worksheets[0].getCell("E36").value) +
-          parseInt(workbook.worksheets[0].getCell("E34").value) +
+          workbook.worksheets[0].getCell("E36").value+
+          workbook.worksheets[0].getCell("E34").value+
           1.0;
         //workbook.worksheets[0].getCell("E41").numFmt= "0.000"
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
@@ -810,17 +834,17 @@ const updateContractImage = async (req, res) => {
         if (i <= Cmpt - 1) {
           Temp.push({
             id: i,
-            image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
+            image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
           urlImage +=
-            `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` +
+            `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` +
             ",";
         } else {
           Temp.push({
             id: i,
-            image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
+            image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
-          urlImage += `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
+          urlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
           db.query(updateContract, [urlImage, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
@@ -858,18 +882,18 @@ const updateContractImage = async (req, res) => {
                 if (j <= Cmpt - 1) {
                   Temp.push({
                     id: j,
-                    image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
+                    image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
                   });
 
                   NurlImage +=
-                    `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` +
+                    `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` +
                     ",";
                 } else {
                   Temp.push({
                     id: j,
-                    image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
+                    image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
                   });
-                  NurlImage += `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
+                  NurlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
                   const updateContract1 = `UPDATE contracts set pdfContractImage =? where id =?`;
                   db.query(updateContract1, [NurlImage, id], (err, result) => {
                     err ? console.log(err) : console.log(result);
@@ -1004,7 +1028,7 @@ const concatImages = (req, response) => {
       File.on("finish", async () => {
         File.close();
         response.send(
-          `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+          `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
         );
       });
     });
@@ -1028,7 +1052,7 @@ const concatImages = (req, response) => {
               )
               .then(async (res) => {
                 response.send(
-                  `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                  `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                 );
               }); //save under given name and reset the internal document
             // Export the merged PDF as a nodejs Buffer
@@ -1063,7 +1087,7 @@ const concatImages = (req, response) => {
                   )
                   .then(async (res) => {
                     response.send(
-                      `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                      `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                     );
                   }); //se under given name and reset the internal document
                 // Export the merged PDF as a nodejs Buffer
@@ -1106,7 +1130,7 @@ const concatImages = (req, response) => {
                       )
                       .then(async (res) => {
                         response.send(
-                          `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                          `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                         );
                       }); //s//save under given name and reset the internal document
                     // Export the merged PDF as a nodejs Buffer
@@ -1130,31 +1154,21 @@ const SaveImageIntoStorage = async (
   number
 ) => {
   // if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
-  axios
-    .post("https://e-tafakna.tn/Send", {
-      contractName,
-      user_name,
-      request,
-      type,
-      number,
-    })
-    .then((res) => {
-      console.log(res.data);
-    });
-  // if (!fs.existsSync(`./uploads/${contractName}`)) {
-  //   fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
-  // }
-  // if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
-  //   fs.mkdirSync(`./uploads/${contractName}/${user_name} `, {
-  //     recursive: true,
-  //   });
-  //   fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
-  //     recursive: true,
-  //   });
-  // }
-  // request.saveFiles(
-  //   `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
-  // );
+
+   if (!fs.existsSync(`./uploads/${contractName}`)) {
+     fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
+   }
+   if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
+     fs.mkdirSync(`./uploads/${contractName}/${user_name} `, {
+       recursive: true,
+     });
+     fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
+       recursive: true,
+     });
+   }
+   request.saveFiles(
+     `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
+   );
 };
 
 module.exports = {
