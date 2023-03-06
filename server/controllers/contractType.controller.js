@@ -810,17 +810,17 @@ const updateContractImage = async (req, res) => {
         if (i <= Cmpt - 1) {
           Temp.push({
             id: i,
-            image: `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
+            image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
           urlImage +=
-            `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` +
+            `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` +
             ",";
         } else {
           Temp.push({
             id: i,
-            image: `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
+            image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
-          urlImage += `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
+          urlImage += `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
           db.query(updateContract, [urlImage, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
@@ -848,7 +848,6 @@ const updateContractImage = async (req, res) => {
               )
               .then(async function (result) {
                 let number = Math.floor(Math.random() * 1000000);
-                
                 await SaveImageIntoStorage(
                   contractName,
                   user_name,
@@ -859,18 +858,18 @@ const updateContractImage = async (req, res) => {
                 if (j <= Cmpt - 1) {
                   Temp.push({
                     id: j,
-                    image: `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
+                    image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
                   });
 
                   NurlImage +=
-                    `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` +
+                    `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` +
                     ",";
                 } else {
                   Temp.push({
                     id: j,
-                    image: `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
+                    image: `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
                   });
-                  NurlImage += `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
+                  NurlImage += `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
                   const updateContract1 = `UPDATE contracts set pdfContractImage =? where id =?`;
                   db.query(updateContract1, [NurlImage, id], (err, result) => {
                     err ? console.log(err) : console.log(result);
@@ -1005,7 +1004,7 @@ const concatImages = (req, response) => {
       File.on("finish", async () => {
         File.close();
         response.send(
-          `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+          `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
         );
       });
     });
@@ -1029,7 +1028,7 @@ const concatImages = (req, response) => {
               )
               .then(async (res) => {
                 response.send(
-                  `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                  `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                 );
               }); //save under given name and reset the internal document
             // Export the merged PDF as a nodejs Buffer
@@ -1064,7 +1063,7 @@ const concatImages = (req, response) => {
                   )
                   .then(async (res) => {
                     response.send(
-                      `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                      `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                     );
                   }); //se under given name and reset the internal document
                 // Export the merged PDF as a nodejs Buffer
@@ -1107,7 +1106,7 @@ const concatImages = (req, response) => {
                       )
                       .then(async (res) => {
                         response.send(
-                          `http://localhost:3000/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                          `https://e-tafakna.tn/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                         );
                       }); //s//save under given name and reset the internal document
                     // Export the merged PDF as a nodejs Buffer
@@ -1123,43 +1122,41 @@ const concatImages = (req, response) => {
     });
   }
 };
-// const SaveImageIntoStorage = async (contractName, user_name, request, type, number) => {
-//   axios.post(
-//     ("http://localhost:3001/Send",
-//     { contractName, user_name, request, type, number }).then((res)=>{console.log(res)})
-//   );
-//   // // if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
-//   // if (!fs.existsSync(`./uploads/${contractName}`)) {
-//   //   fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
-//   // }
-//   // if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
-//   //   fs.mkdirSync(`./uploads/${contractName}/${user_name} `, {
-//   //     recursive: true,
-//   //   });
-//   //   fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
-//   //     recursive: true,
-//   //   });
-//   // }
-//   // request.saveFiles(
-//   //   `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
-//   // );
-// };
-const SaveImageIntoStorage = async (contractName, user_name, request, type, number, imageData) => {
- await axios.post("http://localhost:3001/Send", {
-    contractName,
-    user_name,
-    request,
-    type,
-    number,
-    imageData
-  })
-  .then((res) => {
-    console.log(res);
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+const SaveImageIntoStorage = async (
+  contractName,
+  user_name,
+  request,
+  type,
+  number
+) => {
+  // if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
+  axios
+    .post("https://e-tafakna.tn/Send", {
+      contractName,
+      user_name,
+      request,
+      type,
+      number,
+    })
+    .then((res) => {
+      console.log(res.data);
+    });
+  // if (!fs.existsSync(`./uploads/${contractName}`)) {
+  //   fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
+  // }
+  // if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
+  //   fs.mkdirSync(`./uploads/${contractName}/${user_name} `, {
+  //     recursive: true,
+  //   });
+  //   fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
+  //     recursive: true,
+  //   });
+  // }
+  // request.saveFiles(
+  //   `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
+  // );
 };
+
 module.exports = {
   insertContractType,
   getAllContractType,
