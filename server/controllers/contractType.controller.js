@@ -98,7 +98,7 @@ function inWords(number) {
     if (number >= units[i].value) {
       const count = Math.floor(number / units[i].value);
       if (count > 1) {
-        result += numberToWords(count) + ' ';
+        result += inWords(count) + ' ';
       }
       result += units[i].name;
       number %= units[i].value;
