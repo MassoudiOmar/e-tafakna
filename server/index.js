@@ -135,7 +135,7 @@ websocketServer.on("connection", (webSocketClient) => {
   //send feedback to the incoming connection
 });
 
-//start the web server
+//start the web serverrr
 
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
