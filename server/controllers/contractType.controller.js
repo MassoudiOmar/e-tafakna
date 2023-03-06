@@ -1177,83 +1177,34 @@ const concatImages = (req, response) => {
 //      `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
 //    );
 // };
-// const SaveImageIntoStorage = async (
-//   contractName,
-//   user_name,
-//   request,
-//   type,
-//   number,
-  
-// ) => {
-//   console.log("Received POST request with the following parameters:");
-//   console.log(`contractName: ${contractName}`);
-//   console.log(`user_name: ${user_name}`);
-//   console.log(`type: ${type}`);
-//   console.log(`number: ${number}`);
-//   console.log(`request: ${request}`);
-//   try {
-//     const response = await axios.post("https://e-tafakna.tn/Send",{
-   
-//         contractName,
-//         user_name,
-//         type,
-//         number,
-//         request
-//     });
-//     console.log(response.data,"DATTTTTTTTTTTTAAAAA");
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-const SaveImageIntoStorage = async (
-  contractName,
-  user_name,
-  request,
-  type,
-  number,
-) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      hostname: "etafkna.tn",
-      port: 6391,
-      path: "/Send",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+ const SaveImageIntoStorage = async (
+   contractName,
+   user_name,
+   request,
+   type,
+   number,
+ ) => {
+   console.log("Received POST request with the following parameters:");
+   console.log(`contractName: ${contractName}`);
+   console.log(`user_name: ${user_name}`);
+   console.log(`type: ${type}`);
+   console.log(`number: ${number}`);
+   console.log(`request: ${request}`);
+   try {
+     const response = await axios.post("https://e-tafakna.tn/Send",{ 
+         contractName,
+         user_name,
+         type,
+         number,
+         request
+     });
+     console.log(response.data,"DATTTTTTTTTTTTAAAAA");
+     return`./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`;
+   } catch (error) {
+     console.error(error);
+   }
+ };
 
-    const req = http.request(options, (res) => {
-      let data = "";
-
-      res.on("data", (chunk) => {
-        data += chunk;
-      });
-
-      res.on("end", () => {
-        console.log(`./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`, "pop");
-        resolve(`./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`);
-      });
-    });
-
-    req.on("error", (error) => {
-      console.error(error);
-      reject(error);
-    });
-
-    req.write(
-      JSON.stringify({
-        contractName,
-        user_name,
-        type,
-        number,
-        request,
-      })
-    );
-
-    req.end();
-  });
-};
 
 module.exports = {
   insertContractType,
