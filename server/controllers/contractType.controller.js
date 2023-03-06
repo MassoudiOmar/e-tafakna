@@ -8,7 +8,7 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("gxEThKnlXDf21lrx");
+var convertapi = require("convertapi")("sEkLKXrXWNU0GXLS");
 const cheerio = require("cheerio");
 const https = require("https");
 /***
@@ -55,59 +55,59 @@ var b = [
   "Quatre-vingts",
   "Quatre-vingt-dix",
 ];
-function inWords(number) {
-  const units = [
-    { value: 1000000000, name: 'milliard' },
-    { value: 1000000, name: 'million' },
-    { value: 1000, name: 'mille' },
-    { value: 100, name: 'cent' },
-    { value: 80, name: 'quatre-vingts' },
-    { value: 60, name: 'soixante' },
-    { value: 50, name: 'cinquante' },
-    { value: 40, name: 'quarante' },
-    { value: 30, name: 'trente' },
-    { value: 20, name: 'vingt' },
-    { value: 19, name: 'dix-neuf' },
-    { value: 18, name: 'dix-huit' },
-    { value: 17, name: 'dix-sept' },
-    { value: 16, name: 'seize' },
-    { value: 15, name: 'quinze' },
-    { value: 14, name: 'quatorze' },
-    { value: 13, name: 'treize' },
-    { value: 12, name: 'douze' },
-    { value: 11, name: 'onze' },
-    { value: 10, name: 'dix' },
-    { value: 9, name: 'neuf' },
-    { value: 8, name: 'huit' },
-    { value: 7, name: 'sept' },
-    { value: 6, name: 'six' },
-    { value: 5, name: 'cinq' },
-    { value: 4, name: 'quatre' },
-    { value: 3, name: 'trois' },
-    { value: 2, name: 'deux' },
-    { value: 1, name: 'un' },
-  ];
-
-  if (number === 0) {
-    return 'zéro';
+function inWords(num) {
+  if ((num = num.toString()).length > 9) return "overflow";
+  n = ("000000000" + num)
+    .substr(-9)
+    .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+  if (!n) return;
+  var str = "";
+  str +=
+    n[1] != 0
+      ? (a[Number(n[1])] || b[n[1][0]] + " " + a[n[1][1]]) + "milliard "
+      : "";
+  str +=
+    n[2] != 0
+      ? (a[Number(n[2])] || b[n[2][0]] + " " + a[n[2][1]]) + "million "
+      : "";
+  str +=
+    n[3] != 0
+      ? (a[Number(n[3])] || b[n[3][0]] + " " + a[n[3][1]]) + "mille "
+      : "";
+  str +=
+    n[4] != 0
+      ? (a[Number(n[4])] || b[n[4][0]] + " " + a[n[4][1]]) + "cents "
+      : "";
+  str +=
+    n[5] != 0
+      ? (str != "" ? "et " : "") +
+        (a[Number(n[5])] || b[n[5][0]] + " " + a[n[5][1]]) +
+        ""
+      : "";
+  return str.substring(0, 2) == "Un" ? str.slice(3) : str;
+}
+function inWordsThreeDigits(num) {
+  if (num < 0 || num > 999) {
+    return "Invalid input. Please enter a number between 0 and 999.";
   }
 
-  let result = '';
+  var result = "";
 
-  for (let i = 0; i < units.length; i++) {
-    if (number >= units[i].value) {
-      const count = Math.floor(number / units[i].value);
-      if (count > 1) {
-        result += inWords(count) + ' ';
-      }
-      result += units[i].name;
-      number %= units[i].value;
-      if (number > 0) {
-        result += ' ';
-      }
-    }
+  if (num >= 100) {
+    result += a[Math.floor(num / 100)] + "cent ";
+    num %= 100;
   }
-  return result;
+
+  if (num >= 20) {
+    result += b[Math.floor(num / 10)] + " ";
+    num %= 10;
+  }
+
+  if (num > 0 || result === "") {
+    result += a[num];
+  }
+
+  return result.trim();
 }
 // numberToWords(1425800) + " millimes"
 
@@ -407,16 +407,18 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
         console.log(parseInt(workbook.worksheets[0].getCell("E36").value));
         console.log(workbook.worksheets[0].getCell("E34").value);
         workbook.worksheets[0].getCell("E41").value =
-          workbook.worksheets[0].getCell("E36").value+
-          workbook.worksheets[0].getCell("E34").value+
+          workbook.worksheets[0].getCell("E36").value +
+          workbook.worksheets[0].getCell("E34").value +
           1.0;
         //workbook.worksheets[0].getCell("E41").numFmt= "0.000"
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
         console.log(arr);
         console.log(f);
         arr[1] = type == "devis" ? "le" : "la";
+        var lastFive = inWordsThreeDigits(parseInt(workbook.worksheets[0].getCell("E41").value.substr(value.length -3)))
+        //fares.substr(fares.length - 3)
         arr[arr.length - 1] =
-          inWords(parseInt(workbook.worksheets[0].getCell("E41").value)) +
+          inWords(parseInt(workbook.worksheets[0].getCell("E41").value)) + lastFive
           "Dinars";
         arr[3] = type;
         arr = arr.join(" ");
@@ -827,7 +829,7 @@ const updateContractImage = async (req, res) => {
           contractName,
           user_name,
           result,
-          type="jpg",
+          (type = "jpg"),
           number
         );
         if (i <= Cmpt - 1) {
@@ -875,7 +877,9 @@ e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName
               )
               .then(async function (result) {
                 let number = Math.floor(Math.random() * 1000000);
-                console.log("Received POST request with the following parameters: first func");
+                console.log(
+                  "Received POST request with the following parameters: first func"
+                );
                 console.log(`contractName: ${contractName}`);
                 console.log(`user_name: ${user_name}`);
                 console.log(`type: ${type}`);
@@ -884,10 +888,10 @@ e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName
                   contractName,
                   user_name,
                   result,
-                  type="pdf",
+                  (type = "pdf"),
                   number
                 );
-               
+
                 if (j <= Cmpt - 1) {
                   Temp.push({
                     id: j,
@@ -1041,8 +1045,7 @@ const concatImages = (req, response) => {
       File.on("finish", async () => {
         File.close();
         response.send(
-          `https://
-e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+          `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
         );
       });
     });
@@ -1066,8 +1069,7 @@ e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf
               )
               .then(async (res) => {
                 response.send(
-                  `https://
-e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                  `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                 );
               }); //save under given name and reset the internal document
             // Export the merged PDF as a nodejs Buffer
@@ -1102,8 +1104,7 @@ e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf
                   )
                   .then(async (res) => {
                     response.send(
-                      `https://
-e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                      `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                     );
                   }); //se under given name and reset the internal document
                 // Export the merged PDF as a nodejs Buffer
@@ -1163,60 +1164,29 @@ e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf
     });
   }
 };
-// const SaveImageIntoStorage = async (
-//   contractName,
-//   user_name,
-//   request,
-//   type,
-//   number
-// ) => {
-
-
-//    if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads")
-
-//    if (!fs.existsSync(`./uploads/${contractName}`)) {
-//      fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
-//    }
-//    if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
-//      fs.mkdirSync(`./uploads/${contractName}/${user_name} `, {
-//        recursive: true,
-//      });
-//      fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
-//        recursive: true,
-//      });
-//    }
-//    request.saveFiles(
-//      `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
-//    );
-// };
- const SaveImageIntoStorage = async (
-   contractName,
-   user_name,
-   request,
-   type,
-   number,
- ) => {
-   console.log("Received POST request with the following parameters:");
-   console.log(`contractName: ${contractName}`);
-   console.log(`user_name: ${user_name}`);
-   console.log(`type: ${type}`);
-   console.log(`number: ${number}`);
-   console.log(`request: ${request}`);
-   try {
-     const response = await axios.post("https://e-tafakna.tn/Send",{ 
-         contractName,
-         user_name,
-         type,
-         number,
-         request
-     });
-     console.log(response.data,"DATTTTTTTTTTTTAAAAA");
-     return`./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`;
-   } catch (error) {
-     console.error(error);
-   }
- };
-
+const SaveImageIntoStorage = async (
+  contractName,
+  user_name,
+  request,
+  type,
+  number
+) => {
+  if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads");
+  if (!fs.existsSync(`./uploads/${contractName}`)) {
+    fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
+  }
+  if (!fs.existsSync(`./uploads/${contractName}/${user_name}`)) {
+    fs.mkdirSync(`./uploads/${contractName}/${user_name} `, {
+      recursive: true,
+    });
+    fs.mkdirSync(`./uploads/${contractName}/${user_name}/E-Tafakna`, {
+      recursive: true,
+    });
+  }
+  request.saveFiles(
+    `./uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.${type}`
+  );
+};
 
 module.exports = {
   insertContractType,
