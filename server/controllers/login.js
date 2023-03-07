@@ -2,7 +2,16 @@ var db = require("../database-mysql");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const numberToWords = require('number-to-words');
 
+function formatCurrencyInWords(req,res) {
+  const {number } = req.body
+  const words = numberToWords.toWordsOrdinal(number, {
+    language: 'fr',
+  });
+  const currency = numberToWords.toWords(number % 1 * 1000)
+  res.send(`${words} ${currency}`);
+}
 let getOneUser = (email, callback) => {
   const sql = "SELECT * FROM `users` WHERE email = ? ";
   db.query(sql, [email], (err, user) => {
@@ -18,7 +27,6 @@ let loginUser = function (req, res) {
     getOneUser(email, (err, result) => {
       if (err) {
         res.send(err)
-        
         return  res.send(err);
       } else if (!result.length) {
         return res.send("user not found");
@@ -76,6 +84,7 @@ let loginUser = function (req, res) {
     });
   }
 };
+
 const updatePic = (req, res) => {
   const { id } = req.params;
   const { image } = req.body;
@@ -101,4 +110,12 @@ const updateStatus = (req, res) => {
     }
   });
 };
-module.exports = { loginUser, updatePic ,updateStatus};
+
+const fn =(req,res)=>{
+  const {data} =req.body
+  const {file} =req.files
+console.log(data)
+console.log(file)
+}
+
+module.exports = { loginUser, updatePic ,updateStatus,fn,formatCurrencyInWords};

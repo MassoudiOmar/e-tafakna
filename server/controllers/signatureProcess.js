@@ -6,10 +6,10 @@ const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const axios = require("axios");
-const multer = require('multer');
+const multer = require("multer");
+const crypto = require("crypto");
 
-
-const upload = multer({ dest: './a.png' });
+const upload = multer({ dest: "./a.png" });
 const uploadCin = (req, res) => {
   const { id } = req.params;
   const { carteCinFront, carteCinBack, faceVideo } = req.body;
@@ -198,8 +198,8 @@ const aedValidateOtp = async (req, res) => {
     });
 };
 ////////////////////// third ONE ////// create-digigo-user
-const createUser = (req, res) => {
-  const { clientId } = req.params;
+
+const createDigigoUserPerso = async (req, res) => {
   const {
     txIdEmail,
     txIdPhone,
@@ -220,41 +220,322 @@ const createUser = (req, res) => {
     screeshot2FileType,
     requestSignature,
     urlVideo,
-    videoHash,
   } = req.body;
+
+  const date = await new Date(Date.parse(subscriberBirthdate));
+  const subscriberBirthdateLong = await date.getTime();
+  const data = subscriberIdentityFile;
+  const subscriberIdentityFile64 = await Buffer.from(data).toString("base64");
+  const screenshot1File1 = screenshot1File;
+  const screenshot1File64 = await Buffer.from(screenshot1File1).toString(
+    "base64"
+  );
+  const screenshot1File2 = screenshot2File;
+  const screenshot2File64 = await Buffer.from(screenshot1File2).toString(
+    "base64"
+  );
+  const urlVideo1 = await cloudinary.uploader
+    .upload(urlVideo, {
+      resource_type: "video",
+    })
+    .then((result) => {
+      console.log(result.secure_url);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  const shaVideo = await urlVideo1;
+  const hashVidoe = await crypto
+    .createHash("sha256")
+    .update(shaVideo)
+    .digest("hex");
+
+  const datatoSend = {
+    txIdEmail: txIdEmail,
+    txIdPhone: txIdPhone,
+    certType: certType,
+    country: country,
+    subscriberName: subscriberName,
+    subscriberFirstname: subscriberFirstname,
+    subscriberBirthdate: subscriberBirthdateLong,
+    subscriberIdentityType: subscriberIdentityType,
+    subscriberId: subscriberId,
+    subscriberPhone: subscriberPhone,
+    subscriberEmail: subscriberEmail,
+    subscriberIdentityFile: subscriberIdentityFile64,
+    subscriberIdentityFileType: subscriberIdentityFileType,
+    screenshot1File: screenshot1File64,
+    screeshot1FileType: screeshot1FileType,
+    screenshot2File: screenshot2File64,
+    screeshot2FileType: screeshot2FileType,
+    requestSignature: requestSignature,
+    urlVideo: urlVideo1,
+    videoHash: hashVidoe,
+  };
   axios
     .post(
       `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/c638a72d-5324-405e-b664-de94ed3db77c`,
-      {
-        txIdEmail,
-        txIdPhone,
-        certType,
-        country,
-        subscriberName,
-        subscriberFirstname,
-        subscriberBirthdate,
-        subscriberIdentityType,
-        subscriberId,
-        subscriberPhone,
-        subscriberEmail,
-        subscriberIdentityFile,
-        subscriberIdentityFileType,
-        screenshot1File,
-        screeshot1FileType,
-        screenshot2File,
-        screeshot2FileType,
-        requestSignature,
-        urlVideo,
-        videoHash,
-      }
+      datatoSend
     )
-    .then((res) => {
-      res.send(res.data, "res");
+    .then((resu) => {
+      res.send(resu.data, "res");
     })
     .catch((err) => {
       console.log(err);
     });
-  };
+};
+
+const createDigigoUserPro = async (req,res) => {
+  const {
+    txIdEmail,
+    txIdPhone,
+    certType,
+    country,
+    organisationId,
+    Organisation,
+    taxIdentifierFile,
+    taxIdentifierFileType,
+    nationalBusinessRegisterFile,
+    nationalBusinessRegisterFileType,
+    legalRepresentativeName,
+    legalRepresentativeFirstname,
+    legalRepresentativeBirthdate,
+    legalRepresentativeIdentityType,
+    legalRepresentativeId,
+    legalRepresentativePhoneNumber,
+    legalRepresentativeEmail,
+    legalRepresentativeIdentityFile,
+    legalRepresentativeIdentityFileType,
+    subscriberName,
+    subscriberFirstname,
+    subscriberBirthdate,
+    subscriberIdentityType,
+    subscriberId,
+    subscriberPhone,
+    subscriberEmail,
+    subscriberIdentityFile,
+    subscriberIdentityFileType,
+    screenshot1File,
+    screeshot1FileType,
+    screenshot2File,
+    screeshot2FileType,
+    requestSignature,
+    urlVideo,
+  } = req.body;
+
+  const date1 = await new Date(Date.parse(legalRepresentativeBirthdate));
+  const legalRepresentativeBirthdateLong = await date1.getTime();
+
+  
+  const date = await new Date(Date.parse(subscriberBirthdate));
+  const subscriberBirthdateLong = await date.getTime();
+
+  const data = subscriberIdentityFile;
+  const subscriberIdentityFile64 = await Buffer.from(data).toString("base64");
+  const data1 = taxIdentifierFile;
+  const taxIdentifierFile64 = await Buffer.from(data1).toString("base64");
+  const data2 = nationalBusinessRegisterFile;
+  const nationalBusinessRegisterFile64 = await Buffer.from(data2).toString("base64");
+  const data3 = legalRepresentativeIdentityFile;
+  const legalRepresentativeIdentityFile64 = await Buffer.from(data3).toString("base64");
+  const screenshot1File1 = screenshot1File;
+  const screenshot1File64 = await Buffer.from(screenshot1File1).toString(
+    "base64"
+  );
+  const screenshot1File2 = screenshot2File;
+  const screenshot2File64 = await Buffer.from(screenshot1File2).toString(
+    "base64"
+  );
+  const urlVideo1 = await cloudinary.uploader
+    .upload(urlVideo, {
+      resource_type: "video",
+    })
+    .then((result) => {
+      console.log(result.secure_url);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  const shaVideo = await urlVideo1;
+  const hashVidoe = await crypto
+    .createHash("sha256")
+    .update(shaVideo)
+    .digest("hex");
+
+const dataToSned= {
+  txIdEmail:txIdEmail,
+  txIdPhone:txIdPhone,
+  certType:certType,
+  country:country,
+  organisationId:organisationId,
+  Organisation:Organisation,
+  taxIdentifierFile:taxIdentifierFile64,
+  taxIdentifierFileType:taxIdentifierFileType,
+  nationalBusinessRegisterFile:nationalBusinessRegisterFile64,
+  nationalBusinessRegisterFileType:nationalBusinessRegisterFileType,
+  legalRepresentativeName:legalRepresentativeName,
+  legalRepresentativeFirstname:legalRepresentativeFirstname,
+  legalRepresentativeBirthdate:legalRepresentativeBirthdateLong,
+  legalRepresentativeIdentityType:legalRepresentativeIdentityType,
+  legalRepresentativeId:legalRepresentativeId,
+  legalRepresentativePhoneNumber:legalRepresentativePhoneNumber,
+  legalRepresentativeEmail:legalRepresentativeEmail,
+  legalRepresentativeIdentityFile:legalRepresentativeIdentityFile64,
+  legalRepresentativeIdentityFileType:legalRepresentativeIdentityFileType,
+  subscriberName:subscriberName,
+  subscriberFirstname:subscriberFirstname,
+  subscriberBirthdate:subscriberBirthdateLong,
+  subscriberIdentityType:subscriberIdentityType,
+  subscriberId:subscriberId,
+  subscriberPhone:subscriberPhone,
+  subscriberEmail:subscriberEmail,
+  subscriberIdentityFile:subscriberIdentityFile64,
+  subscriberIdentityFileType:subscriberIdentityFileType,
+  screenshot1File:screenshot1File64,
+  screeshot1FileType:screeshot1FileType,
+  screenshot2File:screenshot2File64,
+  screeshot2FileType:screeshot2FileType,
+  requestSignature:requestSignature,
+  urlVideo:shaVideo
+}
+axios
+.post(
+  `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/c638a72d-5324-405e-b664-de94ed3db77c`,
+  dataToSned
+)
+.then((resu) => {
+  res.send(resu.data, "res");
+})
+.catch((err) => {
+  console.log(err);
+});
+
+};
+const createDigigoUserSeal = async(req,res) => {
+  const {
+    txIdEmail,
+    txIdPhone,
+    certType,
+    country,
+    organisationId,
+    Organisation,
+    taxIdentifierFile,
+    taxIdentifierFileType,
+    nationalBusinessRegisterFile,
+    nationalBusinessRegisterFileType,
+    legalRepresentativeName,
+    legalRepresentativeFirstname,
+    legalRepresentativeBirthdate,
+    legalRepresentativeIdentityType,
+    legalRepresentativeId,
+    legalRepresentativePhoneNumber,
+    legalRepresentativeEmail,
+    legalRepresentativeIdentityFile,
+    legalRepresentativeIdentityFileType,
+    subscriberName,
+    subscriberFirstname,
+    subscriberBirthdate,
+    subscriberIdentityType,
+    subscriberId,
+    subscriberPhone,
+    subscriberEmail,
+    subscriberIdentityFile,
+    subscriberIdentityFileType,
+    screenshot1File,
+    screeshot1FileType,
+    screenshot2File,
+    screeshot2FileType,
+    requestSignature,
+    urlVideo,
+  } = req.body;
+
+  const date1 = await new Date(Date.parse(legalRepresentativeBirthdate));
+  const legalRepresentativeBirthdateLong = await date1.getTime();
+
+  
+  const date = await new Date(Date.parse(subscriberBirthdate));
+  const subscriberBirthdateLong = await date.getTime();
+
+  const data = subscriberIdentityFile;
+  const subscriberIdentityFile64 = await Buffer.from(data).toString("base64");
+  const data1 = taxIdentifierFile;
+  const taxIdentifierFile64 = await Buffer.from(data1).toString("base64");
+  const data2 = nationalBusinessRegisterFile;
+  const nationalBusinessRegisterFile64 = await Buffer.from(data2).toString("base64");
+  const data3 = legalRepresentativeIdentityFile;
+  const legalRepresentativeIdentityFile64 = await Buffer.from(data3).toString("base64");
+  const screenshot1File1 = screenshot1File;
+  const screenshot1File64 = await Buffer.from(screenshot1File1).toString(
+    "base64"
+  );
+  const screenshot1File2 = screenshot2File;
+  const screenshot2File64 = await Buffer.from(screenshot1File2).toString(
+    "base64"
+  );
+  const urlVideo1 = await cloudinary.uploader
+    .upload(urlVideo, {
+      resource_type: "video",
+    })
+    .then((result) => {
+      console.log(result.secure_url);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  const shaVideo = await urlVideo1;
+  const hashVidoe = await crypto
+    .createHash("sha256")
+    .update(shaVideo)
+    .digest("hex");
+
+const dataToSned= {
+  txIdEmail:txIdEmail,
+  txIdPhone:txIdPhone,
+  certType:certType,
+  country:country,
+  organisationId:organisationId,
+  Organisation:Organisation,
+  taxIdentifierFile:taxIdentifierFile64,
+  taxIdentifierFileType:taxIdentifierFileType,
+  nationalBusinessRegisterFile:nationalBusinessRegisterFile64,
+  nationalBusinessRegisterFileType:nationalBusinessRegisterFileType,
+  legalRepresentativeName:legalRepresentativeName,
+  legalRepresentativeFirstname:legalRepresentativeFirstname,
+  legalRepresentativeBirthdate:legalRepresentativeBirthdateLong,
+  legalRepresentativeIdentityType:legalRepresentativeIdentityType,
+  legalRepresentativeId:legalRepresentativeId,
+  legalRepresentativePhoneNumber:legalRepresentativePhoneNumber,
+  legalRepresentativeEmail:legalRepresentativeEmail,
+  legalRepresentativeIdentityFile:legalRepresentativeIdentityFile64,
+  legalRepresentativeIdentityFileType:legalRepresentativeIdentityFileType,
+  subscriberName:subscriberName,
+  subscriberFirstname:subscriberFirstname,
+  subscriberBirthdate:subscriberBirthdateLong,
+  subscriberIdentityType:subscriberIdentityType,//ZD 
+  subscriberId:subscriberId,
+  subscriberPhone:subscriberPhone,
+  subscriberEmail:subscriberEmail,
+  subscriberIdentityFile:subscriberIdentityFile64,
+  subscriberIdentityFileType:subscriberIdentityFileType,
+  screenshot1File:screenshot1File64,
+  screeshot1FileType:screeshot1FileType,
+  screenshot2File:screenshot2File64,
+  screeshot2FileType:screeshot2FileType,
+  requestSignature:requestSignature,
+  urlVideo:shaVideo
+}
+axios
+.post(
+  `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/c638a72d-5324-405e-b664-de94ed3db77c`,
+  dataToSned
+)
+.then((resu) => {
+  res.send(resu.data, "res");
+})
+.catch((err) => {
+  console.log(err);
+});
+};
 
 ////////////////////// fifth ONE ////// validate-identity
 const validateIdentity = (req, res) => {
@@ -284,7 +565,6 @@ const validateIdentity = (req, res) => {
       res.send(err);
     });
 };
-
 
 const aedRequestStatus = (req, res) => {
   const { clientId, requestId } = req.params;
@@ -369,7 +649,7 @@ const approveAffiliation = (req, res) => {
     (err, result) => {
       if (err) res.send(err);
       else res.send(result);
-    }
+    }/* */
   );
 };
 
@@ -705,7 +985,9 @@ module.exports = {
   updateContractImage,
   updateStatus,
   sendOtp,
-  createUser,
+  createDigigoUserPerso,
+  createDigigoUserPro,
+  createDigigoUserSeal,
   validateIdentity,
   aedUserStatues,
   revokeCertificate,

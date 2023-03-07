@@ -22,13 +22,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 process.env.NODE_TLS_REJECT_UNAUTHORIZED
 
-app.use(bodyParser.urlencoded({ limit: "5000mb" }));
+app.use(bodyParser.json({limit: '1000mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '1000mb', extended: true}))
+
 app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(fileUpload());
-app.use(express.urlencoded({ extended: true }));
-app.use(paginate.middleware(10, 50));
 app.use("/api/send", usersContractsRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api", reset);
@@ -36,7 +36,7 @@ app.use("/api/users", usersRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/contractType", contractTypeRoutes);
 app.use("/api/contractTypeQuestions", contractTypeQuestionsRoutes);
-app.use("/api/users", login);
+app.use("/api/userss", login);
 app.use("/api/answers", answersRoutes);
 app.use("/api/contracts", contractRoutes);
 app.use("/api/signature", signature);

@@ -8,87 +8,75 @@ const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
 const Excel = require("exceljs");
 var convertapi = require("convertapi")("lmZB7Q2OoMDHogAI");
-const cheerio = require('cheerio');
+const cheerio = require("cheerio");
 const https = require("https");
 
-var a = [
-  "",
-  "Un ",
-  "Deux ",
-  "Trois ",
-  "Quatre ",
-  "Cinq ",
-  "Six ",
-  "Sept ",
-  "Huit ",
-  "Neuf ",
-  "Dix ",
-  "Onze ",
-  "Douze ",
-  "Treize ",
-  "Quatorze ",
-  "Quinze ",
-  "Seize ",
-  "Dix-sept",
-  "Dix-huit",
-  "Dix-neuf",
-];
-var b = [
-  "",
-  "",
-  "Vingt",
-  "Trente",
-  "Quarante",
-  "Cinquante",
-  "Soixante",
-  "Soixante-dix",
-  "Quatre-vingts",
-  "Quatre-vingt-dix",
-];
-function inWords(num) {
-  if ((num = num.toString()).length > 9) return "overflow";
-  n = ("000000000" + num)
-    .substr(-9)
-    .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-  if (!n) return;
-  var str = "";
-  str +=
-    n[1] != 0
-      ? (a[Number(n[1])] || b[n[1][0]] + " " + a[n[1][1]]) + "milliard "
-      : "";
-  str +=
-    n[2] != 0
-      ? (a[Number(n[2])] || b[n[2][0]] + " " + a[n[2][1]]) + "million "
-      : "";
-  str +=
-    n[3] != 0
-      ? (a[Number(n[3])] || b[n[3][0]] + " " + a[n[3][1]]) + "mille "
-      : "";
-  str +=
-    n[4] != 0
-      ? (a[Number(n[4])] || b[n[4][0]] + " " + a[n[4][1]]) + "cents "
-      : "";
-  str +=
-    n[5] != 0
-      ? (str != "" ? "et " : "") +
-        (a[Number(n[5])] || b[n[5][0]] + " " + a[n[5][1]]) +
-        ""
-      : "";
-  return str.substring(0, 2) == "Un" ? str.slice(3) : str;
+function inWords(number) {
+  const units = [
+    { value: 1000000000, name: "milliard" },
+    { value: 1000000, name: "million" },
+    { value: 1000, name: "mille" },
+    { value: 100, name: "cent" },
+    { value: 80, name: "quatre-vingts" },
+    { value: 60, name: "soixante" },
+    { value: 50, name: "cinquante" },
+    { value: 40, name: "quarante" },
+    { value: 30, name: "trente" },
+    { value: 20, name: "vingt" },
+    { value: 19, name: "dix-neuf" },
+    { value: 18, name: "dix-huit" },
+    { value: 17, name: "dix-sept" },
+    { value: 16, name: "seize" },
+    { value: 15, name: "quinze" },
+    { value: 14, name: "quatorze" },
+    { value: 13, name: "treize" },
+    { value: 12, name: "douze" },
+    { value: 11, name: "onze" },
+    { value: 10, name: "dix" },
+    { value: 9, name: "neuf" },
+    { value: 8, name: "huit" },
+    { value: 7, name: "sept" },
+    { value: 6, name: "six" },
+    { value: 5, name: "cinq" },
+    { value: 4, name: "quatre" },
+    { value: 3, name: "trois" },
+    { value: 2, name: "deux" },
+    { value: 1, name: "un" },
+  ];
+
+  if (number === 0) {
+    return "zéro";
+  }
+
+  let result = "";
+
+  for (let i = 0; i < units.length; i++) {
+    if (number >= units[i].value) {
+      const count = Math.floor(number / units[i].value);
+      if (count > 1) {
+        result += inWords(count) + " ";
+      }
+      result += units[i].name;
+      number %= units[i].value;
+      if (number > 0) {
+        result += " ";
+      }
+    }
+  }
+  return result;
 }
+const getCount = (req, res) => {
+  console.log("test");
+  const lang = req.params.lang;
 
-const getCount= (req,res)=>{
-console.log("test")
-const lang = req.params.lang 
-
-db.query(`select count(*) as count ,  c.${lang} from contracts t inner join contract_types c on (c.id = t.contract_types_id) GROUP BY c.${lang}`,(err,rez)=>{
-if(err)
-res.send(err)
-else 
-res.send(rez)
-})
-}
-
+  db.query(
+    `select count(*) as count ,  c.${lang} from contracts t inner join contract_types c on (c.id = t.contract_types_id) GROUP BY c.${lang}`,
+    (err, rez) => {
+      if (err) res.send(err);
+      else res.send(rez);
+    }
+  );
+};
 
 var ChangeStatusInContract = async (req, res) => {
   const { image_url, user_name } = req.body;
@@ -310,7 +298,7 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
   return "Hi";
 };
 let makeFactureOrDevisFr = (url, ans, type, language) => {
- const file = fs.createWriteStream("file.xlsx");
+  const file = fs.createWriteStream("file.xlsx");
   https.get(url, function (response) {
     response.pipe(file);
     file.on("finish", async () => {
@@ -362,7 +350,7 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
         arr[1] = type == "devis" ? "le" : "la";
         arr[arr.length - 1] =
           inWords(parseInt(workbook.worksheets[0].getCell("E41").value)) +
-          "Dinars";
+          " millimes";
         arr[3] = type;
         arr = arr.join(" ");
         //Fix it
@@ -388,7 +376,7 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
             })
           );
         } catch (e) {
-          console.log(e)
+          console.log(e);
         }
       });
       function streamToString(stream) {
@@ -513,7 +501,7 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
   });
   doc.render(renderedDoc);
   const buf = doc.getZip().generate({
- type: "nodebuffer",
+    type: "nodebuffer",
     // compression: DEFLATE adds a compression step.
     // For a 50MB output document, expect 500ms additional CPU time
     compression: "DEFLATE",
@@ -542,57 +530,54 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
   }
 };
 let QuestionIdForMin = [
- 4,
-23,
-41,
-45,
-100,
-107,
-157,
-164,
-167,
-171,
-186,
-230,
-250,
-261,
-273,
-280,
-290,
-    297, 
-298,
-344,
-360,
-365
-]
+  4, 23, 41, 45, 100, 107, 157, 164, 167, 171, 186, 230, 250, 261, 273, 280,
+  290, 297, 298, 344, 360, 365,
+];
 const addAnswersToAnswerTable = async (req, res) => {
-   const { question, initialQuestionId, contracts_id, contract_types_id,questionsLength } = req.body
-  console.log(questionsLength , " * " , question.length )
-  if (initialQuestionId == -1|| questionsLength-1==question.length ||question.length==0 ) {
-    console.log("Here")
-    res.end("Error Id")
-  }
-  else {
-    console.log(question)
-    console.log(initialQuestionId)
-    console.log(contracts_id)
-    console.log(contract_types_id)
-    console.log(questionsLength)
+  const {
+    question,
+    initialQuestionId,
+    contracts_id,
+    contract_types_id,
+    questionsLength,
+  } = req.body;
+  console.log(questionsLength, " * ", question.length);
+  if (
+    initialQuestionId == -1 ||
+    questionsLength - 1 == question.length ||
+    question.length == 0
+  ) {
+    console.log("Here");
+    res.end("Error Id");
+  } else {
+    console.log(question);
+    console.log(initialQuestionId);
+    console.log(contracts_id);
+    console.log(contract_types_id);
+    console.log(questionsLength);
     question.map((element, index) => {
-      db.query(`INSERT INTO answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${initialQuestionId + index})`, (err, result) => {
-        if (err) {
-          console.log(err)
-          res.send(err)
+      db.query(
+        `INSERT INTO answers (content,contracts_id,contracts_contract_types_id,questions_id) VALUES ('${element}',${contracts_id},${contract_types_id},${
+          initialQuestionId + index
+        })`,
+        (err, result) => {
+          if (err) {
+            console.log(err);
+            res.send(err);
+          } else {
+            console.log(
+              ` question id  :${
+                initialQuestionId + index
+              } with content ${element} has been added`
+            );
+            console.log(index, "***", question.length);
+            if (index == question.length - 1)
+              res.send(question.length.toString());
+          }
         }
-        else {
-          console.log(` question id  :${initialQuestionId + index} with content ${element} has been added`)
-          console.log(index , "***" ,   question.length)
-          if (index == question.length - 1)
-            res.send(question.length.toString())
-        }
-      })
-    })
-  }  
+      );
+    });
+  }
 };
 let Existe = (begin, end) => {
   let Temp = [];
@@ -753,9 +738,8 @@ const updateContractImage = async (req, res) => {
         "jpg",
         {
           File: T2,
-          ImageResolutionH: '500',
-          ImageResolutionV: '500'
-
+          ImageResolutionH: "500",
+          ImageResolutionV: "500",
         },
         T
       )
@@ -1103,5 +1087,5 @@ module.exports = {
   ChangeStatusInContract,
   concatImages,
   addAnswersToAnswerTable,
-   getCount
+  getCount,
 };

@@ -33,22 +33,20 @@ let getAnswers = (req, res) => {
 };
 
 let AddAnswers = (req, res) => {
-  const { content, questions_id, contracts_id, contracts_contract_types_id } =
-    req.body;
-  const sql = `INSERT INTO answers (content ,questions_id,contracts_id,contracts_contract_types_id) VALUES (?,?,?,?)`;
-  db.query(
-    sql,
-    [content, questions_id, contracts_id, contracts_contract_types_id],
-    (err, result) => {
-      if (err) res.send(err);
-      else res.send(result);
-    }
-  );
+  const { content, questions_id, contracts_id, contracts_contract_types_id } = req.body;
+  const escapedContent = db.escape(content);
+  const sql = `INSERT INTO answers (content, questions_id, contracts_id, contracts_contract_types_id) VALUES (${escapedContent}, ${questions_id}, ${contracts_id}, ${contracts_contract_types_id})`;
+  db.query(sql, (err, result) => {
+    if (err) res.send(err);
+    else res.send(result);
+  });
 };
 
 let AddAnswer = (req, res) => {
   const { content, questions_id, contracts_contract_types_id } = req.body;
-  const sql = `INSERT INTO answers (content ,questions_id,contracts_contract_types_id) VALUES (?,?,?,?)`;
+  const escapedContent = db.escape(content);
+
+  const sql = `INSERT INTO answers (content ,questions_id,contracts_contract_types_id) VALUES (${escapedContent}, ${questions_id}, ${contracts_contract_types_id})`;
   db.query(
     sql,
     [content, questions_id, contracts_contract_types_id],
@@ -93,6 +91,7 @@ let getQuestionsAnswers = (req, res) => {
     }
   });
 };
+
 module.exports = {
   AddAnswers,
   updateAnswers,

@@ -258,19 +258,22 @@ const verifying = (req, res) => {
   }
 };
 const payment = async (req, res) => {
-const {amount} = req.params
-let urlDeRedireaction = 'http://localhost:3000'
-console.log(amount)
-  const orderNumber =()=>{
-    return Math.floor((Math.random()*1000000)+1);
- }
-  const response = await fetch(`https://test.clictopay.com/payment/rest/register.do?amount=${amount}&currency=788&language=fr&orderNumber=${orderNumber()}&password=Df9w2Cd9M&userName=0799902133&jsonParams={"orderNumber":1234567890}&returnUrl=https://e-tafakna.com/PaymentRecieved&failUrl=https://e-tafakna.com/PaymentFailed?&expirationDate=2023-09-08T14:14:14`, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json;charset=UTF-8",
-      Authorization: "TOKEN 854da4da3b8f36f8772f46a3992a02b9a2cbb199",
-    },
-  }).then(async (response) => {
+  const { amount } = req.params;
+  let urlDeRedireaction = "http://localhost:3000";
+  console.log(amount);
+  const orderNumber = () => {
+    return Math.floor(Math.random() * 1000000 + 1);
+  };
+  const response = await fetch(
+    `https://test.clictopay.com/payment/rest/register.do?amount=${amount}&currency=788&language=fr&orderNumber=${orderNumber()}&password=Df9w2Cd9M&userName=0799902133&jsonParams={"orderNumber":1234567890}&returnUrl=https://e-tafakna.com/PaymentRecieved&failUrl=https://e-tafakna.com/PaymentFailed?&expirationDate=2023-09-08T14:14:14`,
+    {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json;charset=UTF-8",
+        Authorization: "TOKEN 854da4da3b8f36f8772f46a3992a02b9a2cbb199",
+      },
+    }
+  ).then(async (response) => {
     const data = await response.json();
     res.send(data.formUrl);
   });
@@ -300,20 +303,28 @@ const updateGoogleUserPassword = async (req, res) => {
     }
   }
 };
-const checkPaymentStatus =async(req,res)=>{
-  const {orderId,language} = req.params
-  const response = await fetch(`https://test.clictopay.com/payment/rest/getOrderStatusExtended.do?userName=0799902133&password=Df9w2Cd9M&orderId=${orderId}&language=${language}&password=Df9w2Cd9M&userName=0799902133`, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json;charset=UTF-8",
-      Authorization: "TOKEN 854da4da3b8f36f8772f46a3992a02b9a2cbb199",
-    },
-  }).then(async (response) => {
+const checkPaymentStatus = async (req, res) => {
+  const { orderId, language } = req.params;
+  const response = await fetch(
+    `https://test.clictopay.com/payment/rest/getOrderStatusExtended.do?userName=0799902133&password=Df9w2Cd9M&orderId=${orderId}&language=${language}&password=Df9w2Cd9M&userName=0799902133`,
+    {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json;charset=UTF-8",
+        Authorization: "TOKEN 854da4da3b8f36f8772f46a3992a02b9a2cbb199",
+      },
+    }
+  ).then(async (response) => {
     const data = await response.json();
-    res.send([data.orderNumber,data.actionCodeDescription,data.amount]);
+    res.send([data.orderNumber, data.actionCodeDescription, data.amount]);
   });
-}
+};
 
-
-
-module.exports = { resetPasswor, verifying, updatepassword, payment ,updateGoogleUserPassword,checkPaymentStatus};
+module.exports = {
+  resetPasswor,
+  verifying,
+  updatepassword,
+  payment,
+  updateGoogleUserPassword,
+  checkPaymentStatus,
+};

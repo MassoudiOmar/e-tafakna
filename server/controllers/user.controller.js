@@ -712,6 +712,7 @@ const deleteAllNotificationOfUser = (req, res) => {
     res.send(result);
   });
 };
+
 const getAllAnswerOfUser =(req,res)=>{
 const {user_id} = req.body 
 db.query(`SELECT * from user_answers  where user_id=${user_id}`,(err,result)=>{

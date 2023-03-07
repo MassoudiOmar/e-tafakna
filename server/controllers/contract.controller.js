@@ -137,6 +137,7 @@ const changeContractStatus = (req, res) => {
     }
   });
 };
+
 let getNotification = (req, res) => {
   const { id } = req.params;
   let sql = `
