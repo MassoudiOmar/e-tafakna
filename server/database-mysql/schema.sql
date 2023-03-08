@@ -62,11 +62,30 @@ CREATE TABLE IF NOT EXISTS `etafakna`.`contracts` (
   `archieve` VARCHAR(255) NULL DEFAULT NULL,
   `pdfContractImage` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`, `contract_types_id`),
-  INDEX `fk_contracts_contract_types1_idx` (`contract_types_id` ASC) VISIBLE,
+  INDEX `fk_users_idx` (`contract_types_id` ASC) VISIBLE,
   CONSTRAINT `fk_contracts_contract_types1` FOREIGN KEY (`contract_types_id`) REFERENCES `etafakna`.`contract_types` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
  ALTER TABLE `etafakna`.`contracts` AUTO_INCREMENT = 1;
+
+
+
+
+-- -----------------------------------------------------
+-- Table `etafakna`.`signature_process`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `etafakna`.`signature_process` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `etafakna_user_id` INT NOT NULL,
+  `userId` INT NOT NULL,
+  `phone` INT NULL DEFAULT NULL,
+  `idType` VARCHAR(20) NULL DEFAULT NULL,
+  `status` VARCHAR(20) NULL DEFAULT NULL,
+  `txIdPhone` VARCHAR(200) NULL DEFAULT NULL,
+  `txIdEmail` VARCHAR(200) NULL DEFAULT NULL,
+  `requestId` varchar(100) DEFAULT NULL,  
+  PRIMARY KEY (`id`, `etafakna_user_id`)
+) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------

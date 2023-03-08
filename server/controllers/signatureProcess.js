@@ -167,20 +167,63 @@ const updateStatus = (req, res) => {
 };
 
 const sendOtp = async (req, res) => {
-  const { certType, userId, idType, authDelivery, phone } = req.body;
+  const { certType, userId, idType, phone } = req.body;
+  const authDelivery = 1;
   axios
     .post(
       `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/c638a72d-5324-405e-b664-de94ed3db77c`,
       { certType, userId, idType, authDelivery, phone }
     )
     .then(async (result) => {
-      res.send(result.data);
+      const etafakna_user_id = 1
+      const a = result.data.userId;
+      const b = phone;
+      const c = result.data.idType;
+      const d = result.data.status;
+      const e = result.data.txId;
+      const sql = `insert into signature_process (etafakna_user_id,userId,phone,idType,status,txIdPhone) values (?,?,?,?,?,?)`;
+      db.query(sql, [etafakna_user_id,a, b, c, d, e], (err, result) => {
+        if (err) throw err;
+        else {
+          res.send(result);
+        }
+      });
       return;
     })
     .catch((err) => {
       res.send(err, "err");
     });
 };
+
+const sendOtp2 = async (req, res) => {
+  const { certType, userId, idType, phone } = req.body;
+  const authDelivery = 2;
+  axios
+    .post(
+      `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/aed-send-otp/c638a72d-5324-405e-b664-de94ed3db77c`,
+      { certType, userId, idType, authDelivery, phone }
+    )
+    .then(async (result) => {
+      const etafakna_user_id = 1
+      const a = result.data.userId;
+      const b = phone;
+      const c = result.data.idType;
+      const d = result.data.status;
+      const e = result.data.txId;
+      const sql = `insert into signature_process (etafakna_user_id,userId,phone,idType,status,txIdEmail) values (?,?,?,?,?,?)`;
+      db.query(sql, [etafakna_user_id,a, b, c, d, e], (err, result) => {
+        if (err) throw err;
+        else {
+          res.send(result);
+        }
+      });
+      return;
+    })
+    .catch((err) => {
+      res.send(err, "err");
+    });
+};
+
 const aedValidateOtp = async (req, res) => {
   const { textId, otp } = req.params;
   const { certType, userId, idType, authDelivery, phone, email } = req.body;
@@ -285,7 +328,7 @@ const createDigigoUserPerso = async (req, res) => {
     });
 };
 
-const createDigigoUserPro = async (req,res) => {
+const createDigigoUserPro = async (req, res) => {
   const {
     txIdEmail,
     txIdPhone,
@@ -326,7 +369,6 @@ const createDigigoUserPro = async (req,res) => {
   const date1 = await new Date(Date.parse(legalRepresentativeBirthdate));
   const legalRepresentativeBirthdateLong = await date1.getTime();
 
-  
   const date = await new Date(Date.parse(subscriberBirthdate));
   const subscriberBirthdateLong = await date.getTime();
 
@@ -335,9 +377,13 @@ const createDigigoUserPro = async (req,res) => {
   const data1 = taxIdentifierFile;
   const taxIdentifierFile64 = await Buffer.from(data1).toString("base64");
   const data2 = nationalBusinessRegisterFile;
-  const nationalBusinessRegisterFile64 = await Buffer.from(data2).toString("base64");
+  const nationalBusinessRegisterFile64 = await Buffer.from(data2).toString(
+    "base64"
+  );
   const data3 = legalRepresentativeIdentityFile;
-  const legalRepresentativeIdentityFile64 = await Buffer.from(data3).toString("base64");
+  const legalRepresentativeIdentityFile64 = await Buffer.from(data3).toString(
+    "base64"
+  );
   const screenshot1File1 = screenshot1File;
   const screenshot1File64 = await Buffer.from(screenshot1File1).toString(
     "base64"
@@ -362,56 +408,55 @@ const createDigigoUserPro = async (req,res) => {
     .update(shaVideo)
     .digest("hex");
 
-const dataToSned= {
-  txIdEmail:txIdEmail,
-  txIdPhone:txIdPhone,
-  certType:certType,
-  country:country,
-  organisationId:organisationId,
-  Organisation:Organisation,
-  taxIdentifierFile:taxIdentifierFile64,
-  taxIdentifierFileType:taxIdentifierFileType,
-  nationalBusinessRegisterFile:nationalBusinessRegisterFile64,
-  nationalBusinessRegisterFileType:nationalBusinessRegisterFileType,
-  legalRepresentativeName:legalRepresentativeName,
-  legalRepresentativeFirstname:legalRepresentativeFirstname,
-  legalRepresentativeBirthdate:legalRepresentativeBirthdateLong,
-  legalRepresentativeIdentityType:legalRepresentativeIdentityType,
-  legalRepresentativeId:legalRepresentativeId,
-  legalRepresentativePhoneNumber:legalRepresentativePhoneNumber,
-  legalRepresentativeEmail:legalRepresentativeEmail,
-  legalRepresentativeIdentityFile:legalRepresentativeIdentityFile64,
-  legalRepresentativeIdentityFileType:legalRepresentativeIdentityFileType,
-  subscriberName:subscriberName,
-  subscriberFirstname:subscriberFirstname,
-  subscriberBirthdate:subscriberBirthdateLong,
-  subscriberIdentityType:subscriberIdentityType,
-  subscriberId:subscriberId,
-  subscriberPhone:subscriberPhone,
-  subscriberEmail:subscriberEmail,
-  subscriberIdentityFile:subscriberIdentityFile64,
-  subscriberIdentityFileType:subscriberIdentityFileType,
-  screenshot1File:screenshot1File64,
-  screeshot1FileType:screeshot1FileType,
-  screenshot2File:screenshot2File64,
-  screeshot2FileType:screeshot2FileType,
-  requestSignature:requestSignature,
-  urlVideo:shaVideo
-}
-axios
-.post(
-  `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/c638a72d-5324-405e-b664-de94ed3db77c`,
-  dataToSned
-)
-.then((resu) => {
-  res.send(resu.data, "res");
-})
-.catch((err) => {
-  console.log(err);
-});
-
+  const dataToSned = {
+    txIdEmail: txIdEmail,
+    txIdPhone: txIdPhone,
+    certType: certType,
+    country: country,
+    organisationId: organisationId,
+    Organisation: Organisation,
+    taxIdentifierFile: taxIdentifierFile64,
+    taxIdentifierFileType: taxIdentifierFileType,
+    nationalBusinessRegisterFile: nationalBusinessRegisterFile64,
+    nationalBusinessRegisterFileType: nationalBusinessRegisterFileType,
+    legalRepresentativeName: legalRepresentativeName,
+    legalRepresentativeFirstname: legalRepresentativeFirstname,
+    legalRepresentativeBirthdate: legalRepresentativeBirthdateLong,
+    legalRepresentativeIdentityType: legalRepresentativeIdentityType,
+    legalRepresentativeId: legalRepresentativeId,
+    legalRepresentativePhoneNumber: legalRepresentativePhoneNumber,
+    legalRepresentativeEmail: legalRepresentativeEmail,
+    legalRepresentativeIdentityFile: legalRepresentativeIdentityFile64,
+    legalRepresentativeIdentityFileType: legalRepresentativeIdentityFileType,
+    subscriberName: subscriberName,
+    subscriberFirstname: subscriberFirstname,
+    subscriberBirthdate: subscriberBirthdateLong,
+    subscriberIdentityType: subscriberIdentityType,
+    subscriberId: subscriberId,
+    subscriberPhone: subscriberPhone,
+    subscriberEmail: subscriberEmail,
+    subscriberIdentityFile: subscriberIdentityFile64,
+    subscriberIdentityFileType: subscriberIdentityFileType,
+    screenshot1File: screenshot1File64,
+    screeshot1FileType: screeshot1FileType,
+    screenshot2File: screenshot2File64,
+    screeshot2FileType: screeshot2FileType,
+    requestSignature: requestSignature,
+    urlVideo: shaVideo,
+  };
+  axios
+    .post(
+      `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/c638a72d-5324-405e-b664-de94ed3db77c`,
+      dataToSned
+    )
+    .then((resu) => {
+      res.send(resu.data, "res");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
-const createDigigoUserSeal = async(req,res) => {
+const createDigigoUserSeal = async (req, res) => {
   const {
     txIdEmail,
     txIdPhone,
@@ -452,7 +497,6 @@ const createDigigoUserSeal = async(req,res) => {
   const date1 = await new Date(Date.parse(legalRepresentativeBirthdate));
   const legalRepresentativeBirthdateLong = await date1.getTime();
 
-  
   const date = await new Date(Date.parse(subscriberBirthdate));
   const subscriberBirthdateLong = await date.getTime();
 
@@ -461,9 +505,13 @@ const createDigigoUserSeal = async(req,res) => {
   const data1 = taxIdentifierFile;
   const taxIdentifierFile64 = await Buffer.from(data1).toString("base64");
   const data2 = nationalBusinessRegisterFile;
-  const nationalBusinessRegisterFile64 = await Buffer.from(data2).toString("base64");
+  const nationalBusinessRegisterFile64 = await Buffer.from(data2).toString(
+    "base64"
+  );
   const data3 = legalRepresentativeIdentityFile;
-  const legalRepresentativeIdentityFile64 = await Buffer.from(data3).toString("base64");
+  const legalRepresentativeIdentityFile64 = await Buffer.from(data3).toString(
+    "base64"
+  );
   const screenshot1File1 = screenshot1File;
   const screenshot1File64 = await Buffer.from(screenshot1File1).toString(
     "base64"
@@ -488,53 +536,53 @@ const createDigigoUserSeal = async(req,res) => {
     .update(shaVideo)
     .digest("hex");
 
-const dataToSned= {
-  txIdEmail:txIdEmail,
-  txIdPhone:txIdPhone,
-  certType:certType,
-  country:country,
-  organisationId:organisationId,
-  Organisation:Organisation,
-  taxIdentifierFile:taxIdentifierFile64,
-  taxIdentifierFileType:taxIdentifierFileType,
-  nationalBusinessRegisterFile:nationalBusinessRegisterFile64,
-  nationalBusinessRegisterFileType:nationalBusinessRegisterFileType,
-  legalRepresentativeName:legalRepresentativeName,
-  legalRepresentativeFirstname:legalRepresentativeFirstname,
-  legalRepresentativeBirthdate:legalRepresentativeBirthdateLong,
-  legalRepresentativeIdentityType:legalRepresentativeIdentityType,
-  legalRepresentativeId:legalRepresentativeId,
-  legalRepresentativePhoneNumber:legalRepresentativePhoneNumber,
-  legalRepresentativeEmail:legalRepresentativeEmail,
-  legalRepresentativeIdentityFile:legalRepresentativeIdentityFile64,
-  legalRepresentativeIdentityFileType:legalRepresentativeIdentityFileType,
-  subscriberName:subscriberName,
-  subscriberFirstname:subscriberFirstname,
-  subscriberBirthdate:subscriberBirthdateLong,
-  subscriberIdentityType:subscriberIdentityType,//ZD 
-  subscriberId:subscriberId,
-  subscriberPhone:subscriberPhone,
-  subscriberEmail:subscriberEmail,
-  subscriberIdentityFile:subscriberIdentityFile64,
-  subscriberIdentityFileType:subscriberIdentityFileType,
-  screenshot1File:screenshot1File64,
-  screeshot1FileType:screeshot1FileType,
-  screenshot2File:screenshot2File64,
-  screeshot2FileType:screeshot2FileType,
-  requestSignature:requestSignature,
-  urlVideo:shaVideo
-}
-axios
-.post(
-  `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/c638a72d-5324-405e-b664-de94ed3db77c`,
-  dataToSned
-)
-.then((resu) => {
-  res.send(resu.data, "res");
-})
-.catch((err) => {
-  console.log(err);
-});
+  const dataToSned = {
+    txIdEmail: txIdEmail,
+    txIdPhone: txIdPhone,
+    certType: certType,
+    country: country,
+    organisationId: organisationId,
+    Organisation: Organisation,
+    taxIdentifierFile: taxIdentifierFile64,
+    taxIdentifierFileType: taxIdentifierFileType,
+    nationalBusinessRegisterFile: nationalBusinessRegisterFile64,
+    nationalBusinessRegisterFileType: nationalBusinessRegisterFileType,
+    legalRepresentativeName: legalRepresentativeName,
+    legalRepresentativeFirstname: legalRepresentativeFirstname,
+    legalRepresentativeBirthdate: legalRepresentativeBirthdateLong,
+    legalRepresentativeIdentityType: legalRepresentativeIdentityType,
+    legalRepresentativeId: legalRepresentativeId,
+    legalRepresentativePhoneNumber: legalRepresentativePhoneNumber,
+    legalRepresentativeEmail: legalRepresentativeEmail,
+    legalRepresentativeIdentityFile: legalRepresentativeIdentityFile64,
+    legalRepresentativeIdentityFileType: legalRepresentativeIdentityFileType,
+    subscriberName: subscriberName,
+    subscriberFirstname: subscriberFirstname,
+    subscriberBirthdate: subscriberBirthdateLong,
+    subscriberIdentityType: subscriberIdentityType, //ZD
+    subscriberId: subscriberId,
+    subscriberPhone: subscriberPhone,
+    subscriberEmail: subscriberEmail,
+    subscriberIdentityFile: subscriberIdentityFile64,
+    subscriberIdentityFileType: subscriberIdentityFileType,
+    screenshot1File: screenshot1File64,
+    screeshot1FileType: screeshot1FileType,
+    screenshot2File: screenshot2File64,
+    screeshot2FileType: screeshot2FileType,
+    requestSignature: requestSignature,
+    urlVideo: shaVideo,
+  };
+  axios
+    .post(
+      `https://193.95.63.230:8443/tunsign-proxy-webapp/services/rest/tunsign-proxy-admin/create-digigo-user/c638a72d-5324-405e-b664-de94ed3db77c`,
+      dataToSned
+    )
+    .then((resu) => {
+      res.send(resu.data, "res");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 ////////////////////// fifth ONE ////// validate-identity
@@ -649,7 +697,7 @@ const approveAffiliation = (req, res) => {
     (err, result) => {
       if (err) res.send(err);
       else res.send(result);
-    }/* */
+    } /* */
   );
 };
 
@@ -985,6 +1033,7 @@ module.exports = {
   updateContractImage,
   updateStatus,
   sendOtp,
+  sendOtp2,
   createDigigoUserPerso,
   createDigigoUserPro,
   createDigigoUserSeal,

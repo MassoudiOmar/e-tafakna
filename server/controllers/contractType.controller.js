@@ -6,65 +6,111 @@ const http = require("https");
 const fs = require("fs");
 const cloudinary = require("../utils/cloudinary");
 const FormData = require("form-data");
+const axios = require("axios");
 const Excel = require("exceljs");
-var convertapi = require("convertapi")("lmZB7Q2OoMDHogAI");
+var convertapi = require("convertapi")("sEkLKXrXWNU0GXLS");
 const cheerio = require("cheerio");
 const https = require("https");
+/***
+ *
+ *
+ * TODO:
+ * Function For When user Accept Change The Picture Of it  (With Some Optimization)
+ * USE:
+ * https://www.npmjs.com/package/node-html-to-image
+ *
+ */
 
-function inWords(number) {
-  const units = [
-    { value: 1000000000, name: "milliard" },
-    { value: 1000000, name: "million" },
-    { value: 1000, name: "mille" },
-    { value: 100, name: "cent" },
-    { value: 80, name: "quatre-vingts" },
-    { value: 60, name: "soixante" },
-    { value: 50, name: "cinquante" },
-    { value: 40, name: "quarante" },
-    { value: 30, name: "trente" },
-    { value: 20, name: "vingt" },
-    { value: 19, name: "dix-neuf" },
-    { value: 18, name: "dix-huit" },
-    { value: 17, name: "dix-sept" },
-    { value: 16, name: "seize" },
-    { value: 15, name: "quinze" },
-    { value: 14, name: "quatorze" },
-    { value: 13, name: "treize" },
-    { value: 12, name: "douze" },
-    { value: 11, name: "onze" },
-    { value: 10, name: "dix" },
-    { value: 9, name: "neuf" },
-    { value: 8, name: "huit" },
-    { value: 7, name: "sept" },
-    { value: 6, name: "six" },
-    { value: 5, name: "cinq" },
-    { value: 4, name: "quatre" },
-    { value: 3, name: "trois" },
-    { value: 2, name: "deux" },
-    { value: 1, name: "un" },
-  ];
-
-  if (number === 0) {
-    return "zéro";
-  }
-
-  let result = "";
-
-  for (let i = 0; i < units.length; i++) {
-    if (number >= units[i].value) {
-      const count = Math.floor(number / units[i].value);
-      if (count > 1) {
-        result += inWords(count) + " ";
-      }
-      result += units[i].name;
-      number %= units[i].value;
-      if (number > 0) {
-        result += " ";
-      }
-    }
-  }
-  return result;
+var a = [
+  "",
+  "Un ",
+  "Deux ",
+  "Trois ",
+  "Quatre ",
+  "Cinq ",
+  "Six ",
+  "Sept ",
+  "Huit ",
+  "Neuf ",
+  "Dix ",
+  "Onze ",
+  "Douze ",
+  "Treize ",
+  "Quatorze ",
+  "Quinze ",
+  "Seize ",
+  "Dix-sept",
+  "Dix-huit",
+  "Dix-neuf",
+];
+var b = [
+  "",
+  "",
+  "Vingt",
+  "Trente",
+  "Quarante",
+  "Cinquante",
+  "Soixante",
+  "Soixante-dix",
+  "Quatre-vingts",
+  "Quatre-vingt-dix",
+];
+function inWords(num) {
+  if ((num = num.toString()).length > 9) return "overflow";
+  n = ("000000000" + num)
+    .substr(-9)
+    .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+  if (!n) return;
+  var str = "";
+  str +=
+    n[1] != 0
+      ? (a[Number(n[1])] || b[n[1][0]] + " " + a[n[1][1]]) + "milliard "
+      : "";
+  str +=
+    n[2] != 0
+      ? (a[Number(n[2])] || b[n[2][0]] + " " + a[n[2][1]]) + "million "
+      : "";
+  str +=
+    n[3] != 0
+      ? (a[Number(n[3])] || b[n[3][0]] + " " + a[n[3][1]]) + "mille "
+      : "";
+  str +=
+    n[4] != 0
+      ? (a[Number(n[4])] || b[n[4][0]] + " " + a[n[4][1]]) + "cents "
+      : "";
+  str +=
+    n[5] != 0
+      ? (str != "" ? "et " : "") +
+        (a[Number(n[5])] || b[n[5][0]] + " " + a[n[5][1]]) +
+        ""
+      : "";
+  return str.substring(0, 2) == "Un" ? str.slice(3) : str;
 }
+function inWordsThreeDigits(num) {
+  if (num < 0 || num > 999) {
+    return "Invalid input. Please enter a number between 0 and 999.";
+  }
+
+  var result = "";
+
+  if (num >= 100) {
+    result += a[Math.floor(num / 100)] + "cent ";
+    num %= 100;
+  }
+
+  if (num >= 20) {
+    result += b[Math.floor(num / 10)] + " ";
+    num %= 10;
+  }
+
+  if (num > 0 || result === "") {
+    result += a[num];
+  }
+
+  return result.trim();
+}
+// numberToWords(1425800) + " millimes"
+
 const getCount = (req, res) => {
   console.log("test");
   const lang = req.params.lang;
@@ -79,7 +125,7 @@ const getCount = (req, res) => {
 };
 
 var ChangeStatusInContract = async (req, res) => {
-  const { image_url, user_name } = req.body;
+  const { image_url, user_name, tag } = req.body;
   const output = fs.createWriteStream("test.html");
   db.query(
     `SELECT * from contracts where contract_image='${image_url}'`,
@@ -144,6 +190,13 @@ var ChangeStatusInContract = async (req, res) => {
                                           if (err) {
                                             console.log(err);
                                           } else {
+                                            /**
+                                             * FIXME:
+                                             * Chnage The HTML TO DOCX Then TO PNG to get the correct Format
+                                             *
+                                             *
+                                             *
+                                             */
                                             res.send(resultF);
                                           }
                                         }
@@ -177,6 +230,8 @@ var createDocAndImage = async (str, index, renderObject) => {
   doc.render(renderObject);
   const buf = doc.getZip().generate({
     type: "nodebuffer",
+    // compression: DEFLATE adds a compression step.
+    // For a 50MB output document, expect 500ms additional CPU time
     compression: "DEFLATE",
   });
   fs.writeFileSync(`output${index}.docx`, buf);
@@ -203,6 +258,9 @@ var createDocAndImage = async (str, index, renderObject) => {
   }
 };
 const makeFactureOrDevis = async (url, ans, type, language) => {
+  console.log(ans, "ans ::11111");
+  console.log(type, "ans ::type");
+  console.log(url, "ans ::url");
   const file = fs.createWriteStream("file.xlsx");
   http.get(url, function (response) {
     response.pipe(file);
@@ -244,8 +302,8 @@ const makeFactureOrDevis = async (url, ans, type, language) => {
         workbook.worksheets[0].getCell("B34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("B37").value = (sum * 19) / 100;
         workbook.worksheets[0].getCell("B41").value =
-          parseInt(workbook.worksheets[0].getCell("B37").value) +
-          parseInt(workbook.worksheets[0].getCell("B34").value) +
+          workbook.worksheets[0].getCell("B37").value +
+          workbook.worksheets[0].getCell("B34").value +
           0.6;
         workbook.worksheets[0].getCell("B41").numFmt = "0.000";
         var arr = workbook.worksheets[0]
@@ -303,6 +361,7 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
     response.pipe(file);
     file.on("finish", async () => {
       file.close();
+      console.log("Download Completed");
       const workbook = new Excel.Workbook();
       await workbook.xlsx.readFile(`file.xlsx`).then(async () => {
         workbook.worksheets[0].getCell("C17").value =
@@ -326,37 +385,48 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
         let f = j;
         let k = j + length;
         let r = k + length;
+        console.log("The length is ", length);
         for (let i = 22; i < 22 + length; i++) {
           workbook.worksheets[0].getCell(`B${i}`).font = {
             bold: false,
           };
+          console.log(" The loop for j  is ", ans[j]);
+          console.log(" The loop for k  is ", ans[k]);
+          console.log(" The loop for r  is ", ans[r]);
           sum += parseFloat(ans[k]) * parseFloat(ans[r]);
           workbook.worksheets[0].getCell(`B${i}`).value = ans[j++];
           workbook.worksheets[0].getCell(`C${i}`).value = ans[k++];
           workbook.worksheets[0].getCell(`D${i}`).value = ans[r++];
           workbook.worksheets[0].getCell(`E${i}`).value =
             parseFloat(ans[k - 1]) * parseFloat(ans[r - 1]);
+          console.log("This is the sum so far ", sum);
         }
         workbook.worksheets[0].getCell("E34").value = parseFloat(sum);
         workbook.worksheets[0].getCell("E36").value =
           (parseInt(workbook.worksheets[0].getCell("E34").value) * 19) / 100;
+        console.log(parseInt(workbook.worksheets[0].getCell("E36").value));
+        console.log(workbook.worksheets[0].getCell("E34").value);
         workbook.worksheets[0].getCell("E41").value =
-          parseInt(workbook.worksheets[0].getCell("E36").value) +
-          parseInt(workbook.worksheets[0].getCell("E34").value) +
+          workbook.worksheets[0].getCell("E36").value +
+          workbook.worksheets[0].getCell("E34").value +
           1.0;
         //workbook.worksheets[0].getCell("E41").numFmt= "0.000"
         var arr = workbook.worksheets[0].getCell("D46").value.split(" ");
         console.log(arr);
+        console.log(f);
         arr[1] = type == "devis" ? "le" : "la";
+        var lastFive = inWordsThreeDigits(parseInt(workbook.worksheets[0].getCell("E41").value.substr(value.length -3)))
+        //fares.substr(fares.length - 3)
         arr[arr.length - 1] =
-          inWords(parseInt(workbook.worksheets[0].getCell("E41").value)) +
-          " millimes";
+          inWords(parseInt(workbook.worksheets[0].getCell("E41").value)) + lastFive
+          "Dinars";
         arr[3] = type;
         arr = arr.join(" ");
         //Fix it
         workbook.worksheets[0].getCell("D46").value = arr;
         workbook.worksheets[0].getCell("B52").value = ans[f - 2];
         workbook.worksheets[0].getCell("B53").value = "MF:" + ans[f - 1];
+        console.log("We are Here ");
         await workbook.xlsx.writeFile("output0.xlsx");
         try {
           const formData = new FormData();
@@ -375,8 +445,10 @@ let makeFactureOrDevisFr = (url, ans, type, language) => {
               },
             })
           );
+          console.log("Here");
         } catch (e) {
           console.log(e);
+          const errorString = await streamToString(e.response.data);
         }
       });
       function streamToString(stream) {
@@ -530,8 +602,8 @@ var makeEgagementAr = async (url, question, idBegin, length) => {
   }
 };
 let QuestionIdForMin = [
-  4, 23, 41, 45, 100, 107, 157, 164, 167, 171, 186, 230, 250, 261, 273, 280,
-  290, 297, 298, 344, 360, 365,
+  4, 23, 41, 45, 100, 107, 157, 161, 164, 166, 167, 170, 171, 186, 230, 250,
+  261, 273, 280, 290, 297, 298, 344, 359, 360, 361, 357, 360, 365, 352,
 ];
 const addAnswersToAnswerTable = async (req, res) => {
   const {
@@ -609,6 +681,8 @@ const fillContract = async (req, res) => {
       .slice(0, 5)
       .concat(questions.slice(5, 8).reverse())
       .concat(questions.slice(8));
+    console.log(questions, "this is after reversing..");
+    //  [questions[6],questions[7]] = [questions[7],questions[6]]
     let t = questions[5];
     questions[5] = questions[7];
     questions[7] = t;
@@ -619,6 +693,7 @@ const fillContract = async (req, res) => {
     let y = questions[5];
     questions[5] = questions[6];
     questions[6] = y;
+    console.log(questions, "this is after swapping ");
   }
 
   let renderObject = {};
@@ -641,6 +716,7 @@ const fillContract = async (req, res) => {
         acc[key] = value;
         return acc;
       }, {});
+      // res.send(result);
       var url = "";
       if (lang === "Arabe") {
         url = result[0].template_AR;
@@ -708,6 +784,9 @@ const updateContractImage = async (req, res) => {
   var twoPages = req.body.twoPages;
   let { user_name, contractName } = req.body;
   if (twoPages == "facture" || twoPages == "devis") contractName = twoPages;
+
+  console.log(contractName);
+
   var urlImage = "";
   var Cmpt = 0;
   if (!isNaN(twoPages)) {
@@ -726,7 +805,7 @@ const updateContractImage = async (req, res) => {
       });
     */
     }
-
+    //var docUrl = uploadDoc.secure_url;
     let ArrNumber = [];
     let T = twoPages == "facture" || twoPages == "devis" ? "xlsx" : "docx";
     let T2 =
@@ -738,8 +817,8 @@ const updateContractImage = async (req, res) => {
         "jpg",
         {
           File: T2,
-          ImageResolutionH: "500",
-          ImageResolutionV: "500",
+          ImageResolutionH: "1000",
+          ImageResolutionV: "1000",
         },
         T
       )
@@ -750,23 +829,27 @@ const updateContractImage = async (req, res) => {
           contractName,
           user_name,
           result,
-          "jpg",
+          (type = "jpg"),
           number
         );
         if (i <= Cmpt - 1) {
           Temp.push({
             id: i,
-            image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
+            image: `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
           urlImage +=
-            `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` +
+            `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg` +
             ",";
         } else {
           Temp.push({
             id: i,
-            image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
+            image: `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`,
           });
-          urlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
+          urlImage += `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.jpg`;
           const updateContract = `UPDATE contracts set contract_url = ? , contract_image = ? where id =?`;
           db.query(updateContract, [urlImage, urlImage, id], (err, result) => {
             err ? console.log(err) : console.log(result);
@@ -794,28 +877,40 @@ const updateContractImage = async (req, res) => {
               )
               .then(async function (result) {
                 let number = Math.floor(Math.random() * 1000000);
+                console.log(
+                  "Received POST request with the following parameters: first func"
+                );
+                console.log(`contractName: ${contractName}`);
+                console.log(`user_name: ${user_name}`);
+                console.log(`type: ${type}`);
+                console.log(`number: ${number}`);
                 await SaveImageIntoStorage(
                   contractName,
                   user_name,
                   result,
-                  "pdf",
+                  (type = "pdf"),
                   number
                 );
+
                 if (j <= Cmpt - 1) {
                   Temp.push({
                     id: j,
-                    image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
+                    image: `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
                   });
 
                   NurlImage +=
-                    `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` +
+                    `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf` +
                     ",";
                 } else {
                   Temp.push({
                     id: j,
-                    image: `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
+                    image: `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`,
                   });
-                  NurlImage += `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
+                  NurlImage += `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/${contractName}.${user_name}${number}.pdf`;
                   const updateContract1 = `UPDATE contracts set pdfContractImage =? where id =?`;
                   db.query(updateContract1, [NurlImage, id], (err, result) => {
                     err ? console.log(err) : console.log(result);
@@ -824,6 +919,8 @@ const updateContractImage = async (req, res) => {
               });
           }
           res.send(urlImage + "|" + NurlImage);
+          console.log(urlImage + "|" + NurlImage);
+          //    res.send(urlImage);
         }
       })
       .catch((error) => {
@@ -865,8 +962,8 @@ const insertContractType = (req, res) => {
     }
   );
 };
-
 // getAllContractType
+
 const getAllContractType = (req, res) => {
   let query = `SELECT * FROM contract_types`;
   db.query(query, (err, contracts) => {
@@ -904,6 +1001,18 @@ const getByIdContractType = (req, res) => {
     }
   });
 };
+const UpdateSignedTime = (req, res) => {
+  var title_FR = req.body.title_FR;
+  const signed_time = req.params.signed_time;
+  const sql = `UPDATE contract_types SET signed_time = ? WHERE title_FR = ?`;
+  db.query(sql, [signed_time, title_FR], (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
 const deleteContractById = (req, res) => {
   let id = req.params.id;
   let query = `DELETE FROM contract_types WHERE id = ?`;
@@ -916,6 +1025,7 @@ const deleteContractById = (req, res) => {
   });
 };
 require("sharp/package.json"); // sharp is a peer dependency.  npm i sharp join-images
+var mergeImg = require("merge-img");
 const { render } = require("react-dom");
 const PDFMerger = require("pdf-merger-js");
 
@@ -1037,7 +1147,8 @@ const concatImages = (req, response) => {
                       )
                       .then(async (res) => {
                         response.send(
-                          `https://e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
+                          `https://
+e-tafakna-back.com/uploads/${contractName}/${user_name}/E-Tafakna/result${n}.pdf`
                         );
                       }); //s//save under given name and reset the internal document
                     // Export the merged PDF as a nodejs Buffer
@@ -1060,6 +1171,7 @@ const SaveImageIntoStorage = async (
   type,
   number
 ) => {
+  if (!fs.existsSync("./uploads")) fs.mkdirSync("./uploads");
   if (!fs.existsSync(`./uploads/${contractName}`)) {
     fs.mkdirSync(`./uploads/${contractName} `, { recursive: true });
   }
@@ -1087,5 +1199,6 @@ module.exports = {
   ChangeStatusInContract,
   concatImages,
   addAnswersToAnswerTable,
+  UpdateSignedTime,
   getCount,
 };

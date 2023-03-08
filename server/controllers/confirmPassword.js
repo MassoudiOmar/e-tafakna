@@ -1,4 +1,6 @@
-const bcrypt = require("bcrypt");
+var db = require("../database-mysql");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const confirmPassword = (req, res) => {

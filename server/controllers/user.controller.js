@@ -1,5 +1,5 @@
 var db = require("../database-mysql");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const validateEmail = require("../helpers/validateEmail");
 const jwt = require("jsonwebtoken");
 const jwtDecode = require("jwt-decode");
@@ -63,25 +63,24 @@ var register = async (req, res) => {
         if (result.length) {
           if (result[0].status === "notActivated") {
             try {
-      
-                    var transporter = nodemailer.createTransport({
-                      host: "e-tafakna.com",
-                      port: 465,
-                      secure: true,
-                      auth: {
-                        user: "no-reply@e-tafakna.com",
-                        pass: "kVM^tE9IakqD",
-                      },
-                    });
-                    const code = Math.floor(10000 + Math.random() * 90000);
-                    const salt = await bcrypt.genSalt();
-                    const hashedCode = await bcrypt.hash(code.toString(), salt);
-                    //  const check = await bcrypt.compare(resetCode.toString(), hashedCode.toString())
-                    var mailOptions = {
-                      from: "no-reply@e-tafakna.com",
-                      to: email,
-                      subject: "Hi! this this your verifying code",
-                      html: `
+              var transporter = nodemailer.createTransport({
+                host: "e-tafakna.com",
+                port: 465,
+                secure: true,
+                auth: {
+                  user: "no-reply@e-tafakna.com",
+                  pass: "kVM^tE9IakqD",
+                },
+              });
+              const code = Math.floor(10000 + Math.random() * 90000);
+              const salt = await bcrypt.genSalt();
+              const hashedCode = await bcrypt.hash(code.toString(), salt);
+              //  const check = await bcrypt.compare(resetCode.toString(), hashedCode.toString())
+              var mailOptions = {
+                from: "no-reply@e-tafakna.com",
+                to: email,
+                subject: "Hi! this this your verifying code",
+                html: `
                          <html>
                          <head>
                              <title></title>
@@ -245,26 +244,29 @@ var register = async (req, res) => {
                          
                          </html>
                         `,
-                      text: `${code}`,
-                    };
+                text: `${code}`,
+              };
 
-                    transporter.sendMail(mailOptions, function (error, info) {
-                      if (error) {
-                        console.log(error);
-                      } else {
-                        res.json({
-                          msg: "Welcome! Please check your email.",
-                          code: code.toString(),
-                          email: email,
-                        });
-                        console.log(hashedCode);
-                      }
-                    });
-                    res.json({
-                      msg: "Welcome! Please check your email.",
-                      code: code.toString(),
-                      email: email,
-                    });
+              transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                  console.log(error);
+                } else {
+                  res.json({
+                    msg: "Welcome! Please check your email.",
+                    code: code.toString(),
+                    email: email,
+                  });
+                  console.log(hashedCode);
+                }
+              });
+              // registration success
+
+              // registration success
+              res.json({
+                msg: "Welcome! Please check your email.",
+                code: code.toString(),
+                email: email,
+              });
             } catch (err) {
               console.log(err);
             }
@@ -703,63 +705,62 @@ const deleteUser = (req, res) => {
   });
 };
 const deleteAllNotificationOfUser = (req, res) => {
-  const  receiver  = req.params.receiver;
+  const receiver = req.params.receiver;
   const query = `delete from users_has_notifications where receiver=${receiver}`;
-  db.query(query,[receiver],(err,result) => {
+  db.query(query, [receiver], (err, result) => {
     if (err) {
       res.send(err);
     }
     res.send(result);
   });
 };
-
-const getAllAnswerOfUser =(req,res)=>{
-const {user_id} = req.body 
-db.query(`SELECT * from user_answers  where user_id=${user_id}`,(err,result)=>{
-if(err)
-{
-console.log(err)
-res.send(err)
-}
-else 
-res.send(result)
-})
-}
-const getNameOfSpecificContract = (req,res)=>{
-const {contractId} = req.body 
-db.query(`select  * from contract_types where id=${contractId}`,(err,rez)=>{
-if(err)
-res.send(err)
-else 
-res.send(rez)
-})
-}
-const updateUserInfo =(req,res)=>{
-  const {id} = req.params
-  const {a,b,c,d,e} =req.body 
-   const sql ='UPDATE users SET first_name = ?, last_name = ?, username = ? , phone = ? , address = ?  WHERE id = ?;'
-   db.query(sql,[a,b,c,d,e,id],(err,result)=>{
-     if(err)
-    { console.log(err)}
-     else 
-     {res.send(result)}
-     })
-}
+const getAllAnswerOfUser = (req, res) => {
+  const { user_id } = req.body;
+  db.query(
+    `SELECT * from user_answers  where user_id=${user_id}`,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send(err);
+      } else res.send(result);
+    }
+  );
+};
+const getNameOfSpecificContract = (req, res) => {
+  const { contractId } = req.body;
+  db.query(
+    `select  * from contract_types where id=${contractId}`,
+    (err, rez) => {
+      if (err) res.send(err);
+      else res.send(rez);
+    }
+  );
+};
+const updateUserInfo = (req, res) => {
+  const { id } = req.params;
+  const { a, b, c, d, e } = req.body;
+  const sql =
+    "UPDATE users SET first_name = ?, last_name = ?, username = ? , phone = ? , address = ?  WHERE id = ?;";
+  db.query(sql, [a, b, c, d, e, id], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
 const updatePassword = (req, res) => {
   const { id } = req.params;
   const { oldPassword, newPassword, confirmPassword } = req.body;
-  if (!oldPassword  && !newPassword  && !confirmPassword) {
+  if (!oldPassword && !newPassword && !confirmPassword) {
     res.send("Veuillez remplir tous les champs");
-  } else if (!oldPassword ) {
-    res.send("Veuillez insérer l'ancien mot de passe")
-  }
-  else if (!newPassword ) {
-    res.send("Veuillez insérer le nouveau mot de passe")
-  }
-  else if (!confirmPassword ) {
-    res.send("Veuillez insérer le mot de passe de confirmation")
-  }
-  else if (  newPassword !== confirmPassword) {
+  } else if (!oldPassword) {
+    res.send("Veuillez insérer l'ancien mot de passe");
+  } else if (!newPassword) {
+    res.send("Veuillez insérer le nouveau mot de passe");
+  } else if (!confirmPassword) {
+    res.send("Veuillez insérer le mot de passe de confirmation");
+  } else if (newPassword !== confirmPassword) {
     res.send("Veuillez confirmer votre mot de passe");
   } else {
     const sql = `select password from users where id  = ?`;
@@ -815,10 +816,11 @@ const googleOuth = (req, res) => {
   const emeailCheck = true;
   const sql = "select * from users where email = ? ";
   db.query(sql, [email], (err, result) => {
+    console.log(result);
     if (err) {
       console.log(err);
     } else if (result[0]?.email) {
-      res.send('user exist');
+      res.send("user exist");
     } else {
       const sql =
         "INSERT INTO users (first_name, last_name, email, password, phone,address,username,status,image, role,created_at,notification) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -856,7 +858,21 @@ const googleOuth = (req, res) => {
     }
   });
 };
-
+const UpdateTokenOfDevice = (req, res) => {
+  const email = req.body.email;
+  //**Token
+  const username = req.params.username;
+  //**Token
+  const sql = `UPDATE users SET username = ? WHERE email = ?`;
+  db.query(sql, [username, email], (err, result) => {
+    console.log(username, "username", "email", email);
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};
 module.exports = {
   register,
   activate,
@@ -872,5 +888,6 @@ module.exports = {
   getNameOfSpecificContract,
   updateUserInfo,
   updatePassword,
-  googleOuth
+  googleOuth,
+  UpdateTokenOfDevice
 };

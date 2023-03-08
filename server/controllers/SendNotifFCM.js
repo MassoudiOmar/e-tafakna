@@ -6,14 +6,13 @@ const SendFCM = async (req, res, next) => {
   try {
     let fcm = new FCM(SERVER_KEY);
     let message = {
-      to: "/topics/my-topic" + req.body.topic,
-      notifications: {
-        title: req.body.title,
-        body: req.body.body,
-        sound: "default",
-        click_action: "FCM_PLUGIN_ACTIVITY",
-        icon: "fcm_push_icon",
-      },
+      to: "ExponentPushToken[OAtxPnEH52gkCO747Z_9-J]",
+      title:req.body.title,
+      sound:"default",
+      body:req.body.body,
+      data:{
+        experienceId: "@lafrisou/web-app"
+    }
     };
     fcm.send(message, (err, response) => {
       if (err) next(err);

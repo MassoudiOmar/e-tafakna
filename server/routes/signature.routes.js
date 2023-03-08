@@ -9,6 +9,7 @@ router.put("/updateContractImage/:id", signature.updateContractImage);
 router.put("/updateStatus/:id", signature.updateStatus);
 
 router.post("/aed-send-otp", signature.sendOtp);
+router.post("/aed-send-otp2", signature.sendOtp2);
 router.post("/aed-validate-otp/:textId/:otp",signature.aedValidateOtp)
 router.post("/create-digigo-user-perso", signature.createDigigoUserPerso);
 router.post("/create-digigo-user-pro", signature.createDigigoUserPro);

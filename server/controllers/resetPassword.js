@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const db = require("../database-mysql");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const fetch = require("node-fetch");
 
 const resetPasswor = async (req, res) => {

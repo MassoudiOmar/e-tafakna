@@ -11,6 +11,7 @@ router.post('/fill/:id',contractType.fillContract)
 router.put('/updateImage/:id',contractType.updateContractImage)
 router.post("/concatImages",contractType.concatImages)
 router.post("/addAnswersToAnswerTable",contractType.addAnswersToAnswerTable)
+router.put("/:signed_time/updatedsigned",contractType.UpdateSignedTime)
 router.get("/getCount/Contracts/:lang" , contractType.getCount)
 
 // router.post("/concatImages",contractType.concatImages)
