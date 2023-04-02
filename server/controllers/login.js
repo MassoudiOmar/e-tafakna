@@ -27,7 +27,7 @@ let loginUser = function (req, res) {
     getOneUser(email, (err, result) => {
       if (err) {
         res.send(err)
-        return  res.send(err);
+    
       } else if (!result.length) {
         return res.send("user not found");
       } else {
