@@ -5,12 +5,12 @@ dotenv.config();
 
 var connection = mysql.createPool({
   connectionLimit : process.env.CONNECTIONLIMIT || 100,
-  host: process.env.MYSQL_HOST || "localhost",
+  host: process.env.MYSQL_HOST || "containers-us-west-24.railway.app",
   user: process.env.MYSQL_USER || "root",
-  password: process.env.MYSQL_PASSWORD || "root",
-  database: process.env.MYSQL_DATABASE || "etafakna",
+  password: process.env.MYSQL_PASSWORD || "4iIpFiFPGAgoGOuZCIh2",
+  database: process.env.MYSQL_DATABASE || "railway",
   charset: "cp1256",
-  port : process.env.DB_PORT || 3306
+  port : process.env.DB_PORT || 7682
 });
 
 
