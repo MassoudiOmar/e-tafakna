@@ -32,7 +32,7 @@ const contractTypeQuestionsRoutes = require("./routes/contraType.questions.route
 const login = require("./routes/login");
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3306;
 
 let server = app.listen(PORT, function () {
   console.log(`Server running on ${PORT}`);
